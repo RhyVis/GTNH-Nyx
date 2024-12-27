@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8.5-GTNH",
+  "package": "vis.rhynia.nova.mixins",
+  "refmap": "mixins.nova.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ae.MixinPortableCell",
+    "ae.MixinQuantumCell"
+  ],
+  "client": [],
+  "server": [
+    "bw.MixinCircuitAssemblyLine"
+  ]
+}

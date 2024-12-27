@@ -7,15 +7,12 @@ object Config {
   var greeting: String = "Hello World"
 
   @JvmStatic
-  fun synchronizeConfiguration(configFile: File) {
-    val configuration = Configuration(configFile)
+  fun syncConfig(configFile: File) {
+    Configuration(configFile).run {
+      greeting =
+          getString("greeting", Configuration.CATEGORY_GENERAL, greeting, "How shall I greet?")
 
-    greeting =
-        configuration.getString(
-            "greeting", Configuration.CATEGORY_GENERAL, greeting, "How shall I greet?")
-
-    if (configuration.hasChanged()) {
-      configuration.save()
+      if (hasChanged()) save()
     }
   }
 }

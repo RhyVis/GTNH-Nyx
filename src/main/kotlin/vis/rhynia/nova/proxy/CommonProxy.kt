@@ -1,17 +1,23 @@
-package vis.rhynia.nova
+package vis.rhynia.nova.proxy
 
 import cpw.mods.fml.common.event.FMLInitializationEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
+import vis.rhynia.nova.Config
+import vis.rhynia.nova.Constant
+import vis.rhynia.nova.Log
+import vis.rhynia.nova.Tags
+import vis.rhynia.nova.common.loader.MaterialLoader
 
 open class CommonProxy {
   // Read config, create blocks, items, etc., and register them with the GameRegistry.
   open fun preInit(event: FMLPreInitializationEvent) {
-    Config.synchronizeConfiguration(event.suggestedConfigurationFile)
+    Log.info("Hello Minecraft! ${Constant.MOD_NAME} initializing at version ${Tags.VERSION}")
+    Config.syncConfig(event.suggestedConfigurationFile)
 
-    Nova.LOG.info(Config.greeting)
-    Nova.LOG.info("I am Nova at version " + Tags.VERSION)
+    Log.info("Initializing ${Constant.MOD_NAME} materials...")
+    MaterialLoader.load()
   }
 
   // Do mod setup. Build data structures. Register recipes.
