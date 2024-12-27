@@ -1,0 +1,5 @@
+dependencies {
+    api("com.github.GTNewHorizons:Forgelin:1.10.0-GTNH")
+
+    runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.4-GTNH:dev")
+}
