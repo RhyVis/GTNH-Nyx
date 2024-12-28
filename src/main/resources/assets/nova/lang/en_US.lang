@@ -1,0 +1,70 @@
+ModName=Vis Append
+itemGroup.nova=Nova
+
+item.Ultimate.name=Useless
+
+nova.MetaItem01.0.name=Test
+nova.MetaItem01.1.name=Lapotron Matrix
+nova.MetaItem01.2.name=Crystal Matrix
+nova.MetaItem01.3.name=Dense Mica Insulator Foil
+nova.MetaItem01.4.name=Pre Tesseract
+
+nova.MetaItem01.1001.name=Astral Infinite Gem
+nova.MetaItem01.1002.name=Astral Moment
+nova.MetaItem01.1003.name=Astral Gauge
+
+nova.MetaItem01.3001.name=Astral Energy Lens
+nova.MetaItem01.3002.name=Astral Magical Lens
+nova.MetaItem01.3003.name=Primoium Lens
+nova.MetaItem01.3004.name=Originium Lens
+
+nova.MetaItem02.0.name=Calibration
+nova.MetaItem02.1.name=Assembly - DTPF
+
+nova.MetaBlock01.0.name=What?
+
+nova.EyeOfHarmonyCore.0.name=§fCrude§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.1.name=§fPrimitive§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.2.name=§fStable§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.3.name=§fAdvanced§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.4.name=§fSuperb§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.5.name=§fExotic§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.6.name=§fPerfect§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.7.name=§fTipler§r Integrated Spatio-temporal Convolver
+nova.EyeOfHarmonyCore.8.name=§f§lGallifreyan§r Integrated Spatio-temporal Convolver
+
+nova.recipe.astralForge=Astra Forge
+nova.recipe.thermonuclearControl=Thermonuclear Control
+nova.recipe.transcendentReactor=Transcendent Reactor
+nova.recipe.integratedAssembly=Integrated Assembly
+nova.recipe.microAssembly=Micro Assembly
+nova.recipe.superconductingForming=Superconducting Foaming
+nova.recipe.voidEnergyGenerator=Astral Energy
+nova.recipe.quarkRefactoring=Quark Refactoring
+
+nova.AssemblyMatrix.mRecipeMode.0=Matrix Assembly Mode
+nova.AssemblyMatrix.mRecipeMode.1=Micro Assembly Mode
+nova.AssemblyMatrix.mRecipeMode.2=Superconducting Foaming Mode
+
+nova.UltimateHeater.mRecipeMode.0=Ultimate Heater Mode
+nova.UltimateHeater.mRecipeMode.1=Transcendent Reactor Mode
+nova.UltimateHeater.mRecipeMode.2=Fusion Mode
+
+nova.HeatDeathSimulator.mRecipeMode.0=Vacuum Mode
+nova.HeatDeathSimulator.mRecipeMode.1=Thermodynamics Mode(Not added)
+
+nova.DenseEndpoint.pRecipeMode.0=Electric Implosion Compressor Mode
+nova.DenseEndpoint.pRecipeMode.1=Nano Forge Mode
+nova.DenseEndpoint.pRecipeMode.2=Quark Refactoring Mode
+
+nova.RAL.pFocusMode.0=Disable Focus Mode
+nova.RAL.pFocusMode.1=Enable Focus Mode
+nova.pItemProcess.0=Fluid Mode
+nova.pItemProcess.1=Item Mode
+
+nova.gui.desc.import_energy=Energy Level
+
+GT5U.gui.text.importing_energy=§bImporting Energy
+GT5U.gui.text.no_core_set=§7No Core Set
+GT5U.gui.text.no_mode_set=No IC found for mode setting
+GT5U.gui.text.no_recipe_map_set=No available RecipeMap

@@ -7,7 +7,19 @@ import net.minecraft.item.ItemStack
 import vis.rhynia.nova.api.util.ItemUtil
 
 enum class NovaItemList {
-  TestItem01;
+  // region MetaItem 01
+  TestItem01,
+  LapotronMatrix,
+  CrystalMatrix,
+  DenseMicaInsulatorFoil,
+  PreTesseract,
+  // endregion
+
+  // region Machine Controller
+  AstralForge,
+  // endregion
+
+  ;
 
   private var mHasNotBeenSet: Boolean = true
   private var mDeprecated: Boolean = false
