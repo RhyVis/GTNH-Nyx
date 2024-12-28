@@ -8,6 +8,7 @@ import net.minecraft.util.EnumChatFormatting.GRAY
 import net.minecraft.util.EnumChatFormatting.GREEN
 import net.minecraft.util.EnumChatFormatting.RED
 
+@Suppress("unused")
 object NovaValues {
   object RecipeValues {
     const val SECOND = 20
