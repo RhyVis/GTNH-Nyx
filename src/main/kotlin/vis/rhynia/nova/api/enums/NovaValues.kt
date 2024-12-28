@@ -15,7 +15,10 @@ object NovaValues {
     const val MINUTE = 60 * SECOND
     const val HOUR = 60 * MINUTE
 
-    const val BUCKET = 1_000
+    const val STACK = 64
+
+    const val BUCKET = 1_000L
+    const val INGOT = 144L
 
     val RECIPE_ULV = GTValues.VP[0]
     val RECIPE_LV = GTValues.VP[1]
