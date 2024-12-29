@@ -1,7 +1,7 @@
 ModName=Vis Append
 itemGroup.nova=Nova
 
-item.Ultimate.name=Useless
+item.ultimate.name=Useless
 
 nova.MetaItem01.0.name=Test
 nova.MetaItem01.1.name=Lapotron Matrix

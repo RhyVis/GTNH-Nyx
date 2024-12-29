@@ -57,6 +57,38 @@ object NovaMaterial : Runnable {
           OFFSET_ELEMENT + 3,
           TextureSet.SET_DIAMOND)
 
+  // Primoium
+  val Primoium =
+      Werkstoff(
+          shortArrayOf(0x87.toShort(), 0xce.toShort(), 0xeb.toShort()),
+          "Primoium",
+          "Pr",
+          Werkstoff.Stats()
+              .setProtons(145)
+              .setMass(385)
+              .setBlastFurnace(true)
+              .setMeltingPoint(7250),
+          Werkstoff.Types.ELEMENT,
+          Werkstoff.GenerationFeatures().onlyDust().addMolten(),
+          OFFSET_ELEMENT + 4,
+          TextureSet.SET_SHINY)
+
+  // Originium
+  val Originium =
+      Werkstoff(
+          shortArrayOf(0xda.toShort(), 0xa5.toShort(), 0x20.toShort()),
+          "Originium",
+          "Or*",
+          Werkstoff.Stats()
+              .setProtons(165)
+              .setMass(445)
+              .setBlastFurnace(true)
+              .setMeltingPoint(8540),
+          Werkstoff.Types.ELEMENT,
+          Werkstoff.GenerationFeatures().onlyDust().addMolten(),
+          OFFSET_ELEMENT + 5,
+          TextureSet.SET_SHINY)
+
   override fun run() {
     OrePrefixes.entries.forEach { GenFeaturesUniversal.addPrefix(it) }
     GenFeaturesUniversal.removePrefix(OrePrefixes.ore)

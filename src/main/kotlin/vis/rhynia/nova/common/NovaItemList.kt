@@ -6,13 +6,52 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import vis.rhynia.nova.api.util.ItemUtil
 
+@Suppress("unused")
 enum class NovaItemList {
+  ItemUltimate,
+
   // region MetaItem 01
+
+  // Functional Items
   TestItem01,
   LapotronMatrix,
   CrystalMatrix,
   DenseMicaInsulatorFoil,
   PreTesseract,
+
+  // Astrium Items
+  AstriumInfinityGem,
+  AstriumInfinityComplex,
+  AstriumInfinityGauge,
+
+  // Lens Items
+  LensAstriumInfinity,
+  LensAstriumMagic,
+  LensPrimoium,
+  LensOriginium,
+
+  // endregion
+
+  // region MetaItem 02
+
+  Calibration,
+  AssemblyDTPF,
+
+  // endregion
+
+  // region Block
+
+  TestMetaBlock01,
+  EOHCoreT1,
+  EOHCoreT2,
+  EOHCoreT3,
+  EOHCoreT4,
+  EOHCoreT5,
+  EOHCoreT6,
+  EOHCoreT7,
+  EOHCoreT8,
+  EOHCoreT9,
+
   // endregion
 
   // region Machine Controller

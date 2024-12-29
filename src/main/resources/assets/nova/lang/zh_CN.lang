@@ -1,7 +1,7 @@
 ModName=Nova
 itemGroup.nova=Nova
 
-item.Ultimate.name=无效证明
+item.ultimate.name=无效证明
 
 nova.MetaItem01.0.name=测试物品
 nova.MetaItem01.1.name=兰波顿矩阵
