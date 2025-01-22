@@ -105,5 +105,7 @@ enum class BartPart : RefHelper {
             NovaItemList.TestItem01.get(1))
       }
 
+  fun getItemStack(amount: Long) = getItemStack(amount.toInt())
+
   override fun getFluidStack(amount: Int): FluidStack = Materials.Water.getFluid(1)
 }

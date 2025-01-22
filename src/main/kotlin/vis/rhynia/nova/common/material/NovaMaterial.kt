@@ -1,6 +1,7 @@
 package vis.rhynia.nova.common.material
 
 import bartworks.system.material.Werkstoff
+import bartworks.util.BWUtil.subscriptNumbers
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.enums.TextureSet
 
@@ -88,6 +89,53 @@ object NovaMaterial : Runnable {
           Werkstoff.GenerationFeatures().onlyDust().addMolten(),
           OFFSET_ELEMENT + 5,
           TextureSet.SET_SHINY)
+
+  // region
+  val AstralResidue =
+      Werkstoff(
+          shortArrayOf(0x19, 0x19, 0x70),
+          "AstralResidue",
+          "Aμ°",
+          Werkstoff.Stats(),
+          Werkstoff.Types.ELEMENT,
+          Werkstoff.GenerationFeatures().disable().addCells(),
+          OFFSET_PRODUCT + 1,
+          TextureSet.SET_FLUID)
+
+  val LapotronEnhancedFluid =
+      Werkstoff(
+          shortArrayOf(0x64, 0x95, 0xed),
+          "LapotronEnhancedFluid",
+          "[-Lapo-Lapo-]",
+          Werkstoff.Stats(),
+          Werkstoff.Types.COMPOUND,
+          Werkstoff.GenerationFeatures().disable().addCells(),
+          OFFSET_PRODUCT + 2,
+          TextureSet.SET_FLUID)
+
+  const val SC_FLUX_TT = "(?Aμⁿ2If3?)*12D*12M11If*10SpNt8In7Nq+6Nq*5Or5(⚷⚙⚷Ni4Ti6)4(✧◇✧)4"
+  val SuperconductorFluxRaw =
+      Werkstoff(
+          shortArrayOf(0x69, 0x69, 0x69),
+          "SuperconductorFluxRaw",
+          subscriptNumbers(SC_FLUX_TT),
+          Werkstoff.Stats().setMeltingPoint(3),
+          Werkstoff.Types.MIXTURE,
+          Werkstoff.GenerationFeatures().disable().onlyDust().addMolten().enforceUnification(),
+          OFFSET_PRODUCT + 3,
+          TextureSet.SET_MAGNETIC)
+
+  val SuperconductorFlux =
+      Werkstoff(
+          shortArrayOf(0xC0, 0xC0, 0xC0),
+          "SuperconductorFlux",
+          "Sx",
+          Werkstoff.Stats().setMeltingPoint(1),
+          Werkstoff.Types.ELEMENT,
+          Werkstoff.GenerationFeatures().disable().addCells().enforceUnification(),
+          OFFSET_PRODUCT + 4,
+          TextureSet.SET_FLUID)
+  // endregion
 
   override fun run() {
     OrePrefixes.entries.forEach { GenFeaturesUniversal.addPrefix(it) }

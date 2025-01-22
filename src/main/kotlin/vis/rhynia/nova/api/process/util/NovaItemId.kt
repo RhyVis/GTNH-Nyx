@@ -37,7 +37,7 @@ class NovaItemId : ItemId {
 
   override fun getItemStack() = ItemStack(item, 1, meta)
 
-  fun getItemStack(amount: Int) = ItemStack(item, amount, meta)
+  override fun getItemStack(amount: Int) = ItemStack(item, amount, meta)
 
   fun getItemStackWithNBT() = ItemStack(item, 1, meta).apply { tagCompound = nbt }
 

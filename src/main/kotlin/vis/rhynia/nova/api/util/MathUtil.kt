@@ -6,8 +6,6 @@ import java.util.*
 import kotlin.math.ln
 import kotlin.math.max
 import kotlin.math.min
-import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.Range
 
 object MathUtil {
@@ -20,49 +18,16 @@ object MathUtil {
     else number.toInt()
   }
 
-  fun sortNoNullArray(vararg itemStacks: ItemStack?): Array<ItemStack?>? {
-    if (itemStacks == null) return null
-    val list: MutableList<ItemStack?> = ArrayList()
-    for (itemStack in itemStacks) {
-      if (itemStack == null) continue
-      list.add(itemStack)
-    }
-    if (list.isEmpty()) return arrayOfNulls(0)
-    return list.toTypedArray<ItemStack?>()
+  fun formatE(input: Int): String {
+    return ef.format(input.toLong())
   }
 
-  fun sortNoNullArray(vararg fluidStacks: FluidStack?): Array<FluidStack?>? {
-    if (fluidStacks == null) return null
-    val list: MutableList<FluidStack?> = ArrayList()
-    for (fluidStack in fluidStacks) {
-      if (fluidStack == null) continue
-      list.add(fluidStack)
-    }
-    if (list.isEmpty()) return arrayOfNulls(0)
-    return list.toTypedArray<FluidStack?>()
+  fun formatE(input: Long): String {
+    return ef.format(input)
   }
 
-  fun sortNoNullArray(vararg objects: Any?): Array<Any?>? {
-    if (objects == null) return null
-    val list: MutableList<Any?> = ArrayList()
-    for (`object` in objects) {
-      if (`object` == null) continue
-      list.add(`object`)
-    }
-    if (list.isEmpty()) return arrayOfNulls(0)
-    return list.toTypedArray<Any?>()
-  }
-
-  fun formatE(`val`: Int): String {
-    return ef.format(`val`.toLong())
-  }
-
-  fun formatE(`val`: Long): String {
-    return ef.format(`val`)
-  }
-
-  fun formatE(`val`: BigInteger?): String {
-    return ef.format(`val`)
+  fun formatE(input: BigInteger?): String {
+    return ef.format(input)
   }
 
   fun clampVal(i: Int, min: Int, max: Int): Int {

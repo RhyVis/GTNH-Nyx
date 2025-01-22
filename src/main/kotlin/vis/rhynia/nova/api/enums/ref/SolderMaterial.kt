@@ -21,4 +21,6 @@ enum class SolderMaterial : RefHelper {
         IndaAlloy -> MaterialsAlloy.INDALLOY_140.getFluidStack(amount)
         MutatedLivingAlloy -> MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(amount)
       }
+
+  fun getFluidStack(amount: Long) = getFluidStack(amount.toInt())
 }

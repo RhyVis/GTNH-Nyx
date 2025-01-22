@@ -11,6 +11,7 @@ import net.minecraft.util.EnumChatFormatting.RED
 @Suppress("unused")
 object NovaValues {
   object RecipeValues {
+    const val TICK = 1
     const val SECOND = 20
     const val MINUTE = 60 * SECOND
     const val HOUR = 60 * MINUTE

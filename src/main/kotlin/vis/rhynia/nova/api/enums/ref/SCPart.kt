@@ -1,11 +1,14 @@
 package vis.rhynia.nova.api.enums.ref
 
 import gregtech.api.enums.GTValues
+import gregtech.api.enums.ItemList
 import gregtech.api.enums.Materials
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.util.GTOreDictUnificator
 import kotlin.math.pow
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidStack
+import vis.rhynia.nova.common.material.NovaMaterial
 
 enum class SCPart(private val production: Materials, private val raw: Materials) {
   MV(Materials.SuperconductorMV, Materials.Pentacadmiummagnesiumhexaoxid),
@@ -22,6 +25,10 @@ enum class SCPart(private val production: Materials, private val raw: Materials)
   UIV(Materials.SuperconductorUIV, Materials.SuperconductorUIVBase),
   UMV(Materials.SuperconductorUMV, Materials.SuperconductorUMVBase),
   ;
+
+  companion object {
+    const val TWO: Double = 2.0
+  }
 
   fun getMaterial(raw: Boolean) = if (raw) this.raw else this.production
 
@@ -50,4 +57,21 @@ enum class SCPart(private val production: Materials, private val raw: Materials)
       GTOreDictUnificator.get(OrePrefixes.frameGt, production, amount.toLong())
 
   fun getDust(amount: Int): ItemStack = raw.getDust(amount)
+
+  fun getPump(amount: Int): ItemStack =
+      Tier.valueOf(this.name).getComponent(Tier.Component.ElectricPump, amount)
+
+  fun getSolenoid(amount: Int): ItemStack =
+      ItemList.valueOf("Superconducting_Magnet_Solenoid_${this.name}").get(amount.toLong())
+
+  fun getPrefix(prefix: OrePrefixes, amount: Int): ItemStack = getPrefix(prefix, amount, false)
+
+  fun getPrefix(prefix: OrePrefixes, amount: Int, raw: Boolean): ItemStack =
+      GTOreDictUnificator.get(prefix, getMaterial(raw), amount.toLong())
+
+  fun getMolten(amount: Int): FluidStack = getMaterial(true).getMolten(amount.toLong())
+
+  fun getSxEqualFluid(amount: Int, raw: Boolean = false): FluidStack =
+      if (raw) NovaMaterial.SuperconductorFlux.getFluidOrGas(TWO.pow(ordinal).toInt() * amount * 4)
+      else NovaMaterial.SuperconductorFlux.getFluidOrGas(TWO.pow(ordinal).toInt() * amount)
 }
