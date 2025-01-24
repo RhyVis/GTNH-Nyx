@@ -7,7 +7,7 @@ import gregtech.api.util.GTUtility
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import vis.rhynia.nova.api.interfaces.RefHelper
-import vis.rhynia.nova.common.NovaItemList
+import vis.rhynia.nova.common.loader.container.NovaItemList
 
 @Suppress("unused")
 enum class BundleChip : RefHelper {

@@ -1,8 +1,8 @@
 package vis.rhynia.nova.common.block
 
 import cpw.mods.fml.common.registry.GameRegistry
-import vis.rhynia.nova.common.NovaItemList
 import vis.rhynia.nova.common.block.base.BlockBaseItem01
+import vis.rhynia.nova.common.loader.container.NovaItemList
 
 object BlockRegister {
   private fun registerBlocks() {

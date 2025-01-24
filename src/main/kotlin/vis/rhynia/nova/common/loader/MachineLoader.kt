@@ -1,7 +1,7 @@
 package vis.rhynia.nova.common.loader
 
 import net.minecraft.item.ItemStack
-import vis.rhynia.nova.common.NovaItemList
+import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.tile.multi.process.NovaMTEAstralForge
 
 object MachineLoader {

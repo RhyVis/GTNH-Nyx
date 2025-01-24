@@ -4,9 +4,9 @@ import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting.DARK_PURPLE
 import net.minecraft.util.EnumChatFormatting.DARK_RED
-import vis.rhynia.nova.common.NovaItemList
 import vis.rhynia.nova.common.item.container.NovaMetaItem01
 import vis.rhynia.nova.common.item.container.NovaMetaItem02
+import vis.rhynia.nova.common.loader.container.NovaItemList
 
 object ItemRegister {
   private fun registerItems() {

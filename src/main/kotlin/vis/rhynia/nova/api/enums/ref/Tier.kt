@@ -10,8 +10,12 @@ import gregtech.api.enums.OrePrefixes
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTOreDictUnificator
 import net.minecraft.item.ItemStack
+import org.jetbrains.annotations.Range
+import tectech.loader.recipe.BaseRecipeLoader
+import tectech.thing.CustomItemList
 import vis.rhynia.nova.Log
-import vis.rhynia.nova.common.NovaItemList
+import vis.rhynia.nova.common.loader.container.NovaItemList
+import vis.rhynia.nova.common.loader.container.NovaWirelessHatchList
 
 @Suppress("unused", "SpellCheckingInspection")
 enum class Tier(private val material: Materials) {
@@ -176,4 +180,219 @@ enum class Tier(private val material: Materials) {
               GTPlusPlus.ID, "item.itemBufferCore${this.ordinal + 1}", amount.toLong())
         }
       }
+
+  fun getDynamoHatch(amount: Int): ItemStack? {
+    return when (this) {
+      MAX -> NovaItemList.TestItem01.get(1)
+      ULV,
+      LV,
+      MV,
+      HV,
+      EV,
+      IV,
+      LuV,
+      ZPM,
+      UV ->
+          ItemList.valueOf("Hatch_Dynamo_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      UHV -> ItemList.Hatch_Dynamo_UHV.get(amount.toLong())
+      UEV,
+      UIV,
+      UMV,
+      UXV ->
+          BaseRecipeLoader.getItemContainer("Hatch_Dynamo_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
+
+  fun getEnergyHatch(amount: Int): ItemStack? {
+    return when (this) {
+      MAX -> NovaItemList.TestItem01.get(1)
+      ULV,
+      LV,
+      MV,
+      HV,
+      EV,
+      IV,
+      LuV,
+      ZPM,
+      UV ->
+          ItemList.valueOf("Hatch_Energy_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      UHV -> ItemList.Hatch_Dynamo_UHV.get(amount.toLong())
+      UEV,
+      UIV,
+      UMV,
+      UXV ->
+          BaseRecipeLoader.getItemContainer("Hatch_Energy_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
+
+  fun getEnergyHatch4A(amount: Int): ItemStack {
+    when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      MAX -> {
+        Log.error("Attempting to get $this 4A energy hatch, but it doesn't exist!")
+        return NovaItemList.TestItem01.get(amount.toLong())
+      }
+      EV,
+      IV,
+      LuV,
+      ZPM,
+      UV,
+      UHV,
+      UEV,
+      UIV,
+      UMV,
+      UXV -> {
+        return CustomItemList.valueOf("eM_energyMulti4_$this")
+            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
+    }
+    return NovaItemList.TestItem01.get(1)
+  }
+
+  fun getEnergyHatch16A(amount: Int): ItemStack {
+    when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      MAX -> {
+        Log.error("Attempting to get $this 16A energy hatch, but it doesn't exist!")
+        return NovaItemList.TestItem01.get(amount.toLong())
+      }
+      EV,
+      IV,
+      LuV,
+      ZPM,
+      UV,
+      UHV,
+      UEV,
+      UIV,
+      UMV,
+      UXV -> {
+        return CustomItemList.valueOf("eM_energyMulti16_$this")
+            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
+    }
+    return NovaItemList.TestItem01.get(1)
+  }
+
+  fun getEnergyHatch64A(amount: Int): ItemStack {
+    when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      MAX -> {
+        Log.error("Attempting to get $this 64A energy hatch, but it doesn't exist!")
+        return NovaItemList.TestItem01.get(amount.toLong())
+      }
+      EV,
+      IV,
+      LuV,
+      ZPM,
+      UV,
+      UHV,
+      UEV,
+      UIV,
+      UMV,
+      UXV -> {
+        return CustomItemList.valueOf("eM_energyMulti64_$this")
+            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
+    }
+    return NovaItemList.TestItem01.get(1)
+  }
+
+  fun getDynamoWireless(amount: Int): ItemStack? {
+    if (this == MAX) {
+      return NovaItemList.TestItem01.get(1)
+    }
+    return ItemList.valueOf("Wireless_Dynamo_Energy_$this")
+        .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+  }
+
+  fun getEnergyWireless(amount: Int): ItemStack? {
+    if (this == MAX) {
+      return NovaItemList.TestItem01.get(1)
+    }
+    return ItemList.valueOf("Wireless_Hatch_Energy_$this")
+        .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+  }
+
+  fun getEnergyWireless4A(amount: Int): ItemStack? {
+    return when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      MAX -> NovaItemList.TestItem01.get(1)
+      else ->
+          CustomItemList.valueOf("eM_energyWirelessMulti4_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
+
+  fun getEnergyWireless16A(amount: Int): ItemStack? {
+    return when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      MAX -> NovaItemList.TestItem01.get(1)
+      else ->
+          CustomItemList.valueOf("eM_energyWirelessMulti16_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
+
+  fun getEnergyWireless64A(amount: Int): ItemStack? {
+    return when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      MAX -> NovaItemList.TestItem01.get(1)
+      else ->
+          CustomItemList.valueOf("eM_energyWirelessMulti64_$this")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
+
+  fun getLaserTarget(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack? {
+    return when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      EV,
+      MAX -> NovaItemList.TestItem01.get(1)
+      else ->
+          CustomItemList.valueOf("eM_energyTunnel" + tier + "_" + this)
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
+
+  fun getLaserWireless(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack? {
+    return when (this) {
+      ULV,
+      LV,
+      MV,
+      HV,
+      EV,
+      MAX -> NovaItemList.TestItem01.get(1)
+      UXV ->
+          CustomItemList.valueOf("eM_energyWirelessTunnel" + tier + "_UXV")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      else ->
+          NovaWirelessHatchList.valueOf("ExtLaser${this}$tier")
+              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    }
+  }
 }

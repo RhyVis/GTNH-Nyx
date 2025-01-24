@@ -5,7 +5,7 @@ import gtPlusPlus.core.material.MaterialMisc
 import gtPlusPlus.core.material.MaterialsAlloy
 import net.minecraftforge.fluids.FluidStack
 import vis.rhynia.nova.api.interfaces.RefHelper
-import vis.rhynia.nova.common.NovaItemList
+import vis.rhynia.nova.common.loader.container.NovaItemList
 
 enum class SolderMaterial : RefHelper {
   SolderingAlloy,

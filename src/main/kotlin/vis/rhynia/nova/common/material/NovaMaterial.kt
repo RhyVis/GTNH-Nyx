@@ -90,7 +90,50 @@ object NovaMaterial : Runnable {
           OFFSET_ELEMENT + 5,
           TextureSet.SET_SHINY)
 
-  // region
+  val AstralCatalystBase =
+      Werkstoff(
+          shortArrayOf(0x48, 0x3d, 0x8b),
+          "AstralCatalystBase",
+          subscriptNumbers("Aμⁿ2If3"),
+          Werkstoff.Stats(),
+          Werkstoff.Types.COMPOUND,
+          Werkstoff.GenerationFeatures().disable().onlyDust().addCells().enforceUnification(),
+          OFFSET_MIXTURE + 1,
+          TextureSet.SET_FLUID)
+
+  val AstralCatalystBaseExcited =
+      Werkstoff(
+          shortArrayOf(0x6a, 0x5a, 0xcd),
+          "AstralCatalystBaseExcited",
+          subscriptNumbers("(?Aμⁿ2If3?)*"),
+          Werkstoff.Stats(),
+          Werkstoff.Types.COMPOUND,
+          Werkstoff.GenerationFeatures().disable().addCells(),
+          OFFSET_MIXTURE + 2,
+          TextureSet.SET_FLUID)
+
+  val AstralCatalystReforged =
+      Werkstoff(
+          shortArrayOf(0x41, 0x69, 0xe1),
+          "AstralCatalystReforged",
+          subscriptNumbers("Aμⁿ4?3"),
+          Werkstoff.Stats(),
+          Werkstoff.Types.COMPOUND,
+          Werkstoff.GenerationFeatures().disable().addCells(),
+          OFFSET_MIXTURE + 3,
+          TextureSet.SET_FLUID)
+
+  val AstralCatalystReforgedExcited =
+      Werkstoff(
+          shortArrayOf(0x41, 0x84, 0xe1),
+          "AstralCatalystReforgedExcited",
+          subscriptNumbers("(Aμⁿ4?3)*"),
+          Werkstoff.Stats(),
+          Werkstoff.Types.COMPOUND,
+          Werkstoff.GenerationFeatures().disable().addCells(),
+          OFFSET_MIXTURE + 4,
+          TextureSet.SET_FLUID)
+
   val AstralResidue =
       Werkstoff(
           shortArrayOf(0x19, 0x19, 0x70),
@@ -135,7 +178,6 @@ object NovaMaterial : Runnable {
           Werkstoff.GenerationFeatures().disable().addCells().enforceUnification(),
           OFFSET_PRODUCT + 4,
           TextureSet.SET_FLUID)
-  // endregion
 
   override fun run() {
     OrePrefixes.entries.forEach { GenFeaturesUniversal.addPrefix(it) }
