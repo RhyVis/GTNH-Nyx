@@ -34,7 +34,9 @@ import kotlin.math.pow
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.EnumChatFormatting.RED
 import net.minecraftforge.common.util.ForgeDirection
+import org.apache.commons.lang3.tuple.Pair as ApPair
 import tectech.thing.casing.TTCasingsContainer
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
@@ -141,31 +143,22 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
                         if (block == TTCasingsContainer.StabilisationFieldGenerators) meta else null
                       },
                       listOf(
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 0),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 1),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 2),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 3),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 4),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 5),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 6),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 7),
-                          org.apache.commons.lang3.tuple.Pair.of(
-                              TTCasingsContainer.StabilisationFieldGenerators, 8)),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 0),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 1),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 2),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 3),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 4),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 5),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 6),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 7),
+                          ApPair.of(TTCasingsContainer.StabilisationFieldGenerators, 8)),
                       -1,
                       { t, meta ->
                         if (meta != null) {
                           t.uStableField = meta
                         }
                       },
-                      { t -> t.uStableField })))
+                      { it.uStableField })))
           .addElement('G', ofFrame(Materials.Infinity))
           .build()
 
@@ -219,7 +212,7 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
       MultiblockTooltipBuilder()
           .addMachineType("星光聚能器")
           .addInfo("星辉锻造台的控制器")
-          .addInfo("${EnumChatFormatting.RED}不要试图去理解原理.")
+          .addInfo("${RED}不要试图去理解原理.")
           .addInfo("使用星光将平凡转化为奇迹.")
           .addInfo("没有在指定位置安装稳定器时，最大并行为64.")
           .addInfo("安装稳定器后, 最大并行=64*2^等级.")

@@ -3,6 +3,7 @@ package vis.rhynia.nova.api.util
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import vis.rhynia.nova.Log
+import vis.rhynia.nova.common.loader.container.NovaItemList
 
 @Suppress("unused")
 object ItemUtil {
@@ -94,5 +95,25 @@ object ItemUtil {
     }
     itemStack.stackSize = amount
     return itemStack
+  }
+
+  fun isAstralInfinityGem(itemStack: ItemStack?): Boolean {
+    if (itemStack == null) return false
+    return itemStack.isItemEqual(NovaItemList.AstriumInfinityGem.get(1))
+  }
+
+  fun isAstralInfinityComplex(itemStack: ItemStack?): Boolean {
+    if (itemStack == null) return false
+    return itemStack.isItemEqual(NovaItemList.AstriumInfinityComplex.get(1))
+  }
+
+  fun isAstralInfinityGauge(itemStack: ItemStack?): Boolean {
+    if (itemStack == null) return false
+    return itemStack.isItemEqual(NovaItemList.AstriumInfinityGauge.get(1))
+  }
+
+  fun isCalibration(itemStack: ItemStack?): Boolean {
+    if (itemStack == null) return false
+    return itemStack.isItemEqual(NovaItemList.Calibration.get(1))
   }
 }

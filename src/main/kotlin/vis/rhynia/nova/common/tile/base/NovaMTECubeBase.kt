@@ -40,13 +40,13 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
 
   @OverrideOnly protected abstract fun sCasingBlock(): Block
 
-  @OverrideOnly protected abstract fun sCoreBlock(): Block?
+  @OverrideOnly protected open fun sCoreBlock(): Block? = null
 
   @OverrideOnly protected abstract fun sCasingIndex(): Int
 
   @OverrideOnly protected abstract fun sCasingBlockMeta(): Int
 
-  @OverrideOnly protected fun sCoreBlockMeta(): Int = 0
+  @OverrideOnly protected open fun sCoreBlockMeta(): Int = 0
 
   override fun checkMachine(
       aBaseMetaTileEntity: IGregTechTileEntity?,
@@ -142,7 +142,7 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   }
 
   // spotless:off
-  private val structureShape =
+  protected val structureShape =
       arrayOf(
           arrayOf("CCC", "CCC", "CCC"),
           arrayOf("C~C", "CBC", "CCC"),

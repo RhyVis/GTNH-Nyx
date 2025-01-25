@@ -60,16 +60,13 @@ enum class NovaItemList : IItemContainer {
 
   // region Machine Controller
   AstralForge,
-  UltimateHeater,
+  AtomMacro,
   AssemblyMatrix,
-  VoidMiner,
   KelvinTransformField,
-  ReinforcedAssemblyLine,
   SelectedEnergyGenerator,
   Creator,
   EyeOfUltimate,
   DenseEndpoint,
-  ProcessingMatrix,
   // endregion
 
   // Sig Block

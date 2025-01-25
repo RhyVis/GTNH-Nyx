@@ -1,0 +1,263 @@
+package vis.rhynia.nova.common.tile.multi.generation
+
+import gregtech.api.GregTechAPI
+import gregtech.api.enums.Textures
+import gregtech.api.interfaces.ITexture
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity
+import gregtech.api.logic.ProcessingLogic
+import gregtech.api.recipe.check.CheckRecipeResult
+import gregtech.api.recipe.check.SimpleCheckRecipeResult
+import gregtech.api.render.TextureFactory
+import gregtech.api.util.GTUtility
+import gregtech.api.util.MultiblockTooltipBuilder
+import gregtech.common.blocks.BlockCasings1
+import gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
+import gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser
+import java.math.BigInteger
+import java.util.*
+import mcp.mobius.waila.api.IWailaConfigHandler
+import mcp.mobius.waila.api.IWailaDataAccessor
+import net.minecraft.block.Block
+import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.EnumChatFormatting.AQUA
+import net.minecraft.util.EnumChatFormatting.UNDERLINE
+import net.minecraft.util.EnumChatFormatting.WHITE
+import net.minecraft.world.World
+import net.minecraftforge.common.util.ForgeDirection
+import vis.rhynia.nova.api.enums.NovaValues
+import vis.rhynia.nova.api.util.ItemUtil
+import vis.rhynia.nova.api.util.MathUtil
+import vis.rhynia.nova.common.tile.base.NovaMTECubeBase
+
+class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGenerator> {
+  constructor(aID: Int, aName: String, aNameRegional: String) : super(aID, aName, aNameRegional)
+
+  constructor(aName: String) : super(aName)
+
+  override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): IMetaTileEntity {
+    return NovaMTESelectedEnergyGenerator(this.mName)
+  }
+
+  // region Process
+  private var pCoreValue = 0
+  private var pTweakValue = 0
+  private var pBaseValue = 0L
+  private var pConstruct: BigInteger = BigInteger.ZERO
+  private var pEnergy: BigInteger = BigInteger.ZERO
+  private var pUUID: UUID? = null
+
+  override fun createProcessingLogic(): ProcessingLogic? = null
+
+  override fun checkProcessing(): CheckRecipeResult {
+    resetState()
+    controllerSlot.let {
+      pCoreValue =
+          if (ItemUtil.isAstralInfinityComplex(it)) {
+            it.stackSize
+          } else if (ItemUtil.isAstralInfinityGauge(it)) {
+            it.stackSize * 4
+          } else {
+            return SimpleCheckRecipeResult.ofFailure("no_core_set")
+          }
+    }
+
+    for (inputBus in mInputBusses) {
+      for (itemStack in inputBus.realInventory) {
+        if (ItemUtil.isCalibration(itemStack)) {
+          pBaseValue += itemStack.stackSize.toLong()
+        }
+        if (pTweakValue <= 0 && GTUtility.isAnyIntegratedCircuit(itemStack)) {
+          pTweakValue = MathUtil.clampVal(itemStack.getItemDamage(), 2, 24)
+        }
+      }
+    }
+
+    if (pBaseValue <= 0) {
+      pBaseValue = 1L
+    }
+    if (pTweakValue <= 0) {
+      pTweakValue = 1
+    }
+
+    pConstruct =
+        BigInteger.valueOf(pBaseValue)
+            .multiply(BigInteger.valueOf(pTweakValue.toLong()).pow(pCoreValue))
+    pEnergy =
+        BigInteger.valueOf(Int.Companion.MAX_VALUE.toLong())
+            .multiply(pConstruct)
+            .multiply(BigInteger.valueOf(128))
+
+    addEUToGlobalEnergyMap(pUUID, pEnergy)
+
+    return SimpleCheckRecipeResult.ofSuccess("importing_energy")
+  }
+
+  private fun resetState() {
+    pCoreValue = 0
+    pTweakValue = 0
+    pBaseValue = 0L
+    pConstruct = BigInteger.ZERO
+    pEnergy = BigInteger.ZERO
+    mMaxProgresstime = 128
+    mEfficiencyIncrease = 10000
+  }
+
+  override fun onPreTick(aBaseMetaTileEntity: IGregTechTileEntity?, aTick: Long) {
+    super.onPreTick(aBaseMetaTileEntity, aTick)
+    if (aTick == 1L) {
+      pUUID = baseMetaTileEntity.ownerUuid
+      strongCheckOrAddUser(pUUID)
+    }
+  }
+
+  override fun supportsVoidProtection(): Boolean {
+    return false
+  }
+
+  override fun supportsInputSeparation(): Boolean {
+    return false
+  }
+
+  override fun supportsBatchMode(): Boolean {
+    return false
+  }
+
+  override fun supportsSingleRecipeLocking(): Boolean {
+    return false
+  }
+  // endregion
+
+  // region Structure
+  override fun sCasingBlock(): Block {
+    return GregTechAPI.sBlockCasings1
+  }
+
+  override fun sCoreBlock(): Block? = null
+
+  override fun sCasingIndex(): Int {
+    return (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12)
+  }
+
+  override fun sCasingBlockMeta(): Int {
+    return 12
+  }
+
+  override fun getTexture(
+      baseMetaTileEntity: IGregTechTileEntity,
+      side: ForgeDirection,
+      facing: ForgeDirection,
+      colorIndex: Int,
+      active: Boolean,
+      redstoneLevel: Boolean
+  ): Array<ITexture> {
+    if (side == facing) {
+      if (active)
+          return arrayOf(
+              Textures.BlockIcons.getCasingTextureForId(
+                  GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
+              TextureFactory.builder()
+                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
+                  .extFacing()
+                  .build(),
+              TextureFactory.builder()
+                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
+                  .extFacing()
+                  .glow()
+                  .build())
+      return arrayOf(
+          Textures.BlockIcons.getCasingTextureForId(
+              GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
+          TextureFactory.builder()
+              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
+              .extFacing()
+              .build(),
+          TextureFactory.builder()
+              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
+              .extFacing()
+              .glow()
+              .build())
+    }
+    return arrayOf(
+        Textures.BlockIcons.getCasingTextureForId(
+            GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())))
+  }
+  // endregion
+
+  // region Info
+  protected override fun createTooltip(): MultiblockTooltipBuilder =
+      MultiblockTooltipBuilder()
+          .addMachineType("虚空发电机")
+          .addInfo("虚空发电机的控制器")
+          .addInfo("发电 = 电路板编号^星矩 * 标定指示 * MAX A/t.")
+          .addInfo("产出的能量将直接输出至无线网络.")
+          .addSeparator()
+          .addInfo(NovaValues.CommonStrings.BluePrintTip)
+          .beginStructureBlock(3, 3, 3, false)
+          .addInputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .toolTipFinisher(NovaValues.CommonStrings.NovaMagical)
+
+  override fun getInfoData(): Array<String> {
+    val oStr = super.getInfoData()
+    val nStr = arrayOfNulls<String>(oStr.size + 1)
+    System.arraycopy(oStr, 0, nStr, 0, oStr.size)
+    nStr[oStr.size] = "${AQUA}等效能量: ${GTUtility.formatNumbers(pConstruct)}MAX EU/t"
+    return nStr.filterNotNull().toTypedArray()
+  }
+
+  override fun getWailaBody(
+      itemStack: ItemStack?,
+      currentTip: List<String?>?,
+      accessor: IWailaDataAccessor?,
+      config: IWailaConfigHandler?
+  ) {
+    super.getWailaBody(itemStack, currentTip, accessor, config)
+    val tag = accessor?.nbtData
+    currentTip!!.plus(
+        "${WHITE}等效能量: ${AQUA}${
+      GTUtility.formatNumbers(BigInteger(tag?.getByteArray("pConstructW")))
+    } ${WHITE}${UNDERLINE}MAX${WHITE} EU/t")
+  }
+
+  override fun getWailaNBTData(
+      player: EntityPlayerMP?,
+      tile: TileEntity?,
+      tag: NBTTagCompound?,
+      world: World?,
+      x: Int,
+      y: Int,
+      z: Int
+  ) {
+    super.getWailaNBTData(player, tile, tag, world, x, y, z)
+    val tileEntity = baseMetaTileEntity
+    if (tileEntity?.isActive == true) {
+      tag?.setByteArray("pConstructW", pConstruct.toByteArray())
+    }
+  }
+
+  override fun saveNBTData(aNBT: NBTTagCompound?) {
+    aNBT?.let {
+      it.setInteger("pCoreValue", pCoreValue)
+      it.setInteger("pTweakValue", pTweakValue)
+      it.setLong("pBaseValue", pBaseValue)
+      it.setByteArray("pConstruct", pConstruct.toByteArray())
+      it.setByteArray("pEnergy", pEnergy.toByteArray())
+    }
+    super.saveNBTData(aNBT)
+  }
+
+  override fun loadNBTData(aNBT: NBTTagCompound?) {
+    aNBT?.let {
+      pCoreValue = it.getInteger("pCoreValue")
+      pTweakValue = it.getInteger("pTweakValue")
+      pBaseValue = it.getLong("pBaseValue")
+      pConstruct = BigInteger(it.getByteArray("pConstruct"))
+      pEnergy = BigInteger(it.getByteArray("pEnergy"))
+    }
+    super.loadNBTData(aNBT)
+  }
+  // endregion
+}

@@ -2,7 +2,6 @@ package vis.rhynia.nova.common.block.base
 
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
-import gregtech.api.util.GTLanguageManager
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
@@ -11,7 +10,7 @@ import vis.rhynia.nova.api.util.MetaItemStack
 import vis.rhynia.nova.client.NovaTab
 import vis.rhynia.nova.common.block.BlockRecord.MetaBlock01
 
-class BlockBaseItem01(block: Block) : ItemBlock(block) {
+open class BlockBaseItem01(block: Block) : ItemBlock(block) {
   init {
     setHasSubtypes(true)
     setMaxDamage(0)
@@ -33,15 +32,9 @@ class BlockBaseItem01(block: Block) : ItemBlock(block) {
     }
   }
 
-  @Suppress("SpellCheckingInspection")
-  private val mNoMobsToolTip =
-      GTLanguageManager.addStringLocalization(
-          "gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block")
+  protected val mNoMobsToolTip: String = "Mobs cannot Spawn on this Block"
 
-  @Suppress("SpellCheckingInspection")
-  private val mNoTileEntityToolTip =
-      GTLanguageManager.addStringLocalization(
-          "gt.notileentityinthisblock", "This is NOT a TileEntity!")
+  protected val mNoTileEntityToolTip: String = "This is NOT a TileEntity!"
 
   @SideOnly(Side.CLIENT)
   override fun addInformation(

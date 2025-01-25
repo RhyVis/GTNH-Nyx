@@ -12,16 +12,18 @@ import gregtech.api.metatileentity.implementations.MTEHatchDynamo
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.util.GTUtility
 import gregtech.api.util.IGTHatchAdder
+import gregtech.common.tileentities.machines.MTEHatchOutputBusME
+import gregtech.common.tileentities.machines.MTEHatchOutputME
 import mcp.mobius.waila.api.IWailaConfigHandler
 import mcp.mobius.waila.api.IWailaDataAccessor
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.realms.Tezzelator.t
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.world.World
 import net.minecraftforge.fluids.Fluid
+import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 import vis.rhynia.nova.api.interfaces.ProcessExtension
@@ -85,6 +87,10 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
   override fun addToMachineList(aTileEntity: IGregTechTileEntity?, aBaseCasingIndex: Int): Boolean {
     return super.addToMachineList(aTileEntity, aBaseCasingIndex) ||
         addDynamoToMachineList(aTileEntity, aBaseCasingIndex)
+  }
+
+  fun addToMachineList(aTileEntity: IGregTechTileEntity?, aBaseCasingIndex: Short): Boolean {
+    return addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
   }
 
   override fun addDynamoToMachineList(
@@ -163,7 +169,7 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
   protected open val useAltLogic
     @OverrideOnly get() = false
 
-  override fun createProcessingLogic(): ProcessingLogic {
+  override fun createProcessingLogic(): ProcessingLogic? {
     return if (useAltLogic)
         object : NovaProcessingLogic() {
           override fun process(): CheckRecipeResult {
@@ -202,7 +208,7 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     if (storedFluids.isNullOrEmpty()) return false
     var cost = amount
     storedFluids.forEach {
-      if (it.getFluid() === fluid) {
+      if (it.getFluid() == fluid) {
         if (it.amount >= cost) {
           it.amount -= cost
           return true
@@ -213,6 +219,54 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
       }
     }
     return cost <= 0
+  }
+
+  protected fun outputItemToAENetwork(item: ItemStack?, amount: Long) {
+    var amount = amount
+    if ((item == null) || (amount <= 0)) return
+
+    mOutputBusses
+        .firstOrNull { it is MTEHatchOutputBusME }
+        ?.let {
+          it as MTEHatchOutputBusME
+          if (amount < Int.MAX_VALUE) {
+            it.store(item.copy().apply { stackSize = amount.toInt() })
+          } else {
+            // For item stacks > Int max.
+            while (amount >= Int.MAX_VALUE) {
+              it.store(item.copy().apply { stackSize = Int.MAX_VALUE })
+              amount -= Int.MAX_VALUE.toLong()
+            }
+
+            if (amount > 0) {
+              it.store(item.copy().apply { stackSize = amount.toInt() })
+            }
+          }
+        }
+  }
+
+  protected fun outputFluidToAENetwork(fluid: FluidStack?, amount: Long) {
+    var amount = amount
+    if ((fluid == null) || (amount <= 0)) return
+
+    mOutputHatches
+        .firstOrNull { it is MTEHatchOutputME }
+        ?.let {
+          it as MTEHatchOutputME
+          if (amount < Int.MAX_VALUE) {
+            it.tryFillAE(fluid.copy().apply { this.amount = amount.toInt() })
+          } else {
+            // For fluidStacks > Int max.
+            while (amount >= Int.MAX_VALUE) {
+              it.tryFillAE(fluid.copy().apply { this.amount = Int.MAX_VALUE })
+              amount -= Int.MAX_VALUE.toLong()
+            }
+
+            if (amount > 0) {
+              it.tryFillAE(fluid.copy().apply { this.amount = amount.toInt() })
+            }
+          }
+        }
   }
 
   override fun getInfoData(): Array<String> {

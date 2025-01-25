@@ -15,7 +15,7 @@ import net.minecraft.world.IBlockAccess
 import vis.rhynia.nova.client.NovaTab
 import vis.rhynia.nova.client.block.BlockDataClient.ICON_BLOCK_MAP_01
 
-class BlockBase01 : Block {
+open class BlockBase01 : Block {
   constructor(material: Material) : super(material)
 
   constructor() : this(Material.iron) {

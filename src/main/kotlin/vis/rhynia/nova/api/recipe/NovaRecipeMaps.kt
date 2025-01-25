@@ -44,7 +44,7 @@ object NovaRecipeMaps {
           .progressBarSize(17, 17)
           .progressBarPos(79, 27)
           .neiHandlerInfo {
-            it.setDisplayStack(NovaItemList.UltimateHeater.get(1)).setMaxRecipesPerPage(2)
+            it.setDisplayStack(NovaItemList.AtomMacro.get(1)).setMaxRecipesPerPage(2)
           }
           .neiRecipeBackgroundSize(170, 10 + 4 * 18)
           .frontend(::ThermonuclearControlFrontend)
@@ -62,7 +62,7 @@ object NovaRecipeMaps {
           .progressBarSize(15, 15)
           .progressBarPos(85, 27)
           .neiHandlerInfo {
-            it.setDisplayStack(NovaItemList.UltimateHeater.get(1)).setMaxRecipesPerPage(1)
+            it.setDisplayStack(NovaItemList.AtomMacro.get(1)).setMaxRecipesPerPage(1)
           }
           .neiRecipeBackgroundSize(170, 10 + 6 * 18)
           .frontend(::TranscendentReactorFrontend)

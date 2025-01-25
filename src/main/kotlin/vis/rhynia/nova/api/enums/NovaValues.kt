@@ -1,5 +1,6 @@
 package vis.rhynia.nova.api.enums
 
+import com.gtnewhorizons.modularui.api.drawable.UITexture
 import gregtech.api.enums.GTValues
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.BLUE
@@ -36,6 +37,10 @@ object NovaValues {
     val RECIPE_UMV = GTValues.VP[12]
     val RECIPE_UXV = GTValues.VP[13]
     val RECIPE_MAX = GTValues.VP[14]
+  }
+
+  object TextureSets {
+    val NovaLogo32: UITexture = UITexture.fullImage("nova", "gui/picture/va_logo_32_t")
   }
 
   object CommonStrings {
