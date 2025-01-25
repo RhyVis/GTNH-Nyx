@@ -54,7 +54,7 @@ enum class SCPart(private val production: Materials, private val raw: Materials)
       GTOreDictUnificator.get(OrePrefixes.wireFine, raw, amount.toLong())
 
   fun getFrame(amount: Int): ItemStack =
-      GTOreDictUnificator.get(OrePrefixes.frameGt, production, amount.toLong())
+      GTOreDictUnificator.get(OrePrefixes.frameGt, raw, amount.toLong())
 
   fun getDust(amount: Int): ItemStack = raw.getDust(amount)
 

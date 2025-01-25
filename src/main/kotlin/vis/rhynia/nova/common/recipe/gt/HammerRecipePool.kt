@@ -57,7 +57,6 @@ class HammerRecipePool : RecipePool {
         .eut(RECIPE_LuV)
         .durSec(25)
         .addTo(hammer)
-
     // endregion
 
     // region 矩阵

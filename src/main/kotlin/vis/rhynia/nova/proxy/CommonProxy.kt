@@ -12,6 +12,7 @@ import vis.rhynia.nova.Tags
 import vis.rhynia.nova.common.loader.MachineLoader
 import vis.rhynia.nova.common.loader.MaterialLoader
 import vis.rhynia.nova.common.loader.RecipeLoader
+import vis.rhynia.nova.common.loader.WirelessExtraLoader
 
 open class CommonProxy {
   // Read config, create blocks, items, etc., and register them with the GameRegistry.
@@ -27,6 +28,7 @@ open class CommonProxy {
   open fun init(event: FMLInitializationEvent) {
     Log.info("Initializing ${Constant.MOD_NAME} machines...")
     MachineLoader.load()
+    WirelessExtraLoader.load()
   }
 
   // Handle interaction with other mods, complete setup.

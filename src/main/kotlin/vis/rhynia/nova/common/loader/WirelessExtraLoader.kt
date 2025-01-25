@@ -21,7 +21,7 @@ object WirelessExtraLoader {
     }
   }
 
-  fun doRegister() {
+  fun load() {
     for (extW in NovaWirelessHatchList.entries) {
       extW.set(
           MTEHatchWirelessMultiExtended(

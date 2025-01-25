@@ -19,6 +19,8 @@ import gregtech.api.util.GTRecipeBuilder.BUCKETS
 import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility
 import gtPlusPlus.core.material.MaterialsAlloy
+import net.minecraft.init.Items
+import net.minecraft.item.ItemStack
 import tectech.thing.CustomItemList
 import vis.rhynia.nova.Config
 import vis.rhynia.nova.api.enums.NovaMods
@@ -309,13 +311,13 @@ class MicroAssemblyRecipePool : RecipePool {
         .eut(RECIPE_UMV)
         .durSec(800 * multiple.toInt())
         .addTo(ma)
-    // Piko UMV
-    val pikoC = getCoreItem("PikoCircuit", multiple.toInt())
-    val pikoW = getCoreItem("PikoWafer", 4 * multiple.toInt())
+    // Pico UMV
+    val picoC = getCoreItem("PikoCircuit", multiple.toInt())
+    val picoW = getCoreItem("PicoWafer", 4 * multiple.toInt())
     builder()
         .itemInputs(
             ItemList.Circuit_Board_Optical.get(multiple),
-            pikoW,
+            picoW,
             ItemList.Circuit_OpticalMainframe.get(2 * multiple),
             BartPart.Opt_Transistor.getItemStack(3 * multiple),
             BartPart.Opt_Resistor.getItemStack(3 * multiple),
@@ -330,7 +332,7 @@ class MicroAssemblyRecipePool : RecipePool {
             MaterialsUEVplus.TranscendentMetal.getMolten(4 * INGOTS * multiple),
             Materials.Neutronium.getMolten(2 * INGOTS * multiple),
             Materials.Lanthanum.getMolten(8 * INGOTS * multiple))
-        .itemOutputs(pikoC)
+        .itemOutputs(picoC)
         .eut(RECIPE_UMV)
         .durSec(400 * multiple.toInt())
         .addTo(ma)
@@ -357,8 +359,7 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             BartPart.Elite_Board.getItemStack(1),
-            GTUtility.copyAmountUnsafe(
-                16 * 16, GTModHandler.getModItem("dreamcraft", "item.EngravedGoldChip", 1)),
+            GTUtility.copyAmountUnsafe(16 * 16, getCoreItem("EngravedGoldChip", 1)),
             BartPart.Part_ASOC.getItemStack(8),
             BartPart.Part_NOR.getItemStack(32))
         .fluidInputs(
@@ -422,7 +423,7 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             ItemRefer.HiC_T4.get(8),
-            getCoreItem("EngravedManyullynCrystalChip", 32),
+            getCoreItem("EngravedManyullynCrystalChip", 64),
             ItemList.Circuit_Chip_BioCPU.get(1))
         .fluidInputs(
             GGMaterial.titaniumBetaC.getMolten(4 * 1728),
@@ -504,10 +505,11 @@ class MicroAssemblyRecipePool : RecipePool {
                 GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 64),
                 4 * 64),
             ItemUtil.setStackSize(Materials.Redstone.getPlates(64), 4 * 64),
-            ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 4 * 64))
+            ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 4 * 64),
+            ItemStack(Items.ender_pearl, 64))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(4 * INGOTS),
-            Materials.EnderPearl.getIngotMolten(64))
+        )
         .itemOutputs(
             GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 4, 33))
         .eut(RECIPE_LuV)
@@ -516,18 +518,14 @@ class MicroAssemblyRecipePool : RecipePool {
     // Spacial 3
     builder()
         .itemInputs(
-            ItemUtil.setStackSize(
-                GTModHandler.getModItem(
-                    NewHorizonsCoreMod.ID, "item.EngineeringProcessorSpatialPulsatingCore", 64),
-                256),
-            ItemUtil.setStackSize(
-                GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 64),
-                16 * 64),
+            getCoreItem("EngineeringProcessorSpatialPulsatingCore", 1).withSize(256),
+            getCoreItem("ChargedCertusQuartzPlate", 1).withSize(16 * 64),
             ItemUtil.setStackSize(Materials.Redstone.getPlates(64), 16 * 64),
-            ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 16 * 64))
+            ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 16 * 64),
+            ItemStack(Items.ender_eye, 64))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(4 * INGOTS),
-            Materials.EnderEye.getIngotMolten(64))
+        )
         .itemOutputs(
             GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 34))
         .eut(RECIPE_UV)

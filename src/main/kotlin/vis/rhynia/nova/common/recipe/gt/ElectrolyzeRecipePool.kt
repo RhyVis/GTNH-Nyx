@@ -1,12 +1,12 @@
 package vis.rhynia.nova.common.recipe.gt
 
-import com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV
 import gregtech.api.enums.Materials
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gtPlusPlus.core.material.MaterialMisc
 import gtPlusPlus.core.material.MaterialsElements
+import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.material.NovaMaterial

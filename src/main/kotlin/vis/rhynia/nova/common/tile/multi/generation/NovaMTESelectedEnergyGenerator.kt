@@ -215,10 +215,9 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
       config: IWailaConfigHandler?
   ) {
     super.getWailaBody(itemStack, currentTip, accessor, config)
-    val tag = accessor?.nbtData
     currentTip!!.plus(
         "${WHITE}等效能量: ${AQUA}${
-      GTUtility.formatNumbers(BigInteger(tag?.getByteArray("pConstructW")))
+      GTUtility.formatNumbers(pConstruct)
     } ${WHITE}${UNDERLINE}MAX${WHITE} EU/t")
   }
 

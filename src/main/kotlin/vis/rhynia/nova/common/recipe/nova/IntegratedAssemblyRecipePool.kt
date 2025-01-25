@@ -7,6 +7,7 @@ import goodgenerator.util.ItemRefer
 import gregtech.api.enums.ItemList
 import gregtech.api.enums.Materials
 import gregtech.api.enums.MaterialsUEVplus
+import gregtech.api.enums.Mods
 import gregtech.api.enums.Mods.AE2FluidCraft
 import gregtech.api.enums.Mods.AdvancedSolarPanel
 import gregtech.api.enums.Mods.AppliedEnergistics2
@@ -28,7 +29,10 @@ import gregtech.api.util.GTUtility
 import gtPlusPlus.core.material.MaterialsAlloy
 import gtPlusPlus.core.material.MaterialsElements
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList
+import tectech.loader.recipe.BaseRecipeLoader
 import tectech.thing.CustomItemList
+import vexatos.tgregworks.reference.PartTypes
+import vexatos.tgregworks.util.TGregUtils
 import vis.rhynia.nova.Config
 import vis.rhynia.nova.api.enums.NovaMods
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_EV
@@ -96,25 +100,26 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .durSec(4)
         .addTo(ia)
     // 中子压缩机
-    builder()
-        .itemInputs(
-            ItemList.Hull_UV.get(1),
-            Tier.UV.getComponent(Tier.Component.ElectricMotor, 4),
-            Tier.UV.getComponent(Tier.Component.ElectricPiston, 8),
-            Tier.UV.getComponent(Tier.Component.ConveyorModule, 8),
-            Tier.UHV.getCircuit(4),
-            GTModHandler.getModItem(Avaritia.ID, "Resource", 8, 1),
-            GTModHandler.getModItem(TinkerConstruct.ID, "heavyPlate", 10, 500),
-            // TGregUtils.newItemStack(Materials.BlackPlutonium, PartTypes.LargePlate, 8),
-            GTModHandler.getModItem(TinkerConstruct.ID, "heavyPlate", 6, 315))
-        .fluidInputs(
-            Materials.CosmicNeutronium.getIngotMolten(72),
-            Materials.Neutronium.getIngotMolten(4),
-        )
-        .itemOutputs(GTModHandler.getModItem(Avaritia.ID, "Neutronium_Compressor", 1, 0))
-        .eut(RECIPE_UV)
-        .durSec(4)
-        .addTo(ia)
+    if (Mods.TinkersGregworks.isModLoaded)
+        builder()
+            .itemInputs(
+                ItemList.Hull_UV.get(1),
+                Tier.UV.getComponent(Tier.Component.ElectricMotor, 4),
+                Tier.UV.getComponent(Tier.Component.ElectricPiston, 8),
+                Tier.UV.getComponent(Tier.Component.ConveyorModule, 8),
+                Tier.UHV.getCircuit(4),
+                GTModHandler.getModItem(Avaritia.ID, "Resource", 8, 1),
+                GTModHandler.getModItem(TinkerConstruct.ID, "heavyPlate", 10, 500),
+                TGregUtils.newItemStack(Materials.BlackPlutonium, PartTypes.LargePlate, 8),
+                GTModHandler.getModItem(TinkerConstruct.ID, "heavyPlate", 6, 315))
+            .fluidInputs(
+                Materials.CosmicNeutronium.getIngotMolten(72),
+                Materials.Neutronium.getIngotMolten(4),
+            )
+            .itemOutputs(GTModHandler.getModItem(Avaritia.ID, "Neutronium_Compressor", 1, 0))
+            .eut(RECIPE_UV)
+            .durSec(4)
+            .addTo(ia)
     // 传送机
     builder()
         .itemInputs(
@@ -502,42 +507,44 @@ class IntegratedAssemblyRecipePool : RecipePool {
     // endregion
 
     // region 戴森球
-    // 耐高温网 1024
-    builder()
-        .itemInputs(
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Carbon, 1), 128),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Neutronium, 1), 512),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.TungstenCarbide, 1), 512),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Tantalum, 1), 512))
-        .fluidInputs(
-            SolderMaterial.IndaAlloy.getFluidStack(128 * INGOTS),
-            MaterialsAlloy.SILICON_CARBIDE.getFluidStack(48 * INGOTS))
-        .itemOutputs(
-            ItemUtil.setStackSize(ItemUtil.getItemStack(IGItems.DysonSwarmItems, 1, 3), 1024))
-        .eut(RECIPE_LuV)
-        .durSec(200)
-        .addTo(ia)
-    // 戴森球模块 512 8x
-    builder()
-        .itemInputs(
-            ItemList.Cover_SolarPanel_UV.get(1),
-            ItemUtil.getItemStack(IGItems.DysonSwarmItems, 32, 3),
-            ItemRefer.Radiation_Protection_Plate.get(4),
-            BartPart.Part_IC_Q.getItemStack(1),
-            BundleChip.UHV.getItemStack(1),
-            ItemList.Emitter_UEV.get(4),
-            ItemList.Sensor_UEV.get(4))
-        .fluidInputs(SolderMaterial.MutatedLivingAlloy.getFluidStack(256 * INGOTS))
-        .itemOutputs(
-            GTUtility.copyAmountUnsafe(
-                8 * 64, ItemUtil.getItemStack(IGItems.DysonSwarmItems, 1, 0)))
-        .eut(RECIPE_UEV)
-        .durSec(5)
-        .addTo(ia)
+    if (Mods.GTNHIntergalactic.isModLoaded) {
+      // 耐高温网 1024
+      builder()
+          .itemInputs(
+              ItemUtil.setStackSize(
+                  GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Carbon, 1), 128),
+              ItemUtil.setStackSize(
+                  GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Neutronium, 1), 512),
+              ItemUtil.setStackSize(
+                  GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.TungstenCarbide, 1), 512),
+              ItemUtil.setStackSize(
+                  GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Tantalum, 1), 512))
+          .fluidInputs(
+              SolderMaterial.IndaAlloy.getFluidStack(128 * INGOTS),
+              MaterialsAlloy.SILICON_CARBIDE.getFluidStack(48 * INGOTS))
+          .itemOutputs(
+              ItemUtil.setStackSize(ItemUtil.getItemStack(IGItems.DysonSwarmItems, 1, 3), 1024))
+          .eut(RECIPE_LuV)
+          .durSec(200)
+          .addTo(ia)
+      // 戴森球模块 512 8x
+      builder()
+          .itemInputs(
+              ItemList.Cover_SolarPanel_UV.get(1),
+              ItemUtil.getItemStack(IGItems.DysonSwarmItems, 32, 3),
+              ItemRefer.Radiation_Protection_Plate.get(4),
+              BartPart.Part_IC_Q.getItemStack(1),
+              BundleChip.UHV.getItemStack(1),
+              ItemList.Emitter_UEV.get(4),
+              ItemList.Sensor_UEV.get(4))
+          .fluidInputs(SolderMaterial.MutatedLivingAlloy.getFluidStack(256 * INGOTS))
+          .itemOutputs(
+              GTUtility.copyAmountUnsafe(
+                  8 * 64, ItemUtil.getItemStack(IGItems.DysonSwarmItems, 1, 0)))
+          .eut(RECIPE_UEV)
+          .durSec(5)
+          .addTo(ia)
+    }
     // endregion
 
     // region Optical
@@ -607,8 +614,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
 
     // region Coil UHV+
     // Infinity
-    var micaStack = getCoreItem("micaInsulatorFoil", 64)
-    var micaStackHalf = getCoreItem("micaInsulatorFoil", 32)
+    var micaStack = BaseRecipeLoader.getItemContainer("MicaInsulatorFoil").get(64)
+    var micaStackHalf = getCoreItem("MicaInsulatorFoil", 32)
     builder()
         .itemInputs(
             GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
@@ -784,7 +791,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .itemInputs(
             GregtechItemList.Casing_Fusion_Internal.get(48),
             ItemRefer.HiC_T5.get(16),
-            GTModHandler.getModItem("miscutils", "item.itemBufferCore4", 16))
+            GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore4", 16))
         .fluidInputs(
             MaterialsAlloy.ENERGYCRYSTAL.getFluidStack(16 * 8 * INGOTS),
             MaterialsAlloy.LAURENIUM.getFluidStack(16 * INGOTS))
@@ -798,7 +805,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GregtechItemList.Casing_Fusion_Internal2.get(48),
             ItemRefer.HiC_T5.get(64),
             BundleChip.UEV.getItemStack(1),
-            GTModHandler.getModItem("miscutils", "item.itemBufferCore5", 16))
+            GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore5", 16))
         .fluidInputs(
             MaterialsAlloy.BLACK_TITANIUM.getFluidStack(16 * 8 * INGOTS),
             GGMaterial.metastableOganesson.getMolten(16 * 4 * INGOTS))
@@ -986,7 +993,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             Tier.UV.getComponent(Tier.Component.FieldGenerator, 16))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 10 * INGOTS),
-            GGMaterial.preciousMetalAlloy.getMolten(16 * 4 * 9 * INGOTS),
+            GGMaterial.preciousMetalAlloy.getIngotMolten(16 * 4 * 9),
             MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFluidStack(16 * 2 * INGOTS))
         .itemOutputs(GregtechItemList.NeutronShieldingCore.get(16))
         .eut(RECIPE_UEV)
@@ -1001,7 +1008,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             Tier.UEV.getComponent(Tier.Component.FieldGenerator, 16))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 20 * INGOTS),
-            GGMaterial.enrichedNaquadahAlloy.getMolten(16 * 4 * 9 * INGOTS),
+            GGMaterial.enrichedNaquadahAlloy.getIngotMolten(16 * 4 * 9),
             FluidUtil.getFluidStackByName("molten.radoxpoly", 16 * 2 * INGOTS))
         .itemOutputs(GregtechItemList.CosmicFabricShieldingCore.get(16))
         .eut(RECIPE_UIV)
@@ -1035,7 +1042,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 40 * INGOTS),
             GGMaterial.shirabon.getMolten(16 * 4 * 9 * INGOTS),
-            Materials.Dilithium.getIngotMolten(16 * 2))
+            // Materials.Dilithium.getIngotMolten(16 * 2),
+            Materials.Lithium.getIngotMolten(32 * 2))
         .itemOutputs(GregtechItemList.SpaceTimeBendingCore.get(16))
         .eut(RECIPE_UXV)
         .durSec(12 * 120)

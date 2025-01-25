@@ -7,11 +7,11 @@ import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods.BartWorks
 import gregtech.api.enums.Mods.GTPlusPlus
 import gregtech.api.enums.OrePrefixes
+import gregtech.api.interfaces.IItemContainer
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTOreDictUnificator
 import net.minecraft.item.ItemStack
 import org.jetbrains.annotations.Range
-import tectech.loader.recipe.BaseRecipeLoader
 import tectech.thing.CustomItemList
 import vis.rhynia.nova.Log
 import vis.rhynia.nova.common.loader.container.NovaItemList
@@ -45,8 +45,7 @@ enum class Tier(private val material: Materials) {
     Sensor("Sensor"),
     FieldGenerator("Field_Generator");
 
-    val prefix: String
-      get() = "${this.enumNamePrefix}_"
+    fun ofTier(tier: Tier): IItemContainer = ItemList.valueOf("${this.enumNamePrefix}_$tier")
   }
 
   enum class Hatch {
@@ -104,12 +103,8 @@ enum class Tier(private val material: Materials) {
         }
 
   val circuitMaterial: Materials
-    get() =
-        when (this) {
-          UMV -> Materials.Piko
-          else -> material
-        }
-
+    get() = material
+  /** when (this) { UMV -> Materials.Piko else -> material } */
   fun getSolder(amount: Int) = solderMaterial.getFluidStack(amount)
 
   fun getCircuit(amount: Int): ItemStack =
@@ -121,9 +116,7 @@ enum class Tier(private val material: Materials) {
     if (this == ULV) {
       Log.error("Attempting to get ULV component, but it's already removed!")
       return NovaItemList.TestItem01.get(1)
-    } else
-        return ItemList.valueOf(component.prefix + this.toString())
-            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+    } else return component.ofTier(this).get(amount.toLong(), NovaItemList.TestItem01.get(1))
   }
 
   fun getCoil(amount: Int): ItemStack =
@@ -184,23 +177,8 @@ enum class Tier(private val material: Materials) {
   fun getDynamoHatch(amount: Int): ItemStack? {
     return when (this) {
       MAX -> NovaItemList.TestItem01.get(1)
-      ULV,
-      LV,
-      MV,
-      HV,
-      EV,
-      IV,
-      LuV,
-      ZPM,
-      UV ->
+      else ->
           ItemList.valueOf("Hatch_Dynamo_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-      UHV -> ItemList.Hatch_Dynamo_UHV.get(amount.toLong())
-      UEV,
-      UIV,
-      UMV,
-      UXV ->
-          BaseRecipeLoader.getItemContainer("Hatch_Dynamo_$this")
               .get(amount.toLong(), NovaItemList.TestItem01.get(1))
     }
   }
@@ -208,23 +186,8 @@ enum class Tier(private val material: Materials) {
   fun getEnergyHatch(amount: Int): ItemStack? {
     return when (this) {
       MAX -> NovaItemList.TestItem01.get(1)
-      ULV,
-      LV,
-      MV,
-      HV,
-      EV,
-      IV,
-      LuV,
-      ZPM,
-      UV ->
+      else ->
           ItemList.valueOf("Hatch_Energy_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-      UHV -> ItemList.Hatch_Dynamo_UHV.get(amount.toLong())
-      UEV,
-      UIV,
-      UMV,
-      UXV ->
-          BaseRecipeLoader.getItemContainer("Hatch_Energy_$this")
               .get(amount.toLong(), NovaItemList.TestItem01.get(1))
     }
   }
@@ -239,16 +202,7 @@ enum class Tier(private val material: Materials) {
         Log.error("Attempting to get $this 4A energy hatch, but it doesn't exist!")
         return NovaItemList.TestItem01.get(amount.toLong())
       }
-      EV,
-      IV,
-      LuV,
-      ZPM,
-      UV,
-      UHV,
-      UEV,
-      UIV,
-      UMV,
-      UXV -> {
+      else -> {
         return CustomItemList.valueOf("eM_energyMulti4_$this")
             .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }
@@ -266,16 +220,7 @@ enum class Tier(private val material: Materials) {
         Log.error("Attempting to get $this 16A energy hatch, but it doesn't exist!")
         return NovaItemList.TestItem01.get(amount.toLong())
       }
-      EV,
-      IV,
-      LuV,
-      ZPM,
-      UV,
-      UHV,
-      UEV,
-      UIV,
-      UMV,
-      UXV -> {
+      else -> {
         return CustomItemList.valueOf("eM_energyMulti16_$this")
             .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }
@@ -293,16 +238,7 @@ enum class Tier(private val material: Materials) {
         Log.error("Attempting to get $this 64A energy hatch, but it doesn't exist!")
         return NovaItemList.TestItem01.get(amount.toLong())
       }
-      EV,
-      IV,
-      LuV,
-      ZPM,
-      UV,
-      UHV,
-      UEV,
-      UIV,
-      UMV,
-      UXV -> {
+      else -> {
         return CustomItemList.valueOf("eM_energyMulti64_$this")
             .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }

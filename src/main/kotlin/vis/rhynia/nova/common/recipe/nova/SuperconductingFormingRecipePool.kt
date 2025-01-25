@@ -46,7 +46,7 @@ class SuperconductingFormingRecipePool : RecipePool {
     }
 
     // Frame from molten
-    for (sc in SCPart.values()) {
+    for (sc in SCPart.entries) {
       builder()
           .itemInputs(GTUtility.getIntegratedCircuit(4), ItemUtil.setStackSize(sc.getDust(1), 256))
           .itemOutputs(sc.getFrame(64))

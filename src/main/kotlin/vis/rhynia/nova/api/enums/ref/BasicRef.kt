@@ -5,18 +5,23 @@ import gregtech.api.enums.Mods.GTPlusPlus
 import gregtech.api.enums.Mods.GoodGenerator
 import gregtech.api.enums.Mods.KekzTech
 import gregtech.api.util.GTModHandler
+import gtPlusPlus.core.util.minecraft.FluidUtils.amount
 import net.minecraft.item.ItemStack
 import net.minecraft.util.MathHelper
+import vis.rhynia.nova.common.loader.container.NovaItemList
 
 @Suppress("unused", "SpellCheckingInspection")
 object BasicRef {
-  fun getSingularity(amount: Int): ItemStack {
-    return GTModHandler.getModItem(EternalSingularity.ID, "eternal_singularity", amount.toLong())
-  }
+  fun getSingularity(amount: Int): ItemStack =
+      GTModHandler.getModItem(
+          EternalSingularity.ID,
+          "eternal_singularity",
+          amount.toLong(),
+          NovaItemList.TestItem01.get(amount.toLong()))
 
-  fun getSingularityCatalyst(): ItemStack {
-    return GTModHandler.getModItem(EternalSingularity.ID, "eternal_singularity", 0)
-  }
+  fun getSingularityCatalyst(): ItemStack =
+      GTModHandler.getModItem(
+          EternalSingularity.ID, "eternal_singularity", 0, NovaItemList.TestItem01.get(0))
 
   fun getFluidCore(tier: Int, amount: Int): ItemStack {
     val tierMeta = MathHelper.clamp_int(tier, 1, 10) - 1
