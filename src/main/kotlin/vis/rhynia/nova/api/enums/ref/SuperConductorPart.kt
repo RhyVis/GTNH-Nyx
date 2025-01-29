@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import vis.rhynia.nova.common.material.NovaMaterial
 
-enum class SCPart(private val production: Materials, private val raw: Materials) {
+enum class SuperConductorPart(private val production: Materials, private val raw: Materials) {
   MV(Materials.SuperconductorMV, Materials.Pentacadmiummagnesiumhexaoxid),
   HV(Materials.SuperconductorHV, Materials.Titaniumonabariumdecacoppereikosaoxid),
   EV(Materials.SuperconductorEV, Materials.Uraniumtriplatinid),

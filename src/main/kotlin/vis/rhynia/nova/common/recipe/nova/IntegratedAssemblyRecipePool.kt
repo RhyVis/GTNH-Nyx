@@ -49,7 +49,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.SECOND
 import vis.rhynia.nova.api.enums.ref.BartPart
 import vis.rhynia.nova.api.enums.ref.BasicRef
 import vis.rhynia.nova.api.enums.ref.BundleChip
-import vis.rhynia.nova.api.enums.ref.SCPart
+import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.enums.ref.Tier
 import vis.rhynia.nova.api.interfaces.RecipePool
@@ -139,7 +139,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
     // Gravitation Engine
     builder()
         .itemInputs(
-            SCPart.LuV.getPrefix(OrePrefixes.wireGt16, 4),
+            SuperConductorPart.LuV.getPrefix(OrePrefixes.wireGt16, 4),
             ItemList.IV_Coil.get(16),
             GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64),
             GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64))
@@ -864,7 +864,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(Tier.UV.getComponent(Tier.Component.ElectricPump, 1), 128),
             ItemUtil.setStackSize(ItemList.Circuit_Wafer_PPIC.get(1), 32 * 16))
         .fluidInputs(
-            SCPart.ZPM.getSxEqualFluid(128 * 16),
+            SuperConductorPart.ZPM.getSxEqualFluid(128 * 16),
             Materials.Americium.getIngotMolten(8 * 9 * 16),
             Materials.BlackPlutonium.getIngotMolten(16 * 3 * 16),
             Materials.Osmium.getIngotMolten(2 * 16),
@@ -882,7 +882,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(Tier.UHV.getComponent(Tier.Component.ElectricPump, 1), 128),
             ItemUtil.setStackSize(ItemList.Circuit_Wafer_PPIC.get(1), 48 * 16))
         .fluidInputs(
-            SCPart.UV.getSxEqualFluid(2 * 128 * 16),
+            SuperConductorPart.UV.getSxEqualFluid(2 * 128 * 16),
             Materials.Infinity.getIngotMolten(8 * 9 * 16),
             Materials.Neutronium.getIngotMolten(16 * 3 * 16),
             Materials.CosmicNeutronium.getIngotMolten(2 * 16),
@@ -900,7 +900,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(Tier.UEV.getComponent(Tier.Component.ElectricPump, 1), 128),
             ItemUtil.setStackSize(ItemList.Circuit_Wafer_PPIC.get(1), 64 * 16))
         .fluidInputs(
-            SCPart.UHV.getSxEqualFluid(4 * 128 * 16),
+            SuperConductorPart.UHV.getSxEqualFluid(4 * 128 * 16),
             MaterialsUEVplus.TranscendentMetal.getIngotMolten(8 * 9 * 16),
             Materials.Infinity.getIngotMolten((16 * 3 + 2) * 16),
             Materials.Neutronium.getIngotMolten(64 * 16),
@@ -917,7 +917,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(Tier.UIV.getComponent(Tier.Component.ElectricPump, 1), 128),
             ItemUtil.setStackSize(ItemList.Circuit_Wafer_PPIC.get(1), 64 * 16))
         .fluidInputs(
-            SCPart.UEV.getSxEqualFluid(4 * 128 * 16),
+            SuperConductorPart.UEV.getSxEqualFluid(4 * 128 * 16),
             MaterialsUEVplus.SpaceTime.getIngotMolten((8 * 9 + 16 * 3 + 2) * 16),
             MaterialsUEVplus.TranscendentMetal.getIngotMolten(64 * 16),
             FluidUtil.getFluidStackByName("lubricant", 128000 * 16))
@@ -937,7 +937,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemRefer.Advanced_Radiation_Protection_Plate.get(2 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(10 * 16), SCPart.UHV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(10 * 16), SuperConductorPart.UHV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.NeutronPulseManipulator.get(16))
         .eut(RECIPE_UEV)
         .durSec(12 * 60)
@@ -951,7 +951,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemRefer.Advanced_Radiation_Protection_Plate.get(4 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(12 * 16), SCPart.UEV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(12 * 16), SuperConductorPart.UEV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.CosmicFabricManipulator.get(16))
         .eut(RECIPE_UIV)
         .durSec(12 * 75)
@@ -965,7 +965,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemUtil.setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 8 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(15 * 16), SCPart.UIV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(15 * 16), SuperConductorPart.UIV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.InfinityInfusedManipulator.get(16))
         .eut(RECIPE_UMV)
         .durSec(12 * 90)
@@ -979,7 +979,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemUtil.setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 16 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(20 * 16), SCPart.UMV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(20 * 16), SuperConductorPart.UMV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.SpaceTimeContinuumRipper.get(16))
         .eut(RECIPE_UXV)
         .durSec(12 * 60)
@@ -1126,7 +1126,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             NovaItemList.CrystalMatrix.get(2))
         .fluidInputs(
             Materials.SiliconSG.getIngotMolten(64 * 12 * 9),
-            SCPart.UHV.getMolten(12 * 64 * INGOTS),
+            SuperConductorPart.UHV.getMolten(12 * 64 * INGOTS),
             Materials.ReinforceGlass.getIngotMolten(4 * 64),
             Materials.Neutronium.getIngotMolten(256))
         .itemOutputs(ItemList.Cover_SolarPanel_UV.get(64))

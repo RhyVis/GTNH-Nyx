@@ -35,7 +35,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
 import vis.rhynia.nova.api.enums.ref.BartPart
 import vis.rhynia.nova.api.enums.ref.BundleChip
-import vis.rhynia.nova.api.enums.ref.SCPart
+import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.enums.ref.Tier
 import vis.rhynia.nova.api.interfaces.RecipePool
@@ -65,11 +65,11 @@ class MicroAssemblyRecipePool : RecipePool {
                 partOpticalMultiply * 32 * 4),
             ItemUtil.setStackSize(MaterialsAlloy.LAFIUM.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SCPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SCPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
         .itemOutputs(
             ItemUtil.setStackSize(
                 ItemList.Circuit_Parts_DiodeXSMD.get(1), partOpticalMultiply * 32 * 64))
@@ -85,11 +85,11 @@ class MicroAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(
                 MaterialsAlloy.PIKYONIUM.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SCPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SCPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
         .itemOutputs(
             ItemUtil.setStackSize(
                 ItemList.Circuit_Parts_ResistorXSMD.get(1), partOpticalMultiply * 32 * 32))
@@ -105,11 +105,11 @@ class MicroAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(
                 MaterialsAlloy.TRINIUM_REINFORCED_STEEL.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SCPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SCPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
         .itemOutputs(
             ItemUtil.setStackSize(
                 ItemList.Circuit_Parts_TransistorXSMD.get(1), partOpticalMultiply * 32 * 32))
@@ -124,11 +124,11 @@ class MicroAssemblyRecipePool : RecipePool {
                 partOpticalMultiply * 32 * 4),
             ItemUtil.setStackSize(MaterialsAlloy.CINOBITE.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SCPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SCPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
         .itemOutputs(
             ItemUtil.setStackSize(
                 ItemList.Circuit_Parts_CapacitorXSMD.get(1), partOpticalMultiply * 32 * 32))
@@ -144,7 +144,7 @@ class MicroAssemblyRecipePool : RecipePool {
                 GGMaterial.artheriumSn.get(OrePrefixes.foil, 1), partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SCPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
         .itemOutputs(
             ItemUtil.setStackSize(
                 ItemList.Circuit_Parts_InductorXSMD.get(1), partOpticalMultiply * 32 * 32))

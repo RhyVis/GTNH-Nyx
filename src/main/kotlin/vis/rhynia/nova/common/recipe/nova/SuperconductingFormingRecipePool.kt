@@ -4,7 +4,7 @@ import gregtech.api.enums.Materials
 import gregtech.api.util.GTRecipeBuilder.BUCKETS
 import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility
-import vis.rhynia.nova.api.enums.ref.SCPart
+import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
@@ -16,7 +16,7 @@ class SuperconductingFormingRecipePool : RecipePool {
 
   override fun loadRecipes() {
     // Wire x1 from dust
-    for (sc in SCPart.entries) {
+    for (sc in SuperConductorPart.entries) {
       builder()
           .itemInputs(
               GTUtility.getIntegratedCircuit(1),
@@ -33,7 +33,7 @@ class SuperconductingFormingRecipePool : RecipePool {
     }
 
     // Wire x1 from molten
-    for (sc in SCPart.entries) {
+    for (sc in SuperConductorPart.entries) {
       builder()
           .itemInputs(GTUtility.getIntegratedCircuit(11), sc.getPump(4))
           .itemOutputs(ItemUtil.setStackSize(sc.getWire(1), 512))
@@ -46,7 +46,7 @@ class SuperconductingFormingRecipePool : RecipePool {
     }
 
     // Frame from molten
-    for (sc in SCPart.entries) {
+    for (sc in SuperConductorPart.entries) {
       builder()
           .itemInputs(GTUtility.getIntegratedCircuit(4), ItemUtil.setStackSize(sc.getDust(1), 256))
           .itemOutputs(sc.getFrame(64))
@@ -57,7 +57,7 @@ class SuperconductingFormingRecipePool : RecipePool {
     }
 
     // Solenoid from molten
-    for (sc in SCPart.entries) {
+    for (sc in SuperConductorPart.entries) {
       builder()
           .itemInputs(GTUtility.getIntegratedCircuit(8), ItemUtil.setStackSize(sc.getWire(1), 128))
           .itemOutputs(sc.getSolenoid(16))
@@ -68,7 +68,7 @@ class SuperconductingFormingRecipePool : RecipePool {
     }
 
     // Base from Sx
-    for (sc in SCPart.entries) {
+    for (sc in SuperConductorPart.entries) {
       builder()
           .itemInputs(
               GTUtility.getIntegratedCircuit(24),

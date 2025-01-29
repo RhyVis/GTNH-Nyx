@@ -64,7 +64,6 @@ class AssemblerRecipePool : RecipePool {
 
     for (tier in
         arrayOf<Tier>(
-            Tier.ULV,
             Tier.LV,
             Tier.MV,
             Tier.HV,

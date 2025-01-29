@@ -70,20 +70,20 @@ enum class Tier(private val material: Materials) {
   val voltageRecipe: Long
     get() = GTValues.VP[ordinal]
 
-  val superConductor: SCPart
+  val superConductor: SuperConductorPart
     get() =
         when (this) {
           ULV,
           LV -> {
-            Log.error("$this tier is too low for standard SC material!")
-            SCPart.MV
+            Log.error("$this tier is too low for standard Super Conductor material! Using MV instead.")
+            SuperConductorPart.MV
           }
           UXV,
           MAX -> {
-            Log.error("$this tier is too high for standard SC material!")
-            SCPart.UMV
+            Log.error("$this tier is too high for standard Super Conductor material! Using UMV instead.")
+            SuperConductorPart.UMV
           }
-          else -> SCPart.entries[this.ordinal - 2]
+          else -> SuperConductorPart.entries[this.ordinal - 2]
         }
 
   val solderMaterial: SolderMaterial
@@ -104,7 +104,7 @@ enum class Tier(private val material: Materials) {
 
   val circuitMaterial: Materials
     get() = material
-  /** when (this) { UMV -> Materials.Piko else -> material } */
+
   fun getSolder(amount: Int) = solderMaterial.getFluidStack(amount)
 
   fun getCircuit(amount: Int): ItemStack =
@@ -114,7 +114,7 @@ enum class Tier(private val material: Materials) {
 
   fun getComponent(component: Component, amount: Int): ItemStack {
     if (this == ULV) {
-      Log.error("Attempting to get ULV component, but it's already removed!")
+      Log.error("Attempting to get ULV component of ${component.name}, but it's already removed!")
       return NovaItemList.TestItem01.get(1)
     } else return component.ofTier(this).get(amount.toLong(), NovaItemList.TestItem01.get(1))
   }

@@ -18,7 +18,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UEV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UIV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UMV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
-import vis.rhynia.nova.api.enums.ref.SCPart
+import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
@@ -189,7 +189,7 @@ class TranscendentReactorRecipePool : RecipePool {
             Materials.Osmiridium.getIngotMolten(5448),
             Materials.Naquadria.getIngotMolten(7264))
         .fluidOutputs(
-            SCPart.UV.getMolten(16344 * INGOTS),
+            SuperConductorPart.UV.getMolten(16344 * INGOTS),
             NovaMaterial.AstralResidue.getFluidOrGas(4 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
@@ -205,7 +205,7 @@ class TranscendentReactorRecipePool : RecipePool {
             Materials.CosmicNeutronium.getIngotMolten(2352),
             Materials.Tritanium.getIngotMolten(1680))
         .fluidOutputs(
-            SCPart.UHV.getMolten(8064 * INGOTS),
+            SuperConductorPart.UHV.getMolten(8064 * INGOTS),
             NovaMaterial.AstralResidue.getFluidOrGas(8 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
@@ -222,7 +222,7 @@ class TranscendentReactorRecipePool : RecipePool {
             Materials.Infinity.getIngotMolten(840),
             Materials.Iron.getIngotMolten(168))
         .fluidOutputs(
-            SCPart.UEV.getMolten(2016 * INGOTS),
+            SuperConductorPart.UEV.getMolten(2016 * INGOTS),
             NovaMaterial.AstralResidue.getFluidOrGas(16 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
@@ -239,7 +239,7 @@ class TranscendentReactorRecipePool : RecipePool {
             MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFluidStack(200 * INGOTS),
             Materials.Bismuth.getIngotMolten(40))
         .fluidOutputs(
-            SCPart.UIV.getMolten(1000 * INGOTS),
+            SuperConductorPart.UIV.getMolten(1000 * INGOTS),
             NovaMaterial.AstralResidue.getFluidOrGas(32 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
@@ -257,7 +257,7 @@ class TranscendentReactorRecipePool : RecipePool {
             FluidUtil.getFluidStackByName("molten.dragonblood", 72 * INGOTS),
             Materials.Oxygen.getGas(36 * INGOTS.toLong()))
         .fluidOutputs(
-            SCPart.UMV.getMolten(972 * INGOTS),
+            SuperConductorPart.UMV.getMolten(972 * INGOTS),
             NovaMaterial.AstralResidue.getFluidOrGas(64 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
