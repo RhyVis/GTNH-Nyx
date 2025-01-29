@@ -180,7 +180,7 @@ class MicroAssemblyRecipePool : RecipePool {
     // 生物超级电脑 UHV
     builder()
         .itemInputs(
-            ItemList.CircuitBoard_BioUltra.get(2 * multiple),
+            ItemList.Circuit_Board_Bio_Ultra.get(2 * multiple),
             ItemList.Circuit_Biowarecomputer.get(2 * multiple),
             ItemList.Circuit_Parts_TransistorXSMD.get(4 * multiple),
             ItemList.Circuit_Parts_ResistorXSMD.get(4 * multiple),
@@ -226,7 +226,7 @@ class MicroAssemblyRecipePool : RecipePool {
     // 光学集群 UHV
     builder()
         .itemInputs(
-            ItemList.CircuitBoard_Optical.get(multiple),
+            ItemList.Circuit_Board_Optical.get(multiple),
             ItemList.Circuit_OpticalProcessor.get(2 * multiple),
             ItemList.Circuit_Parts_InductorXSMD.get(16 * multiple),
             ItemList.Circuit_Parts_CapacitorXSMD.get(20 * multiple),
@@ -247,7 +247,7 @@ class MicroAssemblyRecipePool : RecipePool {
     // 光学超级电脑 UEV
     builder()
         .itemInputs(
-            ItemList.CircuitBoard_Optical.get(2 * multiple),
+            ItemList.Circuit_Board_Optical.get(2 * multiple),
             ItemList.Circuit_OpticalAssembly.get(2 * multiple),
             ItemList.Circuit_Parts_TransistorXSMD.get(24 * multiple),
             ItemList.Circuit_Parts_ResistorXSMD.get(24 * multiple),
@@ -320,7 +320,7 @@ class MicroAssemblyRecipePool : RecipePool {
     val picoW = getCoreItem("PicoWafer", 4 * multiple.toInt())
     builder()
         .itemInputs(
-            ItemList.CircuitBoard_Optical.get(multiple),
+            ItemList.Circuit_Board_Optical.get(multiple),
             picoW,
             ItemList.Circuit_OpticalMainframe.get(2 * multiple),
             BartPart.OpticalTransistor.getItemStack(3 * multiple),
