@@ -3,10 +3,10 @@ package vis.rhynia.nova.api.enums.ref
 import goodgenerator.main.GoodGenerator
 import gregtech.api.enums.Materials
 import gregtech.api.util.GTModHandler
-import gregtech.api.util.GTUtility
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import vis.rhynia.nova.api.interfaces.RefHelper
+import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.loader.container.NovaItemList
 
 @Suppress("unused")
@@ -33,14 +33,13 @@ enum class BundleChip : RefHelper {
 
   override fun getItemStack(amount: Int): ItemStack =
       if (amount > 64)
-          GTUtility.copyAmountUnsafe(
-              amount,
-              GTModHandler.getModItem(
+          GTModHandler.getModItem(
                   GoodGenerator.MOD_ID,
                   CIRCUIT_WRAP_NAME,
                   1,
                   this.ordinal,
-                  NovaItemList.TestItem01.get(1)))
+                  NovaItemList.TestItem01.get(1))
+              .copyAmountUnsafe(amount)
       else
           GTModHandler.getModItem(
               GoodGenerator.MOD_ID,

@@ -15,14 +15,10 @@ enum class SolderMaterial : RefHelper {
 
   override fun getItemStack(amount: Int) = NovaItemList.TestItem01.get(1)
 
-  fun getItemStack(amount: Long) = getItemStack(amount.toInt())
-
   override fun getFluidStack(amount: Int): FluidStack =
       when (this) {
         SolderingAlloy -> Materials.SolderingAlloy.getMolten(amount.toLong())
         IndaAlloy -> MaterialsAlloy.INDALLOY_140.getFluidStack(amount)
         MutatedLivingAlloy -> MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(amount)
       }
-
-  fun getFluidStack(amount: Long) = getFluidStack(amount.toInt())
 }
