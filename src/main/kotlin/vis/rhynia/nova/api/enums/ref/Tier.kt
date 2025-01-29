@@ -75,12 +75,14 @@ enum class Tier(private val material: Materials) {
         when (this) {
           ULV,
           LV -> {
-            Log.error("$this tier is too low for standard Super Conductor material! Using MV instead.")
+            Log.error(
+                "$this tier is too low for standard Super Conductor material! Using MV instead.")
             SuperConductorPart.MV
           }
           UXV,
           MAX -> {
-            Log.error("$this tier is too high for standard Super Conductor material! Using UMV instead.")
+            Log.error(
+                "$this tier is too high for standard Super Conductor material! Using UMV instead.")
             SuperConductorPart.UMV
           }
           else -> SuperConductorPart.entries[this.ordinal - 2]

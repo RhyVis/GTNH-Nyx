@@ -35,8 +35,8 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
 import vis.rhynia.nova.api.enums.ref.BartPart
 import vis.rhynia.nova.api.enums.ref.BundleChip
-import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
+import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.Tier
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
@@ -65,7 +65,8 @@ class MicroAssemblyRecipePool : RecipePool {
                 partOpticalMultiply * 32 * 4),
             ItemUtil.setStackSize(MaterialsAlloy.LAFIUM.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(
+                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
@@ -85,7 +86,8 @@ class MicroAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(
                 MaterialsAlloy.PIKYONIUM.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(
+                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
@@ -105,7 +107,8 @@ class MicroAssemblyRecipePool : RecipePool {
             ItemUtil.setStackSize(
                 MaterialsAlloy.TRINIUM_REINFORCED_STEEL.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(
+                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
@@ -124,7 +127,8 @@ class MicroAssemblyRecipePool : RecipePool {
                 partOpticalMultiply * 32 * 4),
             ItemUtil.setStackSize(MaterialsAlloy.CINOBITE.getFoil(1), partOpticalMultiply * 32 * 2),
             ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
+                GTOreDictUnificator.get(
+                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
                 partOpticalMultiply * 32))
         .fluidInputs(
             FluidUtil.getFluidStackByName("xenoxene", partOpticalMultiply * 32 * INGOTS),
@@ -158,7 +162,7 @@ class MicroAssemblyRecipePool : RecipePool {
         .itemInputs(
             Materials.Plastic.getPlates(32),
             Materials.Obsidian.getPlates(64),
-            BartPart.Adv_Board.getItemStack(4),
+            BartPart.AdvancedBoard.getItemStack(4),
             Tier.HV.getCircuit(4),
             GTModHandler.getModItem(SuperSolarPanels.ID, "redcomponent", 4),
             GTModHandler.getModItem(SuperSolarPanels.ID, "greencomponent", 4),
@@ -176,14 +180,14 @@ class MicroAssemblyRecipePool : RecipePool {
     // 生物超级电脑 UHV
     builder()
         .itemInputs(
-            ItemList.Circuit_Board_Bio_Ultra.get(2 * multiple),
+            ItemList.CircuitBoard_BioUltra.get(2 * multiple),
             ItemList.Circuit_Biowarecomputer.get(2 * multiple),
             ItemList.Circuit_Parts_TransistorXSMD.get(4 * multiple),
             ItemList.Circuit_Parts_ResistorXSMD.get(4 * multiple),
             ItemList.Circuit_Parts_CapacitorXSMD.get(4 * multiple),
             ItemList.Circuit_Parts_DiodeXSMD.get(4 * multiple),
-            BartPart.Part_NOR.getItemStack(2 * multiple),
-            BartPart.Part_RAM.getItemStack(4 * multiple))
+            BartPart.NOR.getItemStack(2 * multiple),
+            BartPart.RAM.getItemStack(4 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(10 * INGOTS * multiple.toInt()),
             Materials.BioMediumSterilized.getFluid(10 * INGOTS * multiple),
@@ -203,7 +207,7 @@ class MicroAssemblyRecipePool : RecipePool {
             ItemList.Circuit_Parts_ResistorXSMD.get(6 * multiple),
             ItemList.Circuit_Parts_CapacitorXSMD.get(6 * multiple),
             ItemList.Circuit_Parts_DiodeXSMD.get(6 * multiple),
-            BartPart.Part_RAM.getItemStack(4 * multiple))
+            BartPart.RAM.getItemStack(4 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(20 * INGOTS * multiple),
             Materials.BioMediumSterilized.getFluid(20 * INGOTS * multiple),
@@ -222,13 +226,13 @@ class MicroAssemblyRecipePool : RecipePool {
     // 光学集群 UHV
     builder()
         .itemInputs(
-            ItemList.Circuit_Board_Optical.get(multiple),
+            ItemList.CircuitBoard_Optical.get(multiple),
             ItemList.Circuit_OpticalProcessor.get(2 * multiple),
             ItemList.Circuit_Parts_InductorXSMD.get(16 * multiple),
             ItemList.Circuit_Parts_CapacitorXSMD.get(20 * multiple),
             ItemList.Circuit_Parts_ResistorXSMD.get(20 * multiple),
-            BartPart.Part_NOR.getItemStack(2 * multiple),
-            BartPart.Part_RAM.getItemStack(4 * multiple))
+            BartPart.NOR.getItemStack(2 * multiple),
+            BartPart.RAM.getItemStack(4 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(10 * INGOTS * multiple),
             Materials.Radon.getPlasma(10 * INGOTS * multiple),
@@ -243,14 +247,14 @@ class MicroAssemblyRecipePool : RecipePool {
     // 光学超级电脑 UEV
     builder()
         .itemInputs(
-            ItemList.Circuit_Board_Optical.get(2 * multiple),
+            ItemList.CircuitBoard_Optical.get(2 * multiple),
             ItemList.Circuit_OpticalAssembly.get(2 * multiple),
             ItemList.Circuit_Parts_TransistorXSMD.get(24 * multiple),
             ItemList.Circuit_Parts_ResistorXSMD.get(24 * multiple),
             ItemList.Circuit_Parts_CapacitorXSMD.get(24 * multiple),
             ItemList.Circuit_Parts_DiodeXSMD.get(24 * multiple),
-            BartPart.Part_NOR.getItemStack(4 * multiple),
-            BartPart.Part_ASOC.getItemStack(2 * multiple))
+            BartPart.NOR.getItemStack(4 * multiple),
+            BartPart.ASOC.getItemStack(2 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(20 * INGOTS * multiple),
             Materials.Radon.getPlasma(20 * INGOTS * multiple),
@@ -267,12 +271,12 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             ItemList.Circuit_OpticalComputer.get(2 * multiple),
-            BartPart.Opt_Inductor.getItemStack(2 * multiple),
-            BartPart.Opt_Transistor.getItemStack(2 * multiple),
-            BartPart.Opt_Resistor.getItemStack(2 * multiple),
-            BartPart.Opt_Capacitor.getItemStack(2 * multiple),
-            BartPart.Opt_Diode.getItemStack(2 * multiple),
-            BartPart.Part_ASOC.getItemStack(2 * multiple))
+            BartPart.OpticalInductor.getItemStack(2 * multiple),
+            BartPart.OpticalTransistor.getItemStack(2 * multiple),
+            BartPart.OpticalResistor.getItemStack(2 * multiple),
+            BartPart.OpticalCapacitor.getItemStack(2 * multiple),
+            BartPart.OpticalDiode.getItemStack(2 * multiple),
+            BartPart.ASOC.getItemStack(2 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(26 * INGOTS * multiple),
             Materials.Radon.getPlasma(40 * INGOTS * multiple),
@@ -293,11 +297,11 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             getCoreItem("PikoCircuit", 2 * multiple.toInt()),
-            BartPart.Opt_Capacitor.getItemStack(4 * multiple),
-            BartPart.Opt_Diode.getItemStack(4 * multiple),
-            BartPart.Opt_Transistor.getItemStack(4 * multiple),
-            BartPart.Opt_Resistor.getItemStack(4 * multiple),
-            BartPart.Part_IC_Q.getItemStack(4 * multiple))
+            BartPart.OpticalCapacitor.getItemStack(4 * multiple),
+            BartPart.OpticalDiode.getItemStack(4 * multiple),
+            BartPart.OpticalTransistor.getItemStack(4 * multiple),
+            BartPart.OpticalResistor.getItemStack(4 * multiple),
+            BartPart.IC_Q.getItemStack(4 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(26 * INGOTS * multiple),
             Materials.UUMatter.getFluid(24 * BUCKETS * multiple),
@@ -316,14 +320,14 @@ class MicroAssemblyRecipePool : RecipePool {
     val picoW = getCoreItem("PicoWafer", 4 * multiple.toInt())
     builder()
         .itemInputs(
-            ItemList.Circuit_Board_Optical.get(multiple),
+            ItemList.CircuitBoard_Optical.get(multiple),
             picoW,
             ItemList.Circuit_OpticalMainframe.get(2 * multiple),
-            BartPart.Opt_Transistor.getItemStack(3 * multiple),
-            BartPart.Opt_Resistor.getItemStack(3 * multiple),
-            BartPart.Opt_Capacitor.getItemStack(3 * multiple),
-            BartPart.Opt_Diode.getItemStack(3 * multiple),
-            BartPart.Part_IC_P.getItemStack(4 * multiple))
+            BartPart.OpticalTransistor.getItemStack(3 * multiple),
+            BartPart.OpticalResistor.getItemStack(3 * multiple),
+            BartPart.OpticalCapacitor.getItemStack(3 * multiple),
+            BartPart.OpticalDiode.getItemStack(3 * multiple),
+            BartPart.IC_P.getItemStack(4 * multiple))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(26 * INGOTS * multiple),
             Materials.UUMatter.getFluid(8 * BUCKETS * multiple),
@@ -341,9 +345,9 @@ class MicroAssemblyRecipePool : RecipePool {
     // region High Energy Flow Circuit
     builder()
         .itemInputs(
-            BartPart.Elite_Board.getItemStack(12),
+            BartPart.EliteBoard.getItemStack(12),
             BundleChip.ZPM.getItemStack(24),
-            BartPart.Part_IC_Q.getItemStack(48))
+            BartPart.IC_Q.getItemStack(48))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(24 * INGOTS),
             NovaMaterial.SuperconductorFlux.getFluidOrGas(6 * INGOTS),
@@ -358,10 +362,10 @@ class MicroAssemblyRecipePool : RecipePool {
     // T1
     builder()
         .itemInputs(
-            BartPart.Elite_Board.getItemStack(1),
+            BartPart.EliteBoard.getItemStack(1),
             GTUtility.copyAmountUnsafe(16 * 16, getCoreItem("EngravedGoldChip", 1)),
-            BartPart.Part_ASOC.getItemStack(8),
-            BartPart.Part_NOR.getItemStack(32))
+            BartPart.ASOC.getItemStack(8),
+            BartPart.NOR.getItemStack(32))
         .fluidInputs(
             SolderMaterial.SolderingAlloy.getFluidStack(16 * 2 * INGOTS),
             GGMaterial.signalium.getMolten(16 * 4 * INGOTS),
@@ -376,7 +380,7 @@ class MicroAssemblyRecipePool : RecipePool {
         .itemInputs(
             ItemRefer.HiC_T1.get(32),
             GTUtility.copyAmountUnsafe(16 * 8, getCoreItem("EngravedDiamondCrystalChip")),
-            BartPart.Part_NAND.getItemStack(16))
+            BartPart.NAND.getItemStack(16))
         .fluidInputs(
             Materials.Plastic.getIngotMolten(16 * 2),
             GGMaterial.signalium.getMolten(16 * INGOTS),
@@ -392,7 +396,7 @@ class MicroAssemblyRecipePool : RecipePool {
         .itemInputs(
             ItemRefer.HiC_T2.get(32),
             BartPart.Lapotron.getItemStack(8),
-            BartPart.AdvCrystal_Raw.getItemStack(1))
+            BartPart.AdvancedCrystalRaw.getItemStack(1))
         .fluidInputs(
             GGMaterial.adamantiumAlloy.getMolten(16 * 4 * INGOTS),
             GGMaterial.signalium.getMolten(16 * 2 * INGOTS),
@@ -408,7 +412,7 @@ class MicroAssemblyRecipePool : RecipePool {
         .itemInputs(
             ItemRefer.HiC_T3.get(8),
             getCoreItem("EngravedEnergyChip", 32),
-            BartPart.Part_QBit.getItemStack(4))
+            BartPart.QBit.getItemStack(4))
         .fluidInputs(
             GGMaterial.marM200.getMolten(4 * 8 * INGOTS),
             GGMaterial.signalium.getMolten(4 * 4 * INGOTS),
@@ -561,10 +565,10 @@ class MicroAssemblyRecipePool : RecipePool {
     // Optical SOC
     builder()
         .itemInputs(
-            BartPart.Opt_CPU.getItemStack(16),
-            BartPart.Opt_Ram.getItemStack(32),
-            BartPart.Opt_Capacitor.getItemStack(64),
-            BartPart.Opt_Diode.getItemStack(64),
+            BartPart.OpticalCPU.getItemStack(16),
+            BartPart.OpticalRam.getItemStack(32),
+            BartPart.OpticalCapacitor.getItemStack(64),
+            BartPart.OpticalDiode.getItemStack(64),
             GGMaterial.orundum.get(OrePrefixes.dust, 64),
             GGMaterial.orundum.get(OrePrefixes.dust, 64))
         .fluidInputs(

@@ -26,23 +26,25 @@ enum class SuperConductorPart(private val production: Materials, private val raw
   UMV(Materials.SuperconductorUMV, Materials.SuperconductorUMVBase),
   ;
 
-  companion object {
-    const val TWO: Double = 2.0
-  }
+  val voltage: Long
+    get() = GTValues.V[this.ordinal + 2]
+
+  val powVal: Int
+    get() = 2.0.pow(ordinal).toInt()
+
+  val multiplier: Int
+    get() = ordinal + 1
+
+  val recipeVoltage: Long
+    get() = GTValues.VP[this.ordinal + 2]
+
+  val recipeVoltageLow: Long
+    get() = GTValues.V[this.ordinal + 1]
+
+  val recipeVoltageHigh: Long
+    get() = GTValues.V[this.ordinal + 3]
 
   fun getMaterial(raw: Boolean) = if (raw) this.raw else this.production
-
-  fun getMultiplier() = this.ordinal + 1
-
-  fun getPowValue() = 2.0.pow(this.ordinal).toInt()
-
-  fun getVoltage() = GTValues.V[this.ordinal + 2]
-
-  fun getRecipeVoltage() = GTValues.VP[this.ordinal + 2]
-
-  fun getRecipeVoltageLow() = GTValues.V[this.ordinal + 1]
-
-  fun getRecipeVoltageHigh() = GTValues.V[this.ordinal + 3]
 
   fun getWire(amount: Int): ItemStack =
       GTOreDictUnificator.get(OrePrefixes.wireGt01, production, amount.toLong())
@@ -72,6 +74,6 @@ enum class SuperConductorPart(private val production: Materials, private val raw
   fun getMolten(amount: Int): FluidStack = getMaterial(true).getMolten(amount.toLong())
 
   fun getSxEqualFluid(amount: Int, raw: Boolean = false): FluidStack =
-      if (raw) NovaMaterial.SuperconductorFlux.getFluidOrGas(TWO.pow(ordinal).toInt() * amount * 4)
-      else NovaMaterial.SuperconductorFlux.getFluidOrGas(TWO.pow(ordinal).toInt() * amount)
+      if (raw) NovaMaterial.SuperconductorFlux.getFluidOrGas(2.0.pow(ordinal).toInt() * amount * 4)
+      else NovaMaterial.SuperconductorFlux.getFluidOrGas(2.0.pow(ordinal).toInt() * amount)
 }

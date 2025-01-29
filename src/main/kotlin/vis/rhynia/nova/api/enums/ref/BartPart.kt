@@ -3,82 +3,83 @@ package vis.rhynia.nova.api.enums.ref
 import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods.BartWorks
 import gregtech.api.util.GTModHandler
-import gregtech.api.util.GTUtility
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
+import vis.rhynia.nova.Log
 import vis.rhynia.nova.api.interfaces.RefHelper
+import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.loader.container.NovaItemList
 
-@Suppress("unused")
-enum class BartPart : RefHelper {
+@Suppress("unused", "SpellCheckingInspection")
+enum class BartPart(private val deprecated: Boolean = false) : RefHelper {
   LivingBioChip,
   LivingCrystalChip,
-  Opt_Ram,
-  Opt_CPUCasing,
-  Opt_CPU,
-  Opt_Board,
-  Opt_Card,
-  Opt_Inductor,
-  Adv_Inductor,
-  Opt_Capacitor,
-  Opt_Transistor,
-  Opt_Diode,
-  Opt_Resistor,
-  Bio_Cell,
-  Stem_Cell,
-  Bio_Processor,
-  Stem_Processor,
-  AdvCrystal_Raw,
-  AdvCrystal_SOC,
-  Crystal_CPU,
-  Part_QBit,
-  Part_NanoCPU,
-  Part_IC_Q,
-  Part_IC_P,
-  Part_IC_N,
-  Part_IC_L,
-  Part_IC_UL,
-  Part_IC_UH,
-  Part_IC_H,
-  Part_SSOC,
-  Part_IC,
-  Part_ASOC,
-  Part_SOC,
-  Part_CPU,
-  Part_NOR,
-  Part_NAND,
-  Part_RAM,
-  Part_ILC,
-  Adv_Capacitor,
-  Adv_Transistor,
-  Adv_Diode,
-  Adv_Resistor,
-  Basic_Capacitor,
-  Basic_Transistor,
-  Basic_Diode,
-  Basic_Inductor,
-  Basic_Resistor,
-  Bio_Board,
-  Bio_Board_Raw,
-  Plastic_Board,
-  Plastic_Board_Raw,
-  Wetware_Board,
-  Wetware_Board_Raw,
-  Elite_Board_Raw_Useless,
-  Elite_Board,
-  Delicate_Board,
-  Delicate_Board_Raw,
-  Adv_Board,
-  Adv_Board_Raw_Useless,
-  Good_Board,
-  Good_Board_Raw,
-  Basic_Board,
-  Basic_Board_Raw_Useless,
+  OpticalRam,
+  OpticalCPUCasing,
+  OpticalCPU,
+  OpticalBoard,
+  OpticalCard,
+  OpticalInductor,
+  AdvancedInductor,
+  OpticalCapacitor,
+  OpticalTransistor,
+  OpticalDiode,
+  OpticalResistor,
+  BioCell,
+  StemCell,
+  BioProcessor,
+  StemProcessor,
+  AdvancedCrystalRaw,
+  AdvancedCrystalSOC,
+  CrystalCPU,
+  QBit,
+  NanoCPU,
+  IC_Q,
+  IC_P,
+  IC_N,
+  IC_L,
+  IC_UL,
+  IC_UH,
+  IC_H,
+  SSOC,
+  IC,
+  ASOC,
+  SOC,
+  CPU,
+  NOR,
+  NAND,
+  RAM,
+  ILC,
+  AdvancedCapacitor,
+  AdvancedTransistor,
+  AdvancedDiode,
+  AdvancedResistor,
+  BasicCapacitor,
+  BasicTransistor,
+  BasicDiode,
+  BasicInductor,
+  BasicResistor,
+  BioBoard,
+  BioBoardRaw,
+  PlasticBoard,
+  PlasticBoardRaw,
+  WetwareBoard,
+  WetwareBoardRaw,
+  EliteBoardRawUseless(true),
+  EliteBoard,
+  DelicateBoard,
+  DelicateBoardRaw,
+  AdvancedBoard,
+  AdvancedBoardRawUseless(true),
+  GoodBoard,
+  GoodBoardRaw,
+  BasicBoard,
+  BasicBoardRawUseless(true),
   Lapotron,
-  Crystal_Raw,
-  Elite_Board_Raw,
-  Adv_Board_Raw,
-  Basic_Board_Raw,
+  CrystalRaw,
+  EliteBoardRaw,
+  AdvancedBoardRaw,
+  BasicBoardRaw,
   ;
 
   companion object {
@@ -87,15 +88,17 @@ enum class BartPart : RefHelper {
   }
 
   override fun getItemStack(amount: Int): ItemStack =
-      if (amount > 64) {
-        GTUtility.copyAmountUnsafe(
-            amount,
-            GTModHandler.getModItem(
+      if (deprecated) {
+        Log.error("Attempting to get deprecated item $this!")
+        NovaItemList.TestItem01.get(1)
+      } else if (amount > 64) {
+        GTModHandler.getModItem(
                 BartWorks.ID,
                 BW_GEN_ITEM_NAME,
                 1,
                 this.ordinal + WRAP_CIRCUIT_OFFSET,
-                NovaItemList.TestItem01.get(1)))
+                NovaItemList.TestItem01.get(1))
+            .copyAmountUnsafe(amount)
       } else {
         GTModHandler.getModItem(
             BartWorks.ID,

@@ -49,8 +49,8 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.SECOND
 import vis.rhynia.nova.api.enums.ref.BartPart
 import vis.rhynia.nova.api.enums.ref.BasicRef
 import vis.rhynia.nova.api.enums.ref.BundleChip
-import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
+import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.Tier
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
@@ -241,9 +241,9 @@ class IntegratedAssemblyRecipePool : RecipePool {
     // 兰波顿能量球 IV
     builder()
         .itemInputs(
-            BartPart.Delicate_Board.getItemStack(1),
-            BartPart.Part_IC.getItemStack(4),
-            BartPart.Part_NanoCPU.getItemStack(2))
+            BartPart.DelicateBoard.getItemStack(1),
+            BartPart.IC.getItemStack(4),
+            BartPart.NanoCPU.getItemStack(2))
         .fluidInputs(
             SolderMaterial.SolderingAlloy.getFluidStack(16 * INGOTS),
             Materials.Platinum.getIngotMolten(160),
@@ -255,10 +255,10 @@ class IntegratedAssemblyRecipePool : RecipePool {
     // 兰波顿能量簇 LUV
     builder()
         .itemInputs(
-            BartPart.Delicate_Board.getItemStack(1),
+            BartPart.DelicateBoard.getItemStack(1),
             GTUtility.copyAmountUnsafe(128, ItemList.Energy_LapotronicOrb.get(1)),
-            BartPart.Part_IC_H.getItemStack(4),
-            BartPart.Part_QBit.getItemStack(2))
+            BartPart.IC_H.getItemStack(4),
+            BartPart.QBit.getItemStack(2))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(16 * 5 * INGOTS),
             Materials.NiobiumTitanium.getIngotMolten(16 * 2),
@@ -269,13 +269,13 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .addTo(ia)
     builder()
         .itemInputs(
-            BartPart.Elite_Board.getItemStack(1),
+            BartPart.EliteBoard.getItemStack(1),
             BundleChip.LuV.getItemStack(4),
-            BartPart.Part_IC_H.getItemStack(64),
-            BartPart.Adv_Diode.getItemStack(8),
-            BartPart.Adv_Capacitor.getItemStack(8),
-            BartPart.Adv_Resistor.getItemStack(8),
-            BartPart.Adv_Transistor.getItemStack(8))
+            BartPart.IC_H.getItemStack(64),
+            BartPart.AdvancedDiode.getItemStack(8),
+            BartPart.AdvancedCapacitor.getItemStack(8),
+            BartPart.AdvancedResistor.getItemStack(8),
+            BartPart.AdvancedTransistor.getItemStack(8))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(16 * 5 * INGOTS),
             Materials.NaquadahAlloy.getIngotMolten(16 * 16),
@@ -291,8 +291,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.ZPM.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.Energy_LapotronicOrb2.get(1)),
             ItemList.Field_Generator_LuV.get(32),
-            GTUtility.copyAmountUnsafe(6 * 64, BartPart.Part_ASOC.getItemStack(1)),
-            BartPart.Adv_Transistor.getItemStack(8))
+            GTUtility.copyAmountUnsafe(6 * 64, BartPart.ASOC.getItemStack(1)),
+            BartPart.AdvancedTransistor.getItemStack(8))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Europium.getIngotMolten(16 * 16),
@@ -304,13 +304,13 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .addTo(ia)
     builder()
         .itemInputs(
-            BartPart.Wetware_Board.getItemStack(1),
+            BartPart.WetwareBoard.getItemStack(1),
             BundleChip.ZPM.getItemStack(4),
-            BartPart.Part_IC_UH.getItemStack(64),
-            BartPart.Opt_Diode.getItemStack(8),
-            BartPart.Opt_Capacitor.getItemStack(8),
-            BartPart.Opt_Resistor.getItemStack(8),
-            BartPart.Opt_Transistor.getItemStack(8))
+            BartPart.IC_UH.getItemStack(64),
+            BartPart.OpticalDiode.getItemStack(8),
+            BartPart.OpticalCapacitor.getItemStack(8),
+            BartPart.OpticalResistor.getItemStack(8),
+            BartPart.OpticalTransistor.getItemStack(8))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 5 * INGOTS),
             Materials.Bedrockium.getIngotMolten(16 * 16),
@@ -326,8 +326,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UV.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.Energy_Module.get(1)),
             ItemList.Field_Generator_ZPM.get(32),
-            BartPart.Part_IC_H.getItemStack(256),
-            BartPart.Adv_Diode.getItemStack(16))
+            BartPart.IC_H.getItemStack(256),
+            BartPart.AdvancedDiode.getItemStack(16))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Americium.getIngotMolten(16 * 16),
@@ -339,13 +339,13 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .addTo(ia)
     builder()
         .itemInputs(
-            BartPart.Bio_Board.getItemStack(1),
+            BartPart.BioBoard.getItemStack(1),
             BundleChip.UV.getItemStack(4),
-            BartPart.Part_IC_N.getItemStack(64),
-            BartPart.Opt_Diode.getItemStack(32),
-            BartPart.Opt_Capacitor.getItemStack(32),
-            BartPart.Opt_Resistor.getItemStack(32),
-            BartPart.Opt_Transistor.getItemStack(32))
+            BartPart.IC_N.getItemStack(64),
+            BartPart.OpticalDiode.getItemStack(32),
+            BartPart.OpticalCapacitor.getItemStack(32),
+            BartPart.OpticalResistor.getItemStack(32),
+            BartPart.OpticalTransistor.getItemStack(32))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 10 * INGOTS),
             Materials.CosmicNeutronium.getIngotMolten(16 * 16),
@@ -361,8 +361,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UHV.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.Energy_Cluster.get(1)),
             ItemList.Field_Generator_UV.get(32),
-            BartPart.Part_IC_H.getItemStack(256),
-            BartPart.Adv_Diode.getItemStack(32))
+            BartPart.IC_H.getItemStack(256),
+            BartPart.AdvancedDiode.getItemStack(32))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Tritanium.getIngotMolten(16 * 64),
@@ -374,13 +374,13 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .addTo(ia)
     builder()
         .itemInputs(
-            BartPart.Opt_Board.getItemStack(1),
+            BartPart.OpticalBoard.getItemStack(1),
             BundleChip.UHV.getItemStack(4),
-            BartPart.Part_IC_P.getItemStack(64),
-            BartPart.Opt_Diode.getItemStack(64),
-            BartPart.Opt_Capacitor.getItemStack(64),
-            BartPart.Opt_Resistor.getItemStack(64),
-            BartPart.Opt_Transistor.getItemStack(64))
+            BartPart.IC_P.getItemStack(64),
+            BartPart.OpticalDiode.getItemStack(64),
+            BartPart.OpticalCapacitor.getItemStack(64),
+            BartPart.OpticalResistor.getItemStack(64),
+            BartPart.OpticalTransistor.getItemStack(64))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 20 * INGOTS),
             GGMaterial.shirabon.getIngotMolten(16 * 16),
@@ -398,9 +398,9 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UEV.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.ZPM2.get(1)),
             ItemList.Field_Generator_UHV.get(64),
-            BartPart.Part_IC_UH.getItemStack(256),
-            BartPart.Part_ASOC.getItemStack(3 * 64),
-            BartPart.Adv_Diode.getItemStack(64))
+            BartPart.IC_UH.getItemStack(256),
+            BartPart.ASOC.getItemStack(3 * 64),
+            BartPart.AdvancedDiode.getItemStack(64))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 4608),
             Materials.Neutronium.getIngotMolten(16 * 128),
@@ -417,9 +417,9 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UIV.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.ZPM3.get(1)),
             ItemList.Field_Generator_UEV.get(64),
-            BartPart.Part_IC_P.getItemStack(256),
-            BartPart.Part_ASOC.getItemStack(6 * 64),
-            BartPart.Opt_Diode.getItemStack(64))
+            BartPart.IC_P.getItemStack(256),
+            BartPart.ASOC.getItemStack(6 * 64),
+            BartPart.OpticalDiode.getItemStack(64))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 9216),
             Materials.InfinityCatalyst.getIngotMolten(16 * 128),
@@ -437,11 +437,11 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UMV.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.ZPM4.get(1)),
             ItemList.Field_Generator_UIV.get(64),
-            BartPart.Part_IC_Q.getItemStack(256),
+            BartPart.IC_Q.getItemStack(256),
             GTUtility.copyAmountUnsafe(
                 16 * 64, GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.RawPicoWafer", 1)),
-            BartPart.Opt_Diode.getItemStack(64),
-            BartPart.Opt_Inductor.getItemStack(32))
+            BartPart.OpticalDiode.getItemStack(64),
+            BartPart.OpticalInductor.getItemStack(32))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 18432),
             MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(16 * 128 * INGOTS),
@@ -459,11 +459,11 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UXV.getItemStack(4),
             GTUtility.copyAmountUnsafe(128, ItemList.ZPM5.get(1)),
             ItemList.Field_Generator_UMV.get(64),
-            BartPart.Part_IC_Q.getItemStack(256),
+            BartPart.IC_Q.getItemStack(256),
             GTUtility.copyAmountUnsafe(
                 16 * 64, GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.RawPicoWafer", 1)),
-            BartPart.Opt_Diode.getItemStack(64),
-            BartPart.Opt_Inductor.getItemStack(64))
+            BartPart.OpticalDiode.getItemStack(64),
+            BartPart.OpticalInductor.getItemStack(64))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 36864),
             MaterialsElements.STANDALONE.DRAGON_METAL.getFluidStack(16 * 128 * INGOTS),
@@ -533,7 +533,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
               ItemList.Cover_SolarPanel_UV.get(1),
               ItemUtil.getItemStack(IGItems.DysonSwarmItems, 32, 3),
               ItemRefer.Radiation_Protection_Plate.get(4),
-              BartPart.Part_IC_Q.getItemStack(1),
+              BartPart.IC_Q.getItemStack(1),
               BundleChip.UHV.getItemStack(1),
               ItemList.Emitter_UEV.get(4),
               ItemList.Sensor_UEV.get(4))
@@ -552,12 +552,12 @@ class IntegratedAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             BundleChip.LuV.getItemStack(4),
-            BartPart.Elite_Board.getItemStack(4),
-            BartPart.Opt_Card.getItemStack(4),
+            BartPart.EliteBoard.getItemStack(4),
+            BartPart.OpticalCard.getItemStack(4),
             GTModHandler.getModItem(AdvancedSolarPanel.ID, "asp_crafting_items", 32, 5),
-            BartPart.Part_RAM.getItemStack(64),
-            BartPart.Part_SOC.getItemStack(64),
-            BartPart.Part_NAND.getItemStack(64),
+            BartPart.RAM.getItemStack(64),
+            BartPart.SOC.getItemStack(64),
+            BartPart.NAND.getItemStack(64),
             GTUtility.copyAmountUnsafe(
                 128, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 15470)))
         .fluidInputs(
@@ -571,9 +571,9 @@ class IntegratedAssemblyRecipePool : RecipePool {
     // Optical CPU
     builder()
         .itemInputs(
-            BartPart.Opt_Card.getItemStack(8),
-            BartPart.Opt_CPUCasing.getItemStack(8),
-            BartPart.Opt_Card.getItemStack(4),
+            BartPart.OpticalCard.getItemStack(8),
+            BartPart.OpticalCPUCasing.getItemStack(8),
+            BartPart.OpticalCard.getItemStack(4),
             GTUtility.copyAmountUnsafe(
                 128, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 15470)),
             GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Tritanium, 32),
@@ -759,8 +759,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .itemInputs(
             ItemList.Casing_Fusion_Coil.get(48),
             ItemRefer.HiC_T3.get(16),
-            BartPart.Part_ILC.getItemStack(8),
-            BartPart.Part_IC.getItemStack(1),
+            BartPart.ILC.getItemStack(8),
+            BartPart.IC.getItemStack(1),
             ItemList.IV_Coil.get(1))
         .fluidInputs(
             GGMaterial.artheriumSn.getMolten(16 * 4 * INGOTS),
@@ -937,7 +937,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemRefer.Advanced_Radiation_Protection_Plate.get(2 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(10 * 16), SuperConductorPart.UHV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(10 * 16),
+            SuperConductorPart.UHV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.NeutronPulseManipulator.get(16))
         .eut(RECIPE_UEV)
         .durSec(12 * 60)
@@ -951,7 +952,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemRefer.Advanced_Radiation_Protection_Plate.get(4 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(12 * 16), SuperConductorPart.UEV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(12 * 16),
+            SuperConductorPart.UEV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.CosmicFabricManipulator.get(16))
         .eut(RECIPE_UIV)
         .durSec(12 * 75)
@@ -965,7 +967,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemUtil.setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 8 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(15 * 16), SuperConductorPart.UIV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(15 * 16),
+            SuperConductorPart.UIV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.InfinityInfusedManipulator.get(16))
         .eut(RECIPE_UMV)
         .durSec(12 * 90)
@@ -979,7 +982,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
             ItemUtil.setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 16 * 16))
         .fluidInputs(
-            Materials.Thulium.getIngotMolten(20 * 16), SuperConductorPart.UMV.getMolten(8 * 8 * INGOTS))
+            Materials.Thulium.getIngotMolten(20 * 16),
+            SuperConductorPart.UMV.getMolten(8 * 8 * INGOTS))
         .itemOutputs(GregtechItemList.SpaceTimeContinuumRipper.get(16))
         .eut(RECIPE_UXV)
         .durSec(12 * 60)
@@ -1121,7 +1125,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             BundleChip.UEV.getItemStack(8),
             BundleChip.UHV.getItemStack(8),
             ItemUtil.setStackSize(Materials.Carbon.getPlates(1), 1024),
-            BartPart.Part_IC_P.getItemStack(16),
+            BartPart.IC_P.getItemStack(16),
             GTModHandler.getModItem(SuperSolarPanels.ID, "solarsplitter", 8, 0),
             NovaItemList.CrystalMatrix.get(2))
         .fluidInputs(
@@ -1140,7 +1144,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
     // Particle Trap SpaceTime Shield
     builder()
         .itemInputs(
-            BartPart.Opt_CPUCasing.getItemStack(2),
+            BartPart.OpticalCPUCasing.getItemStack(2),
             NovaItemList.PreTesseract.get(8),
             NovaItemList.AstriumInfinityGem.get(1))
         .fluidInputs(
