@@ -37,4 +37,10 @@ object FluidUtil {
   }
 
   fun fluidEqual(a: FluidStack, b: FluidStack): Boolean = a.fluidID == b.fluidID
+
+  fun Fluid.idEqual(other: Fluid): Boolean = this.id == other.id
+
+  fun FluidStack.idEqual(other: FluidStack): Boolean = this.fluidID == other.fluidID
+
+  fun FluidStack.idEqual(other: Fluid): Boolean = this.fluidID == other.id
 }

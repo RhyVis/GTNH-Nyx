@@ -275,13 +275,7 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
             .setTooltipShowUpDelay(BaseTileEntity.TOOLTIP_DELAY))
   }
 
-  override fun getInfoData(): Array<String> {
-    val oStr = super.getInfoData()
-    val nStr = arrayOfNulls<String>(oStr.size + 1)
-    System.arraycopy(oStr, 0, nStr, 0, oStr.size)
-    nStr[oStr.size] = "${AQUA}复制目标: ${GOLD}$pName"
-    return nStr.filterNotNull().toTypedArray()
-  }
+  override fun getInfoDataExtra(): Array<String> = arrayOf("${AQUA}复制目标: ${GOLD}$pName")
 
   override fun getWailaBody(
       itemStack: ItemStack?,

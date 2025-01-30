@@ -191,29 +191,27 @@ class NovaMTEKelvinTransformField : NovaMTEBase<NovaMTEKelvinTransformField> {
   // endregion
 
   // region Overrides
-  protected override fun createTooltip(): MultiblockTooltipBuilder {
-    val tt = MultiblockTooltipBuilder()
-    tt.addMachineType("真空冷冻机 | 热动力学解析")
-        .addInfo("开尔文变换场的控制器")
-        .addInfo("${RED}万物都有${DARK_RED}终结${RED}，我不过是定义了它的到来.")
-        .addInfo("指挥粒子做它该做的热运动.")
-        .addInfo("真空冷冻机模式下，最大并行为2048.")
-        .addInfo("且电压每提高1级, 降低5%配方耗时(叠乘计算).")
-        .addInfo("热动力学解析模式下，基础最大并行为64.")
-        .addInfo("且电压每提高1级, 增加16并行.")
-        .addInfo(NovaValues.CommonStrings.ChangeModeByScrewdriver)
-        .addSeparator()
-        .addInfo(NovaValues.CommonStrings.StructureTooComplex)
-        .addInfo(NovaValues.CommonStrings.BluePrintTip)
-        .beginStructureBlock(3, 3, 3, false)
-        .addInputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .addInputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .addOutputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .addOutputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .addEnergyHatch(NovaValues.CommonStrings.BluePrintInfo, 2)
-        .toolTipFinisher(NovaValues.CommonStrings.NovaNuclear)
-    return tt
-  }
+  protected override fun createTooltip(): MultiblockTooltipBuilder =
+      MultiblockTooltipBuilder()
+          .addMachineType("真空冷冻机 | 热动力学解析")
+          .addInfo("开尔文变换场的控制器")
+          .addInfo("${RED}万物都有${DARK_RED}终结${RED}，我不过是定义了它的到来.")
+          .addInfo("指挥粒子做它该做的热运动.")
+          .addInfo("真空冷冻机模式下，最大并行为2048.")
+          .addInfo("且电压每提高1级, 降低5%配方耗时(叠乘计算).")
+          .addInfo("热动力学解析模式下，基础最大并行为64.")
+          .addInfo("且电压每提高1级, 增加16并行.")
+          .addInfo(NovaValues.CommonStrings.ChangeModeByScrewdriver)
+          .addSeparator()
+          .addInfo(NovaValues.CommonStrings.StructureTooComplex)
+          .addInfo(NovaValues.CommonStrings.BluePrintTip)
+          .beginStructureBlock(3, 3, 3, false)
+          .addInputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .addInputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .addOutputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .addOutputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .addEnergyHatch(NovaValues.CommonStrings.BluePrintInfo, 2)
+          .toolTipFinisher(NovaValues.CommonStrings.NovaNuclear)
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {
     aNBT?.setInteger("mRecipeMode", mRecipeMode.toInt())

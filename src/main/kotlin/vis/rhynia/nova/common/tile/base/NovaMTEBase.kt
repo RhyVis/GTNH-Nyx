@@ -20,17 +20,18 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.EnumChatFormatting.AQUA
+import net.minecraft.util.EnumChatFormatting.GOLD
 import net.minecraft.world.World
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
-import vis.rhynia.nova.api.interfaces.ProcessExtension
 import vis.rhynia.nova.api.process.logic.NovaProcessingLogic
+import vis.rhynia.nova.api.util.FluidUtil.idEqual
 
 abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
-    MTEExtendedPowerMultiBlockBase<T>, IConstructable, ISurvivalConstructable, ProcessExtension {
+    MTEExtendedPowerMultiBlockBase<T>, IConstructable, ISurvivalConstructable {
   protected constructor(
       aId: Int,
       aName: String,
@@ -204,26 +205,34 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
   protected open val rMaxParallel
     @OverrideOnly get() = 1
 
-  override fun consumeFluid(fluid: Fluid, amount: Int): Boolean {
+  protected fun consumeFluid(fluid: Fluid, amount: Int): Boolean {
     if (storedFluids.isNullOrEmpty()) return false
-    var cost = amount
+    var amount = amount
+
+    // Check if there is enough fluid stored.
+    storedFluids
+        .filter { it.idEqual(fluid) }
+        .sumOf { it.amount }
+        .let { if (it < amount) return false }
+
     storedFluids.forEach {
-      if (it.getFluid() == fluid) {
-        if (it.amount >= cost) {
-          it.amount -= cost
+      if (it.getFluid().idEqual(fluid)) {
+        if (it.amount >= amount) {
+          it.amount -= amount
           return true
         } else {
-          cost -= it.amount
+          amount -= it.amount
           it.amount = 0
         }
       }
     }
-    return cost <= 0
+
+    return amount <= 0
   }
 
   protected fun outputItemToAENetwork(item: ItemStack?, amount: Long) {
-    var amount = amount
     if ((item == null) || (amount <= 0)) return
+    var amount = amount
 
     mOutputBusses
         .firstOrNull { it is MTEHatchOutputBusME }
@@ -246,8 +255,8 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
   }
 
   protected fun outputFluidToAENetwork(fluid: FluidStack?, amount: Long) {
-    var amount = amount
     if ((fluid == null) || (amount <= 0)) return
+    var amount = amount
 
     mOutputHatches
         .firstOrNull { it is MTEHatchOutputME }
@@ -269,20 +278,16 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         }
   }
 
-  override fun getInfoData(): Array<String> {
-    val original = super.getInfoData()
-    val originalSize = original.size
-    return arrayOfNulls<String>(originalSize + 3).run {
-      System.arraycopy(original, 0, this, 0, originalSize)
-      this[originalSize] =
-          "${EnumChatFormatting.AQUA}最大并行: ${EnumChatFormatting.GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}"
-      this[originalSize + 1] =
-          "${EnumChatFormatting.AQUA}速度乘数: ${EnumChatFormatting.GOLD}${String.format("%.3f", rDurationModifier * 100)}%"
-      this[originalSize + 2] =
-          "${EnumChatFormatting.AQUA}功率乘数: ${EnumChatFormatting.GOLD}${String.format("%.3f", rEuModifier * 100)}%"
-      this.filterNotNull().toTypedArray()
-    }
-  }
+  final override fun getInfoData(): Array<String> =
+      super.getInfoData() +
+          arrayOf(
+              "${AQUA}最大并行: ${GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}",
+              "${AQUA}速度乘数: ${GOLD}${"%.3f".format(rDurationModifier * 100)}%",
+              "${AQUA}功率乘数: ${GOLD}${"%.3f".format(rEuModifier * 100)}%") +
+          getInfoDataExtra()
+
+  /** Extra information added after getInfoData() */
+  @OverrideOnly protected open fun getInfoDataExtra(): Array<String> = arrayOf()
 
   override fun getWailaBody(
       itemStack: ItemStack?,

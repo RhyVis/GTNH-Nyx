@@ -56,7 +56,7 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
     private const val D_OFFSET = 0
   }
 
-  private var uStableField = 0
+  private var uStableField = 0 // 0-8, update from structure
 
   override val rPerfectOverclock: Boolean
     get() = uStableField >= 7
@@ -98,8 +98,6 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
         true)
   }
 
-  private var structureDefinition: IStructureDefinition<NovaMTEAstralForge>? = null
-
   // spotless:off
   @Suppress("SpellCheckingInspection")
   private val structureShape = arrayOf(
@@ -108,6 +106,8 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
     arrayOf(" BBB ", "BAAAB", "BAAAB", "BAAAB", " BBB ")
   )
   // spotless:on
+
+  private var structureDefinition: IStructureDefinition<NovaMTEAstralForge>? = null
 
   private fun generateStructureDefinition(): IStructureDefinition<NovaMTEAstralForge> =
       StructureDefinition.builder<NovaMTEAstralForge>()
@@ -162,12 +162,12 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
           .addElement('G', ofFrame(Materials.Infinity))
           .build()
 
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAstralForge> {
-    if (structureDefinition == null) {
-      structureDefinition = generateStructureDefinition()
-    }
-    return structureDefinition!!
-  }
+  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAstralForge> =
+      structureDefinition
+          ?: let {
+            structureDefinition = generateStructureDefinition()
+            structureDefinition!!
+          }
 
   override fun getTexture(
       baseMetaTileEntity: IGregTechTileEntity?,
@@ -229,16 +229,8 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
           .addEnergyHatch(NovaValues.CommonStrings.BluePrintInfo, 2)
           .toolTipFinisher(NovaValues.CommonStrings.NovaMagical)
 
-  override fun getInfoData(): Array<String> {
-    val original = super.getInfoData()
-    val originalSize = original.size
-    return arrayOfNulls<String>(originalSize + 1).run {
-      System.arraycopy(original, 0, this, 0, originalSize)
-      this[originalSize] =
-          "${EnumChatFormatting.AQUA}Stable Field: ${EnumChatFormatting.GOLD}${uStableField}"
-      this.filterNotNull().toTypedArray()
-    }
-  }
+  override fun getInfoDataExtra(): Array<String> =
+      arrayOf("${EnumChatFormatting.AQUA}稳定立场: ${EnumChatFormatting.GOLD}${uStableField}")
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {
     super.saveNBTData(aNBT)

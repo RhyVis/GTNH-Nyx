@@ -200,13 +200,8 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
           .addInputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
           .toolTipFinisher(NovaValues.CommonStrings.NovaMagical)
 
-  override fun getInfoData(): Array<String> {
-    val oStr = super.getInfoData()
-    val nStr = arrayOfNulls<String>(oStr.size + 1)
-    System.arraycopy(oStr, 0, nStr, 0, oStr.size)
-    nStr[oStr.size] = "${AQUA}等效能量: ${GTUtility.formatNumbers(pConstruct)}MAX EU/t"
-    return nStr.filterNotNull().toTypedArray()
-  }
+  override fun getInfoDataExtra(): Array<String> =
+      arrayOf("${AQUA}等效能量: ${GTUtility.formatNumbers(pConstruct)}MAX EU/t")
 
   override fun getWailaBody(
       itemStack: ItemStack?,

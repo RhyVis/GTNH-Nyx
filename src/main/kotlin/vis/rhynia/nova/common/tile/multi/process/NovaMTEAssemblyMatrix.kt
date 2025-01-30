@@ -88,21 +88,19 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
   override val rDurationModifier: Double
     get() = 0.95.pow(GTUtility.getTier(this.maxInputVoltage).toDouble())
 
-  override fun getRecipeMap(): RecipeMap<*>? {
-    return when (mRecipeMode.toInt()) {
-      0 -> NovaRecipeMaps.integratedAssemblyRecipes
-      1 -> NovaRecipeMaps.microAssemblyRecipes
-      2 -> NovaRecipeMaps.superconductingFormingRecipes
-      else -> RecipeMaps.nanoForgeRecipes
-    }
-  }
+  override fun getRecipeMap(): RecipeMap<*> =
+      when (mRecipeMode.toInt()) {
+        0 -> NovaRecipeMaps.integratedAssemblyRecipes
+        1 -> NovaRecipeMaps.microAssemblyRecipes
+        2 -> NovaRecipeMaps.superconductingFormingRecipes
+        else -> RecipeMaps.nanoForgeRecipes
+      }
 
-  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>?> {
-    return listOf(
-        NovaRecipeMaps.integratedAssemblyRecipes,
-        NovaRecipeMaps.microAssemblyRecipes,
-        NovaRecipeMaps.superconductingFormingRecipes)
-  }
+  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>> =
+      listOf(
+          NovaRecipeMaps.integratedAssemblyRecipes,
+          NovaRecipeMaps.microAssemblyRecipes,
+          NovaRecipeMaps.superconductingFormingRecipes)
 
   override fun onScrewdriverRightClick(
       side: ForgeDirection?,
@@ -153,36 +151,37 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
 
   private var structureDefinition: IStructureDefinition<NovaMTEAssemblyMatrix>? = null
 
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAssemblyMatrix> {
-    if (structureDefinition == null)
-        structureDefinition =
-            StructureDefinition.builder<NovaMTEAssemblyMatrix>()
-                .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-                .addElement('A', chainAllGlasses())
-                .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5))
-                .addElement(
-                    'C',
-                    HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
-                        .atLeast(InputBus, InputHatch, Energy.or(ExoticEnergy))
-                        .adder(NovaMTEAssemblyMatrix::addToMachineList)
-                        .dot(1)
-                        .casingIndex(
-                            (GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
-                        .buildAndChain(GregTechAPI.sBlockCasings2, 9))
-                .addElement('D', StructureUtility.ofBlock(GregTechAPI.sBlockCasings3, 10))
-                .addElement(
-                    'F',
-                    HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
-                        .atLeast(OutputBus)
-                        .adder(NovaMTEAssemblyMatrix::addToMachineList)
-                        .dot(2)
-                        .casingIndex(
-                            (GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
-                        .buildAndChain(GregTechAPI.sBlockCasings2, 9))
-                .addElement('T', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 9))
-                .build()
-    return structureDefinition!!
-  }
+  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAssemblyMatrix> =
+      structureDefinition
+          ?: let {
+            structureDefinition =
+                StructureDefinition.builder<NovaMTEAssemblyMatrix>()
+                    .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+                    .addElement('A', chainAllGlasses())
+                    .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5))
+                    .addElement(
+                        'C',
+                        HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
+                            .atLeast(InputBus, InputHatch, Energy.or(ExoticEnergy))
+                            .adder(NovaMTEAssemblyMatrix::addToMachineList)
+                            .dot(1)
+                            .casingIndex(
+                                (GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
+                            .buildAndChain(GregTechAPI.sBlockCasings2, 9))
+                    .addElement('D', StructureUtility.ofBlock(GregTechAPI.sBlockCasings3, 10))
+                    .addElement(
+                        'F',
+                        HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
+                            .atLeast(OutputBus)
+                            .adder(NovaMTEAssemblyMatrix::addToMachineList)
+                            .dot(2)
+                            .casingIndex(
+                                (GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
+                            .buildAndChain(GregTechAPI.sBlockCasings2, 9))
+                    .addElement('T', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 9))
+                    .build()
+            structureDefinition!!
+          }
 
   // spotless:off
   private val structureShape = arrayOf(

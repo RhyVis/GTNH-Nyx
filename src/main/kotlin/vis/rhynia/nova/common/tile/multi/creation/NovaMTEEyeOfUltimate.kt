@@ -300,9 +300,8 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
           .addOutputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
           .toolTipFinisher(NovaValues.CommonStrings.NovaGigaFac)
 
-  override fun getInfoData(): Array<String> {
-    return super.infoData + "${AQUA}执行并行: ${GOLD}${GTUtility.formatNumbers(pMultiplier)}"
-  }
+  override fun getInfoDataExtra(): Array<String> =
+      arrayOf("${AQUA}执行并行: ${GOLD}${GTUtility.formatNumbers(pMultiplier)}")
 
   override fun getWailaBody(
       itemStack: ItemStack?,
