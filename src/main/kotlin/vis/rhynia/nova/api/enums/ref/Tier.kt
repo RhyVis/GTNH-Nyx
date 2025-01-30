@@ -312,7 +312,7 @@ enum class Tier(private val material: Materials) {
       EV,
       MAX -> NovaItemList.TestItem01.get(1)
       else ->
-          CustomItemList.valueOf("eM_energyTunnel" + tier + "_" + this)
+          CustomItemList.valueOf("eM_energyTunnel_${tier}_$this")
               .get(amount.toLong(), NovaItemList.TestItem01.get(1))
     }
   }
@@ -326,7 +326,7 @@ enum class Tier(private val material: Materials) {
       EV,
       MAX -> NovaItemList.TestItem01.get(1)
       UXV ->
-          CustomItemList.valueOf("eM_energyWirelessTunnel" + tier + "_UXV")
+          CustomItemList.valueOf("eM_energyWirelessTunnel${tier}_UXV")
               .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       else ->
           NovaWirelessHatchList.valueOf("ExtLaser${this}$tier")

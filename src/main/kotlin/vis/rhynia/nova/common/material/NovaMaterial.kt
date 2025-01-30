@@ -180,7 +180,7 @@ object NovaMaterial : Runnable {
           TextureSet.SET_FLUID)
 
   override fun run() {
-    OrePrefixes.entries.forEach { GenFeaturesUniversal.addPrefix(it) }
+    OrePrefixes.entries.forEach(GenFeaturesUniversal::addPrefix)
     GenFeaturesUniversal.removePrefix(OrePrefixes.ore)
   }
 }
