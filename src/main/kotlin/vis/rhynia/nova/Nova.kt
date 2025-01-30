@@ -29,27 +29,27 @@ class Nova {
 
   @Mod.EventHandler
   fun preInit(event: FMLPreInitializationEvent) {
-    // proxy.preInit(event)
+    proxy.preInit(event)
   }
 
   @Mod.EventHandler
   fun init(event: FMLInitializationEvent) {
-    // proxy.init(event)
+    proxy.init(event)
   }
 
   @Mod.EventHandler
   fun postInit(event: FMLPostInitializationEvent) {
-    // proxy.postInit(event)
+    proxy.postInit(event)
   }
 
   @Mod.EventHandler
   fun completeInit(event: FMLLoadCompleteEvent) {
-    // proxy.completeInit(event)
+    proxy.completeInit(event)
   }
 
   @Mod.EventHandler
   fun serverStarting(event: FMLServerStartingEvent) {
-    // proxy.serverStarting(event)
+    proxy.serverStarting(event)
   }
 }
 
