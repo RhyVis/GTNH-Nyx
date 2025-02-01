@@ -233,7 +233,7 @@ class TranscendentReactorRecipePool : RecipePool {
     builder()
         .itemInputs(GTUtility.getIntegratedCircuit(10), NovaItemList.AstriumInfinityGem.get(32))
         .fluidInputs(
-            FluidUtil.getFluidStackByName("molten.radoxpoly", 160 * INGOTS),
+            FluidUtil.getFluidStack("molten.radoxpoly", 160 * INGOTS),
             MaterialsUEVplus.TranscendentMetal.getIngotMolten(400),
             MaterialsElements.STANDALONE.RHUGNOR.getFluidStack(240 * INGOTS),
             MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFluidStack(200 * INGOTS),
@@ -254,7 +254,7 @@ class TranscendentReactorRecipePool : RecipePool {
             GGMaterial.orundum.getMolten(108 * INGOTS),
             MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(396 * INGOTS),
             MaterialsAlloy.TITANSTEEL.getFluidStack(180 * INGOTS),
-            FluidUtil.getFluidStackByName("molten.dragonblood", 72 * INGOTS),
+            FluidUtil.getFluidStack("molten.dragonblood", 72 * INGOTS),
             Materials.Oxygen.getGas(36 * INGOTS.toLong()))
         .fluidOutputs(
             SuperConductorPart.UMV.getMolten(972 * INGOTS),

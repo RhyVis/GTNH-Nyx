@@ -10,7 +10,7 @@ import vis.rhynia.nova.common.material.NovaMaterial
 
 class FusionRecipePool : RecipePool {
   override fun loadRecipes() {
-    val fs: IRecipeMap? = RecipeMaps.fusionRecipes
+    val fs: IRecipeMap = RecipeMaps.fusionRecipes
 
     // ACR
     builder()

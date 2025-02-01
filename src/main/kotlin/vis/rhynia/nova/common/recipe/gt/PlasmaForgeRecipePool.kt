@@ -9,22 +9,22 @@ import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTRecipeConstants.COIL_HEAT
 import gregtech.api.util.GTUtility
+import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.BUCKET
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UIV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.loader.container.NovaItemList
 
 class PlasmaForgeRecipePool : RecipePool {
-
   override fun loadRecipes() {
-    val forge: IRecipeMap? = RecipeMaps.plasmaForgeRecipes
+    val forge: IRecipeMap = RecipeMaps.plasmaForgeRecipes
 
     builder()
         .itemInputs(NovaItemList.PreTesseract.get(4))
         .itemOutputs(ItemList.Tesseract.get(4))
         .fluidInputs(MaterialsUEVplus.ExcitedDTRC.getFluid(1000))
         .fluidOutputs(
-            MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid((1000 / 2).toLong()))
+            MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid((BUCKET / 2).toLong()))
         .eut(RECIPE_UIV)
         .durSec(20)
         .metadata(COIL_HEAT, 10800 + 900)
@@ -34,7 +34,7 @@ class PlasmaForgeRecipePool : RecipePool {
         .itemOutputs(ItemList.Tesseract.get(16))
         .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(1000))
         .fluidOutputs(
-            MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid((1000 * 2).toLong()))
+            MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid((BUCKET * 2).toLong()))
         .eut(RECIPE_UXV)
         .durSec(20)
         .metadata(COIL_HEAT, 10800 + 2700)
@@ -48,7 +48,7 @@ class PlasmaForgeRecipePool : RecipePool {
             MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(20000),
             Materials.Infinity.getMolten((4 * 1152).toLong()))
         .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten((4 * 576).toLong()))
-        .eut(2000000000)
+        .eut(2_000_000_000)
         .durSec(20)
         .metadata(COIL_HEAT, 10800 + 2700)
         .addTo(forge)
@@ -64,7 +64,7 @@ class PlasmaForgeRecipePool : RecipePool {
             MaterialsUEVplus.Space.getIngotMolten(1024),
             MaterialsUEVplus.Time.getIngotMolten(1024))
         .itemOutputs(NovaItemList.AstriumInfinityComplex.get(1))
-        .eut(2000000000)
+        .eut(2_000_000_000)
         .durHour(24)
         .metadata(COIL_HEAT, 10800 + 2700)
         .addTo(forge)

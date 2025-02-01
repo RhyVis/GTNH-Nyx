@@ -63,7 +63,7 @@ class AssemblerRecipePool : RecipePool {
     val time = 10 * SECOND
 
     for (tier in
-        arrayOf<Tier>(
+        arrayOf(
             Tier.LV,
             Tier.MV,
             Tier.HV,
@@ -104,7 +104,7 @@ class AssemblerRecipePool : RecipePool {
     }
 
     for (tier in
-        arrayOf<Tier>(
+        arrayOf(
             Tier.EV,
             Tier.IV,
             Tier.LuV,
@@ -122,7 +122,7 @@ class AssemblerRecipePool : RecipePool {
               tier.getComponent(Tier.Component.Emitter, 2),
               tier.getComponent(Tier.Component.Sensor, 2),
               GTUtility.getIntegratedCircuit(22))
-          .fluidInputs(tier.getSolder(4 * INGOTS))
+          .fluidInputs(tier.getIngotSolder(4))
           .itemOutputs(tier.getEnergyWireless4A(1))
           .eut(tier.voltageRecipe)
           .duration(time)
@@ -134,7 +134,7 @@ class AssemblerRecipePool : RecipePool {
               tier.getComponent(Tier.Component.Emitter, 4),
               tier.getComponent(Tier.Component.Sensor, 4),
               GTUtility.getIntegratedCircuit(22))
-          .fluidInputs(tier.getSolder(16 * INGOTS))
+          .fluidInputs(tier.getIngotSolder(16))
           .itemOutputs(tier.getEnergyWireless16A(1))
           .eut(tier.voltageRecipe)
           .duration(time)
@@ -146,7 +146,7 @@ class AssemblerRecipePool : RecipePool {
               tier.getComponent(Tier.Component.Emitter, 8),
               tier.getComponent(Tier.Component.Sensor, 8),
               GTUtility.getIntegratedCircuit(22))
-          .fluidInputs(tier.getSolder(64 * INGOTS))
+          .fluidInputs(tier.getIngotSolder(64))
           .itemOutputs(tier.getEnergyWireless64A(1))
           .eut(tier.voltageRecipe)
           .duration(time)
@@ -154,7 +154,7 @@ class AssemblerRecipePool : RecipePool {
     }
 
     for (tier in
-        arrayOf<Tier>(
+        arrayOf(
             Tier.IV,
             Tier.LuV,
             Tier.ZPM,
@@ -172,7 +172,7 @@ class AssemblerRecipePool : RecipePool {
                 tier.getComponent(Tier.Component.Emitter, 16),
                 tier.getComponent(Tier.Component.Sensor, 16),
                 GTUtility.getIntegratedCircuit(22))
-            .fluidInputs(tier.getSolder(64 * INGOTS))
+            .fluidInputs(tier.getIngotSolder(64))
             .itemOutputs(tier.getLaserWireless(i, 1))
             .eut(tier.voltageRecipe)
             .duration(time)

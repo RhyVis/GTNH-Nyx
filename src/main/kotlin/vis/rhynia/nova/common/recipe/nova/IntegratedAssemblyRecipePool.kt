@@ -143,7 +143,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemList.IV_Coil.get(16),
             GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64),
             GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64))
-        .fluidInputs(FluidUtil.getFluidStackByName("supercoolant", 32 * BUCKETS))
+        .fluidInputs(FluidUtil.getFluidStack("supercoolant", 32 * BUCKETS))
         .itemOutputs(GTModHandler.getModItem(GraviSuite.ID, "itemSimpleItem", 64, 3))
         .eut(RECIPE_IV)
         .durSec(30)
@@ -210,7 +210,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ReinforcedGlassLense", 64, 0),
-            NovaMaterial.Originium.get(OrePrefixes.dust, 64),
+            NovaMaterial.Originium.getDust(64),
         )
         .fluidInputs(
             NovaMaterial.Originium.getIngotMolten(128),
@@ -224,7 +224,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ReinforcedGlassLense", 64, 0),
-            NovaMaterial.Primoium.get(OrePrefixes.dust, 64),
+            NovaMaterial.Primoium.getDust(64),
         )
         .fluidInputs(
             NovaMaterial.Primoium.getIngotMolten(128),
@@ -297,7 +297,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Europium.getIngotMolten(16 * 16),
             Materials.Naquadah.getIngotMolten(16 * 16),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 16000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 16000))
         .itemOutputs(ItemList.Energy_Module.get(16))
         .eut(RECIPE_ZPM)
         .durSec(12 * 100)
@@ -332,7 +332,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Americium.getIngotMolten(16 * 16),
             Materials.NaquadahAlloy.getIngotMolten(16 * 16),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 16000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 16000))
         .itemOutputs(ItemList.Energy_Cluster.get(16))
         .eut(RECIPE_UV)
         .durSec(12 * 100)
@@ -367,7 +367,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Tritanium.getIngotMolten(16 * 64),
             NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 4 * INGOTS),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 16000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 16000))
         .itemOutputs(ItemList.ZPM2.get(16))
         .eut(RECIPE_UV)
         .durSec(12 * 150)
@@ -406,7 +406,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             Materials.Neutronium.getIngotMolten(16 * 128),
             Materials.Naquadria.getMolten(16 * 9216),
             NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 16 * INGOTS),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 32000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 32000))
         .itemOutputs(ItemList.ZPM3.get(16))
         .eut(RECIPE_UHV)
         .durSec(12 * 200)
@@ -426,7 +426,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             Materials.Quantium.getMolten(16 * 18432),
             Materials.Naquadria.getMolten(16 * 18432),
             NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 64 * INGOTS),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 64000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 64000))
         .itemOutputs(ItemList.ZPM4.get(16))
         .eut(RECIPE_UEV)
         .durSec(12 * 250)
@@ -448,7 +448,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(18_432),
             Materials.Quantium.getMolten(16 * 18432),
             NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 128 * INGOTS),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 128000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 128000))
         .itemOutputs(ItemList.ZPM5.get(16))
         .eut(RECIPE_UIV)
         .durSec(12 * 300)
@@ -470,7 +470,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getFluidStack(16 * 36864),
             MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(16 * 36864),
             NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 256 * INGOTS),
-            FluidUtil.getFluidStackByName("ic2coolant", 16 * 256000))
+            FluidUtil.getFluidStack("ic2coolant", 16 * 256000))
         .itemOutputs(ItemList.ZPM6.get(16))
         .eut(RECIPE_UMV)
         .durSec(12 * 350)
@@ -869,7 +869,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             Materials.BlackPlutonium.getIngotMolten(16 * 3 * 16),
             Materials.Osmium.getIngotMolten(2 * 16),
             Materials.ElectrumFlux.getIngotMolten(64 * 16),
-            FluidUtil.getFluidStackByName("lubricant", 128000 * 16))
+            FluidUtil.getFluidStack("lubricant", 128000 * 16))
         .itemOutputs(ItemRefer.Field_Restriction_Coil_T1.get(16))
         .eut(RECIPE_ZPM)
         .durSec(12 * 900)
@@ -887,7 +887,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             Materials.Neutronium.getIngotMolten(16 * 3 * 16),
             Materials.CosmicNeutronium.getIngotMolten(2 * 16),
             Materials.DraconiumAwakened.getIngotMolten(64 * 16),
-            FluidUtil.getFluidStackByName("lubricant", 128000 * 16))
+            FluidUtil.getFluidStack("lubricant", 128000 * 16))
         .itemOutputs(ItemRefer.Field_Restriction_Coil_T2.get(16))
         .eut(RECIPE_ZPM)
         .durSec(12 * 1800)
@@ -904,7 +904,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             MaterialsUEVplus.TranscendentMetal.getIngotMolten(8 * 9 * 16),
             Materials.Infinity.getIngotMolten((16 * 3 + 2) * 16),
             Materials.Neutronium.getIngotMolten(64 * 16),
-            FluidUtil.getFluidStackByName("lubricant", 128000 * 16))
+            FluidUtil.getFluidStack("lubricant", 128000 * 16))
         .itemOutputs(ItemRefer.Field_Restriction_Coil_T3.get(16))
         .eut(RECIPE_ZPM)
         .durSec(12 * 3600)
@@ -920,7 +920,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             SuperConductorPart.UEV.getSxEqualFluid(4 * 128 * 16),
             MaterialsUEVplus.SpaceTime.getIngotMolten((8 * 9 + 16 * 3 + 2) * 16),
             MaterialsUEVplus.TranscendentMetal.getIngotMolten(64 * 16),
-            FluidUtil.getFluidStackByName("lubricant", 128000 * 16))
+            FluidUtil.getFluidStack("lubricant", 128000 * 16))
         .itemOutputs(ItemRefer.Field_Restriction_Coil_T4.get(16))
         .eut(RECIPE_ZPM)
         .durSec(12 * 7200)
@@ -1013,7 +1013,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 20 * INGOTS),
             GGMaterial.enrichedNaquadahAlloy.getIngotMolten(16 * 4 * 9),
-            FluidUtil.getFluidStackByName("molten.radoxpoly", 16 * 2 * INGOTS))
+            FluidUtil.getFluidStack("molten.radoxpoly", 16 * 2 * INGOTS))
         .itemOutputs(GregtechItemList.CosmicFabricShieldingCore.get(16))
         .eut(RECIPE_UIV)
         .durSec(12 * 75)

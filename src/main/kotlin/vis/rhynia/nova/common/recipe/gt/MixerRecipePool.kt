@@ -2,7 +2,6 @@ package vis.rhynia.nova.common.recipe.gt
 
 import goodgenerator.items.GGMaterial
 import gregtech.api.enums.Materials
-import gregtech.api.enums.OrePrefixes
 import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTModHandler
@@ -21,9 +20,10 @@ import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.material.NovaMaterial
 
+@Suppress("SpellCheckingInspection")
 class MixerRecipePool : RecipePool {
   override fun loadRecipes() {
-    val mx: IRecipeMap? = RecipeMaps.mixerRecipes
+    val mx: IRecipeMap = RecipeMaps.mixerRecipes
     val mxNoCell: IRecipeMap = GTPPRecipeMaps.mixerNonCellRecipes
 
     // region 杂项
@@ -41,10 +41,8 @@ class MixerRecipePool : RecipePool {
 
     // 星辉催化剂
     builder()
-        .itemInputs(
-            NovaMaterial.AstriumInfinity.get(OrePrefixes.dust, 8),
-            Materials.InfinityCatalyst.getDust(17))
-        .itemOutputs(NovaMaterial.AstralCatalystBase.get(OrePrefixes.dust, 50))
+        .itemInputs(NovaMaterial.AstriumInfinity.getDust(8), Materials.InfinityCatalyst.getDust(17))
+        .itemOutputs(NovaMaterial.AstralCatalystBase.getDust(50))
         .fluidInputs(
             Materials.Helium.getGas(12 * BUCKETS.toLong()),
             NovaMaterial.Astrium.getMolten(4 * INGOTS))
@@ -56,18 +54,18 @@ class MixerRecipePool : RecipePool {
     // 超导通流
     builder()
         .itemInputs(
-            NovaMaterial.AstralCatalystBase.get(OrePrefixes.dust, 12),
+            NovaMaterial.AstralCatalystBase.getDust(12),
             Materials.TengamPurified.getDust(11),
             Materials.Infinity.getDust(10),
             Materials.CosmicNeutronium.getDust(8),
             Materials.NaquadahEnriched.getDust(6),
             Materials.Naquadria.getDust(5),
-            GGMaterial.orundum.get(OrePrefixes.dust, 5),
+            GGMaterial.orundum.getDust(5),
             MaterialsElements.STANDALONE.ADVANCED_NITINOL.getDust(4),
             MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getDust(4))
         .itemOutputs(
-            NovaMaterial.SuperconductorFluxRaw.get(OrePrefixes.dust, 64),
-            NovaMaterial.SuperconductorFluxRaw.get(OrePrefixes.dust, 15))
+            NovaMaterial.SuperconductorFluxRaw.getDust(64),
+            NovaMaterial.SuperconductorFluxRaw.getDust(15))
         .fluidInputs(
             Materials.Helium.getPlasma(6 * BUCKETS.toLong()),
             Materials.DraconiumAwakened.getIngotMolten(12),
@@ -83,7 +81,7 @@ class MixerRecipePool : RecipePool {
             Materials.Calcite.getDust(4),
             Materials.Quartzite.getDust(4))
         .fluidInputs(Materials.Water.getBucketFluid(16))
-        .fluidOutputs(FluidUtil.getFluidStackByName("wet.concrete", 18 * BUCKETS))
+        .fluidOutputs(FluidUtil.getFluidStack("wet.concrete", 18 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_MV)
         .durSec(5)
@@ -98,7 +96,7 @@ class MixerRecipePool : RecipePool {
     builder()
         .itemInputs(
             Materials.Calcium.getDust(3),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 4),
+            NovaMaterial.Astrium.getDust(4),
             GTUtility.getIntegratedCircuit(15))
         .fluidInputs(GTModHandler.getDistilledWater(4000))
         .fluidOutputs(Materials.GrowthMediumRaw.getFluid(8000))
@@ -111,7 +109,7 @@ class MixerRecipePool : RecipePool {
     builder()
         .itemInputs(
             Materials.NetherStar.getDust(2),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 6),
+            NovaMaterial.Astrium.getDust(6),
             GTUtility.getIntegratedCircuit(16))
         .fluidInputs(GTModHandler.getDistilledWater(4000))
         .fluidOutputs(Materials.BioMediumRaw.getFluid(8000))
@@ -128,11 +126,11 @@ class MixerRecipePool : RecipePool {
         .itemInputs(
             Materials.CallistoIce.getDust(12),
             Materials.Ledox.getDust(12),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 18),
+            NovaMaterial.Astrium.getDust(18),
             GTUtility.getIntegratedCircuit(15))
         .itemOutputs(Materials.Cryotheum.getDust(128))
         .fluidInputs(GTModHandler.getDistilledWater(64 * BUCKETS.toLong()))
-        .fluidOutputs(FluidUtil.getFluidStackByName("cryotheum", 256 * BUCKETS))
+        .fluidOutputs(FluidUtil.getFluidStack("cryotheum", 256 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_IV)
         .durSec(32)
@@ -143,16 +141,15 @@ class MixerRecipePool : RecipePool {
         .itemInputs(
             Materials.Sulfur.getDust(12),
             Materials.Coal.getDust(12),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 18),
+            NovaMaterial.Astrium.getDust(18),
             GTUtility.getIntegratedCircuit(16))
         .itemOutputs(Materials.Pyrotheum.getDust(128))
         .fluidInputs(Materials.Lava.getBucketFluid(64))
-        .fluidOutputs(FluidUtil.getFluidStackByName("pyrotheum", 256 * BUCKETS))
+        .fluidOutputs(FluidUtil.getFluidStack("pyrotheum", 256 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_IV)
         .durSec(32)
         .addTo(mx)
-
     // endregion
   }
 }

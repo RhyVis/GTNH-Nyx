@@ -2,7 +2,6 @@ package vis.rhynia.nova.common.recipe.gt
 
 import bartworks.system.material.WerkstoffLoader
 import gregtech.api.enums.Materials
-import gregtech.api.enums.OrePrefixes
 import gregtech.api.recipe.RecipeMaps
 import gtPlusPlus.api.recipe.GTPPRecipeMaps
 import gtPlusPlus.core.material.MaterialMisc
@@ -46,9 +45,9 @@ class CentrifugeRecipePool : RecipePool {
         .itemOutputs(
             Materials.Copper.getDust(8),
             Materials.Ledox.getDust(2),
-            WerkstoffLoader.Roquesit.get(OrePrefixes.dust, 1),
+            WerkstoffLoader.Roquesit.getDust(1),
             Materials.Firestone.getDust(1),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 1))
+            NovaMaterial.Astrium.getDust(1))
         .outputChances(10000, 10000, 10000, 10000, 5000)
         .eut(RECIPE_HV)
         .durSec(8)
@@ -57,7 +56,7 @@ class CentrifugeRecipePool : RecipePool {
     // 山铜
     builder()
         .itemInputs(Materials.Orichalcum.getDust(12))
-        .itemOutputs(Materials.Copper.getDust(10), NovaMaterial.Astrium.get(OrePrefixes.dust, 4))
+        .itemOutputs(Materials.Copper.getDust(10), NovaMaterial.Astrium.getDust(4))
         .outputChances(10000, 5000)
         .eut(RECIPE_HV)
         .durSec(4)
@@ -68,8 +67,8 @@ class CentrifugeRecipePool : RecipePool {
         .itemInputs(Materials.Mithril.getDust(6))
         .itemOutputs(
             Materials.Pyrotheum.getDust(1),
-            WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 2),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 2))
+            WerkstoffLoader.PTMetallicPowder.getDust(2),
+            NovaMaterial.Astrium.getDust(2))
         .outputChances(10000, 10000, 5000)
         .eut(RECIPE_MV)
         .durSec(16)
@@ -82,8 +81,8 @@ class CentrifugeRecipePool : RecipePool {
             Materials.Mithril.getDust(4),
             Materials.Thaumium.getDust(3),
             Materials.AstralSilver.getDust(1),
-            WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 2),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 2))
+            WerkstoffLoader.PTMetallicPowder.getDust(2),
+            NovaMaterial.Astrium.getDust(2))
         .outputChances(10000, 10000, 10000, 10000, 5000)
         .eut(RECIPE_MV)
         .durSec(16)
@@ -91,9 +90,8 @@ class CentrifugeRecipePool : RecipePool {
 
     // 离心方钍石
     builder()
-        .itemInputs(WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 8))
-        .itemOutputs(
-            Materials.Thorium.getDust(6), WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 2))
+        .itemInputs(WerkstoffLoader.Thorianit.getDust(8))
+        .itemOutputs(Materials.Thorium.getDust(6), WerkstoffLoader.Thorium232.getDust(2))
         .outputChances(10000, 2000)
         .eut(RECIPE_HV)
         .durSec(8)
@@ -127,7 +125,7 @@ class CentrifugeRecipePool : RecipePool {
             Materials.ElectrumFlux.getDust(8),
             Materials.Thaumium.getDust(2),
             Materials.MysteriousCrystal.getDust(2),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 4))
+            NovaMaterial.Astrium.getDust(4))
         .outputChances(10000, 10000, 6500, 5000)
         .eut(RECIPE_HV)
         .durSec(8)
@@ -140,7 +138,7 @@ class CentrifugeRecipePool : RecipePool {
             Materials.Silver.getDust(3),
             Materials.ShadowIron.getDust(3),
             Materials.ElectrumFlux.getDust(2),
-            NovaMaterial.Astrium.get(OrePrefixes.dust, 1))
+            NovaMaterial.Astrium.getDust(1))
         .outputChances(10000, 10000, 6500, 5000)
         .eut(RECIPE_HV)
         .durSec(4)
@@ -182,7 +180,7 @@ class CentrifugeRecipePool : RecipePool {
 
     // 钨铁
     builder()
-        .itemInputs(WerkstoffLoader.Ferberite.get(OrePrefixes.dust, 6))
+        .itemInputs(WerkstoffLoader.Ferberite.getDust(6))
         .itemOutputs(Materials.Tungsten.getDust(3), Materials.Iron.getDust(2))
         .fluidOutputs(Materials.Oxygen.getGas(1500))
         .noOptimize()
@@ -192,7 +190,7 @@ class CentrifugeRecipePool : RecipePool {
 
     // 钨酸锰
     builder()
-        .itemInputs(WerkstoffLoader.Huebnerit.get(OrePrefixes.dust, 8))
+        .itemInputs(WerkstoffLoader.Huebnerit.getDust(8))
         .itemOutputs(Materials.Tungsten.getDust(3), Materials.Manganese.getDust(4))
         .fluidOutputs(Materials.Oxygen.getGas(2000))
         .noOptimize()

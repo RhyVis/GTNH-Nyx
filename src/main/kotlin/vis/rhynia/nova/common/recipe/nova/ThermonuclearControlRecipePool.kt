@@ -42,7 +42,7 @@ class ThermonuclearControlRecipePool : RecipePool {
     builder()
         .itemInputs(GTUtility.getIntegratedCircuit(12), NovaItemList.LensAstriumInfinity.get(0))
         .fluidInputs(WerkstoffLoader.Neon.getFluidOrGas(16 * BUCKETS))
-        .fluidOutputs(FluidUtil.getFluidStackByName("plasma.neon", 16 * BUCKETS))
+        .fluidOutputs(FluidUtil.getFluidStack("plasma.neon", 16 * BUCKETS))
         .eut(RECIPE_UHV)
         .durSec(12)
         .addTo(tc)
@@ -60,7 +60,7 @@ class ThermonuclearControlRecipePool : RecipePool {
     builder()
         .itemInputs(GTUtility.getIntegratedCircuit(12), NovaItemList.LensAstriumInfinity.get(0))
         .fluidInputs(WerkstoffLoader.Krypton.getFluidOrGas(16 * BUCKETS))
-        .fluidOutputs(FluidUtil.getFluidStackByName("plasma.krypton", 16 * BUCKETS))
+        .fluidOutputs(FluidUtil.getFluidStack("plasma.krypton", 16 * BUCKETS))
         .eut(RECIPE_UEV)
         .durSec(12)
         .addTo(tc)
@@ -69,7 +69,7 @@ class ThermonuclearControlRecipePool : RecipePool {
     builder()
         .itemInputs(GTUtility.getIntegratedCircuit(12), NovaItemList.LensAstriumInfinity.get(0))
         .fluidInputs(WerkstoffLoader.Xenon.getFluidOrGas(16 * BUCKETS))
-        .fluidOutputs(FluidUtil.getFluidStackByName("plasma.xenon", 16 * BUCKETS))
+        .fluidOutputs(FluidUtil.getFluidStack("plasma.xenon", 16 * BUCKETS))
         .eut(RECIPE_UEV)
         .durSec(12)
         .addTo(tc)
@@ -128,7 +128,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(64))
         .fluidInputs(WerkstoffLoader.Oganesson.getFluidOrGas(144 * BUCKETS))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.metastable oganesson", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.metastable oganesson", 1000 * INGOTS))
         .eut(RECIPE_UMV)
         .durSec(115)
         .addTo(tc)
@@ -141,7 +141,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(4))
         .fluidInputs(MaterialsAlloy.NITINOL_60.getFluidStack(1000 * INGOTS))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.advancednitinol", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.advancednitinol", 1000 * INGOTS))
         .eut(RECIPE_UHV)
         .durSec(135)
         .addTo(tc)
@@ -152,7 +152,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(8))
         .fluidInputs(Materials.Nickel.getIngotMolten(400), Materials.Titanium.getIngotMolten(600))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.advancednitinol", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.advancednitinol", 1000 * INGOTS))
         .eut(RECIPE_UEV)
         .durSec(100)
         .addTo(tc)
@@ -165,7 +165,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(8))
         .fluidInputs(Materials.Titanium.getIngotMolten(1000))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.astraltitanium", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.astraltitanium", 1000 * INGOTS))
         .eut(RECIPE_UEV)
         .durSec(120)
         .addTo(tc)
@@ -178,7 +178,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(8))
         .fluidInputs(Materials.Glass.getIngotMolten(1000))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.chromaticglass", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.chromaticglass", 1000 * INGOTS))
         .eut(RECIPE_UEV)
         .durSec(195)
         .addTo(tc)
@@ -191,7 +191,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(8))
         .fluidInputs(Materials.Tungsten.getIngotMolten(1000))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.celestialtungsten", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.celestialtungsten", 1000 * INGOTS))
         .eut(RECIPE_UEV)
         .durSec(145)
         .addTo(tc)
@@ -206,7 +206,7 @@ class ThermonuclearControlRecipePool : RecipePool {
         .fluidInputs(
             Materials.DraconiumAwakened.getIngotMolten(1000),
             NovaMaterial.Astrium.getMolten(12 * BUCKETS))
-        .fluidOutputs(FluidUtil.getFluidStackByName("molten.dragonblood", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("molten.dragonblood", 1000 * INGOTS))
         .eut(RECIPE_UEV)
         .durMin(3)
         .addTo(tc)
@@ -221,7 +221,7 @@ class ThermonuclearControlRecipePool : RecipePool {
         .fluidInputs(
             Materials.Radon.getGas(750 * INGOTS.toLong()),
             Materials.Nitrogen.getGas(750 * INGOTS.toLong()))
-        .fluidOutputs(FluidUtil.getFluidStackByName("plasma.neptunium", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("plasma.neptunium", 1000 * INGOTS))
         .eut(RECIPE_UIV)
         .durSec(40)
         .addTo(tc)
@@ -234,7 +234,7 @@ class ThermonuclearControlRecipePool : RecipePool {
             esCata,
             NovaItemList.AstriumInfinityGem.get(16))
         .fluidInputs(Materials.Americium.getIngotMolten(750), Materials.Boron.getIngotMolten(750))
-        .fluidOutputs(FluidUtil.getFluidStackByName("plasma.fermium", 1000 * INGOTS))
+        .fluidOutputs(FluidUtil.getFluidStack("plasma.fermium", 1000 * INGOTS))
         .eut(RECIPE_UIV)
         .durSec(40)
         .addTo(tc)
