@@ -1,5 +1,6 @@
 package vis.rhynia.nova.common.loader
 
+import vis.rhynia.nova.Log
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.recipe.gt.AssemblerRecipePool
 import vis.rhynia.nova.common.recipe.gt.CentrifugeRecipePool
@@ -12,6 +13,7 @@ import vis.rhynia.nova.common.recipe.gt.HammerRecipePool
 import vis.rhynia.nova.common.recipe.gt.LaserEngraverRecipePool
 import vis.rhynia.nova.common.recipe.gt.MixerRecipePool
 import vis.rhynia.nova.common.recipe.gt.PlasmaForgeRecipePool
+import vis.rhynia.nova.common.recipe.gt.QuantumForceTransformerRecipePool
 import vis.rhynia.nova.common.recipe.nova.AstralForgeRecipePool
 import vis.rhynia.nova.common.recipe.nova.IntegratedAssemblyRecipePool
 import vis.rhynia.nova.common.recipe.nova.MicroAssemblyRecipePool
@@ -23,6 +25,7 @@ import vis.rhynia.nova.common.recipe.nova.TranscendentReactorRecipePool
 object RecipeLoader {
   fun loadAtCompleteInit() {
     // Nova
+    Log.info("Loading Nova additional recipes...")
     arrayOf<RecipePool>(
             AstralForgeRecipePool(),
             IntegratedAssemblyRecipePool(),
@@ -30,9 +33,11 @@ object RecipeLoader {
             QuarkRefactoringRecipePool(),
             SuperconductingFormingRecipePool(),
             ThermonuclearControlRecipePool(),
-            TranscendentReactorRecipePool())
+            TranscendentReactorRecipePool(),
+        )
         .forEach { it.loadRecipes() }
     // GT
+    Log.info("Loading GT related recipes...")
     arrayOf<RecipePool>(
             AssemblerRecipePool(),
             CentrifugeRecipePool(),
@@ -45,7 +50,8 @@ object RecipeLoader {
             LaserEngraverRecipePool(),
             MixerRecipePool(),
             PlasmaForgeRecipePool(),
-            QuarkRefactoringRecipePool())
+            QuantumForceTransformerRecipePool(),
+        )
         .forEach { it.loadRecipes() }
   }
 }

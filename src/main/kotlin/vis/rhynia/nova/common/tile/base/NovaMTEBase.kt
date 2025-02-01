@@ -27,9 +27,9 @@ import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
-import vis.rhynia.nova.api.process.logic.NovaProcessingLogic
 import vis.rhynia.nova.api.util.FluidUtil.idEqual
 
+@Suppress("UNUSED")
 abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     MTEExtendedPowerMultiBlockBase<T>, IConstructable, ISurvivalConstructable {
   protected constructor(
@@ -167,31 +167,16 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
 
   override fun supportsSingleRecipeLocking(): Boolean = true
 
-  protected open val useAltLogic
-    @OverrideOnly get() = false
-
-  override fun createProcessingLogic(): ProcessingLogic? {
-    return if (useAltLogic)
-        object : NovaProcessingLogic() {
-          override fun process(): CheckRecipeResult {
-            setEuModifier(rEuModifier)
-            setMaxParallel(rMaxParallel)
-            setSpeedBonus(rDurationModifier)
-            setOverclock(if (rPerfectOverclock) 2.0 else 1.0, 2.0)
-            return super.process()
-          }
+  override fun createProcessingLogic(): ProcessingLogic? =
+      object : ProcessingLogic() {
+        override fun process(): CheckRecipeResult {
+          setEuModifier(rEuModifier)
+          setMaxParallel(rMaxParallel)
+          setSpeedBonus(rDurationModifier)
+          setOverclock(if (rPerfectOverclock) 2.0 else 1.0, 2.0)
+          return super.process()
         }
-    else
-        object : ProcessingLogic() {
-          override fun process(): CheckRecipeResult {
-            setEuModifier(rEuModifier)
-            setMaxParallel(rMaxParallel)
-            setSpeedBonus(rDurationModifier)
-            setOverclock(if (rPerfectOverclock) 2.0 else 1.0, 2.0)
-            return super.process()
-          }
-        }
-  }
+      }
 
   protected open val rPerfectOverclock
     @OverrideOnly get() = false
@@ -278,12 +263,15 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         }
   }
 
+  /** Format Double number as % */
+  protected fun Double.formatPercent() = "%.3f%%".format(this * 100)
+
   final override fun getInfoData(): Array<String> =
       super.getInfoData() +
           arrayOf(
               "${AQUA}最大并行: ${GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}",
-              "${AQUA}速度乘数: ${GOLD}${"%.3f".format(rDurationModifier * 100)}%",
-              "${AQUA}功率乘数: ${GOLD}${"%.3f".format(rEuModifier * 100)}%") +
+              "${AQUA}速度乘数: ${GOLD}${rDurationModifier.formatPercent()}",
+              "${AQUA}功率乘数: ${GOLD}${rEuModifier.formatPercent()}") +
           getInfoDataExtra()
 
   /** Extra information added after getInfoData() */

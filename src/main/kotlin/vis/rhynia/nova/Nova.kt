@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
+import net.minecraft.launchwrapper.Launch
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import vis.rhynia.nova.proxy.CommonProxy
@@ -25,6 +26,8 @@ class Nova {
         clientSide = "vis.rhynia.nova.proxy.ClientProxy",
         serverSide = "vis.rhynia.nova.proxy.CommonProxy")
     lateinit var proxy: CommonProxy
+
+    val DevEnv: Boolean = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
   }
 
   @Mod.EventHandler

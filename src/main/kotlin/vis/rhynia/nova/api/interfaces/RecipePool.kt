@@ -22,12 +22,18 @@ interface RecipePool {
   /** Alias for RA.stdBuilder() */
   fun builder(): GTRecipeBuilder = GTRecipeBuilder.builder().noOptimize()
 
+  fun builder(`if`: Boolean) = if (`if`) builder() else null
+
   fun getCoreItem(name: String, amount: Int = 1): ItemStack =
       GTModHandler.getModItem(
           Mods.NewHorizonsCoreMod.ID,
           name,
           amount.toLong(),
           NovaItemList.TestItem01.get(amount.toLong()))
+
+  fun Mods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
+      GTModHandler.getModItem(
+          this.ID, name, amount.toLong(), meta, NovaItemList.TestItem01.get(amount.toLong()))
 
   fun ItemStack.withSize(size: Int): ItemStack = this.apply { this.stackSize = size }
 
@@ -50,4 +56,6 @@ interface RecipePool {
   fun Werkstoff.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * INGOT.toInt())
 
   fun Werkstoff.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * INGOT).toInt())
+
+  fun Werkstoff.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * BUCKET).toInt())
 }

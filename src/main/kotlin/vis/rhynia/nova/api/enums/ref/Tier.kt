@@ -11,9 +11,11 @@ import gregtech.api.interfaces.IItemContainer
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTOreDictUnificator
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.Range
 import tectech.thing.CustomItemList
 import vis.rhynia.nova.Log
+import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.INGOT
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.loader.container.NovaWirelessHatchList
 
@@ -107,7 +109,9 @@ enum class Tier(private val material: Materials) {
   val circuitMaterial: Materials
     get() = material
 
-  fun getSolder(amount: Int) = solderMaterial.getFluidStack(amount)
+  fun getSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount)
+
+  fun getIngotSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount * INGOT)
 
   fun getCircuit(amount: Int): ItemStack =
       GTOreDictUnificator.get(OrePrefixes.circuit, circuitMaterial, amount.toLong())
