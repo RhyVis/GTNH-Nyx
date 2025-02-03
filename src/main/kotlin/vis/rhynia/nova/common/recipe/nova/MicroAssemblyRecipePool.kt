@@ -522,8 +522,8 @@ class MicroAssemblyRecipePool : RecipePool {
     // Spacial 3
     builder()
         .itemInputs(
-            getCoreItem("EngineeringProcessorSpatialPulsatingCore", 1).withSize(256),
-            getCoreItem("ChargedCertusQuartzPlate", 1).withSize(16 * 64),
+            getCoreItem("EngineeringProcessorSpatialPulsatingCore", 1).setSize(256),
+            getCoreItem("ChargedCertusQuartzPlate", 1).setSize(16 * 64),
             ItemUtil.setStackSize(Materials.Redstone.getPlates(64), 16 * 64),
             ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 16 * 64),
             ItemStack(Items.ender_eye, 64))

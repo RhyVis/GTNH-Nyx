@@ -59,6 +59,7 @@ import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
 
+@Suppress("SpellCheckingInspection")
 class IntegratedAssemblyRecipePool : RecipePool {
   private val ia = NovaRecipeMaps.integratedAssemblyRecipes
 
@@ -1077,7 +1078,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             GTModHandler.getModItem(AE2FluidCraft.ID, "fluid_part", 8, 7),
             ItemList.Quantum_Tank_IV.get(8),
             BasicRef.getYOTCell(7, 4),
-            GTModHandler.getModItem(Avaritia.ID, "Resource", 4, 5),
+            Avaritia.getItem("Resource", 4, 5),
             BasicRef.getSingularity(1))
         .fluidInputs(
             Materials.CosmicNeutronium.getIngotMolten(12 * 9),
@@ -1177,10 +1178,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemList.Hatch_Energy_UIV.get(1),
             ItemList.Hatch_Energy_UMV.get(1),
             ItemList.Hatch_Energy_UXV.get(1))
-    /**
-     * getItemContainer("Hatch_Energy_UEV").get(1L), getItemContainer("Hatch_Energy_UIV").get(1L),
-     * getItemContainer("Hatch_Energy_UMV").get(1L), getItemContainer("Hatch_Energy_UXV").get(1L))
-     */
+
     val energyHatches4A =
         arrayOf(
             CustomItemList.eM_energyMulti4_EV.get(1),
@@ -1229,6 +1227,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             CustomItemList.eM_energyTunnel5_UXV.get(1),
             CustomItemList.eM_energyTunnel6_UXV.get(1),
             CustomItemList.eM_energyTunnel7_UXV.get(1))
+
     val dynamoHatches =
         arrayOf(
             ItemList.Hatch_Dynamo_ULV.get(1),
@@ -1246,10 +1245,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
             ItemList.Hatch_Dynamo_UMV.get(1),
             ItemList.Hatch_Dynamo_UXV.get(1),
         )
-    /**
-     * getItemContainer("Hatch_Dynamo_UEV").get(1L), getItemContainer("Hatch_Dynamo_UIV").get(1L),
-     * getItemContainer("Hatch_Dynamo_UMV").get(1L), getItemContainer("Hatch_Dynamo_UXV").get(1L)
-     */
+
     val circuitsTierPlusTwo =
         arrayOf(
             arrayOf(OrePrefixes.circuit.get(Materials.MV), 1L), // MV

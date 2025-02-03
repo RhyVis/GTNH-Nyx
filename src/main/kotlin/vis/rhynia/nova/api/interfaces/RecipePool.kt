@@ -3,6 +3,7 @@ package vis.rhynia.nova.api.interfaces
 import bartworks.system.material.Werkstoff
 import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods
+import gregtech.api.enums.Mods.NewHorizonsCoreMod
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTRecipeBuilder
@@ -15,6 +16,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.MINUTE
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.SECOND
 import vis.rhynia.nova.common.loader.container.NovaItemList
 
+@Suppress("unused")
 interface RecipePool {
   /** Load recipes into the recipe pool at Complete Load Stage */
   fun loadRecipes()
@@ -24,18 +26,16 @@ interface RecipePool {
 
   fun builder(`if`: Boolean) = if (`if`) builder() else null
 
+  fun builder(requiredMod: Mods) = builder(requiredMod.isModLoaded)
+
   fun getCoreItem(name: String, amount: Int = 1): ItemStack =
-      GTModHandler.getModItem(
-          Mods.NewHorizonsCoreMod.ID,
-          name,
-          amount.toLong(),
-          NovaItemList.TestItem01.get(amount.toLong()))
+      NewHorizonsCoreMod.getItem(name, amount)
 
   fun Mods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
       GTModHandler.getModItem(
           this.ID, name, amount.toLong(), meta, NovaItemList.TestItem01.get(amount.toLong()))
 
-  fun ItemStack.withSize(size: Int): ItemStack = this.apply { this.stackSize = size }
+  fun ItemStack.setSize(size: Int): ItemStack = this.apply { this.stackSize = size }
 
   fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder = this.duration(seconds * SECOND)
 

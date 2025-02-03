@@ -278,10 +278,8 @@ class AstralForgeRecipePool : RecipePool {
             *Array(14) { phOxDust })
         .itemOutputs(
             *Array(8) { phDust },
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64))
+            *Array(4) { NovaMaterial.Astrium.getDust(64) },
+        )
         .outputChances(*IntArray(8) { 10000 }, 8000, 8000, 6000, 6000)
         .eut(RECIPE_HV)
         .durSec(40)

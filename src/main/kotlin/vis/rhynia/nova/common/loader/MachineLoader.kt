@@ -1,6 +1,7 @@
 package vis.rhynia.nova.common.loader
 
 import net.minecraft.item.ItemStack
+import vis.rhynia.nova.api.interfaces.Loader
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.tile.hatch.NovaMTEHatchDistilledWater
 import vis.rhynia.nova.common.tile.hatch.NovaMTEHatchHumongousCalibrationHalfInput
@@ -20,7 +21,7 @@ import vis.rhynia.nova.common.tile.multi.process.NovaMTEAtomMacro
 import vis.rhynia.nova.common.tile.multi.process.NovaMTEDenseEndpoint
 import vis.rhynia.nova.common.tile.multi.process.NovaMTEKelvinTransformField
 
-object MachineLoader {
+object MachineLoader : Loader {
 
   // region sig Machine
   var InfiniteLiquidAirHatch: ItemStack? = null
@@ -43,8 +44,9 @@ object MachineLoader {
   var Creator: ItemStack? = null
   var EyeOfUltimate: ItemStack? = null
   var DenseEndpoint: ItemStack? = null
+  // endregion
 
-  fun load() {
+  override fun load() {
     initializeMachineClass()
     initializeItemList()
   }

@@ -1,6 +1,7 @@
 package vis.rhynia.nova.common.loader
 
 import vis.rhynia.nova.Log
+import vis.rhynia.nova.api.interfaces.Loader
 import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.recipe.gt.AssemblerRecipePool
 import vis.rhynia.nova.common.recipe.gt.CentrifugeRecipePool
@@ -22,8 +23,8 @@ import vis.rhynia.nova.common.recipe.nova.SuperconductingFormingRecipePool
 import vis.rhynia.nova.common.recipe.nova.ThermonuclearControlRecipePool
 import vis.rhynia.nova.common.recipe.nova.TranscendentReactorRecipePool
 
-object RecipeLoader {
-  fun loadAtCompleteInit() {
+object RecipeLoader : Loader {
+  override fun load() {
     // Nova
     Log.info("Loading Nova additional recipes...")
     arrayOf<RecipePool>(
