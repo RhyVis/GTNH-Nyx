@@ -10,7 +10,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import vis.rhynia.nova.api.util.ItemUtil
 
-@Suppress("unused")
+@Suppress("unused", "SpellCheckingInspection")
 enum class NovaItemList : IItemContainer {
   ItemUltimate,
 

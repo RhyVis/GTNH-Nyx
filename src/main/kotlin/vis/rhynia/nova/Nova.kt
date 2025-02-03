@@ -30,30 +30,15 @@ class Nova {
     val DevEnv: Boolean = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
   }
 
-  @Mod.EventHandler
-  fun preInit(event: FMLPreInitializationEvent) {
-    proxy.preInit(event)
-  }
+  @Mod.EventHandler fun preInit(event: FMLPreInitializationEvent) = proxy.preInit(event)
 
-  @Mod.EventHandler
-  fun init(event: FMLInitializationEvent) {
-    proxy.init(event)
-  }
+  @Mod.EventHandler fun init(event: FMLInitializationEvent) = proxy.init(event)
 
-  @Mod.EventHandler
-  fun postInit(event: FMLPostInitializationEvent) {
-    proxy.postInit(event)
-  }
+  @Mod.EventHandler fun postInit(event: FMLPostInitializationEvent) = proxy.postInit(event)
 
-  @Mod.EventHandler
-  fun completeInit(event: FMLLoadCompleteEvent) {
-    proxy.completeInit(event)
-  }
+  @Mod.EventHandler fun completeInit(event: FMLLoadCompleteEvent) = proxy.completeInit(event)
 
-  @Mod.EventHandler
-  fun serverStarting(event: FMLServerStartingEvent) {
-    proxy.serverStarting(event)
-  }
+  @Mod.EventHandler fun serverStarting(event: FMLServerStartingEvent) = proxy.serverStarting(event)
 }
 
 val Any.Log: Logger

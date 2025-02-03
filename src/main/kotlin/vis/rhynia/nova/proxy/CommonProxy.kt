@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent
 import vis.rhynia.nova.Config
 import vis.rhynia.nova.Constant
 import vis.rhynia.nova.Log
+import vis.rhynia.nova.Nova
 import vis.rhynia.nova.Tags
 import vis.rhynia.nova.common.loader.MachineLoader
 import vis.rhynia.nova.common.loader.MaterialLoader
@@ -17,7 +18,9 @@ import vis.rhynia.nova.common.loader.WirelessExtraLoader
 open class CommonProxy {
   // Read config, create blocks, items, etc., and register them with the GameRegistry.
   open fun preInit(event: FMLPreInitializationEvent) {
-    Log.info("Hello Minecraft! ${Constant.MOD_NAME} initializing at version ${Tags.VERSION}")
+    Log.info(
+        "Hello Minecraft! ${Constant.MOD_NAME} initializing at version ${Tags.VERSION}" +
+            if (Nova.DevEnv) " (dev)" else null)
     Config.syncConfig(event.suggestedConfigurationFile)
 
     Log.info("Initializing ${Constant.MOD_NAME} materials...")
@@ -37,7 +40,7 @@ open class CommonProxy {
   // Additional loader for complete init
   open fun completeInit(event: FMLLoadCompleteEvent) {
     Log.info("Initializing ${Constant.MOD_NAME} recipes...")
-    RecipeLoader.loadAtCompleteInit()
+    RecipeLoader.load()
   }
 
   // register server commands

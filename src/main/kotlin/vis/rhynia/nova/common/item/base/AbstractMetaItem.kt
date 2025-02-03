@@ -1,0 +1,99 @@
+package vis.rhynia.nova.common.item.base
+
+import cpw.mods.fml.relauncher.Side
+import cpw.mods.fml.relauncher.SideOnly
+import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.util.IIcon
+import vis.rhynia.nova.Constant
+import vis.rhynia.nova.api.interfaces.item.MetaTooltip
+import vis.rhynia.nova.api.interfaces.item.MetaVariant
+import vis.rhynia.nova.client.NovaTab
+
+abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTooltip {
+  protected var iconMap: Map<Int, IIcon> = mutableMapOf()
+  protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
+  protected val metaSet: MutableSet<Int> = mutableSetOf()
+
+  init {
+    hasSubtypes = true
+    maxDamage = 0
+    creativeTab = NovaTab.TabMetaItem01
+    unlocalizedName = rawName
+  }
+
+  companion object {
+    fun getAllVariants(item: Item, metaSet: Set<Int>): Array<ItemStack> =
+        metaSet.map { ItemStack(item, 1, it) }.toTypedArray()
+  }
+
+  override fun getMetadata(meta: Int): Int = meta
+
+  override fun getUnlocalizedName(): String = super.getUnlocalizedName()
+
+  override fun getUnlocalizedName(stack: ItemStack?): String =
+      "${super.getUnlocalizedName()}.${stack?.itemDamage ?: 0}"
+
+  override fun registerIcons(register: IIconRegister) {
+    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$unlocalizedName/$it" }
+    itemIcon = iconMap[0]
+  }
+
+  override fun getIconFromDamage(meta: Int): IIcon = iconMap[meta] ?: itemIcon
+
+  // region MetaVariant Implementation
+
+  override fun getVariant(meta: Int): ItemStack =
+      if (metaSet.contains(meta)) ItemStack(this, 1, meta)
+      else throw IllegalArgumentException("Invalid meta value: $meta")
+
+  override fun getVariants(): Array<ItemStack> =
+      metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
+
+  override fun registerVariant(meta: Int): ItemStack {
+    if (metaSet.contains(meta))
+        throw IllegalArgumentException(
+            "Meta $meta already taken by $unlocalizedName in ${javaClass.simpleName}")
+    else
+        return meta.let {
+          metaSet.add(it)
+          ItemStack(this, 1, it)
+        }
+  }
+
+  override fun getVariantIds(): Set<Int> = metaSet.toSet()
+
+  // endregion
+
+  // region MetaTooltip Implementation
+
+  override fun setTooltips(meta: Int, tooltips: Array<String>?) {
+    if (tooltips == null) tooltipMap.remove(meta) else tooltipMap[meta] = tooltips
+  }
+
+  override fun getTooltips(meta: Int): Array<String>? = tooltipMap[meta]
+
+  // endregion
+
+  @SideOnly(Side.CLIENT)
+  override fun getSubItems(
+      aItem: Item?,
+      aCreativeTabs: CreativeTabs?,
+      aList: MutableList<ItemStack?>
+  ) {
+    aList.addAll(getVariants())
+  }
+
+  @SideOnly(Side.CLIENT)
+  override fun addInformation(
+      aItemStack: ItemStack,
+      aEntityPlayer: EntityPlayer?,
+      aTooltipsList: MutableList<String?>,
+      isAdvancedMode: Boolean
+  ) {
+    getTooltips(aItemStack.getItemDamage())?.let { aTooltipsList.addAll(it) }
+  }
+}

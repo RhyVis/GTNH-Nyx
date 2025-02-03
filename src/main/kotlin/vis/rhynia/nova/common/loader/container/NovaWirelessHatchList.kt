@@ -10,6 +10,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import vis.rhynia.nova.api.util.ItemUtil
 
+@Suppress("unused")
 enum class NovaWirelessHatchList : IItemContainer {
   ExtLaserIV1(5, 256),
   ExtLaserIV2(5, 1024),
@@ -74,13 +75,27 @@ enum class NovaWirelessHatchList : IItemContainer {
   private var mDeprecated: Boolean = false
   private var mWarned: Boolean = false
 
-  private var tier: Int = 0
-  private var amp: Int = 0
+  var tier: Int = 0
+  var amp: Int = 0
 
   private lateinit var mStack: ItemStack
 
   val hasBeenSet: Boolean
     get() = !mHasNotBeenSet
+
+  val tierName: String
+    get() =
+        when (tier) {
+          5 -> "IV"
+          6 -> "LuV"
+          7 -> "ZPM"
+          8 -> "UV"
+          9 -> "UHV"
+          10 -> "UEV"
+          11 -> "UIV"
+          12 -> "UMV"
+          else -> "?"
+        }
 
   constructor(tier: Int, amp: Int) {
     this.tier = tier
@@ -94,14 +109,6 @@ enum class NovaWirelessHatchList : IItemContainer {
 
   constructor(deprecated: Boolean) {
     mDeprecated = deprecated
-  }
-
-  fun getTier(): Int {
-    return this.tier
-  }
-
-  fun getAmp(): Int {
-    return this.amp
   }
 
   override fun getItem(): Item {

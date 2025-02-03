@@ -271,7 +271,8 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
           arrayOf(
               "${AQUA}最大并行: ${GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}",
               "${AQUA}速度乘数: ${GOLD}${rDurationModifier.formatPercent()}",
-              "${AQUA}功率乘数: ${GOLD}${rEuModifier.formatPercent()}") +
+              "${AQUA}功率乘数: ${GOLD}${rEuModifier.formatPercent()}",
+          ) +
           getInfoDataExtra()
 
   /** Extra information added after getInfoData() */
