@@ -36,7 +36,14 @@ object RecipeLoader : Loader {
             ThermonuclearControlRecipePool(),
             TranscendentReactorRecipePool(),
         )
-        .forEach { it.loadRecipes() }
+        .forEach {
+          try {
+            it.loadRecipes()
+          } catch (e: Exception) {
+            Log.error("Error occurred on loading recipe pool at: ${it.javaClass.simpleName}", e)
+            throw e
+          }
+        }
     // GT
     Log.info("Loading GT related recipes...")
     arrayOf<RecipePool>(
@@ -53,6 +60,13 @@ object RecipeLoader : Loader {
             PlasmaForgeRecipePool(),
             QuantumForceTransformerRecipePool(),
         )
-        .forEach { it.loadRecipes() }
+        .forEach {
+          try {
+            it.loadRecipes()
+          } catch (e: Exception) {
+            Log.error("Error occurred on loading recipe pool at: ${it.javaClass.simpleName}", e)
+            throw e
+          }
+        }
   }
 }
