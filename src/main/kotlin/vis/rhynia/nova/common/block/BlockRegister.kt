@@ -1,51 +1,68 @@
 package vis.rhynia.nova.common.block
 
 import cpw.mods.fml.common.registry.GameRegistry
-import vis.rhynia.nova.common.block.base.BlockBaseItem01
-import vis.rhynia.nova.common.block.casing.EyeOfHarmonyCore
-import vis.rhynia.nova.common.block.casing.EyeOfHarmonyCoreItem
+import gregtech.api.interfaces.IItemContainer
+import kotlin.jvm.java
+import net.minecraft.util.EnumChatFormatting.AQUA
+import net.minecraft.util.EnumChatFormatting.BOLD
+import vis.rhynia.nova.api.util.RegistryUtil
+import vis.rhynia.nova.common.block.BlockRecord.EyeOfHarmonyCoreCasing
+import vis.rhynia.nova.common.block.BlockRecord.MetaBlock01
+import vis.rhynia.nova.common.block.base.AbstractMetaBlock
+import vis.rhynia.nova.common.block.base.NovaMetaBlockItem
 import vis.rhynia.nova.common.loader.container.NovaItemList
 
+@Suppress("unused")
 object BlockRegister {
+  fun register() {
+    registerBlocks()
+    registerBlockContainers()
+  }
+
   private fun registerBlocks() {
     GameRegistry.registerBlock(
-        BlockRecord.MetaBlock01,
-        BlockBaseItem01::class.java,
-        BlockRecord.MetaBlock01.unlocalizedName)
+        MetaBlock01, NovaMetaBlockItem::class.java, MetaBlock01.unlocalizedName)
     GameRegistry.registerBlock(
-        BlockRecord.EyeOfHarmonyCoreCasing,
-        EyeOfHarmonyCoreItem::class.java,
-        BlockRecord.EyeOfHarmonyCoreCasing.unlocalizedName)
+        EyeOfHarmonyCoreCasing,
+        NovaMetaBlockItem::class.java,
+        EyeOfHarmonyCoreCasing.unlocalizedName)
   }
 
   // spotless:off
   private fun registerBlockContainers() {
     NovaItemList.TestMetaBlock01
-      .set(BlockBaseItem01.initMetaBlock("测试方块", 0, arrayOf("我相信它没什么用")))
+      .register(MetaBlock01, 0, arrayOf("我相信它没什么用", "仅作测试之用"))
 
     NovaItemList.EOHCoreT1
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 0))
+      .register(EyeOfHarmonyCoreCasing, 0, "${BOLD}${AQUA}允许执行鸿蒙之眼T1配方")
     NovaItemList.EOHCoreT2
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 1))
+      .register(EyeOfHarmonyCoreCasing, 1, "${BOLD}${AQUA}允许执行鸿蒙之眼T2配方")
     NovaItemList.EOHCoreT3
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 2))
+      .register(EyeOfHarmonyCoreCasing, 2, "${BOLD}${AQUA}允许执行鸿蒙之眼T3配方")
     NovaItemList.EOHCoreT4
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 3))
+      .register(EyeOfHarmonyCoreCasing, 3, "${BOLD}${AQUA}允许执行鸿蒙之眼T4配方")
     NovaItemList.EOHCoreT5
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 4))
+      .register(EyeOfHarmonyCoreCasing, 4, "${BOLD}${AQUA}允许执行鸿蒙之眼T5配方")
     NovaItemList.EOHCoreT6
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 5))
+      .register(EyeOfHarmonyCoreCasing, 5, "${BOLD}${AQUA}允许执行鸿蒙之眼T6配方")
     NovaItemList.EOHCoreT7
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 6))
+      .register(EyeOfHarmonyCoreCasing, 6, "${BOLD}${AQUA}允许执行鸿蒙之眼T7配方")
     NovaItemList.EOHCoreT8
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 7))
+      .register(EyeOfHarmonyCoreCasing, 7, "${BOLD}${AQUA}允许执行鸿蒙之眼T8配方")
     NovaItemList.EOHCoreT9
-      .set(EyeOfHarmonyCore.eyeOfHarmonyCoreCasingMeta( 8))
+      .register(EyeOfHarmonyCoreCasing, 8, "${BOLD}${AQUA}允许执行鸿蒙之眼T9配方")
   }
   // spotless:on
 
-  fun register() {
-    registerBlocks()
-    registerBlockContainers()
+  private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int) {
+    this.set(RegistryUtil.registerMetaBlock(block, meta, null))
+  }
+
+  private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int, tooltip: Array<String>) {
+    this.set(RegistryUtil.registerMetaBlock(block, meta, tooltip))
+  }
+
+  private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int, tooltip: String) {
+    this.set(RegistryUtil.registerMetaBlock(block, meta, tooltip))
   }
 }

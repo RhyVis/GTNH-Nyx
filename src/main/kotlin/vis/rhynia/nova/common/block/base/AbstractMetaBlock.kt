@@ -1,48 +1,43 @@
-package vis.rhynia.nova.common.item.base
+package vis.rhynia.nova.common.block.base
 
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
+import net.minecraft.block.Block
+import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
+import net.minecraft.world.World
 import vis.rhynia.nova.Constant
 import vis.rhynia.nova.api.interfaces.item.MetaTooltip
 import vis.rhynia.nova.api.interfaces.item.MetaVariant
 import vis.rhynia.nova.client.NovaTab
 
-abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTooltip {
-  protected var iconMap: Map<Int, IIcon> = mutableMapOf()
-  protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
-  protected val metaSet: MutableSet<Int> = mutableSetOf()
-
-  init {
-    hasSubtypes = true
-    maxDamage = 0
-    creativeTab = NovaTab.TabMetaItem01
-    unlocalizedName = rawName
+abstract class AbstractMetaBlock : Block, MetaVariant, MetaTooltip {
+  constructor(material: Material, rawName: String) : super(material) {
+    setBlockName(rawName)
+    setCreativeTab(NovaTab.TabBlock01)
   }
 
+  constructor(rawName: String) : this(Material.iron, rawName)
+
+  protected var iconMap: Map<Int, IIcon> = mutableMapOf()
+  protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
+  protected val metaSet: MutableSet<Int> = mutableSetOf(16)
+
   companion object {
-    fun getAllVariants(item: Item, metaSet: Set<Int>): Array<ItemStack> =
+    fun getAllVariants(item: Block, metaSet: Set<Int>): Array<ItemStack> =
         metaSet.map { ItemStack(item, 1, it) }.toTypedArray()
   }
 
-  override fun getMetadata(meta: Int): Int = meta
+  override fun getIcon(side: Int, meta: Int): IIcon? = iconMap[meta]
 
-  override fun getUnlocalizedName(): String = super.getUnlocalizedName()
+  override fun damageDropped(meta: Int): Int = meta
 
-  override fun getUnlocalizedName(stack: ItemStack?): String =
-      "${super.getUnlocalizedName()}.${stack?.itemDamage ?: 0}"
-
-  override fun registerIcons(register: IIconRegister) {
-    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$unlocalizedName/$it" }
-    itemIcon = iconMap[0]
-  }
-
-  override fun getIconFromDamage(meta: Int): IIcon = iconMap[meta] ?: itemIcon
+  override fun getDamageValue(worldIn: World?, x: Int, y: Int, z: Int): Int =
+      worldIn?.getBlockMetadata(x, y, z) ?: 0
 
   // region MetaVariant Implementation
 
@@ -78,21 +73,17 @@ abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTool
   // endregion
 
   @SideOnly(Side.CLIENT)
-  override fun getSubItems(
-      aItem: Item?,
-      aCreativeTabs: CreativeTabs?,
-      aList: MutableList<ItemStack?>
-  ) {
-    aList.addAll(getVariants())
+  override fun registerBlockIcons(register: IIconRegister) {
+    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$unlocalizedName/$it" }
+    blockIcon = iconMap[0]
   }
 
   @SideOnly(Side.CLIENT)
-  override fun addInformation(
-      aItemStack: ItemStack,
-      aEntityPlayer: EntityPlayer?,
-      aTooltipsList: MutableList<String?>,
-      isAdvancedMode: Boolean
+  override fun getSubBlocks(
+      aItem: Item?,
+      aCreativeTabs: CreativeTabs?,
+      list: MutableList<ItemStack?>
   ) {
-    getTooltips(aItemStack.getItemDamage())?.let { aTooltipsList.addAll(it) }
+    list.addAll(getVariants())
   }
 }
