@@ -10,11 +10,13 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.BLUE
 import net.minecraft.util.EnumChatFormatting.RED
+import vis.rhynia.nova.client.NovaTab.TabItem
 
-class NovaItemUltimate(creativeTab: CreativeTabs) : Item() {
+class NovaItemUltimate() : Item() {
   init {
-    setCreativeTab(creativeTab)
+    setCreativeTab(TabItem)
     setUnlocalizedName("ultimate")
+    setTextureName("nova:ultimate")
   }
 
   @SideOnly(Side.CLIENT)

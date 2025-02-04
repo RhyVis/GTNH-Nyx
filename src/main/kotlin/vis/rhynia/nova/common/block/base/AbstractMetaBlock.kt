@@ -13,12 +13,13 @@ import net.minecraft.world.World
 import vis.rhynia.nova.Constant
 import vis.rhynia.nova.api.interfaces.item.MetaTooltip
 import vis.rhynia.nova.api.interfaces.item.MetaVariant
-import vis.rhynia.nova.client.NovaTab
+import vis.rhynia.nova.client.NovaTab.TabBlock
 
+/** Abstract class for blocks using meta as variant. */
 abstract class AbstractMetaBlock : Block, MetaVariant, MetaTooltip {
   constructor(material: Material, rawName: String) : super(material) {
     setBlockName(rawName)
-    setCreativeTab(NovaTab.TabBlock01)
+    setCreativeTab(TabBlock)
   }
 
   constructor(rawName: String) : this(Material.iron, rawName)
@@ -26,11 +27,6 @@ abstract class AbstractMetaBlock : Block, MetaVariant, MetaTooltip {
   protected var iconMap: Map<Int, IIcon> = mutableMapOf()
   protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
   protected val metaSet: MutableSet<Int> = mutableSetOf(16)
-
-  companion object {
-    fun getAllVariants(item: Block, metaSet: Set<Int>): Array<ItemStack> =
-        metaSet.map { ItemStack(item, 1, it) }.toTypedArray()
-  }
 
   override fun getIcon(side: Int, meta: Int): IIcon? = iconMap[meta]
 
@@ -45,7 +41,8 @@ abstract class AbstractMetaBlock : Block, MetaVariant, MetaTooltip {
       if (metaSet.contains(meta)) ItemStack(this, 1, meta)
       else throw IllegalArgumentException("Invalid meta value: $meta")
 
-  override fun getVariants(): Array<ItemStack> = getAllVariants(this, metaSet)
+  override fun getVariants(): Array<ItemStack> =
+      metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
 
   override fun getVariantIds(): Set<Int> = metaSet.toSet()
 

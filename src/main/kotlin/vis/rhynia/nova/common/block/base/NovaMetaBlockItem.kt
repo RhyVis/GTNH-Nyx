@@ -13,15 +13,16 @@ class NovaMetaBlockItem(block: AbstractMetaBlock) : ItemBlock(block) {
   init {
     hasSubtypes = true
     maxDamage = 0
-    creativeTab = NovaTab.TabBlock01
+    creativeTab = NovaTab.TabBlock
   }
 
   @Suppress("SpellCheckingInspection")
-  val mNoMobsToolTip: String? =
+  private val mNoMobsToolTip: String? =
       GTLanguageManager.addStringLocalization(
           "gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block")
+
   @Suppress("SpellCheckingInspection")
-  val mNoTileEntityToolTip: String? =
+  private val mNoTileEntityToolTip: String? =
       GTLanguageManager.addStringLocalization(
           "gt.notileentityinthisblock", "This is NOT a TileEntity!")
 
@@ -39,7 +40,7 @@ class NovaMetaBlockItem(block: AbstractMetaBlock) : ItemBlock(block) {
       stack: ItemStack,
       player: EntityPlayer?,
       list: MutableList<String?>,
-      b: Boolean
+      isAdvancedMode: Boolean
   ) {
     metaBlock.getTooltips(stack.itemDamage)?.let { list.addAll(it) }
     if (metaBlock is GregTechTileInfo) {

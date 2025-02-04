@@ -3,6 +3,7 @@ package vis.rhynia.nova.api.interfaces.item
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.item.ItemStack
 
+/** Specify the item that uses meta value to represent different variants. */
 interface MetaVariant {
   /**
    * Create a copy of this with given meta value.

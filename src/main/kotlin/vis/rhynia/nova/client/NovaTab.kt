@@ -7,12 +7,12 @@ import net.minecraft.item.Item
 import vis.rhynia.nova.common.item.ItemRecord
 
 object NovaTab {
-  val TabMetaItem01: CreativeTabs =
+  val TabItem: CreativeTabs =
       object : CreativeTabs("Nova: Item") {
         @SideOnly(Side.CLIENT) override fun getTabIconItem(): Item = ItemRecord.MetaItem01
       }
 
-  val TabBlock01: CreativeTabs =
+  val TabBlock: CreativeTabs =
       object : CreativeTabs("Nova: Block") {
         @SideOnly(Side.CLIENT) override fun getTabIconItem(): Item = ItemRecord.MetaItem01
       }

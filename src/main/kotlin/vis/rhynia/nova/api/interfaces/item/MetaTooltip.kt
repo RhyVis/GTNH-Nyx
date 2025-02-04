@@ -1,5 +1,9 @@
 package vis.rhynia.nova.api.interfaces.item
 
+/**
+ * Specify the item that uses meta value to represent different tooltips. This is used to provide
+ * tooltips information on registration.
+ */
 interface MetaTooltip {
   /**
    * Set or clear the tooltips of given meta.

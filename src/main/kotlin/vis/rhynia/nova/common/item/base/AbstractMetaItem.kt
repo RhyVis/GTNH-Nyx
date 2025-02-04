@@ -8,11 +8,13 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
+import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import vis.rhynia.nova.Constant
 import vis.rhynia.nova.api.interfaces.item.MetaTooltip
 import vis.rhynia.nova.api.interfaces.item.MetaVariant
 import vis.rhynia.nova.client.NovaTab
 
+/** Abstract class for items using meta as variant. */
 abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTooltip {
   protected var iconMap: Map<Int, IIcon> = mutableMapOf()
   protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
@@ -21,14 +23,18 @@ abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTool
   init {
     hasSubtypes = true
     maxDamage = 0
-    creativeTab = NovaTab.TabMetaItem01
+    creativeTab = NovaTab.TabItem
     unlocalizedName = rawName
+    iconString = "${Constant.MOD_ID}:${iconName ?: "$rawName/0"}"
   }
 
-  companion object {
-    fun getAllVariants(item: Item, metaSet: Set<Int>): Array<ItemStack> =
-        metaSet.map { ItemStack(item, 1, it) }.toTypedArray()
-  }
+  /**
+   * Override this to set the alternate texture name, if null defaults to
+   *
+   * `nova:'rawName'/0`.
+   */
+  open val iconName: String?
+    @OverrideOnly get() = null
 
   override fun getMetadata(meta: Int): Int = meta
 
@@ -50,7 +56,8 @@ abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTool
       if (metaSet.contains(meta)) ItemStack(this, 1, meta)
       else throw IllegalArgumentException("Invalid meta value: $meta")
 
-  override fun getVariants(): Array<ItemStack> = getAllVariants(this, metaSet)
+  override fun getVariants(): Array<ItemStack> =
+      metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
 
   override fun getVariantIds(): Set<Int> = metaSet.toSet()
 
@@ -88,11 +95,11 @@ abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTool
 
   @SideOnly(Side.CLIENT)
   override fun addInformation(
-      aItemStack: ItemStack,
-      aEntityPlayer: EntityPlayer?,
-      aTooltipsList: MutableList<String?>,
+      stack: ItemStack,
+      player: EntityPlayer?,
+      list: MutableList<String?>,
       isAdvancedMode: Boolean
   ) {
-    getTooltips(aItemStack.getItemDamage())?.let { aTooltipsList.addAll(it) }
+    getTooltips(stack.getItemDamage())?.let { list.addAll(it) }
   }
 }
