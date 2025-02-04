@@ -2,7 +2,14 @@ package vis.rhynia.nova.common.tile.base
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition
+import gregtech.api.enums.Textures
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW
 import gregtech.api.interfaces.IHatchElement
+import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
@@ -10,12 +17,14 @@ import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBas
 import gregtech.api.metatileentity.implementations.MTEHatch
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo
 import gregtech.api.recipe.check.CheckRecipeResult
+import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.api.util.IGTHatchAdder
 import gregtech.common.tileentities.machines.MTEHatchOutputBusME
 import gregtech.common.tileentities.machines.MTEHatchOutputME
 import mcp.mobius.waila.api.IWailaConfigHandler
 import mcp.mobius.waila.api.IWailaDataAccessor
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -23,6 +32,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.GOLD
 import net.minecraft.world.World
+import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
@@ -32,17 +42,18 @@ import vis.rhynia.nova.api.util.FluidUtil.idEqual
 @Suppress("UNUSED")
 abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     MTEExtendedPowerMultiBlockBase<T>, IConstructable, ISurvivalConstructable {
+
   protected constructor(
       aId: Int,
       aName: String,
       aNameRegional: String
   ) : super(aId, aName, aNameRegional)
-
   protected constructor(aName: String) : super(aName)
 
   protected companion object {
     const val STRUCTURE_PIECE_MAIN = "Main" // Just a name
 
+    /** Simulated Hatch Element for Exotic Energy Hatch which has multiple allowed ampere. */
     val ExoticDynamo =
         object :
             HatchElement(
@@ -90,10 +101,6 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         addDynamoToMachineList(aTileEntity, aBaseCasingIndex)
   }
 
-  fun addToMachineList(aTileEntity: IGregTechTileEntity?, aBaseCasingIndex: Short): Boolean {
-    return addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
-  }
-
   override fun addDynamoToMachineList(
       aTileEntity: IGregTechTileEntity?,
       aBaseCasingIndex: Int
@@ -109,13 +116,19 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     return false
   }
 
-  fun addMachineListCompatible(
+  /** Add everything to Machine List, Short type compatible */
+  fun addToMachineList(aTileEntity: IGregTechTileEntity?, aBaseCasingIndex: Short): Boolean {
+    return addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
+  }
+
+  /** Add everything to Machine List, Short type compatible */
+  protected fun addMachineListCompatible(
       aTileEntity: IGregTechTileEntity?,
       aBaseCasingIndex: Short
   ): Boolean = addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
 
   /** Add Exotic Dynamo to Machine List, Short type compatible */
-  fun addDynamoCompatible(entity: IGregTechTileEntity, value: Short): Boolean {
+  protected fun addDynamoCompatible(entity: IGregTechTileEntity, value: Short): Boolean {
     return addDynamoToMachineList(entity, value.toInt())
   }
 
@@ -150,6 +163,61 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
 
     return false
   }
+
+  /** Structure Definition for the machine, set when first time calling getStructureDefinition(). */
+  protected var cachedStructureDef: IStructureDefinition<T>? = null
+
+  /** Set the structure definition for the machine. */
+  protected abstract fun genStructureDefinition(): IStructureDefinition<T>
+
+  final override fun getStructureDefinition(): IStructureDefinition<T> =
+      cachedStructureDef
+          ?: let {
+            cachedStructureDef = genStructureDefinition()
+            cachedStructureDef!!
+          }
+
+  /** Controller Block and Meta, used for calculating casing texture index. */
+  protected abstract val sControllerBlock: Pair<Block, Int>
+
+  protected open val sControllerCasingIndex: Int
+    get() = GTUtility.getCasingTextureIndex(sControllerBlock.first, sControllerBlock.second)
+
+  /** Controller Icon for active state, left is normal, right is glow. */
+  protected open val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE to OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW
+
+  /** Controller Icon for inactive state, left is normal, right is glow. */
+  protected open val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_FRONT_ASSEMBLY_LINE to OVERLAY_FRONT_ASSEMBLY_LINE_GLOW
+
+  override fun getTexture(
+      baseMetaTileEntity: IGregTechTileEntity,
+      side: ForgeDirection,
+      facing: ForgeDirection,
+      colorIndex: Int,
+      active: Boolean,
+      redstoneLevel: Boolean
+  ): Array<ITexture> =
+      if (side != facing) arrayOf(Textures.BlockIcons.getCasingTextureForId(sControllerCasingIndex))
+      else if (active)
+          arrayOf(
+              Textures.BlockIcons.getCasingTextureForId(sControllerCasingIndex),
+              TextureFactory.builder().addIcon(sControllerIconActive.first).extFacing().build(),
+              TextureFactory.builder()
+                  .addIcon(sControllerIconActive.second)
+                  .extFacing()
+                  .glow()
+                  .build())
+      else
+          arrayOf(
+              Textures.BlockIcons.getCasingTextureForId(sControllerCasingIndex),
+              TextureFactory.builder().addIcon(OVERLAY_FRONT_ASSEMBLY_LINE).extFacing().build(),
+              TextureFactory.builder()
+                  .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+                  .extFacing()
+                  .glow()
+                  .build())
 
   override fun getMaxEfficiency(aStack: ItemStack?): Int = 100_00
 

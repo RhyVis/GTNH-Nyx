@@ -9,14 +9,14 @@ import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
 import gregtech.api.enums.Textures
-import gregtech.api.interfaces.ITexture
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.recipe.check.CheckRecipeResultRegistry
 import gregtech.api.recipe.check.SimpleCheckRecipeResult
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
 import gregtech.api.util.MultiblockTooltipBuilder
@@ -172,72 +172,64 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
     if (aTick == 1L) strongCheckOrAddUser(baseMetaTileEntity.ownerUuid)
   }
 
-  override fun supportsVoidProtection(): Boolean {
-    return false
-  }
+  override fun supportsVoidProtection(): Boolean = false
 
-  override fun supportsInputSeparation(): Boolean {
-    return false
-  }
+  override fun supportsInputSeparation(): Boolean = false
 
-  override fun supportsBatchMode(): Boolean {
-    return false
-  }
+  override fun supportsBatchMode(): Boolean = false
 
-  override fun supportsSingleRecipeLocking(): Boolean {
-    return false
-  }
+  override fun supportsSingleRecipeLocking(): Boolean = false
   // endregion
 
   // region Structure
-  override fun sCasingBlock(): Block {
-    return TTCasingsContainer.sBlockCasingsBA0
-  }
+  override val sCasingBlock: Block
+    get() = TTCasingsContainer.sBlockCasingsBA0
 
-  override fun sCoreBlock(): Block? = null
+  override val sCasingBlockMeta: Int
+    get() = 11
 
-  override fun sCasingIndex(): Int {
-    return (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12)
-  }
+  override val sCasingIndex: Int
+    get() = (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12)
 
-  override fun sCasingBlockMeta(): Int {
-    return 11
-  }
+  override val sControllerIcon: kotlin.Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
 
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEEyeOfUltimate> {
-    return StructureDefinition.builder<NovaMTEEyeOfUltimate>()
-        .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-        .addElement(
-            'B',
-            StructureUtility.ofBlocksTiered<NovaMTEEyeOfUltimate, Int>(
-                { block: Block, meta: Int ->
-                  if (block === BlockRecord.EyeOfHarmonyCoreCasing) meta else null
-                },
-                ImmutableList.of<Pair<Block, Int>>(
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 0),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 1),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 2),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 3),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 4),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 5),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 6),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 7),
-                    Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 8)),
-                -1,
-                { t: NovaMTEEyeOfUltimate, meta: Int ->
-                  t.pSpacetimeCompressionFieldMetadata = meta
-                },
-                { it.pSpacetimeCompressionFieldMetadata }))
-        .addElement(
-            'C',
-            HatchElementBuilder.builder<NovaMTEEyeOfUltimate>()
-                .atLeast(InputBus, OutputBus, OutputHatch)
-                .adder(NovaMTEEyeOfUltimate::addToMachineList)
-                .dot(1)
-                .casingIndex(sCasingIndex())
-                .buildAndChain(sCasingBlock(), sCasingBlockMeta()))
-        .build()
-  }
+  override val sControllerIconActive: kotlin.Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_DTPF_ON to OVERLAY_DTPF_ON
+
+  override fun genStructureDefinition(): IStructureDefinition<NovaMTEEyeOfUltimate> =
+      StructureDefinition.builder<NovaMTEEyeOfUltimate>()
+          .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+          .addElement(
+              'B',
+              StructureUtility.ofBlocksTiered<NovaMTEEyeOfUltimate, Int>(
+                  { block: Block, meta: Int ->
+                    if (block === BlockRecord.EyeOfHarmonyCoreCasing) meta else null
+                  },
+                  ImmutableList.of<Pair<Block, Int>>(
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 0),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 1),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 2),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 3),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 4),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 5),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 6),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 7),
+                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 8)),
+                  -1,
+                  { t: NovaMTEEyeOfUltimate, meta: Int ->
+                    t.pSpacetimeCompressionFieldMetadata = meta
+                  },
+                  { it.pSpacetimeCompressionFieldMetadata }))
+          .addElement(
+              'C',
+              HatchElementBuilder.builder<NovaMTEEyeOfUltimate>()
+                  .atLeast(InputBus, OutputBus, OutputHatch)
+                  .adder(NovaMTEEyeOfUltimate::addToMachineList)
+                  .dot(1)
+                  .casingIndex(sCasingIndex)
+                  .buildAndChain(sCasingBlock, sCasingBlockMeta))
+          .build()
 
   override fun checkMachine(
       aBaseMetaTileEntity: IGregTechTileEntity?,
@@ -245,42 +237,6 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
   ): Boolean {
     pSpacetimeCompressionFieldMetadata = -1
     return super.checkMachine(aBaseMetaTileEntity, aStack)
-  }
-
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity,
-      side: ForgeDirection,
-      facing: ForgeDirection,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<ITexture> {
-    if (side == facing) {
-      if (active)
-          return arrayOf(
-              Textures.BlockIcons.getCasingTextureForId(sCasingIndex()),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
-                  .extFacing()
-                  .build(),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
-                  .extFacing()
-                  .glow()
-                  .build())
-      return arrayOf(
-          Textures.BlockIcons.getCasingTextureForId(sCasingIndex()),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
-              .extFacing()
-              .build(),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
-              .extFacing()
-              .glow()
-              .build())
-    }
-    return arrayOf(Textures.BlockIcons.getCasingTextureForId(sCasingIndex()))
   }
   // endregion
 

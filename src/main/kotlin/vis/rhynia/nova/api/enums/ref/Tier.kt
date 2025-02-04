@@ -106,15 +106,12 @@ enum class Tier(private val material: Materials) {
           else -> SolderMaterial.IndaAlloy
         }
 
-  val circuitMaterial: Materials
-    get() = material
-
   fun getSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount)
 
   fun getIngotSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount * INGOT)
 
   fun getCircuit(amount: Int): ItemStack =
-      GTOreDictUnificator.get(OrePrefixes.circuit, circuitMaterial, amount.toLong())
+      GTOreDictUnificator.get(OrePrefixes.circuit, material, amount.toLong())
 
   fun getCircuitWrap(amount: Int): ItemStack = BundleChip.entries[ordinal].getItemStack(amount)
 
@@ -252,7 +249,7 @@ enum class Tier(private val material: Materials) {
     return NovaItemList.TestItem01.get(1)
   }
 
-  fun getDynamoWireless(amount: Int): ItemStack? {
+  fun getDynamoWireless(amount: Int): ItemStack {
     if (this == MAX) {
       return NovaItemList.TestItem01.get(1)
     }
@@ -260,7 +257,7 @@ enum class Tier(private val material: Materials) {
         .get(amount.toLong(), NovaItemList.TestItem01.get(1))
   }
 
-  fun getEnergyWireless(amount: Int): ItemStack? {
+  fun getEnergyWireless(amount: Int): ItemStack {
     if (this == MAX) {
       return NovaItemList.TestItem01.get(1)
     }
@@ -268,7 +265,7 @@ enum class Tier(private val material: Materials) {
         .get(amount.toLong(), NovaItemList.TestItem01.get(1))
   }
 
-  fun getEnergyWireless4A(amount: Int): ItemStack? {
+  fun getEnergyWireless4A(amount: Int): ItemStack {
     return when (this) {
       ULV,
       LV,
@@ -281,7 +278,7 @@ enum class Tier(private val material: Materials) {
     }
   }
 
-  fun getEnergyWireless16A(amount: Int): ItemStack? {
+  fun getEnergyWireless16A(amount: Int): ItemStack {
     return when (this) {
       ULV,
       LV,
@@ -294,7 +291,7 @@ enum class Tier(private val material: Materials) {
     }
   }
 
-  fun getEnergyWireless64A(amount: Int): ItemStack? {
+  fun getEnergyWireless64A(amount: Int): ItemStack {
     return when (this) {
       ULV,
       LV,
@@ -307,7 +304,7 @@ enum class Tier(private val material: Materials) {
     }
   }
 
-  fun getLaserTarget(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack? {
+  fun getLaserTarget(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack {
     return when (this) {
       ULV,
       LV,
@@ -321,7 +318,7 @@ enum class Tier(private val material: Materials) {
     }
   }
 
-  fun getLaserWireless(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack? {
+  fun getLaserWireless(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack {
     return when (this) {
       ULV,
       LV,

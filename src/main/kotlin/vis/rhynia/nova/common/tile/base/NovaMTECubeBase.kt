@@ -13,18 +13,15 @@ import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.HatchElement.InputHatch
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
-import gregtech.api.enums.Textures
-import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
-import net.minecraftforge.common.util.ForgeDirection
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
 
 abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
+
   protected constructor(
       aId: Int,
       aName: String,
@@ -38,15 +35,26 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
     private const val D_OFFSET = 1
   }
 
-  @OverrideOnly protected abstract fun sCasingBlock(): Block
+  /** The block used for the casing of the machine. */
+  protected abstract val sCasingBlock: Block
 
-  @OverrideOnly protected open fun sCoreBlock(): Block? = null
+  /** The meta of the block used for the casing of the machine. */
+  protected abstract val sCasingBlockMeta: Int
 
-  @OverrideOnly protected abstract fun sCasingIndex(): Int
+  /** The index of the casing texture, usually calculated from the block and meta. */
+  protected open val sCasingIndex: Int
+    @OverrideOnly get() = GTUtility.getCasingTextureIndex(sCasingBlock, sCasingBlockMeta)
 
-  @OverrideOnly protected abstract fun sCasingBlockMeta(): Int
+  /** The block used for the core of the machine, leave null if no core block is needed. */
+  protected open val sCoreBlock: Block?
+    @OverrideOnly get() = null
 
-  @OverrideOnly protected open fun sCoreBlockMeta(): Int = 0
+  /** The meta of the block used for the core of the machine. */
+  protected open val sCoreBlockMeta: Int
+    @OverrideOnly get() = 0
+
+  final override val sControllerBlock: Pair<Block, Int>
+    get() = sCasingBlock to sCasingBlockMeta
 
   override fun checkMachine(
       aBaseMetaTileEntity: IGregTechTileEntity?,
@@ -78,68 +86,27 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
         true)
   }
 
-  override fun getStructureDefinition(): IStructureDefinition<T> {
-    return StructureDefinition.builder<T>()
-        .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-        .addElement(
-            'B', if (sCoreBlock() == null) isAir() else ofBlock(sCoreBlock(), sCoreBlockMeta()))
-        .addElement(
-            'C',
-            HatchElementBuilder.builder<T>()
-                .atLeast(
-                    InputBus,
-                    InputHatch,
-                    OutputBus,
-                    OutputHatch,
-                    Energy.or(ExoticEnergy),
-                    Dynamo.or(ExoticDynamo))
-                .adder { t, aTileEntity, aBaseCasingIndex ->
-                  t.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
-                }
-                .dot(1)
-                .casingIndex(sCasingIndex())
-                .buildAndChain(sCasingBlock(), sCasingBlockMeta()))
-        .build()
-  }
-
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity,
-      side: ForgeDirection,
-      facing: ForgeDirection,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<ITexture> {
-    if (side != facing)
-        return arrayOf(
-            Textures.BlockIcons.getCasingTextureForId(
-                GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())))
-    if (active)
-        return arrayOf(
-            Textures.BlockIcons.getCasingTextureForId(
-                GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
-            TextureFactory.builder()
-                .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                .extFacing()
-                .build(),
-            TextureFactory.builder()
-                .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                .extFacing()
-                .glow()
-                .build())
-    return arrayOf(
-        Textures.BlockIcons.getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
-        TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE)
-            .extFacing()
-            .build(),
-        TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-            .extFacing()
-            .glow()
-            .build())
-  }
+  override fun genStructureDefinition(): IStructureDefinition<T> =
+      StructureDefinition.builder<T>()
+          .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+          .addElement('B', if (sCoreBlock == null) isAir() else ofBlock(sCoreBlock, sCoreBlockMeta))
+          .addElement(
+              'C',
+              HatchElementBuilder.builder<T>()
+                  .atLeast(
+                      InputBus,
+                      InputHatch,
+                      OutputBus,
+                      OutputHatch,
+                      Energy.or(ExoticEnergy),
+                      Dynamo.or(ExoticDynamo))
+                  .adder { t, aTileEntity, aBaseCasingIndex ->
+                    t.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
+                  }
+                  .dot(1)
+                  .casingIndex(sCasingIndex)
+                  .buildAndChain(sCasingBlock, sCasingBlockMeta))
+          .build()
 
   // spotless:off
   protected val structureShape =

@@ -2,16 +2,15 @@ package vis.rhynia.nova.common.tile.multi.generation
 
 import gregtech.api.GregTechAPI
 import gregtech.api.enums.Textures
-import gregtech.api.interfaces.ITexture
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.recipe.check.SimpleCheckRecipeResult
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.api.util.MultiblockTooltipBuilder
-import gregtech.common.blocks.BlockCasings1
 import gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
 import gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser
 import java.math.BigInteger
@@ -27,7 +26,6 @@ import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.UNDERLINE
 import net.minecraft.util.EnumChatFormatting.WHITE
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.api.util.MathUtil
@@ -132,59 +130,17 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
   // endregion
 
   // region Structure
-  override fun sCasingBlock(): Block {
-    return GregTechAPI.sBlockCasings1
-  }
+  override val sCasingBlock: Block
+    get() = GregTechAPI.sBlockCasings1
 
-  override fun sCoreBlock(): Block? = null
+  override val sCasingBlockMeta: Int
+    get() = 12
 
-  override fun sCasingIndex(): Int {
-    return (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12)
-  }
+  override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
 
-  override fun sCasingBlockMeta(): Int {
-    return 12
-  }
-
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity,
-      side: ForgeDirection,
-      facing: ForgeDirection,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<ITexture> {
-    if (side == facing) {
-      if (active)
-          return arrayOf(
-              Textures.BlockIcons.getCasingTextureForId(
-                  GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
-                  .extFacing()
-                  .build(),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
-                  .extFacing()
-                  .glow()
-                  .build())
-      return arrayOf(
-          Textures.BlockIcons.getCasingTextureForId(
-              GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
-              .extFacing()
-              .build(),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
-              .extFacing()
-              .glow()
-              .build())
-    }
-    return arrayOf(
-        Textures.BlockIcons.getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())))
-  }
+  override val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_DTPF_ON to OVERLAY_DTPF_ON
   // endregion
 
   // region Info

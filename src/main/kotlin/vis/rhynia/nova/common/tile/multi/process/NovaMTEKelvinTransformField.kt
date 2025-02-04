@@ -12,18 +12,21 @@ import gregtech.api.enums.HatchElement.InputHatch
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
 import gregtech.api.enums.Textures
-import gregtech.api.interfaces.ITexture
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.recipe.RecipeMap
 import gregtech.api.recipe.RecipeMaps
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
 import gregtech.api.util.MultiblockTooltipBuilder
 import gregtech.common.blocks.BlockCasings2
 import gtPlusPlus.api.recipe.GTPPRecipeMaps
 import kotlin.math.pow
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -62,14 +65,12 @@ class NovaMTEKelvinTransformField : NovaMTEBase<NovaMTEKelvinTransformField> {
         if (mRecipeMode.toInt() == 0) 0.95.pow(GTUtility.getTier(this.maxInputVoltage).toDouble())
         else 1.0
 
-  override fun getRecipeMap(): RecipeMap<*>? {
-    return if (mRecipeMode.toInt() == 0) RecipeMaps.vacuumFreezerRecipes
-    else GTPPRecipeMaps.advancedFreezerRecipes
-  }
+  override fun getRecipeMap(): RecipeMap<*>? =
+      if (mRecipeMode.toInt() == 0) RecipeMaps.vacuumFreezerRecipes
+      else GTPPRecipeMaps.advancedFreezerRecipes
 
-  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>> {
-    return listOf(RecipeMaps.vacuumFreezerRecipes, GTPPRecipeMaps.advancedFreezerRecipes)
-  }
+  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>> =
+      listOf(RecipeMaps.vacuumFreezerRecipes, GTPPRecipeMaps.advancedFreezerRecipes)
 
   override fun getRecipeCatalystPriority(): Int = -10
 
@@ -121,27 +122,19 @@ class NovaMTEKelvinTransformField : NovaMTEBase<NovaMTEKelvinTransformField> {
         true)
   }
 
-  private var structureDefinition: IStructureDefinition<NovaMTEKelvinTransformField>? = null
-
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEKelvinTransformField> {
-    if (structureDefinition == null) {
-      structureDefinition =
-          StructureDefinition.builder<NovaMTEKelvinTransformField>()
-              .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-              .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 7))
-              .addElement(
-                  'C',
-                  HatchElementBuilder.builder<NovaMTEKelvinTransformField>()
-                      .atLeast(
-                          InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                      .adder(NovaMTEKelvinTransformField::addToMachineList)
-                      .dot(1)
-                      .casingIndex((GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(1))
-                      .buildAndChain(GregTechAPI.sBlockCasings2, 1))
-              .build()
-    }
-    return structureDefinition!!
-  }
+  override fun genStructureDefinition(): IStructureDefinition<NovaMTEKelvinTransformField> =
+      StructureDefinition.builder<NovaMTEKelvinTransformField>()
+          .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+          .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 7))
+          .addElement(
+              'C',
+              HatchElementBuilder.builder<NovaMTEKelvinTransformField>()
+                  .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+                  .adder(NovaMTEKelvinTransformField::addToMachineList)
+                  .dot(1)
+                  .casingIndex((GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(1))
+                  .buildAndChain(GregTechAPI.sBlockCasings2, 1))
+          .build()
 
   // spotless:off
   private val structureShape = arrayOf(
@@ -151,43 +144,15 @@ class NovaMTEKelvinTransformField : NovaMTEBase<NovaMTEKelvinTransformField> {
   )
   // spotless:on
 
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity?,
-      sideDirection: ForgeDirection?,
-      facingDirection: ForgeDirection?,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<ITexture> {
-    if (sideDirection == facingDirection) {
-      if (active)
-          return arrayOf(
-              Textures.BlockIcons.getCasingTextureForId(
-                  GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 1)),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE)
-                  .extFacing()
-                  .build(),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW)
-                  .extFacing()
-                  .glow()
-                  .build())
-      return arrayOf(
-          Textures.BlockIcons.getCasingTextureForId(
-              GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 1)),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER)
-              .extFacing()
-              .build(),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW)
-              .extFacing()
-              .glow()
-              .build())
-    }
-    return arrayOf(Textures.BlockIcons.casingTexturePages[0][17])
-  }
+  override val sControllerBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings2 to 1
+
+  override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_FRONT_VACUUM_FREEZER to OVERLAY_FRONT_VACUUM_FREEZER_GLOW
+
+  override val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE to OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW
+
   // endregion
 
   // region Overrides

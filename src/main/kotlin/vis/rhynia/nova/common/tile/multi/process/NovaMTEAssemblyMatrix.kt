@@ -10,21 +10,19 @@ import gregtech.api.enums.HatchElement.ExoticEnergy
 import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.HatchElement.InputHatch
 import gregtech.api.enums.HatchElement.OutputBus
-import gregtech.api.enums.Textures
-import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.recipe.RecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.recipe.check.CheckRecipeResult
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTStructureUtility.chainAllGlasses
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
 import gregtech.api.util.MultiblockTooltipBuilder
 import gregtech.common.blocks.BlockCasings2
 import kotlin.math.pow
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -149,39 +147,30 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
         true)
   }
 
-  private var structureDefinition: IStructureDefinition<NovaMTEAssemblyMatrix>? = null
-
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAssemblyMatrix> =
-      structureDefinition
-          ?: let {
-            structureDefinition =
-                StructureDefinition.builder<NovaMTEAssemblyMatrix>()
-                    .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-                    .addElement('A', chainAllGlasses())
-                    .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5))
-                    .addElement(
-                        'C',
-                        HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
-                            .atLeast(InputBus, InputHatch, Energy.or(ExoticEnergy))
-                            .adder(NovaMTEAssemblyMatrix::addToMachineList)
-                            .dot(1)
-                            .casingIndex(
-                                (GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
-                            .buildAndChain(GregTechAPI.sBlockCasings2, 9))
-                    .addElement('D', StructureUtility.ofBlock(GregTechAPI.sBlockCasings3, 10))
-                    .addElement(
-                        'F',
-                        HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
-                            .atLeast(OutputBus)
-                            .adder(NovaMTEAssemblyMatrix::addToMachineList)
-                            .dot(2)
-                            .casingIndex(
-                                (GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
-                            .buildAndChain(GregTechAPI.sBlockCasings2, 9))
-                    .addElement('T', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 9))
-                    .build()
-            structureDefinition!!
-          }
+  override fun genStructureDefinition(): IStructureDefinition<NovaMTEAssemblyMatrix> =
+      StructureDefinition.builder<NovaMTEAssemblyMatrix>()
+          .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+          .addElement('A', chainAllGlasses())
+          .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5))
+          .addElement(
+              'C',
+              HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
+                  .atLeast(InputBus, InputHatch, Energy.or(ExoticEnergy))
+                  .adder(NovaMTEAssemblyMatrix::addToMachineList)
+                  .dot(1)
+                  .casingIndex((GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
+                  .buildAndChain(GregTechAPI.sBlockCasings2, 9))
+          .addElement('D', StructureUtility.ofBlock(GregTechAPI.sBlockCasings3, 10))
+          .addElement(
+              'F',
+              HatchElementBuilder.builder<NovaMTEAssemblyMatrix>()
+                  .atLeast(OutputBus)
+                  .adder(NovaMTEAssemblyMatrix::addToMachineList)
+                  .dot(2)
+                  .casingIndex((GregTechAPI.sBlockCasings2 as BlockCasings2).getTextureIndex(9))
+                  .buildAndChain(GregTechAPI.sBlockCasings2, 9))
+          .addElement('T', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 9))
+          .build()
 
   // spotless:off
   private val structureShape = arrayOf(
@@ -191,45 +180,8 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
   )
   // spotless:on
 
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity?,
-      sideDirection: ForgeDirection?,
-      facingDirection: ForgeDirection?,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<ITexture?> {
-    if (sideDirection == facingDirection) {
-      if (active)
-          return arrayOf<ITexture?>(
-              Textures.BlockIcons.getCasingTextureForId(
-                  GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 9)),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                  .extFacing()
-                  .build(),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                  .extFacing()
-                  .glow()
-                  .build())
-      return arrayOf<ITexture?>(
-          Textures.BlockIcons.getCasingTextureForId(
-              GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 9)),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE)
-              .extFacing()
-              .build(),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-              .extFacing()
-              .glow()
-              .build())
-    }
-    return arrayOf<ITexture?>(
-        Textures.BlockIcons.getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 9)))
-  }
+  override val sControllerBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings2 to 9
   // endregion
 
   // region Tooltip

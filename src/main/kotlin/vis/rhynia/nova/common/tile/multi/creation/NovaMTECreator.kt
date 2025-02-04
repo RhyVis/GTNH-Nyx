@@ -6,8 +6,9 @@ import com.gtnewhorizons.modularui.common.widget.CycleButtonWidget
 import gregtech.api.GregTechAPI
 import gregtech.api.enums.Materials
 import gregtech.api.enums.Textures
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.gui.modularui.GTUITextures
-import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
@@ -15,10 +16,8 @@ import gregtech.api.metatileentity.BaseTileEntity
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.recipe.check.CheckRecipeResultRegistry
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.api.util.MultiblockTooltipBuilder
-import gregtech.common.blocks.BlockCasings8
 import gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
 import gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser
 import java.util.*
@@ -184,74 +183,33 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
   // endregion
 
   // region Structure
-  override fun sCasingBlock(): Block = GregTechAPI.sBlockCasings8
+  override val sCasingBlock: Block
+    get() = GregTechAPI.sBlockCasings8
 
-  override fun sCoreBlock(): Block? = null
+  override val sCasingBlockMeta: Int
+    get() = 7
 
-  override fun sCasingIndex(): Int =
-      (GregTechAPI.sBlockCasings8 as BlockCasings8).getTextureIndex(7)
+  override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
 
-  override fun sCasingBlockMeta(): Int = 7
-
-  override fun sCoreBlockMeta(): Int = 0
-
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity,
-      side: ForgeDirection,
-      facing: ForgeDirection,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<ITexture> {
-    if (side == facing) {
-      if (active)
-          return arrayOf<ITexture>(
-              Textures.BlockIcons.getCasingTextureForId(
-                  GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
-                  .extFacing()
-                  .build(),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_DTPF_ON)
-                  .extFacing()
-                  .glow()
-                  .build())
-      return arrayOf<ITexture>(
-          Textures.BlockIcons.getCasingTextureForId(
-              GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
-              .extFacing()
-              .build(),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_DTPF_OFF)
-              .extFacing()
-              .glow()
-              .build())
-    }
-    return arrayOf<ITexture>(
-        Textures.BlockIcons.getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(sCasingBlock(), sCasingBlockMeta())))
-  }
+  override val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    get() = OVERLAY_DTPF_ON to OVERLAY_DTPF_ON
   // endregion
 
   // region Info
-  protected override fun createTooltip(): MultiblockTooltipBuilder {
-    val tt = MultiblockTooltipBuilder()
-    tt.addMachineType("造物者")
-        .addInfo("逆向奇点的控制器")
-        .addInfo("复制指定的物品或流体.")
-        .addInfo("直接从无线电网获取所需能量.")
-        .addSeparator()
-        .addInfo(NovaValues.CommonStrings.BluePrintTip)
-        .beginStructureBlock(3, 3, 3, false)
-        .addInputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .addOutputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .addOutputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
-        .toolTipFinisher(NovaValues.CommonStrings.NovaMagical)
-    return tt
-  }
+  protected override fun createTooltip(): MultiblockTooltipBuilder =
+      MultiblockTooltipBuilder()
+          .addMachineType("造物者")
+          .addInfo("逆向奇点的控制器")
+          .addInfo("复制指定的物品或流体.")
+          .addInfo("直接从无线电网获取所需能量.")
+          .addSeparator()
+          .addInfo(NovaValues.CommonStrings.BluePrintTip)
+          .beginStructureBlock(3, 3, 3, false)
+          .addInputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .addOutputBus(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .addOutputHatch(NovaValues.CommonStrings.BluePrintInfo, 1)
+          .toolTipFinisher(NovaValues.CommonStrings.NovaMagical)
 
   override fun addUIWidgets(builder: ModularWindow.Builder, buildContext: UIBuildContext?) {
     super.addUIWidgets(builder, buildContext)

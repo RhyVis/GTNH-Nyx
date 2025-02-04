@@ -9,7 +9,6 @@ import gregtech.api.recipe.RecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTUtility
 import gregtech.api.util.MultiblockTooltipBuilder
-import gregtech.common.blocks.BlockCasings8
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -90,12 +89,11 @@ class NovaMTEDenseEndpoint : NovaMTECubeBase<NovaMTEDenseEndpoint> {
   // endregion
 
   // region Structure
-  override fun sCasingBlock(): Block = GregTechAPI.sBlockCasings8
+  override val sCasingBlock: Block
+    get() = GregTechAPI.sBlockCasings8
 
-  override fun sCasingIndex(): Int =
-      (GregTechAPI.sBlockCasings8 as BlockCasings8).getTextureIndex(10)
-
-  override fun sCasingBlockMeta(): Int = 10
+  override val sCasingBlockMeta: Int
+    get() = 10
   // endregion
 
   // region Info

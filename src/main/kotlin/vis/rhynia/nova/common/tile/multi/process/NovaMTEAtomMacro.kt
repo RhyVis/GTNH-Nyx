@@ -15,6 +15,9 @@ import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
 import gregtech.api.enums.HeatingCoilLevel
 import gregtech.api.enums.Textures
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW
+import gregtech.api.enums.Textures.BlockIcons.OVERLAY_SCREEN
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
@@ -42,7 +45,7 @@ import net.minecraft.util.EnumChatFormatting.GOLD
 import net.minecraft.util.EnumChatFormatting.GRAY
 import net.minecraft.util.StatCollector
 import net.minecraftforge.common.util.ForgeDirection
-import org.apache.commons.lang3.tuple.Pair
+import org.apache.commons.lang3.tuple.Pair as ApPair
 import tectech.thing.CustomItemList
 import tectech.thing.casing.TTCasingsContainer
 import vis.rhynia.nova.api.enums.NovaValues
@@ -178,122 +181,109 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
         true)
   }
 
-  private var structureDefinition: IStructureDefinition<NovaMTEAtomMacro>? = null
-
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAtomMacro> =
-      structureDefinition
-          ?: let {
-            structureDefinition =
-                StructureDefinition.builder<NovaMTEAtomMacro>()
-                    .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-                    .addElement('A', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 12))
-                    .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 15))
-                    .addElement(
-                        'C',
-                        StructureUtility.ofChain(
-                            StructureUtility.onElementPass(
-                                Consumer { t: NovaMTEAtomMacro -> t.uTimeAccelerationField = -1 },
-                                StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14)),
-                            StructureUtility.ofBlocksTiered(
-                                ITierConverter { block: Block?, meta: Int ->
-                                  if (block === TTCasingsContainer.TimeAccelerationFieldGenerator)
-                                      meta
-                                  else null
-                                },
-                                ImmutableList.of<Pair<Block, Int>>(
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 0),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 1),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 2),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 3),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 4),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 5),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 6),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 7),
-                                    Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 8)),
-                                -1,
-                                { t: NovaMTEAtomMacro, meta: Int ->
-                                  t.uTimeAccelerationField = meta
-                                },
-                                { it.uTimeAccelerationField })))
-                    .addElement(
-                        'D',
-                        StructureUtility.withChannel<NovaMTEAtomMacro>(
-                            "coil",
-                            ofCoil(
-                                BiConsumer { obj: NovaMTEAtomMacro, aCoilLevel: HeatingCoilLevel ->
-                                  obj.setCoilLevel(aCoilLevel)
-                                }) { it.getCoilLevel() }))
-                    .addElement(
-                        'E',
-                        StructureUtility.ofChain(
-                            StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 1 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 0)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 2 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 1)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 4 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 8 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 3)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 16 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 4)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 32 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 5)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 64 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 6)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 128 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 7)),
-                            StructureUtility.onElementPass(
-                                { it.uSpacetimeCompressionCount += 256 },
-                                StructureUtility.ofBlock(
-                                    TTCasingsContainer.SpacetimeCompressionFieldGenerators, 8))))
-                    .addElement('F', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14))
-                    .addElement(
-                        'G',
-                        HatchElementBuilder.builder<NovaMTEAtomMacro>()
-                            .atLeast(InputBus, InputHatch)
-                            .adder(NovaMTEAtomMacro::addToMachineList)
-                            .dot(1)
-                            .casingIndex(
-                                (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12))
-                            .buildAndChain(GregTechAPI.sBlockCasings1, 12))
-                    .addElement(
-                        'H',
-                        HatchElementBuilder.builder<NovaMTEAtomMacro>()
-                            .atLeast(OutputBus, OutputHatch)
-                            .adder(NovaMTEAtomMacro::addToMachineList)
-                            .dot(2)
-                            .casingIndex(
-                                (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12))
-                            .buildAndChain(GregTechAPI.sBlockCasings1, 12))
-                    .addElement(
-                        'I',
-                        HatchElementBuilder.builder<NovaMTEAtomMacro>()
-                            .atLeast(Energy.or(ExoticEnergy))
-                            .adder(NovaMTEAtomMacro::addToMachineList)
-                            .dot(3)
-                            .casingIndex(
-                                (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12))
-                            .buildAndChain(GregTechAPI.sBlockCasings1, 12))
-                    .build()
-            structureDefinition!!
-          }
+  override fun genStructureDefinition(): IStructureDefinition<NovaMTEAtomMacro> =
+      StructureDefinition.builder<NovaMTEAtomMacro>()
+          .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+          .addElement('A', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 12))
+          .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 15))
+          .addElement(
+              'C',
+              StructureUtility.ofChain(
+                  StructureUtility.onElementPass(
+                      Consumer { t: NovaMTEAtomMacro -> t.uTimeAccelerationField = -1 },
+                      StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14)),
+                  StructureUtility.ofBlocksTiered(
+                      ITierConverter { block: Block?, meta: Int ->
+                        if (block === TTCasingsContainer.TimeAccelerationFieldGenerator) meta
+                        else null
+                      },
+                      ImmutableList.of<ApPair<Block, Int>>(
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 0),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 1),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 2),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 3),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 4),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 5),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 6),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 7),
+                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 8)),
+                      -1,
+                      { t: NovaMTEAtomMacro, meta: Int -> t.uTimeAccelerationField = meta },
+                      { it.uTimeAccelerationField })))
+          .addElement(
+              'D',
+              StructureUtility.withChannel<NovaMTEAtomMacro>(
+                  "coil",
+                  ofCoil(
+                      BiConsumer { obj: NovaMTEAtomMacro, aCoilLevel: HeatingCoilLevel ->
+                        obj.setCoilLevel(aCoilLevel)
+                      }) { it.getCoilLevel() }))
+          .addElement(
+              'E',
+              StructureUtility.ofChain(
+                  StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 1 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 0)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 2 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 1)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 4 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 8 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 3)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 16 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 4)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 32 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 5)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 64 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 6)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 128 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 7)),
+                  StructureUtility.onElementPass(
+                      { it.uSpacetimeCompressionCount += 256 },
+                      StructureUtility.ofBlock(
+                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 8))))
+          .addElement('F', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14))
+          .addElement(
+              'G',
+              HatchElementBuilder.builder<NovaMTEAtomMacro>()
+                  .atLeast(InputBus, InputHatch)
+                  .adder(NovaMTEAtomMacro::addToMachineList)
+                  .dot(1)
+                  .casingIndex((GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12))
+                  .buildAndChain(GregTechAPI.sBlockCasings1, 12))
+          .addElement(
+              'H',
+              HatchElementBuilder.builder<NovaMTEAtomMacro>()
+                  .atLeast(OutputBus, OutputHatch)
+                  .adder(NovaMTEAtomMacro::addToMachineList)
+                  .dot(2)
+                  .casingIndex((GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12))
+                  .buildAndChain(GregTechAPI.sBlockCasings1, 12))
+          .addElement(
+              'I',
+              HatchElementBuilder.builder<NovaMTEAtomMacro>()
+                  .atLeast(Energy.or(ExoticEnergy))
+                  .adder(NovaMTEAtomMacro::addToMachineList)
+                  .dot(3)
+                  .casingIndex((GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12))
+                  .buildAndChain(GregTechAPI.sBlockCasings1, 12))
+          .build()
 
   // spotless: off
   @Suppress("SpellCheckingInspection")
@@ -349,41 +339,31 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
               "               "))
   // spotless: on
 
+  private val textureIndex = GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings1, 12)
+
+  override val sControllerBlock: kotlin.Pair<Block, Int>
+    get() = null!! // Special case
+
   override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity?,
-      sideDirection: ForgeDirection?,
-      facingDirection: ForgeDirection?,
+      baseMetaTileEntity: IGregTechTileEntity,
+      sideDirection: ForgeDirection,
+      facingDirection: ForgeDirection,
       colorIndex: Int,
       active: Boolean,
       redstoneLevel: Boolean
   ): Array<ITexture> {
-    if (sideDirection == ForgeDirection.UP) {
-      if (active)
-          return arrayOf(
-              Textures.BlockIcons.getCasingTextureForId(
-                  GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings1, 12)),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_FUSION1)
-                  .extFacing()
-                  .build(),
-              TextureFactory.builder()
-                  .addIcon(Textures.BlockIcons.OVERLAY_FUSION1_GLOW)
-                  .extFacing()
-                  .glow()
-                  .build())
-      return arrayOf(
-          Textures.BlockIcons.getCasingTextureForId(
-              GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings1, 12)),
-          TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_SCREEN).extFacing().build(),
-          TextureFactory.builder()
-              .addIcon(Textures.BlockIcons.OVERLAY_SCREEN)
-              .extFacing()
-              .glow()
-              .build())
-    }
-    return arrayOf(
-        Textures.BlockIcons.getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings1, 12)))
+    return if (sideDirection != ForgeDirection.UP)
+        arrayOf(Textures.BlockIcons.getCasingTextureForId(textureIndex))
+    else if (active)
+        arrayOf(
+            Textures.BlockIcons.getCasingTextureForId(textureIndex),
+            TextureFactory.builder().addIcon(OVERLAY_FUSION1).extFacing().build(),
+            TextureFactory.builder().addIcon(OVERLAY_FUSION1_GLOW).extFacing().glow().build())
+    else
+        arrayOf(
+            Textures.BlockIcons.getCasingTextureForId(textureIndex),
+            TextureFactory.builder().addIcon(OVERLAY_SCREEN).extFacing().build(),
+            TextureFactory.builder().addIcon(OVERLAY_SCREEN).extFacing().glow().build())
   }
   // endregion
 

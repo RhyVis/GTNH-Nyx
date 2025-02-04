@@ -19,23 +19,20 @@ import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
 import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods
-import gregtech.api.enums.Textures
-import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.recipe.RecipeMap
-import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTStructureUtility.ofFrame
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
 import gregtech.api.util.MultiblockTooltipBuilder
 import kotlin.math.min
 import kotlin.math.pow
+import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.EnumChatFormatting.RED
-import net.minecraftforge.common.util.ForgeDirection
 import org.apache.commons.lang3.tuple.Pair as ApPair
 import tectech.thing.casing.TTCasingsContainer
 import vis.rhynia.nova.api.enums.NovaValues
@@ -107,9 +104,7 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
   )
   // spotless:on
 
-  private var structureDefinition: IStructureDefinition<NovaMTEAstralForge>? = null
-
-  private fun generateStructureDefinition(): IStructureDefinition<NovaMTEAstralForge> =
+  override fun genStructureDefinition(): IStructureDefinition<NovaMTEAstralForge> =
       StructureDefinition.builder<NovaMTEAstralForge>()
           .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
           .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 9))
@@ -162,51 +157,8 @@ class NovaMTEAstralForge : NovaMTEBase<NovaMTEAstralForge> {
           .addElement('G', ofFrame(Materials.Infinity))
           .build()
 
-  override fun getStructureDefinition(): IStructureDefinition<NovaMTEAstralForge> =
-      structureDefinition
-          ?: let {
-            structureDefinition = generateStructureDefinition()
-            structureDefinition!!
-          }
-
-  override fun getTexture(
-      baseMetaTileEntity: IGregTechTileEntity?,
-      side: ForgeDirection?,
-      facing: ForgeDirection?,
-      colorIndex: Int,
-      active: Boolean,
-      redstoneLevel: Boolean
-  ): Array<out ITexture?>? {
-    if (side != facing)
-        return arrayOf(
-            Textures.BlockIcons.getCasingTextureForId(
-                GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 7)))
-    if (active)
-        return arrayOf(
-            Textures.BlockIcons.getCasingTextureForId(
-                GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 7)),
-            TextureFactory.builder()
-                .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                .extFacing()
-                .build(),
-            TextureFactory.builder()
-                .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                .extFacing()
-                .glow()
-                .build())
-    return arrayOf(
-        Textures.BlockIcons.getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 7)),
-        TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE)
-            .extFacing()
-            .build(),
-        TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-            .extFacing()
-            .glow()
-            .build())
-  }
+  override val sControllerBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings8 to 7
 
   override fun createTooltip(): MultiblockTooltipBuilder =
       MultiblockTooltipBuilder()
