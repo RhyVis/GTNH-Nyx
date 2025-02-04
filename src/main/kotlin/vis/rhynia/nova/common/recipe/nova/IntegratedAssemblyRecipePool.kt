@@ -1,6 +1,6 @@
 package vis.rhynia.nova.common.recipe.nova
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList
 import com.gtnewhorizons.gtnhintergalactic.item.IGItems
 import goodgenerator.items.GGMaterial
 import goodgenerator.util.ItemRefer

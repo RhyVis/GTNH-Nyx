@@ -1,7 +1,7 @@
 package vis.rhynia.nova.common.recipe.nova
 
 import bartworks.system.material.WerkstoffLoader
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList
 import goodgenerator.items.GGMaterial
 import goodgenerator.util.ItemRefer
 import gregtech.api.enums.ItemList

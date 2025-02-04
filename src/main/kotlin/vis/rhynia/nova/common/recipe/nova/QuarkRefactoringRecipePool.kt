@@ -1,6 +1,6 @@
 package vis.rhynia.nova.common.recipe.nova
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList
 import gregtech.api.enums.Materials
 import gregtech.api.enums.MaterialsUEVplus
 import gregtech.api.util.GTUtility
