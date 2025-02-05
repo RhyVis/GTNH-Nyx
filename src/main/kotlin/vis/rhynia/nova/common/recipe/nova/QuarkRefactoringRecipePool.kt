@@ -1,6 +1,5 @@
 package vis.rhynia.nova.common.recipe.nova
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList
 import gregtech.api.enums.Materials
 import gregtech.api.enums.MaterialsUEVplus
 import gregtech.api.util.GTUtility
@@ -10,10 +9,11 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MAX
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UMV
 import vis.rhynia.nova.api.enums.ref.BasicRef
 import vis.rhynia.nova.api.enums.ref.Tier
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
+import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class QuarkRefactoringRecipePool : RecipePool {
+class QuarkRefactoringRecipePool : RecipePool() {
   private val qa = NovaRecipeMaps.quarkRefactoringRecipes
 
   override fun loadRecipes() {
@@ -39,7 +39,9 @@ class QuarkRefactoringRecipePool : RecipePool {
         .itemInputs(
             GTUtility.copyAmountUnsafe(128, BasicRef.getQuantumAnomaly(1)),
             BasicRef.getFusionMatrixCatalyst())
-        .itemOutputs(GTUtility.copyAmountUnsafe(512, GTCMItemList.CriticalPhoton.get(1)))
+        .itemOutputs(
+            // GTUtility.copyAmountUnsafe(512, GTCMItemList.CriticalPhoton.get(1))
+            NovaMods.TwistSpaceTechnology.getItem("MetaItem01", 1, 13).copyAmountUnsafe(512))
         .eut(RECIPE_MAX)
         .durSec(16)
         .addTo(qa)

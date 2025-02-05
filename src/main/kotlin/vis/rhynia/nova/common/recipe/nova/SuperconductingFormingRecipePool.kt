@@ -6,12 +6,12 @@ import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.enums.ref.SuperConductorPart
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class SuperconductingFormingRecipePool : RecipePool {
+class SuperconductingFormingRecipePool : RecipePool() {
   private val sf = NovaRecipeMaps.superconductingFormingRecipes
 
   override fun loadRecipes() {

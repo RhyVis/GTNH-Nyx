@@ -9,12 +9,12 @@ import gregtech.loaders.misc.GTBees
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LuV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class HammerRecipePool : RecipePool {
+class HammerRecipePool : RecipePool() {
   override fun loadRecipes() {
     val hammer: IRecipeMap = RecipeMaps.hammerRecipes
 

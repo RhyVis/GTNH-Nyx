@@ -1,6 +1,7 @@
 package vis.rhynia.nova.common.tile.base
 
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
+import com.gtnewhorizon.structurelib.structure.IStructureElement
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment
 import com.gtnewhorizon.structurelib.structure.StructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureUtility
@@ -29,11 +30,9 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   ) : super(aId, aName, aNameRegional)
   protected constructor(aName: String) : super(aName)
 
-  companion object {
-    private const val H_OFFSET = 1
-    private const val V_OFFSET = 1
-    private const val D_OFFSET = 1
-  }
+  protected val hOffset = 1
+  protected val vOffset = 1
+  protected val dOffset = 1
 
   /** The block used for the casing of the machine. */
   protected abstract val sCasingBlock: Block
@@ -53,6 +52,9 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   protected open val sCoreBlockMeta: Int
     @OverrideOnly get() = 0
 
+  protected val sCoreBlockRef: IStructureElement<T>
+    get() = if (sCoreBlock == null) isAir() else ofBlock(sCoreBlock, sCoreBlockMeta)
+
   final override val sControllerBlock: Pair<Block, Int>
     get() = sCasingBlock to sCasingBlockMeta
 
@@ -61,11 +63,11 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
       aStack: ItemStack?
   ): Boolean {
     removeMaintenance()
-    return checkPiece(STRUCTURE_PIECE_MAIN, H_OFFSET, V_OFFSET, D_OFFSET)
+    return checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset)
   }
 
   override fun construct(stackSize: ItemStack?, hintsOnly: Boolean) {
-    buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, H_OFFSET, V_OFFSET, D_OFFSET)
+    buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset)
   }
 
   override fun survivalConstruct(
@@ -75,21 +77,13 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   ): Int {
     if (mMachine) return -1
     return survivialBuildPiece(
-        STRUCTURE_PIECE_MAIN,
-        stackSize,
-        H_OFFSET,
-        V_OFFSET,
-        D_OFFSET,
-        elementBudget,
-        env,
-        false,
-        true)
+        STRUCTURE_PIECE_MAIN, stackSize, hOffset, vOffset, dOffset, elementBudget, env, false, true)
   }
 
   override fun genStructureDefinition(): IStructureDefinition<T> =
       StructureDefinition.builder<T>()
           .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-          .addElement('B', if (sCoreBlock == null) isAir() else ofBlock(sCoreBlock, sCoreBlockMeta))
+          .addElement('B', sCoreBlockRef)
           .addElement(
               'C',
               HatchElementBuilder.builder<T>()
@@ -108,12 +102,10 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
                   .buildAndChain(sCasingBlock, sCasingBlockMeta))
           .build()
 
-  // spotless:off
-  protected val structureShape =
-      arrayOf(
-          arrayOf("CCC", "CCC", "CCC"),
-          arrayOf("C~C", "CBC", "CCC"),
-          arrayOf("CCC", "CCC", "CCC")
-      )
-  // spotless:on
+  protected val structureShape: Array<Array<String>>
+    get() =
+        arrayOf(
+            arrayOf("CCC", "CCC", "CCC"),
+            arrayOf("C~C", "CBC", "CCC"),
+            arrayOf("CCC", "CCC", "CCC"))
 }

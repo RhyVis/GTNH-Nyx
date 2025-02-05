@@ -19,14 +19,14 @@ object BlockRegister {
     registerBlockContainers()
   }
 
-  private fun registerBlocks() {
-    GameRegistry.registerBlock(
-        MetaBlock01, NovaMetaBlockItem::class.java, MetaBlock01.unlocalizedName)
-    GameRegistry.registerBlock(
-        EyeOfHarmonyCoreCasing,
-        NovaMetaBlockItem::class.java,
-        EyeOfHarmonyCoreCasing.unlocalizedName)
-  }
+  private fun registerBlocks() =
+      arrayOf(
+              MetaBlock01,
+              EyeOfHarmonyCoreCasing,
+          )
+          .forEach {
+            GameRegistry.registerBlock(it, NovaMetaBlockItem::class.java, it.unlocalizedName)
+          }
 
   // spotless:off
   private fun registerBlockContainers() {

@@ -5,10 +5,10 @@ import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTRecipeConstants.FUSION_THRESHOLD
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class FusionRecipePool : RecipePool {
+class FusionRecipePool : RecipePool() {
   override fun loadRecipes() {
     val fs: IRecipeMap = RecipeMaps.fusionRecipes
 

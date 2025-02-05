@@ -64,6 +64,12 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
           override fun name(): String = "ExoticDynamo"
           override fun count(t: NovaMTEBase<*>): Long = t.mExoticDynamoHatches.size.toLong()
         }
+
+    /**
+     * Structure Definition for the machine, set when first time calling getStructureDefinition().
+     */
+    val cachedStructureDefs: MutableMap<Class<out NovaMTEBase<*>>, IStructureDefinition<*>> =
+        mutableMapOf()
   }
 
   /** Remove maintenance requirement. */
@@ -164,18 +170,13 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     return false
   }
 
-  /** Structure Definition for the machine, set when first time calling getStructureDefinition(). */
-  protected var cachedStructureDef: IStructureDefinition<T>? = null
-
   /** Set the structure definition for the machine. */
   protected abstract fun genStructureDefinition(): IStructureDefinition<T>
 
+  @Suppress("UNCHECKED_CAST")
   final override fun getStructureDefinition(): IStructureDefinition<T> =
-      cachedStructureDef
-          ?: let {
-            cachedStructureDef = genStructureDefinition()
-            cachedStructureDef!!
-          }
+      cachedStructureDefs.getOrPut(this::class.java) { genStructureDefinition() }
+          as IStructureDefinition<T>
 
   /** Controller Block and Meta, used for calculating casing texture index. */
   protected abstract val sControllerBlock: Pair<Block, Int>

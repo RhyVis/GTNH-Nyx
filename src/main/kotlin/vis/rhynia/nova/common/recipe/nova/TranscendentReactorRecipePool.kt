@@ -19,14 +19,14 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UIV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UMV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.enums.ref.SuperConductorPart
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class TranscendentReactorRecipePool : RecipePool {
+class TranscendentReactorRecipePool : RecipePool() {
   private val tr = NovaRecipeMaps.transcendentReactorRecipes
   private val recipeModifier: Int = Config.Recipe_TR_RecipeModifier
   private val outputModifier: Int = Config.Recipe_TR_OutputModifier

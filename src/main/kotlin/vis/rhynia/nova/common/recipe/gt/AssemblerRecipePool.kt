@@ -7,9 +7,9 @@ import gregtech.api.util.GTUtility
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_EV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.SECOND
 import vis.rhynia.nova.api.enums.ref.Tier
-import vis.rhynia.nova.api.interfaces.RecipePool
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class AssemblerRecipePool : RecipePool {
+class AssemblerRecipePool : RecipePool() {
   private val assembler = RecipeMaps.assemblerRecipes
 
   override fun loadRecipes() {

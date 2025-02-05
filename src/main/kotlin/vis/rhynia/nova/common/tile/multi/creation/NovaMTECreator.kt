@@ -267,6 +267,7 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
   }
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {
+    super.saveNBTData(aNBT)
     if (aNBT == null) return
 
     aNBT.setByte("pRecipeTime", pRecipeTime)
@@ -276,13 +277,14 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
     aNBT.setString("pName", pName)
     aNBT.setBoolean("pItemProcess", pItemProcess)
     aNBT.setTag("pItemStackStore", GTUtility.saveItem(pItemStackStore))
-    val fNBT = NBTTagCompound()
-    pFluidStackStore.writeToNBT(fNBT)
-    aNBT.setTag("pFluidStackStore", fNBT)
-    super.saveNBTData(aNBT)
+    NBTTagCompound().let {
+      pFluidStackStore.writeToNBT(it)
+      aNBT.setTag("pFluidStackStore", it)
+    }
   }
 
   override fun loadNBTData(aNBT: NBTTagCompound?) {
+    super.loadNBTData(aNBT)
     if (aNBT == null) return
 
     pRecipeTime = aNBT.getByte("pRecipeTime")
@@ -293,7 +295,6 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
     pItemProcess = aNBT.getBoolean("pItemProcess")
     pItemStackStore = GTUtility.loadItem(aNBT, "pItemStackStore")
     pFluidStackStore = GTUtility.loadFluid(aNBT, "pFluidStackStore")
-    super.loadNBTData(aNBT)
   }
   // endregion
 }

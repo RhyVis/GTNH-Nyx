@@ -16,12 +16,12 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LuV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UHV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
-class MixerRecipePool : RecipePool {
+class MixerRecipePool : RecipePool() {
   override fun loadRecipes() {
     val mx: IRecipeMap = RecipeMaps.mixerRecipes
     val mxNoCell: IRecipeMap = GTPPRecipeMaps.mixerNonCellRecipes

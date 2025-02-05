@@ -34,7 +34,7 @@ object NovaRecipeMaps {
 
   /** Thermonuclear Control (TC) Recipe */
   val thermonuclearControlRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("va.recipe.thermonuclearControl")
+      RecipeMapBuilder.of("nova.recipe.thermonuclearControl")
           .maxIO(4, 0, 2, 4)
           .minInputs(1, 0)
           // .logo(VA_Values.TextureSets.VA_LOGO_32)
@@ -52,7 +52,7 @@ object NovaRecipeMaps {
 
   /** Transcendent Reactor (TR) Recipe */
   val transcendentReactorRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("va.recipe.transcendentReactor")
+      RecipeMapBuilder.of("nova.recipe.transcendentReactor")
           .maxIO(16, 6, 8, 6)
           .minInputs(1, 0)
           // .logo(NovaValues.TextureSets.VA_LOGO_32)
@@ -89,7 +89,7 @@ object NovaRecipeMaps {
 
   /** Micro Assembly (MA) Recipe */
   val microAssemblyRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("va.recipe.microAssembly")
+      RecipeMapBuilder.of("nova.recipe.microAssembly")
           .maxIO(8, 1, 8, 0)
           .minInputs(1, 0)
           // .logo(VA_Values.TextureSets.VA_LOGO_32)
@@ -108,7 +108,7 @@ object NovaRecipeMaps {
 
   /** Superconducting Forming (SF) Recipe (Allow 64+ Stack) */
   val superconductingFormingRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("va.recipe.superconductingForming")
+      RecipeMapBuilder.of("nova.recipe.superconductingForming")
           .maxIO(6, 2, 3, 2)
           .minInputs(1, 0)
           // .logo(VA_Values.TextureSets.VA_LOGO_32)
@@ -120,7 +120,7 @@ object NovaRecipeMaps {
 
   /** Quark Refactoring (QR) Recipe (Allow 64+ Stack) */
   val quarkRefactoringRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("va.recipe.quarkRefactoring")
+      RecipeMapBuilder.of("nova.recipe.quarkRefactoring")
           .maxIO(6, 2, 3, 2)
           .minInputs(1, 0)
           // .logo(VA_Values.TextureSets.VA_LOGO_32)

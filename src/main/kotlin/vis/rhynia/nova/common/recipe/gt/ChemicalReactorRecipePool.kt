@@ -10,12 +10,12 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_EV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_HV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LuV
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
-class ChemicalReactorRecipePool : RecipePool {
+class ChemicalReactorRecipePool : RecipePool() {
   override fun loadRecipes() {
     val lcr: IRecipeMap = RecipeMaps.multiblockChemicalReactorRecipes
     // region 杂项

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureUtility
-import gregtech.api.GregTechAPI
 import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
@@ -20,7 +19,6 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
 import gregtech.api.util.MultiblockTooltipBuilder
-import gregtech.common.blocks.BlockCasings1
 import gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
 import gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser
 import java.util.*
@@ -187,9 +185,6 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
 
   override val sCasingBlockMeta: Int
     get() = 11
-
-  override val sCasingIndex: Int
-    get() = (GregTechAPI.sBlockCasings1 as BlockCasings1).getTextureIndex(12)
 
   override val sControllerIcon: kotlin.Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF

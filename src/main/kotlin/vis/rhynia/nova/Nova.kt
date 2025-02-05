@@ -12,14 +12,20 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import vis.rhynia.nova.proxy.CommonProxy
 
+@Suppress("SpellCheckingInspection")
 @Mod(
     modid = Constant.MOD_ID,
     name = Constant.MOD_NAME,
     version = Tags.VERSION,
+    dependencies =
+        "required-after:forgelin;" +
+            "required-after:gregtech;" +
+            "required-after:structurelib;" +
+            "required-after:gtnhintergalactic;",
     acceptedMinecraftVersions = "[1.7.10]")
 class Nova {
   companion object {
-    @JvmStatic val LOG: Logger = LogManager.getLogger(Constant.MOD_ID)
+    @JvmStatic val NovaModLogger: Logger by lazy { LogManager.getLogger(Constant.MOD_ID) }
 
     @JvmStatic
     @SidedProxy(
@@ -42,4 +48,4 @@ class Nova {
 }
 
 val Any.Log: Logger
-  get() = Nova.LOG
+  get() = Nova.NovaModLogger

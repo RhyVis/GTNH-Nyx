@@ -9,10 +9,10 @@ import gtPlusPlus.core.material.MaterialsElements
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_HV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class CentrifugeRecipePool : RecipePool {
+class CentrifugeRecipePool : RecipePool() {
   private val cf = RecipeMaps.centrifugeRecipes
   private val cfNoCell = GTPPRecipeMaps.centrifugeNonCellRecipes
 

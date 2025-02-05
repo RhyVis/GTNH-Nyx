@@ -3,13 +3,14 @@ package vis.rhynia.nova.common.block.base
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
 import gregtech.api.util.GTLanguageManager
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import vis.rhynia.nova.api.interfaces.block.GregTechTileInfo
 import vis.rhynia.nova.client.NovaTab
 
-class NovaMetaBlockItem(block: AbstractMetaBlock) : ItemBlock(block) {
+class NovaMetaBlockItem(block: Block) : ItemBlock(block) {
   init {
     hasSubtypes = true
     maxDamage = 0

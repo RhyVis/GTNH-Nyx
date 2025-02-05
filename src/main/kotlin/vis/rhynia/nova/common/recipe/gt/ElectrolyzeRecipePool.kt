@@ -7,10 +7,10 @@ import gtPlusPlus.core.material.MaterialMisc
 import gtPlusPlus.core.material.MaterialsElements
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class ElectrolyzeRecipePool : RecipePool {
+class ElectrolyzeRecipePool : RecipePool() {
 
   override fun loadRecipes() {
     val ec: IRecipeMap = RecipeMaps.electrolyzerRecipes

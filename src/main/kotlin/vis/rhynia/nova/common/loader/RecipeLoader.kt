@@ -2,7 +2,7 @@ package vis.rhynia.nova.common.loader
 
 import vis.rhynia.nova.Log
 import vis.rhynia.nova.api.interfaces.Loader
-import vis.rhynia.nova.api.interfaces.RecipePool
+import vis.rhynia.nova.common.recipe.RecipePool
 import vis.rhynia.nova.common.recipe.gt.AssemblerRecipePool
 import vis.rhynia.nova.common.recipe.gt.CentrifugeRecipePool
 import vis.rhynia.nova.common.recipe.gt.ChemicalReactorRecipePool

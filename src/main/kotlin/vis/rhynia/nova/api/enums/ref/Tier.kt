@@ -106,6 +106,14 @@ enum class Tier(private val material: Materials) {
           else -> SolderMaterial.IndaAlloy
         }
 
+  private val fallbackStack: ItemStack
+    get() = NovaItemList.TestItem01.get(1)
+
+  private fun fail(info: String): ItemStack {
+    Log.error("Attempting to get $info, but it doesn't exist!")
+    return fallbackStack
+  }
+
   fun getSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount)
 
   fun getIngotSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount * INGOT)
@@ -115,12 +123,9 @@ enum class Tier(private val material: Materials) {
 
   fun getCircuitWrap(amount: Int): ItemStack = BundleChip.entries[ordinal].getItemStack(amount)
 
-  fun getComponent(component: Component, amount: Int): ItemStack {
-    if (this == ULV) {
-      Log.error("Attempting to get ULV component of ${component.name}, but it's already removed!")
-      return NovaItemList.TestItem01.get(1)
-    } else return component.ofTier(this).get(amount.toLong(), NovaItemList.TestItem01.get(1))
-  }
+  fun getComponent(component: Component, amount: Int): ItemStack =
+      if (this == ULV) fail("ULV component of ${component.name}")
+      else component.ofTier(this).get(amount.toLong(), fallbackStack)
 
   fun getCoil(amount: Int): ItemStack =
       when (this) {
@@ -128,19 +133,14 @@ enum class Tier(private val material: Materials) {
         UIV,
         UMV,
         UXV,
-        MAX -> {
-          Log.error("Attempting to get $this coil, but it doesn't exist!")
-          NovaItemList.TestItem01.get(1)
-        }
+        MAX -> fail("$this coil")
         else ->
             ItemList.valueOf("${this}_Coil").get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }
 
   fun getComponentAssemblyCasing(amount: Int): ItemStack =
-      if (this == ULV) {
-        Log.error("Attempting to get ULV casing, but it doesn't exist!")
-        NovaItemList.TestItem01.get(1)
-      } else
+      if (this == ULV) fail("ULV component assembly casing")
+      else
           GTModHandler.getModItem(
               GoodGenerator.MOD_ID,
               "componentAssemblylineCasing",
@@ -168,170 +168,165 @@ enum class Tier(private val material: Materials) {
         UIV,
         UMV,
         UXV,
-        MAX -> {
-          GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", amount.toLong())
-        }
-        else -> {
-          GTModHandler.getModItem(
-              GTPlusPlus.ID, "item.itemBufferCore${this.ordinal + 1}", amount.toLong())
-        }
+        MAX -> GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", amount.toLong())
+        else ->
+            GTModHandler.getModItem(
+                GTPlusPlus.ID, "item.itemBufferCore${this.ordinal + 1}", amount.toLong())
       }
 
-  fun getDynamoHatch(amount: Int): ItemStack? {
+  fun getHatch(hatch: Hatch, amount: Int) =
+      when (hatch) {
+        Hatch.Dynamo -> getDynamoHatch(amount)
+        Hatch.Energy -> getEnergyHatch(amount)
+        Hatch.Energy4A -> getEnergyHatch4A(amount)
+        Hatch.Energy16A -> getEnergyHatch16A(amount)
+        Hatch.Energy64A -> getEnergyHatch64A(amount)
+        Hatch.LaserEnergy -> getLaserTarget(1, amount)
+        Hatch.LaserDynamo -> getLaserTarget(1, amount)
+        Hatch.WirelessDynamo -> getDynamoWireless(amount)
+        Hatch.WirelessEnergy -> getEnergyWireless(amount)
+        Hatch.WirelessEnergy4A -> getEnergyWireless4A(amount)
+        Hatch.WirelessEnergy16A -> getEnergyWireless16A(amount)
+        Hatch.WirelessEnergy64A -> getEnergyWireless64A(amount)
+        Hatch.WirelessLaser -> getLaserWireless(1, amount)
+      }
+
+  fun getDynamoHatch(amount: Int): ItemStack {
     return when (this) {
-      MAX -> NovaItemList.TestItem01.get(1)
+      MAX -> fail("MAX dynamo hatch")
       else ->
           ItemList.valueOf("Hatch_Dynamo_$this")
               .get(amount.toLong(), NovaItemList.TestItem01.get(1))
     }
   }
 
-  fun getEnergyHatch(amount: Int): ItemStack? {
+  fun getEnergyHatch(amount: Int): ItemStack {
     return when (this) {
-      MAX -> NovaItemList.TestItem01.get(1)
+      MAX -> fail("MAX energy hatch")
       else ->
           ItemList.valueOf("Hatch_Energy_$this")
               .get(amount.toLong(), NovaItemList.TestItem01.get(1))
     }
   }
 
-  fun getEnergyHatch4A(amount: Int): ItemStack {
-    when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      MAX -> {
-        Log.error("Attempting to get $this 4A energy hatch, but it doesn't exist!")
-        return NovaItemList.TestItem01.get(amount.toLong())
+  fun getEnergyHatch4A(amount: Int): ItemStack =
+      when (this) {
+        EV,
+        IV,
+        LuV,
+        ZPM,
+        UV,
+        UHV,
+        UEV,
+        UIV,
+        UMV,
+        UXV ->
+            CustomItemList.valueOf("eM_energyMulti4_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+        else -> fail("$this 4A energy hatch")
       }
-      else -> {
-        return CustomItemList.valueOf("eM_energyMulti4_$this")
-            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+
+  fun getEnergyHatch16A(amount: Int): ItemStack =
+      when (this) {
+        EV,
+        IV,
+        LuV,
+        ZPM,
+        UV,
+        UHV,
+        UEV,
+        UIV,
+        UMV,
+        UXV ->
+            CustomItemList.valueOf("eM_energyMulti16_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+        else -> fail("$this 16A energy hatch")
       }
-    }
-    return NovaItemList.TestItem01.get(1)
-  }
 
-  fun getEnergyHatch16A(amount: Int): ItemStack {
-    when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      MAX -> {
-        Log.error("Attempting to get $this 16A energy hatch, but it doesn't exist!")
-        return NovaItemList.TestItem01.get(amount.toLong())
+  fun getEnergyHatch64A(amount: Int): ItemStack =
+      when (this) {
+        EV,
+        IV,
+        LuV,
+        ZPM,
+        UV,
+        UHV,
+        UEV,
+        UIV,
+        UMV,
+        UXV ->
+            CustomItemList.valueOf("eM_energyMulti64_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+        else -> fail("$this 64A energy hatch")
       }
-      else -> {
-        return CustomItemList.valueOf("eM_energyMulti16_$this")
-            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+
+  fun getDynamoWireless(amount: Int): ItemStack =
+      ItemList.valueOf("Wireless_Dynamo_Energy_$this")
+          .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+
+  fun getEnergyWireless(amount: Int): ItemStack =
+      ItemList.valueOf("Wireless_Hatch_Energy_$this")
+          .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+
+  fun getEnergyWireless4A(amount: Int): ItemStack =
+      when (this) {
+        ULV,
+        LV,
+        MV,
+        HV -> fail("$this 4A energy wireless")
+        else ->
+            CustomItemList.valueOf("eM_energyWirelessMulti4_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }
-    }
-    return NovaItemList.TestItem01.get(1)
-  }
 
-  fun getEnergyHatch64A(amount: Int): ItemStack {
-    when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      MAX -> {
-        Log.error("Attempting to get $this 64A energy hatch, but it doesn't exist!")
-        return NovaItemList.TestItem01.get(amount.toLong())
+  fun getEnergyWireless16A(amount: Int): ItemStack =
+      when (this) {
+        ULV,
+        LV,
+        MV,
+        HV -> fail("$this 16A energy wireless")
+        else ->
+            CustomItemList.valueOf("eM_energyWirelessMulti16_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }
-      else -> {
-        return CustomItemList.valueOf("eM_energyMulti64_$this")
-            .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+
+  fun getEnergyWireless64A(amount: Int): ItemStack =
+      when (this) {
+        ULV,
+        LV,
+        MV,
+        HV -> fail("$this 64A energy wireless")
+        else ->
+            CustomItemList.valueOf("eM_energyWirelessMulti64_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
       }
-    }
-    return NovaItemList.TestItem01.get(1)
-  }
 
-  fun getDynamoWireless(amount: Int): ItemStack {
-    if (this == MAX) {
-      return NovaItemList.TestItem01.get(1)
-    }
-    return ItemList.valueOf("Wireless_Dynamo_Energy_$this")
-        .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-  }
+  fun getLaserTarget(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack =
+      when (this) {
+        ULV,
+        LV,
+        MV,
+        HV,
+        EV,
+        MAX -> fail("$this level $tier laser target")
+        else ->
+            CustomItemList.valueOf("eM_energyTunnel${tier}_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
 
-  fun getEnergyWireless(amount: Int): ItemStack {
-    if (this == MAX) {
-      return NovaItemList.TestItem01.get(1)
-    }
-    return ItemList.valueOf("Wireless_Hatch_Energy_$this")
-        .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-  }
-
-  fun getEnergyWireless4A(amount: Int): ItemStack {
-    return when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      MAX -> NovaItemList.TestItem01.get(1)
-      else ->
-          CustomItemList.valueOf("eM_energyWirelessMulti4_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
-
-  fun getEnergyWireless16A(amount: Int): ItemStack {
-    return when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      MAX -> NovaItemList.TestItem01.get(1)
-      else ->
-          CustomItemList.valueOf("eM_energyWirelessMulti16_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
-
-  fun getEnergyWireless64A(amount: Int): ItemStack {
-    return when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      MAX -> NovaItemList.TestItem01.get(1)
-      else ->
-          CustomItemList.valueOf("eM_energyWirelessMulti64_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
-
-  fun getLaserTarget(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack {
-    return when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      EV,
-      MAX -> NovaItemList.TestItem01.get(1)
-      else ->
-          CustomItemList.valueOf("eM_energyTunnel_${tier}_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
-
-  fun getLaserWireless(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack {
-    return when (this) {
-      ULV,
-      LV,
-      MV,
-      HV,
-      EV,
-      MAX -> NovaItemList.TestItem01.get(1)
-      UXV ->
-          CustomItemList.valueOf("eM_energyWirelessTunnel${tier}_UXV")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-      else ->
-          NovaWirelessHatchList.valueOf("ExtLaser${this}$tier")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
+  fun getLaserWireless(tier: @Range(from = 1, to = 7) Int, amount: Int): ItemStack =
+      when (this) {
+        ULV,
+        LV,
+        MV,
+        HV,
+        EV,
+        MAX -> fail("$this level $tier laser wireless")
+        UXV ->
+            CustomItemList.valueOf("eM_energyWirelessTunnel${tier}_UXV")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+        else ->
+            NovaWirelessHatchList.valueOf("ExtLaser${this}$tier")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
 }

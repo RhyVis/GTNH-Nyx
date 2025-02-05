@@ -3,35 +3,35 @@ itemGroup.nova=Nova
 
 item.ultimate.name=Useless
 
-nova.MetaItem01.0.name=Test
-nova.MetaItem01.1.name=Lapotron Matrix
-nova.MetaItem01.2.name=Crystal Matrix
-nova.MetaItem01.3.name=Dense Mica Insulator Foil
-nova.MetaItem01.4.name=Pre Tesseract
+item.MetaItem01.0.name=Test
+item.MetaItem01.1.name=Lapotron Matrix
+item.MetaItem01.2.name=Crystal Matrix
+item.MetaItem01.3.name=Dense Mica Insulator Foil
+item.MetaItem01.4.name=Pre Tesseract
 
-nova.MetaItem01.1001.name=Astral Infinite Gem
-nova.MetaItem01.1002.name=Astral Moment
-nova.MetaItem01.1003.name=Astral Gauge
+item.MetaItem01.1001.name=Astral Infinite Gem
+item.MetaItem01.1002.name=Astral Moment
+item.MetaItem01.1003.name=Astral Gauge
 
-nova.MetaItem01.3001.name=Astral Energy Lens
-nova.MetaItem01.3002.name=Astral Magical Lens
-nova.MetaItem01.3003.name=Primoium Lens
-nova.MetaItem01.3004.name=Originium Lens
+item.MetaItem01.3001.name=Astral Energy Lens
+item.MetaItem01.3002.name=Astral Magical Lens
+item.MetaItem01.3003.name=Primoium Lens
+item.MetaItem01.3004.name=Originium Lens
 
-nova.MetaItem02.0.name=Calibration
-nova.MetaItem02.1.name=Assembly - DTPF
+item.MetaItem02.0.name=Calibration
+item.MetaItem02.1.name=Assembly - DTPF
 
-nova.MetaBlock01.0.name=What?
+tile.MetaBlock01.0.name=What?
 
-nova.EyeOfHarmonyCore.0.name=§fCrude§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.1.name=§fPrimitive§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.2.name=§fStable§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.3.name=§fAdvanced§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.4.name=§fSuperb§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.5.name=§fExotic§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.6.name=§fPerfect§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.7.name=§fTipler§r Integrated Spatio-temporal Convolver
-nova.EyeOfHarmonyCore.8.name=§f§lGallifreyan§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.0.name=§fCrude§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.1.name=§fPrimitive§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.2.name=§fStable§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.3.name=§fAdvanced§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.4.name=§fSuperb§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.5.name=§fExotic§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.6.name=§fPerfect§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.7.name=§fTipler§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.8.name=§f§lGallifreyan§r Integrated Spatio-temporal Convolver
 
 nova.recipe.astralForge=Astra Forge
 nova.recipe.thermonuclearControl=Thermonuclear Control

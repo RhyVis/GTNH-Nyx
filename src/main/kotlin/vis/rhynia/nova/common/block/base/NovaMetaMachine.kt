@@ -3,16 +3,21 @@ package vis.rhynia.nova.common.block.base
 import gregtech.api.GregTechAPI
 import net.minecraft.block.Block
 import net.minecraft.world.World
+import org.jetbrains.annotations.ApiStatus
 
 /**
- * A block that is a machine block. Causes machine updates when added or broken.
+ * A block that is a machine block such as casing. Causes machine updates when added or broken.
  *
  * @param rawName The raw name of the block.
  */
 open class NovaMetaMachine(rawName: String) : NovaMetaBlock(rawName) {
   init {
     GregTechAPI.registerMachineBlock(this, -1)
+    setHarvestLevel("wrench", wrenchLevel)
   }
+
+  protected val wrenchLevel: Int
+    @ApiStatus.OverrideOnly get() = 1
 
   override fun onBlockAdded(aWorld: World, aX: Int, aY: Int, aZ: Int) {
     updateMachine(aWorld, aX, aY, aZ)

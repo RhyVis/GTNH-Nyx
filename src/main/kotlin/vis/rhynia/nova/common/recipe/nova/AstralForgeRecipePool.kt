@@ -27,12 +27,12 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UHV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class AstralForgeRecipePool : RecipePool {
+class AstralForgeRecipePool : RecipePool() {
   private val af = NovaRecipeMaps.astralForgeRecipes
 
   override fun loadRecipes() {

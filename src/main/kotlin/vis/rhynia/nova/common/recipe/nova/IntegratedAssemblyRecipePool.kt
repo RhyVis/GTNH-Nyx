@@ -1,7 +1,6 @@
 package vis.rhynia.nova.common.recipe.nova
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList
-import com.gtnewhorizons.gtnhintergalactic.item.IGItems
+import galaxyspace.core.register.GSItems
 import goodgenerator.items.GGMaterial
 import goodgenerator.util.ItemRefer
 import gregtech.api.enums.ItemList
@@ -52,15 +51,15 @@ import vis.rhynia.nova.api.enums.ref.BundleChip
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.Tier
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
-class IntegratedAssemblyRecipePool : RecipePool {
+class IntegratedAssemblyRecipePool : RecipePool() {
   private val ia = NovaRecipeMaps.integratedAssemblyRecipes
 
   override fun loadRecipes() {
@@ -524,7 +523,8 @@ class IntegratedAssemblyRecipePool : RecipePool {
               SolderMaterial.IndaAlloy.getFluidStack(128 * INGOTS),
               MaterialsAlloy.SILICON_CARBIDE.getFluidStack(48 * INGOTS))
           .itemOutputs(
-              ItemUtil.setStackSize(ItemUtil.getItemStack(IGItems.DysonSwarmItems, 1, 3), 1024))
+              // Reminder: GSItems will be switched to IGItems in future
+              ItemUtil.setStackSize(ItemUtil.getItemStack(GSItems.DysonSwarmItems, 1, 3), 1024))
           .eut(RECIPE_LuV)
           .durSec(200)
           .addTo(ia)
@@ -532,7 +532,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
       builder()
           .itemInputs(
               ItemList.Cover_SolarPanel_UV.get(1),
-              ItemUtil.getItemStack(IGItems.DysonSwarmItems, 32, 3),
+              ItemUtil.getItemStack(GSItems.DysonSwarmItems, 32, 3),
               ItemRefer.Radiation_Protection_Plate.get(4),
               BartPart.IC_Q.getItemStack(1),
               BundleChip.UHV.getItemStack(1),
@@ -541,7 +541,7 @@ class IntegratedAssemblyRecipePool : RecipePool {
           .fluidInputs(SolderMaterial.MutatedLivingAlloy.getFluidStack(256 * INGOTS))
           .itemOutputs(
               GTUtility.copyAmountUnsafe(
-                  8 * 64, ItemUtil.getItemStack(IGItems.DysonSwarmItems, 1, 0)))
+                  8 * 64, ItemUtil.getItemStack(GSItems.DysonSwarmItems, 1, 0)))
           .eut(RECIPE_UEV)
           .durSec(5)
           .addTo(ia)
@@ -1151,7 +1151,9 @@ class IntegratedAssemblyRecipePool : RecipePool {
         .fluidInputs(
             NovaMaterial.AstriumMagic.getMolten(8 * INGOTS),
             MaterialsUEVplus.SpaceTime.getIngotMolten(4))
-        .itemOutputs(GTCMItemList.ParticleTrapTimeSpaceShield.get(64))
+        .itemOutputs(
+            // GTCMItemList.ParticleTrapTimeSpaceShield.get(64)
+            NovaMods.TwistSpaceTechnology.getItem("MetaItem01", 64, 4))
         .noOptimize()
         .eut(RECIPE_UIV)
         .durSec(60)

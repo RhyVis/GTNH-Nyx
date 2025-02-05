@@ -3,9 +3,9 @@ package vis.rhynia.nova.common.recipe.gt
 import gregtech.api.enums.Materials
 import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
-import vis.rhynia.nova.api.interfaces.RecipePool
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class CompressorRecipePool : RecipePool {
+class CompressorRecipePool : RecipePool() {
   override fun loadRecipes() {
 
     val cp: IRecipeMap = RecipeMaps.compressorRecipes

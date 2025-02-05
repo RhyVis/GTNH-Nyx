@@ -15,6 +15,7 @@ import vis.rhynia.nova.client.NovaTab.TabItem
 class NovaItemUltimate() : Item() {
   init {
     setCreativeTab(TabItem)
+    setMaxStackSize(1)
     setUnlocalizedName("ultimate")
     setTextureName("nova:ultimate")
   }

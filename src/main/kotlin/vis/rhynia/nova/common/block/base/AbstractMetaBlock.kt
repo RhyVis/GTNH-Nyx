@@ -15,20 +15,26 @@ import vis.rhynia.nova.api.interfaces.item.MetaTooltip
 import vis.rhynia.nova.api.interfaces.item.MetaVariant
 import vis.rhynia.nova.client.NovaTab.TabBlock
 
-/** Abstract class for blocks using meta as variant. */
-abstract class AbstractMetaBlock : Block, MetaVariant, MetaTooltip {
-  constructor(material: Material, rawName: String) : super(material) {
+/**
+ * Abstract class for blocks using meta as variant.
+ *
+ * @param rawName the raw name of the block
+ */
+abstract class AbstractMetaBlock(
+    protected val rawName: String,
+    material: Material = Material.iron
+) : Block(material), MetaVariant, MetaTooltip {
+
+  init {
     setBlockName(rawName)
     setCreativeTab(TabBlock)
   }
-
-  constructor(rawName: String) : this(Material.iron, rawName)
 
   protected var iconMap: Map<Int, IIcon> = mutableMapOf()
   protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
   protected val metaSet: MutableSet<Int> = mutableSetOf(16)
 
-  override fun getIcon(side: Int, meta: Int): IIcon? = iconMap[meta]
+  override fun getUnlocalizedName(): String = super.getUnlocalizedName()
 
   override fun damageDropped(meta: Int): Int = meta
 
@@ -69,9 +75,11 @@ abstract class AbstractMetaBlock : Block, MetaVariant, MetaTooltip {
 
   // endregion
 
+  @SideOnly(Side.CLIENT) override fun getIcon(side: Int, meta: Int): IIcon? = iconMap[meta]
+
   @SideOnly(Side.CLIENT)
   override fun registerBlockIcons(register: IIconRegister) {
-    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$unlocalizedName/$it" }
+    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$rawName/$it" }
     blockIcon = iconMap[0]
   }
 

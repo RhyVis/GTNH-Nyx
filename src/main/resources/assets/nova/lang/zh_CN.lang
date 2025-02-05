@@ -3,35 +3,35 @@ itemGroup.nova=Nova
 
 item.ultimate.name=无效证明
 
-nova.MetaItem01.0.name=测试物品
-nova.MetaItem01.1.name=兰波顿矩阵
-nova.MetaItem01.2.name=晶体矩阵
-nova.MetaItem01.3.name=致密绝缘云母
-nova.MetaItem01.4.name=准超立方体
+item.MetaItem01.0.name=测试物品
+item.MetaItem01.1.name=兰波顿矩阵
+item.MetaItem01.2.name=晶体矩阵
+item.MetaItem01.3.name=致密绝缘云母
+item.MetaItem01.4.name=准超立方体
 
-nova.MetaItem01.1001.name=星极
-nova.MetaItem01.1002.name=星矩
-nova.MetaItem01.1003.name=星规
+item.MetaItem01.1001.name=星极
+item.MetaItem01.1002.name=星矩
+item.MetaItem01.1003.name=星规
 
-nova.MetaItem01.3001.name=星极天体透镜
-nova.MetaItem01.3002.name=星芒魔力透镜
-nova.MetaItem01.3003.name=原石透镜
-nova.MetaItem01.3004.name=源石透镜
+item.MetaItem01.3001.name=星极天体透镜
+item.MetaItem01.3002.name=星芒魔力透镜
+item.MetaItem01.3003.name=原石透镜
+item.MetaItem01.3004.name=源石透镜
 
-nova.MetaItem02.0.name=标定指示
-nova.MetaItem02.1.name=套件 - DTPF
+item.MetaItem02.0.name=标定指示
+item.MetaItem02.1.name=套件 - DTPF
 
-nova.MetaBlock01.0.name=这是什么?
+tile.MetaBlock01.0.name=这是什么?
 
-nova.EyeOfHarmonyCore.0.name=§f粗制§r集成时空卷积器
-nova.EyeOfHarmonyCore.1.name=§f原始§r集成时空卷积器
-nova.EyeOfHarmonyCore.2.name=§f稳定§r集成时空卷积器
-nova.EyeOfHarmonyCore.3.name=§f先进§r集成时空卷积器
-nova.EyeOfHarmonyCore.4.name=§f卓越§r集成时空卷积器
-nova.EyeOfHarmonyCore.5.name=§f异星§r集成时空卷积器
-nova.EyeOfHarmonyCore.6.name=§f完美§r集成时空卷积器
-nova.EyeOfHarmonyCore.7.name=§f太初§r集成时空卷积器
-nova.EyeOfHarmonyCore.8.name=§f§l鸿蒙§r集成时空卷积器
+tile.EyeOfHarmonyCore.0.name=§f粗制§r集成时空卷积器
+tile.EyeOfHarmonyCore.1.name=§f原始§r集成时空卷积器
+tile.EyeOfHarmonyCore.2.name=§f稳定§r集成时空卷积器
+tile.EyeOfHarmonyCore.3.name=§f先进§r集成时空卷积器
+tile.EyeOfHarmonyCore.4.name=§f卓越§r集成时空卷积器
+tile.EyeOfHarmonyCore.5.name=§f异星§r集成时空卷积器
+tile.EyeOfHarmonyCore.6.name=§f完美§r集成时空卷积器
+tile.EyeOfHarmonyCore.7.name=§f太初§r集成时空卷积器
+tile.EyeOfHarmonyCore.8.name=§f§l鸿蒙§r集成时空卷积器
 
 nova.recipe.astralForge=星辉聚能转化
 nova.recipe.thermonuclearControl=热核控制过程

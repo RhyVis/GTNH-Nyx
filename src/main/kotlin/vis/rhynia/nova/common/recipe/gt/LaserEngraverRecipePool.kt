@@ -10,13 +10,13 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UEV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UHV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
-class LaserEngraverRecipePool : RecipePool {
+class LaserEngraverRecipePool : RecipePool() {
   override fun loadRecipes() {
     val laser: IRecipeMap = RecipeMaps.laserEngraverRecipes
 

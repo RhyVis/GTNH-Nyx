@@ -4,7 +4,7 @@ import java.io.File
 import net.minecraftforge.common.config.Configuration
 
 object Config {
-  const val CATEGORY_GENERAL = Configuration.CATEGORY_GENERAL
+  private const val CATEGORY_GENERAL = Configuration.CATEGORY_GENERAL
   private var greeting: String = "Hello World"
 
   private const val CATEGORY_RECIPE = "recipe"

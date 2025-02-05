@@ -12,10 +12,10 @@ import gregtech.api.util.GTUtility
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.BUCKET
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UIV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.loader.container.NovaItemList
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class PlasmaForgeRecipePool : RecipePool {
+class PlasmaForgeRecipePool : RecipePool() {
   override fun loadRecipes() {
     val forge: IRecipeMap = RecipeMaps.plasmaForgeRecipes
 

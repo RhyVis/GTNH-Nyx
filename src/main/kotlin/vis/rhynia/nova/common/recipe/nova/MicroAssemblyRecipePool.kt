@@ -1,7 +1,6 @@
 package vis.rhynia.nova.common.recipe.nova
 
 import bartworks.system.material.WerkstoffLoader
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList
 import goodgenerator.items.GGMaterial
 import goodgenerator.util.ItemRefer
 import gregtech.api.enums.ItemList
@@ -38,14 +37,15 @@ import vis.rhynia.nova.api.enums.ref.BundleChip
 import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.Tier
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.api.util.ItemUtil
+import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class MicroAssemblyRecipePool : RecipePool {
+class MicroAssemblyRecipePool : RecipePool() {
   private val ma = NovaRecipeMaps.microAssemblyRecipes
   private val partOpticalMultiply = 4
 
@@ -363,7 +363,8 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             BartPart.EliteBoard.getItemStack(1),
-            GTUtility.copyAmountUnsafe(16 * 16, getCoreItem("EngravedGoldChip", 1)),
+            // getCoreItem("EngravedGoldChip").copyAmountUnsafe(16 * 16),
+            Materials.Gold.getPlates(1).setSize(16 * 20),
             BartPart.ASOC.getItemStack(8),
             BartPart.NOR.getItemStack(32))
         .fluidInputs(
@@ -379,7 +380,7 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             ItemRefer.HiC_T1.get(32),
-            GTUtility.copyAmountUnsafe(16 * 8, getCoreItem("EngravedDiamondCrystalChip")),
+            getCoreItem("EngravedDiamondCrystalChip").copyAmountUnsafe(16 * 8),
             BartPart.NAND.getItemStack(16))
         .fluidInputs(
             Materials.Plastic.getIngotMolten(16 * 2),
@@ -427,7 +428,8 @@ class MicroAssemblyRecipePool : RecipePool {
     builder()
         .itemInputs(
             ItemRefer.HiC_T4.get(8),
-            getCoreItem("EngravedManyullynCrystalChip", 64),
+            // getCoreItem("EngravedManyullynCrystalChip", 64),
+            getCoreItem("ManyullynCrystal").setSize(64 + 32),
             ItemList.Circuit_Chip_BioCPU.get(1))
         .fluidInputs(
             GGMaterial.titaniumBetaC.getMolten(4 * 1728),
@@ -522,10 +524,13 @@ class MicroAssemblyRecipePool : RecipePool {
     // Spacial 3
     builder()
         .itemInputs(
-            getCoreItem("EngineeringProcessorSpatialPulsatingCore", 1).setSize(256),
-            getCoreItem("ChargedCertusQuartzPlate", 1).setSize(16 * 64),
-            ItemUtil.setStackSize(Materials.Redstone.getPlates(64), 16 * 64),
-            ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 16 * 64),
+            GTModHandler.getModItem(
+                    NewHorizonsCoreMod.ID, "item.EngineeringProcessorSpatialPulsatingCore", 1)
+                .setSize(256),
+            GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 1)
+                .setSize(16 * 64),
+            Materials.Redstone.getPlates(1).setSize(16 * 64),
+            Materials.NetherQuartz.getPlates(1).setSize(16 * 64),
             ItemStack(Items.ender_eye, 64))
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(4 * INGOTS),
@@ -575,7 +580,9 @@ class MicroAssemblyRecipePool : RecipePool {
             SolderMaterial.MutatedLivingAlloy.getFluidStack(48 * INGOTS),
             Materials.Sunnarium.getIngotMolten(32),
             NovaMaterial.Astrium.getIngotMolten(32))
-        .itemOutputs(GTCMItemList.OpticalSOC.get(64))
+        .itemOutputs(
+            // GTCMItemList.OpticalSOC.get(64)
+            NovaMods.TwistSpaceTechnology.getItem("MetaItem01", 64, 2))
         .noOptimize()
         .eut(RECIPE_UMV)
         .durSec(512)

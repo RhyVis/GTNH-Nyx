@@ -7,7 +7,11 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "ae.MixinPortableCell",
-    "ae.MixinQuantumCell"
+    "ae.MixinQuantumCell",
+    "bw.MixinMegaMultiBase",
+    "bw.MixinVoidMiner",
+    "pp.MixinElementalDuplicator",
+    "pp.MixinIndustrialDehydrator"
   ],
   "client": [],
   "server": [

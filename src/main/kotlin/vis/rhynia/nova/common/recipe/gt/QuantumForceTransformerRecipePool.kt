@@ -7,11 +7,11 @@ import gtPlusPlus.api.recipe.GTPPRecipeMaps
 import gtPlusPlus.core.item.chemistry.GenericChem
 import gtPlusPlus.core.util.minecraft.ItemUtils
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UEV
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class QuantumForceTransformerRecipePool : RecipePool {
+class QuantumForceTransformerRecipePool : RecipePool() {
   override fun loadRecipes() {
     val qft = GTPPRecipeMaps.quantumForceTransformerRecipes
 

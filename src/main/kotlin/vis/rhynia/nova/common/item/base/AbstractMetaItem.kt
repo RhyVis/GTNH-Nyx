@@ -15,7 +15,7 @@ import vis.rhynia.nova.api.interfaces.item.MetaVariant
 import vis.rhynia.nova.client.NovaTab
 
 /** Abstract class for items using meta as variant. */
-abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTooltip {
+abstract class AbstractMetaItem(protected val rawName: String) : Item(), MetaVariant, MetaTooltip {
   protected var iconMap: Map<Int, IIcon> = mutableMapOf()
   protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
   protected val metaSet: MutableSet<Int> = mutableSetOf()
@@ -42,12 +42,6 @@ abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTool
 
   override fun getUnlocalizedName(stack: ItemStack?): String =
       "${super.getUnlocalizedName()}.${stack?.itemDamage ?: 0}"
-
-  override fun registerIcons(register: IIconRegister) {
-    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$unlocalizedName/$it" }
-    itemIcon = iconMap[0]
-  }
-
   override fun getIconFromDamage(meta: Int): IIcon = iconMap[meta] ?: itemIcon
 
   // region MetaVariant Implementation
@@ -83,6 +77,12 @@ abstract class AbstractMetaItem(rawName: String) : Item(), MetaVariant, MetaTool
   }
 
   // endregion
+
+  @SideOnly(Side.CLIENT)
+  override fun registerIcons(register: IIconRegister) {
+    iconMap = this.registerVariantIcon(register) { "${Constant.MOD_ID}:$rawName/$it" }
+    itemIcon = iconMap[0]
+  }
 
   @SideOnly(Side.CLIENT)
   override fun getSubItems(

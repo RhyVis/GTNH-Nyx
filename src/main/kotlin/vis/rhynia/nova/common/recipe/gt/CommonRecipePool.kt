@@ -10,11 +10,11 @@ import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility
 import gtPlusPlus.core.material.MaterialsElements
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
-import vis.rhynia.nova.api.interfaces.RecipePool
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.recipe.RecipePool
 
-class CommonRecipePool : RecipePool {
+class CommonRecipePool : RecipePool() {
   override fun loadRecipes() {
     val ems: IRecipeMap = RecipeMaps.electroMagneticSeparatorRecipes
     val imp: IRecipeMap = BartWorksRecipeMaps.electricImplosionCompressorRecipes
