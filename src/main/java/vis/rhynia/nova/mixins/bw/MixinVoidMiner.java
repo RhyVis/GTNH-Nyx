@@ -20,7 +20,7 @@ public class MixinVoidMiner {
      * Multiply output of VM
      */
     @Inject(method = "getNobleGasInputAndSetMultiplier", at = @At(value = "RETURN", ordinal = 0))
-    private void bh$injectMultiplier(CallbackInfoReturnable<FluidStack> cir) {
+    private void injectMultiplier(CallbackInfoReturnable<FluidStack> cir) {
         this.multiplier = this.multiplier * 16384;
     }
 }

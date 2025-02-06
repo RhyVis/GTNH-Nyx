@@ -20,7 +20,7 @@ public class MixinMegaMultiBase<T> {
      * This attempts to remove all air checks depending on StructureElementAirNoHint
      */
     @Inject(method = "check", at = @At("HEAD"), cancellable = true)
-    private void bh$injectAirCheck(T o, World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
+    private void injectAirCheck(T o, World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true);
     }
 }
