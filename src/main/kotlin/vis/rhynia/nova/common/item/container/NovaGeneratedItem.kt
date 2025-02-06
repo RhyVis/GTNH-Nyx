@@ -8,10 +8,16 @@ import gregtech.api.enums.OrePrefixes
 import gregtech.api.interfaces.IIconContainer
 import gregtech.api.items.MetaGeneratedItem
 import gregtech.api.util.GTOreDictUnificator
+import net.minecraft.client.gui.GuiScreen.isShiftKeyDown
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.EnumChatFormatting.BOLD
+import net.minecraft.util.EnumChatFormatting.GRAY
+import net.minecraft.util.EnumChatFormatting.RESET
+import net.minecraft.util.EnumChatFormatting.WHITE
 import net.minecraft.util.IIcon
 import vis.rhynia.nova.client.NovaTab
 import vis.rhynia.nova.common.material.NovaMaterials
@@ -87,7 +93,12 @@ class NovaGeneratedItem(val orePrefix: OrePrefixes) :
       aStack: ItemStack?,
       aPlayer: EntityPlayer?
   ) {
-    materialMap[aStack?.itemDamage?.toShort()]?.additionalTooltips?.forEach { aList.add(it) }
+    val material = materialMap[aStack?.itemDamage?.toShort()] ?: return
+    material.elementTooltip.forEach { aList.add(it) }
+    if (material.extraTooltip.isNotEmpty()) {
+      if (isShiftKeyDown()) material.extraTooltip.forEach { aList.add(it) }
+      else aList.add("按下 ${BOLD}${WHITE}Shift${RESET}${GRAY} 键以查看更多信息")
+    }
   }
 
   override fun getItemStackDisplayName(stack: ItemStack): String? {

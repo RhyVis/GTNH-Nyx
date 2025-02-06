@@ -21,7 +21,7 @@ class NovaItemUltimate() : Item() {
   }
 
   @SideOnly(Side.CLIENT)
-  override fun getSubItems(item: Item, tab: CreativeTabs, list: MutableList<ItemStack>) {
+  override fun getSubItems(item: Item, tab: CreativeTabs?, list: MutableList<ItemStack>) {
     list.add(ItemStack(item, 1, 0))
   }
 

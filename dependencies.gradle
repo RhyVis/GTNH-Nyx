@@ -7,6 +7,7 @@ dependencies {
 
     compileOnly('com.github.GTNewHorizons:TinkersGregworks:GTNH-1.0.27:dev') { transitive = false }
 
+    runtimeOnly('com.github.GTNewHorizons:AppleCore:3.3.4:dev') { transitive = false }
     runtimeOnlyNonPublishable("com.github.GTNewHorizons:BlockRenderer6343:1.2.16:dev") { transitive = false }
     runtimeOnlyNonPublishable("com.github.GTNewHorizons:nei-custom-diagram:1.6.8:dev") { transitive = false }
 }

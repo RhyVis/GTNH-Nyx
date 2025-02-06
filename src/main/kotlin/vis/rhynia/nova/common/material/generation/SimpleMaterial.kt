@@ -17,7 +17,7 @@ import vis.rhynia.nova.common.loader.container.NovaItemList
  * The material instance should be created only once at preInit stage, then the system will handle
  * the auto generation
  */
-@Suppress("SpellCheckingInspection")
+@Suppress("SpellCheckingInspection", "unused")
 class SimpleMaterial(
     /**
      * The material id, it should be unique and not larger than 32767, used as item meta in
@@ -91,7 +91,8 @@ class SimpleMaterial(
   // region Material Metadata
   val internalName: String = internalName.replace(" ", "")
 
-  var additionalTooltips: Array<String> = arrayOf()
+  var elementTooltip: Array<String> = arrayOf()
+  var extraTooltip: Array<String> = arrayOf()
 
   var textureSet: TextureSet = TextureSet.SET_NONE
 
@@ -103,13 +104,13 @@ class SimpleMaterial(
    *
    * Should be called before `addTooltip`
    */
-  fun addElementalTooltip(e: String) {
-    addTooltip(e.subscriptNumbers())
+  fun addElementalTooltip(vararg e: String) {
+    elementTooltip += e
   }
 
-  /** Add the tooltip to the material */
-  fun addTooltip(vararg tooltips: String) {
-    additionalTooltips += tooltips
+  /** Add additional tooltip to the material, need to press shift */
+  fun addExtraTooltip(vararg tooltips: String) {
+    extraTooltip += tooltips
   }
   // endregion
 
@@ -123,14 +124,6 @@ class SimpleMaterial(
 
   fun addOrePrefix(prefix: OrePrefixes) {
     allowedOrePrefixes.add(prefix)
-  }
-
-  /** Enable dusts for the material */
-  fun enableDusts() {
-    hasDust = true
-    addOrePrefix(OrePrefixes.dust)
-    addOrePrefix(OrePrefixes.dustSmall)
-    addOrePrefix(OrePrefixes.dustTiny)
   }
   // endregion
 
@@ -153,6 +146,23 @@ class SimpleMaterial(
             NovaItemList.TestItem01.get(0)
           }
 
+  // endregion
+
+  // region Dust
+
+  private var hasDust: Boolean = false
+
+  val flagDust: Boolean
+    get() = hasDust
+
+  /** Enable dusts for the material */
+  fun enableDusts() {
+    hasDust = true
+    addOrePrefix(OrePrefixes.dust)
+    addOrePrefix(OrePrefixes.dustSmall)
+    addOrePrefix(OrePrefixes.dustTiny)
+  }
+
   /**
    * Get the dust item stack
    *
@@ -161,10 +171,143 @@ class SimpleMaterial(
    */
   fun getDust(amount: Int = 1) = get(OrePrefixes.dust, amount)
 
-  private var hasDust: Boolean = false
+  // endregion
 
-  val flagDust: Boolean
-    get() = hasDust
+  // region Ingot
+
+  private var hasIngot: Boolean = false
+
+  val flagIngot: Boolean
+    get() = hasIngot
+
+  /**
+   * Enable ingots for the material
+   *
+   * @param prefixes The ingot ore prefixes
+   */
+  fun enableIngots(
+      vararg prefixes: OrePrefixes =
+          arrayOf(
+              OrePrefixes.ingot,
+              OrePrefixes.ingotDouble,
+              OrePrefixes.ingotTriple,
+              OrePrefixes.ingotQuadruple,
+              OrePrefixes.ingotQuintuple,
+              OrePrefixes.ingotHot,
+              OrePrefixes.nugget,
+          )
+  ) {
+    if (prefixes.isEmpty()) return
+    hasIngot = true
+    prefixes.forEach(this::addOrePrefix)
+  }
+
+  /**
+   * Get the ingot item stack
+   *
+   * @param amount The amount of ingot
+   * @return The ingot item stack
+   */
+  fun getIngot(amount: Int = 1) = get(OrePrefixes.ingot, amount)
+
+  // endregion
+
+  // region Plate
+
+  private var hasPlate: Boolean = false
+
+  val flagPlate: Boolean
+    get() = hasPlate
+
+  /**
+   * Enable plates for the material
+   *
+   * @param orePrefixes The plate ore prefixes
+   */
+  fun enablePlates(
+      vararg orePrefixes: OrePrefixes =
+          arrayOf(
+              OrePrefixes.plate,
+              OrePrefixes.plateDouble,
+              OrePrefixes.plateTriple,
+              OrePrefixes.plateQuadruple,
+              OrePrefixes.plateQuintuple,
+              OrePrefixes.plateDense,
+              OrePrefixes.foil,
+          )
+  ) {
+    if (orePrefixes.isEmpty()) return
+    hasPlate = true
+    orePrefixes.forEach(this::addOrePrefix)
+  }
+
+  fun getPlate(amount: Int = 1) = get(OrePrefixes.plate, amount)
+
+  // endregion
+
+  // region Gem
+
+  private var hasGem: Boolean = false
+
+  val flagGem: Boolean
+    get() = hasGem
+
+  /**
+   * Enable gems for the material
+   *
+   * @param orePrefixes The gem ore prefixes
+   */
+  fun enableGems(
+      vararg orePrefixes: OrePrefixes =
+          arrayOf(
+              OrePrefixes.gem,
+              OrePrefixes.gemChipped,
+              OrePrefixes.gemFlawed,
+              OrePrefixes.gemFlawless,
+              OrePrefixes.gemExquisite,
+              OrePrefixes.lens,
+          )
+  ) {
+    if (orePrefixes.isEmpty()) return
+    hasGem = true
+    orePrefixes.forEach(this::addOrePrefix)
+  }
+
+  fun getGem(amount: Int = 1) = get(OrePrefixes.gem, amount)
+
+  // endregion
+
+  // region Misc
+
+  private var hasMisc: Boolean = false
+
+  val flagMisc: Boolean
+    get() = hasMisc
+
+  /**
+   * Enable misc items for the material
+   *
+   * @param orePrefixes The misc ore prefixes
+   */
+  fun enableMisc(
+      vararg orePrefixes: OrePrefixes =
+          arrayOf(
+              OrePrefixes.stick,
+              OrePrefixes.stickLong,
+              OrePrefixes.spring,
+              OrePrefixes.springSmall,
+              OrePrefixes.bolt,
+              OrePrefixes.gear,
+              OrePrefixes.ring,
+              OrePrefixes.rotor,
+              OrePrefixes.screw,
+          )
+  ) {
+    if (orePrefixes.isEmpty()) return
+    hasMisc = true
+    orePrefixes.forEach(this::addOrePrefix)
+  }
+
   // endregion
 
   // region Fluid

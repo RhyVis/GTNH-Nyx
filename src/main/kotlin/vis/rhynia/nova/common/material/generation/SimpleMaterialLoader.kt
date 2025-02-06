@@ -1,6 +1,5 @@
 package vis.rhynia.nova.common.material.generation
 
-import buildcraft.api.core.StackKey.fluid
 import gregtech.api.enums.FluidState
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.fluid.GTFluidFactory
@@ -15,11 +14,11 @@ object SimpleMaterialLoader : Loader {
     Log.info("Registering materials...")
     val time1 = System.currentTimeMillis()
     materialSet.forEach {
-      Log.info("Loading material: ${it.id}: ${it.internalName}")
+      Log.debug("Loading material: ${it.id}: ${it.internalName}")
       generateFluid(it)
-      generateMetaItem(it)
       materialMap[it.id] = it
     }
+    generateMetaItem()
     Log.info("Generated ${materialMap.size} materials in ${System.currentTimeMillis() - time1}ms")
   }
 
@@ -45,17 +44,27 @@ object SimpleMaterialLoader : Loader {
             .buildAndRegister()
             .asFluid()
             .let { fluid = it }
-        Log.info("Generated fluid ${null}")
+        Log.debug("Generated fluid $name")
       }
       fluidMap[material]?.let { it[state] = fluid }
           ?: run { fluidMap[material] = mutableMapOf(state to fluid) }
     }
   }
 
-  private fun generateMetaItem(material: SimpleMaterial) {
-    material.getFinalOrePrefixes().forEach {
-      itemMap[it] = NovaGeneratedItem(it)
-      Log.info("Generated item for ${material.internalName}: ${it.name}")
+  private fun getUsedOrePrefixes(): Set<OrePrefixes> {
+    materialSet
+        .flatMap { it.getFinalOrePrefixes() }
+        .toSortedSet(compareBy { it.ordinal })
+        .let {
+          Log.debug("Used ore prefixes: ${it.joinToString(", ") { it.name }}")
+          return it
+        }
+  }
+
+  private fun generateMetaItem() {
+    getUsedOrePrefixes().forEach {
+      itemMap.getOrPut(it) { NovaGeneratedItem(it) }
+      Log.debug("Generated item for ${it.name}")
     }
   }
 }
