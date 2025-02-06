@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureUtility
+import gregtech.api.GregTechAPI
 import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
@@ -36,11 +37,10 @@ import net.minecraft.util.EnumChatFormatting.WHITE
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
-import org.apache.commons.lang3.tuple.Pair
+import org.apache.commons.lang3.tuple.Pair as ApachePair
 import tectech.TecTech.eyeOfHarmonyRecipeStorage
 import tectech.recipe.EyeOfHarmonyRecipe
 import tectech.thing.CustomItemList
-import tectech.thing.casing.TTCasingsContainer
 import tectech.util.FluidStackLong
 import tectech.util.ItemStackLong
 import vis.rhynia.nova.api.enums.NovaValues
@@ -180,11 +180,8 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
   // endregion
 
   // region Structure
-  override val sCasingBlock: Block
-    get() = TTCasingsContainer.sBlockCasingsBA0
-
-  override val sCasingBlockMeta: Int
-    get() = 11
+  override val sCasingBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings1 to 12
 
   override val sControllerIcon: kotlin.Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
@@ -201,16 +198,16 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
                   { block: Block, meta: Int ->
                     if (block === BlockRecord.EyeOfHarmonyCoreCasing) meta else null
                   },
-                  ImmutableList.of<Pair<Block, Int>>(
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 0),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 1),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 2),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 3),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 4),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 5),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 6),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 7),
-                      Pair.of(BlockRecord.EyeOfHarmonyCoreCasing, 8)),
+                  ImmutableList.of<ApachePair<Block, Int>>(
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 0),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 1),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 2),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 3),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 4),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 5),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 6),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 7),
+                      ApachePair.of(BlockRecord.EyeOfHarmonyCoreCasing, 8)),
                   -1,
                   { t: NovaMTEEyeOfUltimate, meta: Int ->
                     t.pSpacetimeCompressionFieldMetadata = meta
@@ -223,7 +220,7 @@ class NovaMTEEyeOfUltimate : NovaMTECubeBase<NovaMTEEyeOfUltimate> {
                   .adder(NovaMTEEyeOfUltimate::addToMachineList)
                   .dot(1)
                   .casingIndex(sCasingIndex)
-                  .buildAndChain(sCasingBlock, sCasingBlockMeta))
+                  .buildAndChain(sCasingBlock.first, sCasingBlock.second))
           .build()
 
   override fun checkMachine(

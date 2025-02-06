@@ -17,11 +17,7 @@ import vis.rhynia.nova.proxy.CommonProxy
     modid = Constant.MOD_ID,
     name = Constant.MOD_NAME,
     version = Tags.VERSION,
-    dependencies =
-        "required-after:forgelin;" +
-            "required-after:gregtech;" +
-            "required-after:structurelib;" +
-            "required-after:gtnhintergalactic;",
+    dependencies = "required-after:forgelin;required-after:gregtech;required-after:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
 class Nova {
   companion object {

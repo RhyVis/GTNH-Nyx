@@ -42,7 +42,7 @@ import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class MicroAssemblyRecipePool : RecipePool() {
@@ -215,7 +215,7 @@ class MicroAssemblyRecipePool : RecipePool() {
             Materials.Tritanium.getMolten(8 * INGOTS * multiple),
             Materials.Silicone.getMolten(16 * INGOTS * multiple),
             Materials.Polybenzimidazole.getMolten(16 * INGOTS * multiple),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(4 * INGOTS * multiple.toInt()))
+            NovaMaterials.SuperconductorFlux.getLiquid(4 * INGOTS * multiple.toInt()))
         .itemOutputs(ItemList.Circuit_Biomainframe.get(multiple))
         .eut(RECIPE_UHV)
         .durSec(150 * multiple.toInt())
@@ -285,7 +285,7 @@ class MicroAssemblyRecipePool : RecipePool() {
             Materials.Tritanium.getMolten(16 * INGOTS * multiple),
             Materials.Silicone.getMolten(32 * INGOTS * multiple),
             Materials.Polybenzimidazole.getMolten(32 * INGOTS * multiple),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * INGOTS * multiple.toInt()))
+            NovaMaterials.SuperconductorFlux.getLiquid(16 * INGOTS * multiple.toInt()))
         .itemOutputs(ItemList.Circuit_OpticalMainframe.get(multiple))
         .eut(RECIPE_UEV)
         .durSec(150 * multiple.toInt())
@@ -350,7 +350,7 @@ class MicroAssemblyRecipePool : RecipePool() {
             BartPart.IC_Q.getItemStack(48))
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(24 * INGOTS),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(6 * INGOTS),
+            NovaMaterials.SuperconductorFlux.getLiquid(6 * INGOTS),
             Materials.Infinity.getIngotMolten(4))
         .itemOutputs(GTUtility.copyAmountUnsafe(256, getCoreItem("HighEnergyFlowCircuit")))
         .eut(RECIPE_LuV)
@@ -579,7 +579,7 @@ class MicroAssemblyRecipePool : RecipePool() {
         .fluidInputs(
             SolderMaterial.MutatedLivingAlloy.getFluidStack(48 * INGOTS),
             Materials.Sunnarium.getIngotMolten(32),
-            NovaMaterial.Astrium.getIngotMolten(32))
+            NovaMaterials.Astrium.getIngotMolten(32))
         .itemOutputs(
             // GTCMItemList.OpticalSOC.get(64)
             NovaMods.TwistSpaceTechnology.getItem("MetaItem01", 64, 2))

@@ -11,7 +11,7 @@ import gregtech.api.util.GTUtility
 import gtPlusPlus.core.material.MaterialsElements
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class CommonRecipePool : RecipePool() {
@@ -23,15 +23,15 @@ class CommonRecipePool : RecipePool() {
     // 磁析神秘
     builder()
         .itemInputs(Materials.Thaumium.getDust(8))
-        .itemOutputs(Materials.Iron.getDust(6), NovaMaterial.Astrium.getDust(4))
+        .itemOutputs(Materials.Iron.getDust(6), NovaMaterials.Astrium.getDust(4))
         .eut(RECIPE_MV)
         .durSec(21)
         .addTo(ems)
 
     // 聚爆星辉
     builder()
-        .itemInputs(NovaMaterial.AstriumInfinity.getDust(8))
-        .fluidInputs(NovaMaterial.Astrium.getIngotMolten(2))
+        .itemInputs(NovaMaterials.AstriumInfinity.getDust(8))
+        .fluidInputs(NovaMaterials.Astrium.getIngotMolten(2))
         .itemOutputs(NovaItemList.AstriumInfinityGem.get(1))
         .eut(6000000)
         .duration(1)
@@ -40,7 +40,7 @@ class CommonRecipePool : RecipePool() {
         .itemInputs(
             MaterialsUEVplus.SpaceTime.getDust(64),
             MaterialsElements.STANDALONE.HYPOGEN.getDust(32))
-        .fluidInputs(NovaMaterial.AstriumInfinity.getIngotMolten(48))
+        .fluidInputs(NovaMaterials.AstriumInfinity.getIngotMolten(48))
         .itemOutputs(GTUtility.copyAmountUnsafe(256, NovaItemList.AstriumInfinityGem.get(1)))
         .eut(24000000)
         .duration(1)
@@ -48,14 +48,14 @@ class CommonRecipePool : RecipePool() {
 
     // 星辉残留
     builder()
-        .fluidInputs(NovaMaterial.AstralResidue.getFluidOrGas(32 * BUCKETS))
+        .fluidInputs(NovaMaterials.AstralResidue.getLiquid(32 * BUCKETS))
         .fluidOutputs(MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(16 * INGOTS))
         .eut(8000000)
         .duration(1)
         .addTo(imp)
     builder()
         .itemInputs(NovaItemList.PreTesseract.get(1))
-        .fluidInputs(NovaMaterial.AstralResidue.getFluidOrGas(16 * BUCKETS))
+        .fluidInputs(NovaMaterials.AstralResidue.getLiquid(16 * BUCKETS))
         .fluidOutputs(MaterialsUEVplus.TranscendentMetal.getIngotMolten(4))
         .eut(32000000)
         .duration(1)

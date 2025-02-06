@@ -23,9 +23,10 @@ import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
+@Suppress("SpellCheckingInspection")
 class TranscendentReactorRecipePool : RecipePool() {
   private val tr = NovaRecipeMaps.transcendentReactorRecipes
   private val recipeModifier: Int = Config.Recipe_TR_RecipeModifier
@@ -49,12 +50,12 @@ class TranscendentReactorRecipePool : RecipePool() {
             ItemUtil.setStackSize(Materials.Calcium.getDust(1), recipeModifier),
             ItemUtil.setStackSize(Materials.Niobium.getDust(1), recipeModifier))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(catalystACA / 4),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA / 4),
             Materials.Helium.getGas(ingotModifier))
         .fluidOutputs(
             MaterialsUEVplus.ExcitedDTCC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterial.AstralResidue.getFluidOrGas(catalystACA / 8))
-        .specialValue(HeatingCoilLevel.UEV.getHeat().toInt())
+            NovaMaterials.AstralResidue.getLiquid(catalystACA / 8))
+        .specialValue(HeatingCoilLevel.UEV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UEV)
         .durSec(10)
@@ -71,12 +72,12 @@ class TranscendentReactorRecipePool : RecipePool() {
             ItemUtil.setStackSize(Materials.Boron.getDust(1), recipeModifier),
             ItemUtil.setStackSize(Materials.Sulfur.getDust(1), recipeModifier))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(catalystACA / 2),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA / 2),
             Materials.Helium.getGas(ingotModifier),
             Materials.Radon.getGas(ingotModifier))
         .fluidOutputs(
             MaterialsUEVplus.ExcitedDTPC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterial.AstralResidue.getFluidOrGas(catalystACA / 4))
+            NovaMaterials.AstralResidue.getLiquid(catalystACA / 4))
         .specialValue(HeatingCoilLevel.UIV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UIV)
@@ -97,13 +98,13 @@ class TranscendentReactorRecipePool : RecipePool() {
             ItemUtil.setStackSize(Materials.Silver.getDust(1), recipeModifier),
             ItemUtil.setStackSize(Materials.Titanium.getDust(1), recipeModifier))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(catalystACA),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA),
             Materials.Helium.getGas(ingotModifier),
             Materials.Radon.getGas(ingotModifier),
             Materials.Nitrogen.getGas(ingotModifier))
         .fluidOutputs(
             MaterialsUEVplus.ExcitedDTRC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterial.AstralResidue.getFluidOrGas(catalystACA / 2))
+            NovaMaterials.AstralResidue.getLiquid(catalystACA / 2))
         .specialValue(HeatingCoilLevel.UMV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UMV)
@@ -127,15 +128,15 @@ class TranscendentReactorRecipePool : RecipePool() {
             ItemUtil.setStackSize(Materials.Bismuth.getDust(1), recipeModifier),
             ItemUtil.setStackSize(Materials.Tin.getDust(1), recipeModifier))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(catalystACA * 2),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA * 2),
             Materials.Helium.getGas(ingotModifier),
             Materials.Radon.getGas(ingotModifier),
             Materials.Nitrogen.getGas(ingotModifier),
             Materials.Oxygen.getGas(ingotModifier))
         .fluidOutputs(
             MaterialsUEVplus.ExcitedDTEC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterial.AstralResidue.getFluidOrGas(catalystACA))
-        .specialValue(HeatingCoilLevel.UXV.getHeat().toInt())
+            NovaMaterials.AstralResidue.getLiquid(catalystACA))
+        .specialValue(HeatingCoilLevel.UXV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UXV)
         .durSec(10)
@@ -161,7 +162,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             ItemUtil.setStackSize(Materials.Thorium.getDust(1), recipeModifier),
             ItemUtil.setStackSize(Materials.Plutonium241.getDust(1), recipeModifier))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(catalystACA * 4),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA * 4),
             Materials.Helium.getGas(ingotModifier),
             Materials.Radon.getGas(ingotModifier),
             Materials.Nitrogen.getGas(ingotModifier),
@@ -169,7 +170,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             MaterialsUEVplus.RawStarMatter.getFluid(recipeModifier * 100L))
         .fluidOutputs(
             MaterialsUEVplus.ExcitedDTSC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterial.AstralResidue.getFluidOrGas(catalystACA * 2))
+            NovaMaterials.AstralResidue.getLiquid(catalystACA * 2))
         .specialValue(HeatingCoilLevel.MAX.heat.toInt())
         .noOptimize()
         .eut(RECIPE_MAX)
@@ -190,7 +191,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             Materials.Naquadria.getIngotMolten(7264))
         .fluidOutputs(
             SuperConductorPart.UV.getMolten(16344 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(4 * BUCKETS))
+            NovaMaterials.AstralResidue.getLiquid(4 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
         .durSec(4)
@@ -206,7 +207,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             Materials.Tritanium.getIngotMolten(1680))
         .fluidOutputs(
             SuperConductorPart.UHV.getMolten(8064 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(8 * BUCKETS))
+            NovaMaterials.AstralResidue.getLiquid(8 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
         .durSec(8)
@@ -223,7 +224,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             Materials.Iron.getIngotMolten(168))
         .fluidOutputs(
             SuperConductorPart.UEV.getMolten(2016 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(16 * BUCKETS))
+            NovaMaterials.AstralResidue.getLiquid(16 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
         .durSec(16)
@@ -240,7 +241,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             Materials.Bismuth.getIngotMolten(40))
         .fluidOutputs(
             SuperConductorPart.UIV.getMolten(1000 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(32 * BUCKETS))
+            NovaMaterials.AstralResidue.getLiquid(32 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
         .durSec(32)
@@ -258,7 +259,7 @@ class TranscendentReactorRecipePool : RecipePool() {
             Materials.Oxygen.getGas(36 * INGOTS.toLong()))
         .fluidOutputs(
             SuperConductorPart.UMV.getMolten(972 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(64 * BUCKETS))
+            NovaMaterials.AstralResidue.getLiquid(64 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UXV)
         .durSec(64)
@@ -269,7 +270,7 @@ class TranscendentReactorRecipePool : RecipePool() {
     builder()
         .itemInputs(
             GTUtility.getIntegratedCircuit(10),
-            NovaMaterial.AstralCatalystBase.getDust(12),
+            NovaMaterials.AstralCatalystBase.getDust(12),
             Materials.TengamPurified.getDust(11),
             Materials.Infinity.getDust(10),
             Materials.CosmicNeutronium.getDust(8),
@@ -278,17 +279,17 @@ class TranscendentReactorRecipePool : RecipePool() {
             GGMaterial.orundum.getDust(5),
             MaterialsElements.STANDALONE.ADVANCED_NITINOL.getDust(4),
             MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getDust(4))
-        .itemOutputs(NovaMaterial.AstriumMagic.getDust(16))
+        .itemOutputs(NovaMaterials.AstriumMagic.getDust(16))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(48 * BUCKETS),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(48 * BUCKETS),
             Materials.Helium.getPlasma(6 * BUCKETS.toLong()),
             Materials.DraconiumAwakened.getMolten(12 * INGOTS.toLong()),
             Materials.Indium.getMolten(7 * INGOTS.toLong()),
         )
         .fluidOutputs(
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(72 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(24 * BUCKETS))
-        .specialValue(HeatingCoilLevel.UEV.getHeat().toInt())
+            NovaMaterials.SuperconductorFlux.getLiquid(72 * INGOTS),
+            NovaMaterials.AstralResidue.getLiquid(24 * BUCKETS))
+        .specialValue(HeatingCoilLevel.UEV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UIV)
         .durSec(20)
@@ -301,20 +302,20 @@ class TranscendentReactorRecipePool : RecipePool() {
             NovaItemList.AstriumInfinityGem.get(16),
             ItemList.EnergisedTesseract.get(1))
         .itemOutputs(
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.AstriumMagic.getDust(64),
-            NovaMaterial.AstriumInfinity.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.AstriumMagic.getDust(64),
-            NovaMaterial.AstriumInfinity.getDust(64))
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.AstriumMagic.getDust(64),
+            NovaMaterials.AstriumInfinity.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.AstriumMagic.getDust(64),
+            NovaMaterials.AstriumInfinity.getDust(64))
         .outputChances(5000, 5000, 5000, 2500, 2500, 2500)
         .fluidInputs(MaterialsUEVplus.SpaceTime.getIngotMolten(512))
         .fluidOutputs(
             MaterialsUEVplus.Space.getIngotMolten(512),
             MaterialsUEVplus.Time.getIngotMolten(512),
-            NovaMaterial.AstralResidue.getFluidOrGas(10 * BUCKETS),
+            NovaMaterials.AstralResidue.getLiquid(10 * BUCKETS),
             MaterialsUEVplus.DimensionallyTranscendentResidue.getBucketFluid(10))
-        .specialValue(HeatingCoilLevel.UMV.getHeat().toInt())
+        .specialValue(HeatingCoilLevel.UMV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UMV)
         .durSec(20)
@@ -331,11 +332,11 @@ class TranscendentReactorRecipePool : RecipePool() {
                 256, GTModHandler.getModItem(Mods.GTPlusPlus.ID, "MU-metaitem.01", 1, 32105)))
         .fluidInputs(
             MaterialsUEVplus.SpaceTime.getIngotMolten(16),
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(4 * BUCKETS))
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(4 * BUCKETS))
         .fluidOutputs(
-            NovaMaterial.AstralResidue.getFluidOrGas(10 * BUCKETS),
+            NovaMaterials.AstralResidue.getLiquid(10 * BUCKETS),
             MaterialsUEVplus.DimensionallyTranscendentResidue.getBucketFluid(16))
-        .specialValue(HeatingCoilLevel.UIV.getHeat().toInt())
+        .specialValue(HeatingCoilLevel.UIV.heat.toInt())
         .noOptimize()
         .eut(RECIPE_UMV)
         .durSec(16)

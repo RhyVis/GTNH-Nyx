@@ -30,44 +30,39 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   ) : super(aId, aName, aNameRegional)
   protected constructor(aName: String) : super(aName)
 
-  protected val hOffset = 1
-  protected val vOffset = 1
-  protected val dOffset = 1
+  protected companion object {
+    const val H_OFFSET = 1
+    const val V_OFFSET = 1
+    const val D_OFFSET = 0
+  }
 
-  /** The block used for the casing of the machine. */
-  protected abstract val sCasingBlock: Block
-
-  /** The meta of the block used for the casing of the machine. */
-  protected abstract val sCasingBlockMeta: Int
+  /** The block and corresponding meta used for the casing of the machine. */
+  protected abstract val sCasingBlock: Pair<Block, Int>
 
   /** The index of the casing texture, usually calculated from the block and meta. */
   protected open val sCasingIndex: Int
-    @OverrideOnly get() = GTUtility.getCasingTextureIndex(sCasingBlock, sCasingBlockMeta)
+    @OverrideOnly get() = GTUtility.getCasingTextureIndex(sCasingBlock.first, sCasingBlock.second)
 
   /** The block used for the core of the machine, leave null if no core block is needed. */
-  protected open val sCoreBlock: Block?
+  protected open val sCoreBlock: Pair<Block, Int>?
     @OverrideOnly get() = null
 
-  /** The meta of the block used for the core of the machine. */
-  protected open val sCoreBlockMeta: Int
-    @OverrideOnly get() = 0
-
   protected val sCoreBlockRef: IStructureElement<T>
-    get() = if (sCoreBlock == null) isAir() else ofBlock(sCoreBlock, sCoreBlockMeta)
+    get() = sCoreBlock?.let { ofBlock(it.first, it.second) } ?: isAir()
 
   final override val sControllerBlock: Pair<Block, Int>
-    get() = sCasingBlock to sCasingBlockMeta
+    get() = sCasingBlock
 
   override fun checkMachine(
       aBaseMetaTileEntity: IGregTechTileEntity?,
       aStack: ItemStack?
   ): Boolean {
     removeMaintenance()
-    return checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset)
+    return checkPiece(STRUCTURE_PIECE_MAIN, H_OFFSET, V_OFFSET, D_OFFSET)
   }
 
   override fun construct(stackSize: ItemStack?, hintsOnly: Boolean) {
-    buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset)
+    buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, H_OFFSET, V_OFFSET, D_OFFSET)
   }
 
   override fun survivalConstruct(
@@ -77,7 +72,15 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   ): Int {
     if (mMachine) return -1
     return survivialBuildPiece(
-        STRUCTURE_PIECE_MAIN, stackSize, hOffset, vOffset, dOffset, elementBudget, env, false, true)
+        STRUCTURE_PIECE_MAIN,
+        stackSize,
+        H_OFFSET,
+        V_OFFSET,
+        D_OFFSET,
+        elementBudget,
+        env,
+        false,
+        true)
   }
 
   override fun genStructureDefinition(): IStructureDefinition<T> =
@@ -99,7 +102,7 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
                   }
                   .dot(1)
                   .casingIndex(sCasingIndex)
-                  .buildAndChain(sCasingBlock, sCasingBlockMeta))
+                  .buildAndChain(sCasingBlock.first, sCasingBlock.second))
           .build()
 
   protected val structureShape: Array<Array<String>>

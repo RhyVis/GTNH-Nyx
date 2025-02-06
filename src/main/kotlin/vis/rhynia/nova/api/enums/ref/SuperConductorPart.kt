@@ -8,8 +8,9 @@ import gregtech.api.util.GTOreDictUnificator
 import kotlin.math.pow
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 
+@Suppress("unused")
 enum class SuperConductorPart(private val production: Materials, private val raw: Materials) {
   MV(Materials.SuperconductorMV, Materials.Pentacadmiummagnesiumhexaoxid),
   HV(Materials.SuperconductorHV, Materials.Titaniumonabariumdecacoppereikosaoxid),
@@ -74,6 +75,6 @@ enum class SuperConductorPart(private val production: Materials, private val raw
   fun getMolten(amount: Int): FluidStack = getMaterial(true).getMolten(amount.toLong())
 
   fun getSxEqualFluid(amount: Int, raw: Boolean = false): FluidStack =
-      if (raw) NovaMaterial.SuperconductorFlux.getFluidOrGas(2.0.pow(ordinal).toInt() * amount * 4)
-      else NovaMaterial.SuperconductorFlux.getFluidOrGas(2.0.pow(ordinal).toInt() * amount)
+      if (raw) NovaMaterials.SuperconductorFlux.getLiquid(2.0.pow(ordinal).toInt() * amount * 4)
+      else NovaMaterials.SuperconductorFlux.getLiquid(2.0.pow(ordinal).toInt() * amount)
 }

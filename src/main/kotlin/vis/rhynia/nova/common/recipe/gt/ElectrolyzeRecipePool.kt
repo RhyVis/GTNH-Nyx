@@ -7,7 +7,7 @@ import gtPlusPlus.core.material.MaterialMisc
 import gtPlusPlus.core.material.MaterialsElements
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class ElectrolyzeRecipePool : RecipePool() {
@@ -19,7 +19,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧铁粉
     builder()
         .itemInputs(Materials.RoastedIron.getDust(4))
-        .itemOutputs(Materials.Iron.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Iron.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -28,7 +28,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧铅粉
     builder()
         .itemInputs(Materials.RoastedLead.getDust(4))
-        .itemOutputs(Materials.Lead.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Lead.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -37,7 +37,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧镍粉
     builder()
         .itemInputs(Materials.RoastedNickel.getDust(4))
-        .itemOutputs(Materials.Nickel.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Nickel.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -46,7 +46,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧锌粉
     builder()
         .itemInputs(Materials.RoastedZinc.getDust(4))
-        .itemOutputs(Materials.Zinc.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Zinc.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -55,7 +55,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧铜粉
     builder()
         .itemInputs(Materials.RoastedCopper.getDust(4))
-        .itemOutputs(Materials.Copper.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Copper.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -64,7 +64,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧钴粉
     builder()
         .itemInputs(Materials.RoastedCobalt.getDust(4))
-        .itemOutputs(Materials.Cobalt.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Cobalt.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -73,7 +73,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧锑粉
     builder()
         .itemInputs(Materials.RoastedAntimony.getDust(4))
-        .itemOutputs(Materials.Antimony.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Antimony.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)
@@ -82,7 +82,7 @@ class ElectrolyzeRecipePool : RecipePool() {
     // 焙烧砷粉
     builder()
         .itemInputs(Materials.RoastedArsenic.getDust(4))
-        .itemOutputs(Materials.Arsenic.getDust(4), NovaMaterial.Astrium.getDust(1))
+        .itemOutputs(Materials.Arsenic.getDust(4), NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 5000)
         .eut(RECIPE_LV)
         .durSec(8)

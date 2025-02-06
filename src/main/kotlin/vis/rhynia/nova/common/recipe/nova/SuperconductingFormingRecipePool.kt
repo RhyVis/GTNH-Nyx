@@ -8,7 +8,7 @@ import vis.rhynia.nova.api.enums.ref.SolderMaterial
 import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.ItemUtil
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class SuperconductingFormingRecipePool : RecipePool() {
@@ -24,7 +24,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
               ItemUtil.setStackSize(sc.getDust(1), 128))
           .itemOutputs(ItemUtil.setStackSize(sc.getWire(1), 512))
           .fluidInputs(
-              NovaMaterial.Astrium.getMolten(sc.multiplier * INGOTS),
+              NovaMaterials.Astrium.getMolten(sc.multiplier * INGOTS),
               sc.getSxEqualFluid(32),
               Materials.Helium.getGas(sc.multiplier * 8L * BUCKETS))
           .eut(sc.recipeVoltage)
@@ -72,7 +72,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
           .itemInputs(
               GTUtility.getIntegratedCircuit(24),
               sc.getSolenoid(0),
-              ItemUtil.setStackSize(NovaMaterial.Astrium.getDust(1), 16 * sc.multiplier))
+              ItemUtil.setStackSize(NovaMaterials.Astrium.getDust(1), 16 * sc.multiplier))
           .itemOutputs(sc.getDust(64))
           .fluidInputs(sc.getSxEqualFluid(16), Materials.UUMatter.getFluid(sc.powVal * 500L))
           .fluidOutputs(sc.getMolten(512 * INGOTS))

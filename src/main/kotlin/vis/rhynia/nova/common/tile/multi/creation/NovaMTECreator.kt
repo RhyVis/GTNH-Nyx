@@ -183,11 +183,8 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
   // endregion
 
   // region Structure
-  override val sCasingBlock: Block
-    get() = GregTechAPI.sBlockCasings8
-
-  override val sCasingBlockMeta: Int
-    get() = 7
+  override val sCasingBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings8 to 7
 
   override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF

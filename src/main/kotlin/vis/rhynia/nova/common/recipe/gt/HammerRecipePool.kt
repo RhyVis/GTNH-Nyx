@@ -1,6 +1,7 @@
 package vis.rhynia.nova.common.recipe.gt
 
 import gregtech.api.enums.Materials
+import gregtech.api.enums.Mods
 import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTRecipeBuilder.BUCKETS
@@ -11,7 +12,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LuV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class HammerRecipePool : RecipePool() {
@@ -19,52 +20,60 @@ class HammerRecipePool : RecipePool() {
     val hammer: IRecipeMap = RecipeMaps.hammerRecipes
 
     // region 杂项
-    // Nt
-    builder()
-        .itemInputs(
-            GTBees.combs.getStackForType(CombType.NEUTRONIUM, 16), NovaMaterial.Astrium.getDust(12))
-        .itemOutputs(Materials.Neutronium.getIngots(2))
-        .fluidOutputs(NovaMaterial.AstriumMagic.getMolten(12), Materials.Neutronium.getMolten(2304))
-        .eut(RECIPE_LuV)
-        .durSec(25)
-        .addTo(hammer)
+    if (Mods.Forestry.isModLoaded) {
+      // Nt
+      builder()
+          .itemInputs(
+              GTBees.combs.getStackForType(CombType.NEUTRONIUM, 16),
+              NovaMaterials.Astrium.getDust(12),
+          )
+          .itemOutputs(Materials.Neutronium.getIngots(2))
+          .fluidOutputs(
+              NovaMaterials.AstriumMagic.getMolten(12),
+              Materials.Neutronium.getMolten(2304),
+          )
+          .eut(RECIPE_LuV)
+          .durSec(25)
+          .addTo(hammer)
 
-    // SpNt
-    builder()
-        .itemInputs(
-            GTBees.combs.getStackForType(CombType.COSMICNEUTRONIUM, 16),
-            NovaMaterial.Astrium.getDust(12))
-        .itemOutputs(Materials.CosmicNeutronium.getIngots(2))
-        .fluidOutputs(
-            NovaMaterial.AstriumMagic.getMolten(12), Materials.CosmicNeutronium.getMolten(2304))
-        .eut(RECIPE_LuV)
-        .durSec(25)
-        .addTo(hammer)
+      // SpNt
+      builder()
+          .itemInputs(
+              GTBees.combs.getStackForType(CombType.COSMICNEUTRONIUM, 16),
+              NovaMaterials.Astrium.getDust(12))
+          .itemOutputs(Materials.CosmicNeutronium.getIngots(2))
+          .fluidOutputs(
+              NovaMaterials.AstriumMagic.getMolten(12), Materials.CosmicNeutronium.getMolten(2304))
+          .eut(RECIPE_LuV)
+          .durSec(25)
+          .addTo(hammer)
 
-    // Kevlar
-    builder()
-        .itemInputs(
-            GTBees.combs.getStackForType(CombType.KEVLAR, 16), NovaMaterial.Astrium.getDust(12))
-        .fluidOutputs(
-            NovaMaterial.AstriumMagic.getMolten(12), FluidUtil.getFluidStack("molten.kevlar", 4608))
-        .eut(RECIPE_LuV)
-        .durSec(25)
-        .addTo(hammer)
+      // Kevlar
+      builder()
+          .itemInputs(
+              GTBees.combs.getStackForType(CombType.KEVLAR, 16), NovaMaterials.Astrium.getDust(12))
+          .fluidOutputs(
+              NovaMaterials.AstriumMagic.getMolten(12),
+              FluidUtil.getFluidStack("molten.kevlar", 4608))
+          .eut(RECIPE_LuV)
+          .durSec(25)
+          .addTo(hammer)
+    }
     // endregion
 
     // region 矩阵
     // 兰波顿矩阵
     builder()
-        .itemInputs(getCoreItem("LapotronDust", 64), NovaMaterial.Astrium.getDust(16))
+        .itemInputs(getCoreItem("LapotronDust", 64), NovaMaterials.Astrium.getDust(16))
         .itemOutputs(NovaItemList.LapotronMatrix.get(4))
-        .fluidInputs(NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(12 * BUCKETS))
+        .fluidInputs(NovaMaterials.LapotronEnhancedFluid.getLiquid(12 * BUCKETS))
         .eut(RECIPE_LuV)
         .durSec(40)
         .addTo(hammer)
 
     // 晶体矩阵
     builder()
-        .itemInputs(Materials.Aluminiumoxide.getDust(64), NovaMaterial.Astrium.getDust(16))
+        .itemInputs(Materials.Aluminiumoxide.getDust(64), NovaMaterials.Astrium.getDust(16))
         .itemOutputs(NovaItemList.CrystalMatrix.get(16))
         .fluidInputs(Materials.Europium.getIngotMolten(4), Materials.Americium.getIngotMolten(4))
         .fluidOutputs()

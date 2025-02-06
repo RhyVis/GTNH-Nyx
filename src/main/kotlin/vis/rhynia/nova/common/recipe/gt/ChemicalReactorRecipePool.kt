@@ -2,6 +2,7 @@ package vis.rhynia.nova.common.recipe.gt
 
 import bartworks.system.material.WerkstoffLoader
 import gregtech.api.enums.Materials
+import gregtech.api.enums.Mods.GTNHIntergalactic
 import gregtech.api.enums.Mods.GregTech
 import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
@@ -11,7 +12,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_HV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LuV
 import vis.rhynia.nova.api.util.FluidUtil
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
@@ -60,13 +61,14 @@ class ChemicalReactorRecipePool : RecipePool() {
 
     // 干细胞
     val stemCell = GregTech.getItem("gt.metaitem.03", 64, 32073)
-    builder()
-        .itemInputs(NovaMaterial.Astrium.getDust(12), Materials.Osmiridium.getDust(8))
-        .itemOutputs(*Array(3) { stemCell }, Materials.MysteriousCrystal.getDust(2))
-        .fluidInputs(Materials.GrowthMediumSterilized.getFluid(4000))
-        .fluidOutputs(FluidUtil.getFluidStack("bacterialsludge", 4000))
-        .eut(RECIPE_LuV)
-        .durSec(21)
-        .addTo(lcr)
+    builder(GTNHIntergalactic)?.also {
+      it.itemInputs(NovaMaterials.Astrium.getDust(12), Materials.Osmiridium.getDust(8))
+          .itemOutputs(*Array(3) { stemCell }, Materials.MysteriousCrystal.getDust(2))
+          .fluidInputs(Materials.GrowthMediumSterilized.getFluid(4000))
+          .fluidOutputs(FluidUtil.getFluidStack("bacterialsludge", 4000))
+          .eut(RECIPE_LuV)
+          .durSec(21)
+          .addTo(lcr)
+    }
   }
 }

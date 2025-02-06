@@ -89,11 +89,10 @@ class NovaMTEDenseEndpoint : NovaMTECubeBase<NovaMTEDenseEndpoint> {
   // endregion
 
   // region Structure
-  override val sCasingBlock: Block
-    get() = GregTechAPI.sBlockCasings8
 
-  override val sCasingBlockMeta: Int
-    get() = 10
+  override val sCasingBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings8 to 10
+
   // endregion
 
   // region Info

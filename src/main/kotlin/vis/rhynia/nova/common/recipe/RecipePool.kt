@@ -13,6 +13,7 @@ import vis.rhynia.nova.Log
 import vis.rhynia.nova.api.enums.NovaMods
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.common.loader.container.NovaItemList
+import vis.rhynia.nova.common.material.generation.SimpleMaterial
 
 @Suppress("unused")
 abstract class RecipePool {
@@ -60,6 +61,8 @@ abstract class RecipePool {
   protected fun builder(`if`: Boolean) = if (`if`) builder() else null
 
   protected fun builder(requiredMod: Mods) = builder(requiredMod.isModLoaded)
+
+  protected fun builder(vararg requiredMods: Mods) = builder(requiredMods.all { it.isModLoaded })
 
   protected fun Mods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
       GTModHandler.getModItem(
@@ -109,5 +112,14 @@ abstract class RecipePool {
       this.getMolten((amount * NovaValues.RecipeValues.INGOT).toInt())
 
   protected fun Werkstoff.getBucketMolten(amount: Int): FluidStack =
+      this.getMolten((amount * NovaValues.RecipeValues.BUCKET).toInt())
+
+  protected fun SimpleMaterial.getIngotMolten(amount: Int): FluidStack =
+      this.getMolten(amount * NovaValues.RecipeValues.INGOT.toInt())
+
+  protected fun SimpleMaterial.getIngotMolten(amount: Long): FluidStack =
+      this.getMolten((amount * NovaValues.RecipeValues.INGOT).toInt())
+
+  protected fun SimpleMaterial.getBucketMolten(amount: Int): FluidStack =
       this.getMolten((amount * NovaValues.RecipeValues.BUCKET).toInt())
 }

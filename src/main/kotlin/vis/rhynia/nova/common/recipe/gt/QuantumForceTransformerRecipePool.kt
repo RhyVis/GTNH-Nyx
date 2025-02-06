@@ -8,7 +8,7 @@ import gtPlusPlus.core.item.chemistry.GenericChem
 import gtPlusPlus.core.util.minecraft.ItemUtils
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UEV
 import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class QuantumForceTransformerRecipePool : RecipePool() {
@@ -18,7 +18,7 @@ class QuantumForceTransformerRecipePool : RecipePool() {
     builder()
         .itemInputs(
             Materials.Calcium.getDust(32),
-            NovaMaterial.Astrium.getDust(32),
+            NovaMaterials.Astrium.getDust(32),
             ItemUtils.getSimpleStack(GenericChem.mRawIntelligenceCatalyst, 0))
         .fluidOutputs(
             Materials.GrowthMediumRaw.getBucketFluid(1024),

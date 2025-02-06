@@ -1,24 +1,25 @@
 package vis.rhynia.nova.common.recipe.nova
 
-import galaxyspace.core.register.GSItems
 import goodgenerator.items.GGMaterial
 import goodgenerator.util.ItemRefer
 import gregtech.api.enums.ItemList
 import gregtech.api.enums.Materials
 import gregtech.api.enums.MaterialsUEVplus
-import gregtech.api.enums.Mods
 import gregtech.api.enums.Mods.AE2FluidCraft
 import gregtech.api.enums.Mods.AdvancedSolarPanel
 import gregtech.api.enums.Mods.AppliedEnergistics2
 import gregtech.api.enums.Mods.Avaritia
 import gregtech.api.enums.Mods.AvaritiaAddons
 import gregtech.api.enums.Mods.EternalSingularity
+import gregtech.api.enums.Mods.GTNHIntergalactic
 import gregtech.api.enums.Mods.GTPlusPlus
+import gregtech.api.enums.Mods.GalaxySpace
 import gregtech.api.enums.Mods.GraviSuite
 import gregtech.api.enums.Mods.IndustrialCraft2
 import gregtech.api.enums.Mods.NewHorizonsCoreMod
 import gregtech.api.enums.Mods.SuperSolarPanels
 import gregtech.api.enums.Mods.TinkerConstruct
+import gregtech.api.enums.Mods.TinkersGregworks
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTOreDictUnificator
@@ -54,8 +55,9 @@ import vis.rhynia.nova.api.enums.ref.Tier
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.api.util.ItemUtil
+import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
@@ -72,54 +74,57 @@ class IntegratedAssemblyRecipePool : RecipePool() {
   private fun loadMain() {
     // region MISC
     // 光辉玻璃板
-    builder()
-        .itemInputs(Materials.Sunnarium.getPlates(16))
-        .fluidInputs(
-            Materials.Glass.getIngotMolten(72),
-            Materials.Glowstone.getIngotMolten(16),
-            Materials.Uranium.getIngotMolten(16),
-        )
-        .itemOutputs(GTModHandler.getModItem(AdvancedSolarPanel.ID, "asp_crafting_items", 64, 5))
-        .eut(RECIPE_EV)
-        .durSec(20)
-        .addTo(ia)
+    builder(AdvancedSolarPanel)?.also {
+      it.itemInputs(Materials.Sunnarium.getPlates(16))
+          .fluidInputs(
+              Materials.Glass.getIngotMolten(72),
+              Materials.Glowstone.getIngotMolten(16),
+              Materials.Uranium.getIngotMolten(16),
+          )
+          .itemOutputs(AdvancedSolarPanel.getItem("asp_crafting_items", 64, 5))
+          .eut(RECIPE_EV)
+          .durSec(20)
+          .addTo(ia)
+    }
+
     // 无尽箱子
-    builder()
-        .itemInputs(
-            GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 10, 60),
-            ItemList.Quantum_Chest_IV.get(18),
-            GTModHandler.getModItem(Avaritia.ID, "Resource", 36, 0),
-            BasicRef.getSingularity(1))
-        .fluidInputs(
-            Materials.InfinityCatalyst.getIngotMolten(64),
-            Materials.Infinity.getIngotMolten(4 + 4 * 9),
-            Materials.CosmicNeutronium.getIngotMolten(6 * 9),
-        )
-        .itemOutputs(GTModHandler.getModItem(AvaritiaAddons.ID, "InfinityChest", 1, 0))
-        .eut(RECIPE_UHV)
-        .durSec(4)
-        .addTo(ia)
+    builder(AvaritiaAddons)?.also {
+      it.itemInputs(
+              GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 10, 60),
+              ItemList.Quantum_Chest_IV.get(18),
+              GTModHandler.getModItem(Avaritia.ID, "Resource", 36, 0),
+              BasicRef.getSingularity(1))
+          .fluidInputs(
+              Materials.InfinityCatalyst.getIngotMolten(64),
+              Materials.Infinity.getIngotMolten(4 + 4 * 9),
+              Materials.CosmicNeutronium.getIngotMolten(6 * 9),
+          )
+          .itemOutputs(AvaritiaAddons.getItem("InfinityChest", 1, 0))
+          .eut(RECIPE_UHV)
+          .durSec(4)
+          .addTo(ia)
+    }
     // 中子压缩机
-    if (Mods.TinkersGregworks.isModLoaded)
-        builder()
-            .itemInputs(
-                ItemList.Hull_UV.get(1),
-                Tier.UV.getComponent(Tier.Component.ElectricMotor, 4),
-                Tier.UV.getComponent(Tier.Component.ElectricPiston, 8),
-                Tier.UV.getComponent(Tier.Component.ConveyorModule, 8),
-                Tier.UHV.getCircuit(4),
-                GTModHandler.getModItem(Avaritia.ID, "Resource", 8, 1),
-                GTModHandler.getModItem(TinkerConstruct.ID, "heavyPlate", 10, 500),
-                TGregUtils.newItemStack(Materials.BlackPlutonium, PartTypes.LargePlate, 8),
-                GTModHandler.getModItem(TinkerConstruct.ID, "heavyPlate", 6, 315))
-            .fluidInputs(
-                Materials.CosmicNeutronium.getIngotMolten(72),
-                Materials.Neutronium.getIngotMolten(4),
-            )
-            .itemOutputs(GTModHandler.getModItem(Avaritia.ID, "Neutronium_Compressor", 1, 0))
-            .eut(RECIPE_UV)
-            .durSec(4)
-            .addTo(ia)
+    builder(TinkersGregworks, Avaritia)?.also {
+      it.itemInputs(
+              ItemList.Hull_UV.get(1),
+              Tier.UV.getComponent(Tier.Component.ElectricMotor, 4),
+              Tier.UV.getComponent(Tier.Component.ElectricPiston, 8),
+              Tier.UV.getComponent(Tier.Component.ConveyorModule, 8),
+              Tier.UHV.getCircuit(4),
+              Avaritia.getItem("Resource", 8, 1),
+              TinkerConstruct.getItem("heavyPlate", 10, 500),
+              TGregUtils.newItemStack(Materials.BlackPlutonium, PartTypes.LargePlate, 8),
+              TinkerConstruct.getItem("heavyPlate", 6, 315))
+          .fluidInputs(
+              Materials.CosmicNeutronium.getIngotMolten(72),
+              Materials.Neutronium.getIngotMolten(4),
+          )
+          .itemOutputs(Avaritia.getItem("Neutronium_Compressor", 1, 0))
+          .eut(RECIPE_UV)
+          .durSec(4)
+          .addTo(ia)
+    }
     // 传送机
     builder()
         .itemInputs(
@@ -131,23 +136,24 @@ class IntegratedAssemblyRecipePool : RecipePool() {
         .fluidInputs(
             Materials.Titanium.getIngotMolten(5),
             Materials.Aluminium.getIngotMolten(4),
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(200))
-        .itemOutputs(GTModHandler.getModItem(IndustrialCraft2.ID, "blockMachine2", 1, 0))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(200))
+        .itemOutputs(IndustrialCraft2.getItem("blockMachine2", 1, 0))
         .eut(RECIPE_EV)
         .durSec(4)
         .addTo(ia)
     // Gravitation Engine
-    builder()
-        .itemInputs(
-            SuperConductorPart.LuV.getPrefix(OrePrefixes.wireGt16, 4),
-            ItemList.IV_Coil.get(16),
-            GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64),
-            GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64))
-        .fluidInputs(FluidUtil.getFluidStack("supercoolant", 32 * BUCKETS))
-        .itemOutputs(GTModHandler.getModItem(GraviSuite.ID, "itemSimpleItem", 64, 3))
-        .eut(RECIPE_IV)
-        .durSec(30)
-        .addTo(ia)
+    builder(GraviSuite)?.also {
+      it.itemInputs(
+              SuperConductorPart.LuV.getPrefix(OrePrefixes.wireGt16, 4),
+              ItemList.IV_Coil.get(16),
+              GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64),
+              GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64))
+          .fluidInputs(FluidUtil.getFluidStack("supercoolant", 32 * BUCKETS))
+          .itemOutputs(GraviSuite.getItem("itemSimpleItem", 64, 3))
+          .eut(RECIPE_IV)
+          .durSec(30)
+          .addTo(ia)
+    }
     // PreTesseract v1
     builder()
         .itemInputs(NovaItemList.AstriumInfinityGem.get(1), BundleChip.ZPM.getItemStack(1))
@@ -167,9 +173,9 @@ class IntegratedAssemblyRecipePool : RecipePool() {
         .itemInputs(
             ItemList.Tesseract.get(0),
             NovaItemList.AstriumInfinityGem.get(4),
-            GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105))
+            GTPlusPlus.getItem("MU-metaitem.01", 16, 32105))
         .fluidInputs(MaterialsUEVplus.TranscendentMetal.getIngotMolten(256))
-        .itemOutputs(GTUtility.copyAmountUnsafe(256, NovaItemList.PreTesseract.get(1)))
+        .itemOutputs(NovaItemList.PreTesseract.get(1).copyAmountUnsafe(256))
         .eut(RECIPE_UMV)
         .durSec(25)
         .addTo(ia)
@@ -185,7 +191,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             NovaItemList.AstriumInfinityGem.get(16),
         )
         .fluidInputs(
-            NovaMaterial.Astrium.getIngotMolten(32),
+            NovaMaterials.Astrium.getIngotMolten(32),
             Materials.Glass.getIngotMolten(128),
             Materials.Neutronium.getIngotMolten(64))
         .itemOutputs(NovaItemList.LensAstriumMagic.get(1))
@@ -199,7 +205,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             NovaItemList.AstriumInfinityGem.get(32),
         )
         .fluidInputs(
-            NovaMaterial.Astrium.getIngotMolten(128),
+            NovaMaterials.Astrium.getIngotMolten(128),
             Materials.Glass.getIngotMolten(1024),
             Materials.CosmicNeutronium.getIngotMolten(512))
         .itemOutputs(NovaItemList.LensAstriumInfinity.get(1))
@@ -210,10 +216,10 @@ class IntegratedAssemblyRecipePool : RecipePool() {
     builder()
         .itemInputs(
             GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ReinforcedGlassLense", 64, 0),
-            NovaMaterial.Originium.getDust(64),
+            NovaMaterials.Originium.getDust(64),
         )
         .fluidInputs(
-            NovaMaterial.Originium.getIngotMolten(128),
+            NovaMaterials.Originium.getIngotMolten(128),
             Materials.Glass.getIngotMolten(64),
             GGMaterial.orundum.getIngotMolten(64))
         .itemOutputs(NovaItemList.LensOriginium.get(1))
@@ -224,10 +230,10 @@ class IntegratedAssemblyRecipePool : RecipePool() {
     builder()
         .itemInputs(
             GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ReinforcedGlassLense", 64, 0),
-            NovaMaterial.Primoium.getDust(64),
+            NovaMaterials.Primoium.getDust(64),
         )
         .fluidInputs(
-            NovaMaterial.Primoium.getIngotMolten(128),
+            NovaMaterials.Primoium.getIngotMolten(128),
             Materials.Glass.getIngotMolten(64),
             Materials.DraconiumAwakened.getIngotMolten(64))
         .itemOutputs(NovaItemList.LensPrimoium.get(1))
@@ -247,7 +253,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
         .fluidInputs(
             SolderMaterial.SolderingAlloy.getFluidStack(16 * INGOTS),
             Materials.Platinum.getIngotMolten(160),
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(6400))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(6400))
         .itemOutputs(ItemList.Energy_LapotronicOrb.get(16))
         .eut(RECIPE_EV)
         .duration(12 * (25 * SECOND + 12 * 20))
@@ -280,7 +286,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             SolderMaterial.IndaAlloy.getFluidStack(16 * 5 * INGOTS),
             Materials.NaquadahAlloy.getIngotMolten(16 * 16),
             Materials.Platinum.getIngotMolten(16 * 8),
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(16 * 800))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(16 * 800))
         .itemOutputs(ItemList.Energy_LapotronicOrb2.get(16))
         .eut(RECIPE_ZPM)
         .durSec(12 * 50)
@@ -315,7 +321,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 5 * INGOTS),
             Materials.Bedrockium.getIngotMolten(16 * 16),
             MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(16 * 6 * INGOTS),
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(16 * 1000))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(16 * 1000))
         .itemOutputs(ItemList.Energy_Module.get(16))
         .eut(RECIPE_UV)
         .durSec(12 * 50)
@@ -350,7 +356,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 10 * INGOTS),
             Materials.CosmicNeutronium.getIngotMolten(16 * 16),
             MaterialsUEVplus.SpaceTime.getIngotMolten(16 * 6),
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(16 * 2000))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(16 * 2000))
         .itemOutputs(ItemList.Energy_Cluster.get(16))
         .eut(RECIPE_UHV)
         .durSec(12 * 50)
@@ -366,7 +372,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
         .fluidInputs(
             SolderMaterial.IndaAlloy.getFluidStack(16 * 20 * INGOTS),
             Materials.Tritanium.getIngotMolten(16 * 64),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 4 * INGOTS),
+            NovaMaterials.SuperconductorFlux.getLiquid(16 * 4 * INGOTS),
             FluidUtil.getFluidStack("ic2coolant", 16 * 16000))
         .itemOutputs(ItemList.ZPM2.get(16))
         .eut(RECIPE_UV)
@@ -387,7 +393,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             MaterialsUEVplus.WhiteDwarfMatter.getIngotMolten(16 * 4),
             MaterialsUEVplus.BlackDwarfMatter.getIngotMolten(16 * 4),
             MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getIngotMolten(8),
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(16 * 5000))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(16 * 5000))
         .itemOutputs(ItemList.ZPM2.get(16))
         .eut(RECIPE_UEV)
         .durSec(12 * 50)
@@ -405,7 +411,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             SolderMaterial.MutatedLivingAlloy.getFluidStack(16 * 4608),
             Materials.Neutronium.getIngotMolten(16 * 128),
             Materials.Naquadria.getMolten(16 * 9216),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 16 * INGOTS),
+            NovaMaterials.SuperconductorFlux.getLiquid(16 * 16 * INGOTS),
             FluidUtil.getFluidStack("ic2coolant", 16 * 32000))
         .itemOutputs(ItemList.ZPM3.get(16))
         .eut(RECIPE_UHV)
@@ -425,7 +431,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             Materials.InfinityCatalyst.getIngotMolten(16 * 128),
             Materials.Quantium.getMolten(16 * 18432),
             Materials.Naquadria.getMolten(16 * 18432),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 64 * INGOTS),
+            NovaMaterials.SuperconductorFlux.getLiquid(16 * 64 * INGOTS),
             FluidUtil.getFluidStack("ic2coolant", 16 * 64000))
         .itemOutputs(ItemList.ZPM4.get(16))
         .eut(RECIPE_UEV)
@@ -447,7 +453,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(16 * 128 * INGOTS),
             MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(18_432),
             Materials.Quantium.getMolten(16 * 18432),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 128 * INGOTS),
+            NovaMaterials.SuperconductorFlux.getLiquid(16 * 128 * INGOTS),
             FluidUtil.getFluidStack("ic2coolant", 16 * 128000))
         .itemOutputs(ItemList.ZPM5.get(16))
         .eut(RECIPE_UIV)
@@ -469,7 +475,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             MaterialsElements.STANDALONE.DRAGON_METAL.getFluidStack(16 * 128 * INGOTS),
             MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getFluidStack(16 * 36864),
             MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(16 * 36864),
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(16 * 256 * INGOTS),
+            NovaMaterials.SuperconductorFlux.getLiquid(16 * 256 * INGOTS),
             FluidUtil.getFluidStack("ic2coolant", 16 * 256000))
         .itemOutputs(ItemList.ZPM6.get(16))
         .eut(RECIPE_UMV)
@@ -507,7 +513,8 @@ class IntegratedAssemblyRecipePool : RecipePool() {
     // endregion
 
     // region 戴森球
-    if (Mods.GTNHIntergalactic.isModLoaded) {
+    if (GTNHIntergalactic.isModLoaded) {
+      fun dsi(amount: Int, meta: Int) = GalaxySpace.getItem("DysonSwarmItems", amount, meta)
       // 耐高温网 1024
       builder()
           .itemInputs(
@@ -524,7 +531,9 @@ class IntegratedAssemblyRecipePool : RecipePool() {
               MaterialsAlloy.SILICON_CARBIDE.getFluidStack(48 * INGOTS))
           .itemOutputs(
               // Reminder: GSItems will be switched to IGItems in future
-              ItemUtil.setStackSize(ItemUtil.getItemStack(GSItems.DysonSwarmItems, 1, 3), 1024))
+              dsi(1, 3).setSize(1024),
+              // ItemUtil.setStackSize(ItemUtil.getItemStack(GSItems.DysonSwarmItems, 1, 3), 1024)
+              )
           .eut(RECIPE_LuV)
           .durSec(200)
           .addTo(ia)
@@ -532,7 +541,8 @@ class IntegratedAssemblyRecipePool : RecipePool() {
       builder()
           .itemInputs(
               ItemList.Cover_SolarPanel_UV.get(1),
-              ItemUtil.getItemStack(GSItems.DysonSwarmItems, 32, 3),
+              dsi(32, 3),
+              // ItemUtil.getItemStack(GSItems.DysonSwarmItems, 32, 3),
               ItemRefer.Radiation_Protection_Plate.get(4),
               BartPart.IC_Q.getItemStack(1),
               BundleChip.UHV.getItemStack(1),
@@ -540,8 +550,10 @@ class IntegratedAssemblyRecipePool : RecipePool() {
               ItemList.Sensor_UEV.get(4))
           .fluidInputs(SolderMaterial.MutatedLivingAlloy.getFluidStack(256 * INGOTS))
           .itemOutputs(
-              GTUtility.copyAmountUnsafe(
-                  8 * 64, ItemUtil.getItemStack(GSItems.DysonSwarmItems, 1, 0)))
+              dsi(1, 0).setSize(8 * 64),
+              // GTUtility.copyAmountUnsafe(8 * 64, ItemUtil.getItemStack(GSItems.DysonSwarmItems,
+              // 1, 0))
+              )
           .eut(RECIPE_UEV)
           .durSec(5)
           .addTo(ia)
@@ -595,7 +607,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             *Array(8) { GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Trinium, 64) },
             NovaItemList.DenseMicaInsulatorFoil.get(64),
         )
-        .fluidInputs(NovaMaterial.SuperconductorFlux.getFluidOrGas(64 * INGOTS))
+        .fluidInputs(NovaMaterials.SuperconductorFlux.getLiquid(64 * INGOTS))
         .itemOutputs(ItemList.Casing_Coil_Superconductor.get(64))
         .eut(RECIPE_LuV)
         .durSec(12 * 40)
@@ -1149,7 +1161,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
             NovaItemList.PreTesseract.get(8),
             NovaItemList.AstriumInfinityGem.get(1))
         .fluidInputs(
-            NovaMaterial.AstriumMagic.getMolten(8 * INGOTS),
+            NovaMaterials.AstriumMagic.getMolten(8 * INGOTS),
             MaterialsUEVplus.SpaceTime.getIngotMolten(4))
         .itemOutputs(
             // GTCMItemList.ParticleTrapTimeSpaceShield.get(64)

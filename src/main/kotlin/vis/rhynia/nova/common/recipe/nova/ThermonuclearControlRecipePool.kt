@@ -5,7 +5,6 @@ import goodgenerator.items.GGMaterial
 import gregtech.api.enums.Materials
 import gregtech.api.enums.MaterialsUEVplus
 import gregtech.api.enums.Mods
-import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTRecipeBuilder.BUCKETS
 import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility
@@ -19,12 +18,16 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UV
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
+@Suppress("SpellCheckingInspection")
 class ThermonuclearControlRecipePool : RecipePool() {
   private val tc = NovaRecipeMaps.thermonuclearControlRecipes
-  private val esCata = GTModHandler.getModItem(Mods.EternalSingularity.ID, "eternal_singularity", 0)
+  private val esCata =
+      if (Mods.EternalSingularity.isModLoaded)
+          Mods.EternalSingularity.getItem("eternal_singularity", 0)
+      else NovaItemList.TestItem01.get(0)
 
   override fun loadRecipes() {
 
@@ -93,10 +96,10 @@ class ThermonuclearControlRecipePool : RecipePool() {
             getCoreItem("LapotronDust", 64),
             getCoreItem("LapotronDust", 64),
         )
-        .fluidInputs(NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(BUCKETS))
+        .fluidInputs(NovaMaterials.AstralCatalystBaseExcited.getLiquid(BUCKETS))
         .fluidOutputs(
-            NovaMaterial.LapotronEnhancedFluid.getFluidOrGas(8 * BUCKETS),
-            NovaMaterial.AstralResidue.getFluidOrGas(500))
+            NovaMaterials.LapotronEnhancedFluid.getLiquid(8 * BUCKETS),
+            NovaMaterials.AstralResidue.getLiquid(500))
         .eut(RECIPE_UHV)
         .durSec(115)
         .addTo(tc)
@@ -109,11 +112,11 @@ class ThermonuclearControlRecipePool : RecipePool() {
             NovaItemList.LensOriginium.get(0),
             NovaItemList.LensAstriumMagic.get(0))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(32 * BUCKETS),
-            NovaMaterial.SuperconductorFluxRaw.getMolten(72 * INGOTS))
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(32 * BUCKETS),
+            NovaMaterials.SuperconductorFluxRaw.getMolten(72 * INGOTS))
         .fluidOutputs(
-            NovaMaterial.SuperconductorFlux.getFluidOrGas(64 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(16 * BUCKETS))
+            NovaMaterials.SuperconductorFlux.getLiquid(64 * INGOTS),
+            NovaMaterials.AstralResidue.getLiquid(16 * BUCKETS))
         .eut(RECIPE_UEV)
         .durSec(30)
         .addTo(tc)
@@ -205,7 +208,7 @@ class ThermonuclearControlRecipePool : RecipePool() {
             NovaItemList.AstriumInfinityGem.get(16))
         .fluidInputs(
             Materials.DraconiumAwakened.getIngotMolten(1000),
-            NovaMaterial.Astrium.getMolten(12 * BUCKETS))
+            NovaMaterials.Astrium.getMolten(12 * BUCKETS))
         .fluidOutputs(FluidUtil.getFluidStack("molten.dragonblood", 1000 * INGOTS))
         .eut(RECIPE_UEV)
         .durMin(3)
@@ -248,11 +251,11 @@ class ThermonuclearControlRecipePool : RecipePool() {
             NovaItemList.PreTesseract.get(64))
         .fluidInputs(
             Materials.CosmicNeutronium.getIngotMolten(64),
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(4 * BUCKETS))
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(4 * BUCKETS))
         .fluidOutputs(
             MaterialsUEVplus.TranscendentMetal.getIngotMolten(32 * 64),
             MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(16 * 64 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(4 * BUCKETS))
+            NovaMaterials.AstralResidue.getLiquid(4 * BUCKETS))
         .eut(RECIPE_UIV)
         .durSec(30)
         .addTo(tc)
@@ -266,10 +269,9 @@ class ThermonuclearControlRecipePool : RecipePool() {
             NovaItemList.AstriumInfinityGem.get(32))
         .fluidInputs(
             GGMaterial.metastableOganesson.getMolten(16 * INGOTS),
-            NovaMaterial.AstralCatalystReforged.getFluidOrGas(250))
+            NovaMaterials.AstralCatalystReforged.getLiquid(250))
         .fluidOutputs(
-            GGMaterial.shirabon.getMolten(16 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(500))
+            GGMaterial.shirabon.getMolten(16 * INGOTS), NovaMaterials.AstralResidue.getLiquid(500))
         .eut(RECIPE_UMV)
         .durSec(25)
         .addTo(tc)
@@ -286,7 +288,7 @@ class ThermonuclearControlRecipePool : RecipePool() {
             MaterialsAlloy.QUANTUM.getFluidStack(256 * INGOTS))
         .fluidOutputs(
             MaterialsElements.STANDALONE.RHUGNOR.getFluidStack(512 * INGOTS),
-            NovaMaterial.AstralResidue.getFluidOrGas(5000))
+            NovaMaterials.AstralResidue.getLiquid(5000))
         .eut(RECIPE_UIV)
         .durSec(80)
         .addTo(tc)

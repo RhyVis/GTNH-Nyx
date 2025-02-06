@@ -2,6 +2,8 @@ package vis.rhynia.nova.common.loader
 
 import vis.rhynia.nova.Log
 import vis.rhynia.nova.api.interfaces.Loader
+import vis.rhynia.nova.common.material.generation.SimpleMaterialLoader
+import vis.rhynia.nova.common.material.generation.SimpleMaterialRecipeLoader
 import vis.rhynia.nova.common.recipe.RecipePool
 import vis.rhynia.nova.common.recipe.gt.AssemblerRecipePool
 import vis.rhynia.nova.common.recipe.gt.CentrifugeRecipePool
@@ -68,5 +70,15 @@ object RecipeLoader : Loader {
             throw e
           }
         }
+    // Material System
+    Log.info("Loading material related recipes...")
+    SimpleMaterialLoader.materialSet.forEach {
+      try {
+        SimpleMaterialRecipeLoader(it).loadRecipes()
+      } catch (e: Exception) {
+        Log.error("Error occurred on loading material recipe loader at: ${it.internalName}", e)
+        throw e
+      }
+    }
   }
 }

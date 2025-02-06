@@ -5,7 +5,7 @@ import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTRecipeConstants.FUSION_THRESHOLD
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class FusionRecipePool : RecipePool() {
@@ -15,9 +15,9 @@ class FusionRecipePool : RecipePool() {
     // ACR
     builder()
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(500),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(500),
             GGMaterial.orundum.getMolten(288))
-        .fluidOutputs(NovaMaterial.AstralCatalystReforged.getFluidOrGas(125))
+        .fluidOutputs(NovaMaterials.AstralCatalystReforged.getLiquid(125))
         .durSec(2)
         .eut(RECIPE_ZPM)
         .metadata(FUSION_THRESHOLD, 400_000_000)

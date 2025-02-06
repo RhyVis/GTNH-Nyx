@@ -9,6 +9,7 @@ import gregtech.api.enums.Mods.HardcoreEnderExpansion
 import gregtech.api.enums.Mods.NewHorizonsCoreMod
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.util.GTModHandler
+import gregtech.api.util.GTRecipeBuilder.BUCKETS
 import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility.getIntegratedCircuit
 import gtPlusPlus.core.item.ModItems
@@ -29,7 +30,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class AstralForgeRecipePool : RecipePool() {
@@ -79,7 +80,7 @@ class AstralForgeRecipePool : RecipePool() {
         .itemInputs(
             getIntegratedCircuit(12),
             NovaItemList.LensAstriumMagic.get(0),
-            NovaMaterial.Astrium.getDust(16),
+            NovaMaterials.Astrium.getDust(16),
             Materials.Redstone.getDust(64),
         )
         .fluidInputs(Materials.Water.getBucketFluid(256))
@@ -101,6 +102,19 @@ class AstralForgeRecipePool : RecipePool() {
         .eut(RECIPE_IV)
         .durSec(20)
         .addTo(af)
+    // 星辉催化剂
+    builder()
+        .itemInputs(
+            getIntegratedCircuit(12),
+            NovaItemList.LensAstriumMagic.get(0),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.AstralCatalystBase.getDust(16))
+        .itemOutputs(NovaMaterials.AstriumInfinity.getDust(1))
+        .fluidOutputs(NovaMaterials.AstralCatalystBase.getLiquid(48 * BUCKETS))
+        .noOptimize()
+        .eut(RECIPE_UV)
+        .durSec(20)
+        .addTo(af)
 
     // endregion
 
@@ -116,7 +130,7 @@ class AstralForgeRecipePool : RecipePool() {
             ItemStack(Items.blaze_powder, 4, 0),
             *Array(8) { sand },
         )
-        .fluidInputs(Materials.Water.getBucketFluid(1), NovaMaterial.Astrium.getMolten(16))
+        .fluidInputs(Materials.Water.getBucketFluid(1), NovaMaterials.Astrium.getMolten(16))
         .itemOutputs(soulSand)
         .eut(RECIPE_HV)
         .durSec(18)
@@ -130,7 +144,7 @@ class AstralForgeRecipePool : RecipePool() {
             Materials.Carbon.getDust(64),
             Materials.Sulfur.getDust(64),
         )
-        .fluidInputs(Materials.Lava.getBucketFluid(1), NovaMaterial.Astrium.getMolten(16))
+        .fluidInputs(Materials.Lava.getBucketFluid(1), NovaMaterials.Astrium.getMolten(16))
         .itemOutputs(*Array(4) { blazePowder })
         .eut(RECIPE_EV)
         .durSec(18)
@@ -146,9 +160,9 @@ class AstralForgeRecipePool : RecipePool() {
             getIntegratedCircuit(11),
             NovaItemList.LensAstriumMagic.get(0),
             endPowder,
-            NovaMaterial.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
         )
-        .fluidInputs(NovaMaterial.Astrium.getMolten(16))
+        .fluidInputs(NovaMaterials.Astrium.getMolten(16))
         .itemOutputs(*Array(4) { enderPearl })
         .eut(RECIPE_IV)
         .durSec(18)
@@ -159,14 +173,14 @@ class AstralForgeRecipePool : RecipePool() {
         .itemInputs(
             getIntegratedCircuit(11),
             NovaItemList.LensAstriumMagic.get(0),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
             Materials.Mica.getDust(64),
             Materials.Mica.getDust(64),
             Materials.Mica.getDust(64),
             Materials.Mica.getDust(64),
         )
-        .fluidInputs(NovaMaterial.Astrium.getMolten(1000))
+        .fluidInputs(NovaMaterials.Astrium.getMolten(1000))
         .itemOutputs(*Array(12) { micaBasedPulp })
         .eut(RECIPE_LuV)
         .durSec(20)
@@ -190,10 +204,10 @@ class AstralForgeRecipePool : RecipePool() {
             chromaticLens,
             NovaItemList.LensPrimoium.get(0),
             NovaItemList.LensOriginium.get(0),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
         )
         .fluidInputs(Materials.Water.getBucketFluid(512), Materials.UUMatter.getBucketFluid(16))
         .itemOutputs(
@@ -201,8 +215,8 @@ class AstralForgeRecipePool : RecipePool() {
             ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 7, 1),
             ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 18, 1),
             ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 24, 1),
-            NovaMaterial.AstriumMagic.getDust(32),
-            NovaMaterial.AstriumInfinity.getDust(32),
+            NovaMaterials.AstriumMagic.getDust(32),
+            NovaMaterials.AstriumInfinity.getDust(32),
         )
         .outputChances(10, 10, 10, 5, 5000, 1000)
         .fluidOutputs(
@@ -242,8 +256,8 @@ class AstralForgeRecipePool : RecipePool() {
               .itemOutputs(
                   *Array(8) { siDust },
                   *Array(4) { siSgDust },
-                  NovaMaterial.Astrium.getDust(64),
-                  NovaMaterial.Astrium.getDust(64))
+                  NovaMaterials.Astrium.getDust(64),
+                  NovaMaterials.Astrium.getDust(64))
               .outputChances(*IntArray(8) { 10000 }, 7000, 7000, 7000, 7000, 6000, 6000)
               .eut(RECIPE_HV)
               .durSec(40)
@@ -261,8 +275,8 @@ class AstralForgeRecipePool : RecipePool() {
         .itemOutputs(
             *Array(4) { caDust },
             *Array(8) { cDust },
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
         )
         .outputChances(*IntArray(12) { 10000 }, 8000, 8000)
         .eut(RECIPE_HV)
@@ -278,7 +292,7 @@ class AstralForgeRecipePool : RecipePool() {
             *Array(14) { phOxDust })
         .itemOutputs(
             *Array(8) { phDust },
-            *Array(4) { NovaMaterial.Astrium.getDust(64) },
+            *Array(4) { NovaMaterials.Astrium.getDust(64) },
         )
         .outputChances(*IntArray(8) { 10000 }, 8000, 8000, 6000, 6000)
         .eut(RECIPE_HV)
@@ -294,8 +308,8 @@ class AstralForgeRecipePool : RecipePool() {
             *Array(10) { naDust },
             Materials.Sulfur.getDust(64),
             Materials.Sulfur.getDust(64),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64))
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64))
         .outputChances(*IntArray(12) { 10000 }, 8000, 8000)
         .eut(RECIPE_HV)
         .durSec(40)
@@ -310,8 +324,8 @@ class AstralForgeRecipePool : RecipePool() {
             Materials.Samarium.getDust(32),
             Materials.Lanthanum.getDust(16),
             Materials.Cerium.getDust(16),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64))
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64))
         .outputChances(10000, 10000, 9500, 9500, 7500, 7500)
         .noOptimize()
         .eut(RECIPE_HV)
@@ -328,8 +342,8 @@ class AstralForgeRecipePool : RecipePool() {
             Materials.Lanthanum.getDust(16),
             Materials.Europium.getDust(16),
             Materials.Gadolinium.getDust(16),
-            NovaMaterial.Astrium.getDust(64),
-            NovaMaterial.Astrium.getDust(64))
+            NovaMaterials.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64))
         .outputChances(10000, 10000, 9500, 8000, 8000, 7500, 7500)
         .noOptimize()
         .eut(RECIPE_HV)
@@ -588,7 +602,7 @@ class AstralForgeRecipePool : RecipePool() {
         .itemInputs(
             getIntegratedCircuit(4),
             NovaItemList.LensAstriumInfinity.get(0),
-            NovaMaterial.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
             Materials.Glowstone.getDust(64))
         .fluidInputs(Materials.Hydrogen.getGas(48000))
         .itemOutputs(
@@ -604,8 +618,8 @@ class AstralForgeRecipePool : RecipePool() {
         .itemInputs(
             getIntegratedCircuit(4),
             NovaItemList.LensAstriumInfinity.get(0),
-            NovaMaterial.AstriumInfinity.getDust(12),
-            NovaMaterial.Astrium.getDust(32),
+            NovaMaterials.AstriumInfinity.getDust(12),
+            NovaMaterials.Astrium.getDust(32),
             *Array(4) { naqDust })
         .fluidInputs(Materials.NaquadahEnriched.getIngotMolten(32))
         .itemOutputs(
@@ -621,7 +635,7 @@ class AstralForgeRecipePool : RecipePool() {
         .itemInputs(
             getIntegratedCircuit(4),
             NovaItemList.LensAstriumInfinity.get(0),
-            NovaMaterial.Astrium.getDust(60),
+            NovaMaterials.Astrium.getDust(60),
             Materials.Naquadah.getDust(60))
         .fluidInputs(Materials.Helium.getGas(120_000), Materials.Quantium.getIngotMolten(32))
         .itemOutputs(GGMaterial.orundum.getDust(64), GGMaterial.orundum.getDust(64))
@@ -640,9 +654,9 @@ class AstralForgeRecipePool : RecipePool() {
             GGMaterial.orundum.getDust(64),
             GGMaterial.orundum.getDust(64),
             Materials.Naquadah.getDust(60),
-            NovaMaterial.Astrium.getDust(64),
+            NovaMaterials.Astrium.getDust(64),
             Materials.InfinityCatalyst.getDust(16))
-        .itemOutputs(NovaMaterial.Originium.getDust(64), NovaMaterial.Originium.getDust(48))
+        .itemOutputs(NovaMaterials.Originium.getDust(64), NovaMaterials.Originium.getDust(48))
         .eut(RECIPE_UHV)
         .durMin(2)
         .addTo(af)
@@ -664,11 +678,11 @@ class AstralForgeRecipePool : RecipePool() {
           val modifier = 8 * (index + 2)
           builder()
               .itemInputs(getIntegratedCircuit(1), NovaItemList.LensPrimoium.get(0))
-              .itemOutputs(*Array(16) { NovaMaterial.Astrium.getDust(modifier) })
+              .itemOutputs(*Array(16) { NovaMaterials.Astrium.getDust(modifier) })
               .fluidInputs(material.getBucketFluid(16))
               .fluidOutputs(
-                  NovaMaterial.Astrium.getMolten(12 * modifier * INGOTS),
-                  NovaMaterial.AstriumInfinity.getMolten(4 * modifier * INGOTS),
+                  NovaMaterials.Astrium.getMolten(12 * modifier * INGOTS),
+                  NovaMaterials.AstriumInfinity.getMolten(4 * modifier * INGOTS),
               )
               .eut(RECIPE_UV)
               .durSec(16)

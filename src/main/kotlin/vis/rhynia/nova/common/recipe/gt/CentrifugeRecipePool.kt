@@ -9,7 +9,7 @@ import gtPlusPlus.core.material.MaterialsElements
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_HV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_LV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_MV
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 class CentrifugeRecipePool : RecipePool() {
@@ -47,7 +47,7 @@ class CentrifugeRecipePool : RecipePool() {
             Materials.Ledox.getDust(2),
             WerkstoffLoader.Roquesit.getDust(1),
             Materials.Firestone.getDust(1),
-            NovaMaterial.Astrium.getDust(1))
+            NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 10000, 10000, 10000, 5000)
         .eut(RECIPE_HV)
         .durSec(8)
@@ -56,7 +56,7 @@ class CentrifugeRecipePool : RecipePool() {
     // 山铜
     builder()
         .itemInputs(Materials.Orichalcum.getDust(12))
-        .itemOutputs(Materials.Copper.getDust(10), NovaMaterial.Astrium.getDust(4))
+        .itemOutputs(Materials.Copper.getDust(10), NovaMaterials.Astrium.getDust(4))
         .outputChances(10000, 5000)
         .eut(RECIPE_HV)
         .durSec(4)
@@ -68,7 +68,7 @@ class CentrifugeRecipePool : RecipePool() {
         .itemOutputs(
             Materials.Pyrotheum.getDust(1),
             WerkstoffLoader.PTMetallicPowder.getDust(2),
-            NovaMaterial.Astrium.getDust(2))
+            NovaMaterials.Astrium.getDust(2))
         .outputChances(10000, 10000, 5000)
         .eut(RECIPE_MV)
         .durSec(16)
@@ -82,7 +82,7 @@ class CentrifugeRecipePool : RecipePool() {
             Materials.Thaumium.getDust(3),
             Materials.AstralSilver.getDust(1),
             WerkstoffLoader.PTMetallicPowder.getDust(2),
-            NovaMaterial.Astrium.getDust(2))
+            NovaMaterials.Astrium.getDust(2))
         .outputChances(10000, 10000, 10000, 10000, 5000)
         .eut(RECIPE_MV)
         .durSec(16)
@@ -125,7 +125,7 @@ class CentrifugeRecipePool : RecipePool() {
             Materials.ElectrumFlux.getDust(8),
             Materials.Thaumium.getDust(2),
             Materials.MysteriousCrystal.getDust(2),
-            NovaMaterial.Astrium.getDust(4))
+            NovaMaterials.Astrium.getDust(4))
         .outputChances(10000, 10000, 6500, 5000)
         .eut(RECIPE_HV)
         .durSec(8)
@@ -138,7 +138,7 @@ class CentrifugeRecipePool : RecipePool() {
             Materials.Silver.getDust(3),
             Materials.ShadowIron.getDust(3),
             Materials.ElectrumFlux.getDust(2),
-            NovaMaterial.Astrium.getDust(1))
+            NovaMaterials.Astrium.getDust(1))
         .outputChances(10000, 10000, 6500, 5000)
         .eut(RECIPE_HV)
         .durSec(4)

@@ -12,7 +12,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UV
 import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_ZPM
 import vis.rhynia.nova.api.util.FluidUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
-import vis.rhynia.nova.common.material.NovaMaterial
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
 @Suppress("SpellCheckingInspection")
@@ -23,7 +23,7 @@ class LaserEngraverRecipePool : RecipePool() {
     // region 光刻
     // 异氙
     builder()
-        .itemInputs(NovaMaterial.AstriumMagic.getDust(1), NovaItemList.LensAstriumMagic.get(0))
+        .itemInputs(NovaMaterials.AstriumMagic.getDust(1), NovaItemList.LensAstriumMagic.get(0))
         .fluidInputs(Materials.UUMatter.getFluid(16), WerkstoffLoader.Xenon.getFluidOrGas(1000))
         .fluidOutputs(FluidUtil.getFluidStack("xenoxene", 500))
         .eut(RECIPE_UHV)
@@ -39,7 +39,7 @@ class LaserEngraverRecipePool : RecipePool() {
         .itemOutputs(
             Mods.GregTech.getItem("gt.metaitem.01", 4, 32668),
         )
-        .fluidInputs(NovaMaterial.Astrium.getMolten(50))
+        .fluidInputs(NovaMaterials.Astrium.getMolten(50))
         .eut(RECIPE_UHV)
         .durSec(45)
         .addTo(laser)
@@ -49,9 +49,9 @@ class LaserEngraverRecipePool : RecipePool() {
         .itemInputs(getCoreItem("RawPicoWafer"), NovaItemList.LensAstriumInfinity.get(0))
         .itemOutputs(getCoreItem("PicoWafer", 4))
         .fluidInputs(
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(100),
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(100),
             Materials.Neutronium.getIngotMolten(2))
-        .fluidOutputs(NovaMaterial.AstralResidue.getFluidOrGas(50))
+        .fluidOutputs(NovaMaterials.AstralResidue.getLiquid(50))
         .eut(RECIPE_UEV)
         .durSec(15)
         .addTo(laser)
@@ -61,7 +61,7 @@ class LaserEngraverRecipePool : RecipePool() {
         .itemInputs(ItemList.Circuit_Silicon_Wafer6.get(1), NovaItemList.LensAstriumMagic.get(0))
         .itemOutputs(ItemList.Circuit_Wafer_Bioware.get(4))
         .fluidInputs(
-            Materials.BioMediumSterilized.getFluid(4000), NovaMaterial.Astrium.getIngotMolten(10))
+            Materials.BioMediumSterilized.getFluid(4000), NovaMaterials.Astrium.getIngotMolten(10))
         .fluidOutputs(Materials.UUMatter.getFluid(500))
         .eut(RECIPE_UHV)
         .durSec(40)
@@ -77,17 +77,17 @@ class LaserEngraverRecipePool : RecipePool() {
         .itemOutputs(ItemList.Circuit_Silicon_Wafer7.get(4L))
         .fluidInputs(
             WerkstoffLoader.Oganesson.getFluidOrGas(2500),
-            NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(800))
+            NovaMaterials.AstralCatalystBaseExcited.getLiquid(800))
         .fluidOutputs(
-            NovaMaterial.AstralResidue.getFluidOrGas(400), NovaMaterial.Astrium.getMolten(500))
+            NovaMaterials.AstralResidue.getLiquid(400), NovaMaterials.Astrium.getMolten(500))
         .eut(RECIPE_UEV)
         .durSec(20)
         .addTo(laser)
 
     // 增殖星辉
     builder()
-        .itemInputs(NovaMaterial.Astrium.getDust(64), NovaItemList.LensAstriumInfinity.get(0))
-        .fluidOutputs(NovaMaterial.Astrium.getBucketMolten(96))
+        .itemInputs(NovaMaterials.Astrium.getDust(64), NovaItemList.LensAstriumInfinity.get(0))
+        .fluidOutputs(NovaMaterials.Astrium.getBucketMolten(96))
         .eut(RECIPE_UV)
         .durSec(60)
         .addTo(laser)
@@ -95,8 +95,8 @@ class LaserEngraverRecipePool : RecipePool() {
     // 激活催化剂
     builder()
         .itemInputs(NovaItemList.LensAstriumInfinity.get(0))
-        .fluidInputs(NovaMaterial.AstralCatalystBase.getFluidOrGas(1000))
-        .fluidOutputs(NovaMaterial.AstralCatalystBaseExcited.getFluidOrGas(1000))
+        .fluidInputs(NovaMaterials.AstralCatalystBase.getLiquid(1000))
+        .fluidOutputs(NovaMaterials.AstralCatalystBaseExcited.getLiquid(1000))
         .eut(RECIPE_ZPM)
         .durSec(45)
         .addTo(laser)

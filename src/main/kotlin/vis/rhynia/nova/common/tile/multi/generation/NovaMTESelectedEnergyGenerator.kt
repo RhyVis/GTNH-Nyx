@@ -130,11 +130,8 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
   // endregion
 
   // region Structure
-  override val sCasingBlock: Block
-    get() = GregTechAPI.sBlockCasings1
-
-  override val sCasingBlockMeta: Int
-    get() = 12
+  override val sCasingBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings1 to 12
 
   override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF

@@ -31,7 +31,7 @@ class NovaMetaBlockItem(block: Block) : ItemBlock(block) {
     get() = field_150939_a as AbstractMetaBlock
 
   override fun getUnlocalizedName(stack: ItemStack?): String =
-      "${metaBlock.unlocalizedName}.${stack?.itemDamage ?: 0}"
+      "${unlocalizedName}.${stack?.itemDamage ?: 0}"
 
   override fun getMetadata(meta: Int): Int =
       metaBlock.isValidVariant(meta).let { if (it) meta else 0 }
