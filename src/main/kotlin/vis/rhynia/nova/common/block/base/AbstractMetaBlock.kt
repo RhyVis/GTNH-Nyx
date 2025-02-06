@@ -32,7 +32,7 @@ abstract class AbstractMetaBlock(
 
   protected var iconMap: Map<Int, IIcon> = mutableMapOf()
   protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
-  protected val metaSet: MutableSet<Int> = mutableSetOf(16)
+  protected val metaSet: MutableSet<Int> = mutableSetOf()
 
   override fun getUnlocalizedName(): String = super.getUnlocalizedName()
 

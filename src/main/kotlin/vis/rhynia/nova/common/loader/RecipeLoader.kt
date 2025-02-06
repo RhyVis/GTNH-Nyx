@@ -74,6 +74,7 @@ object RecipeLoader : Loader {
     Log.info("Loading material related recipes...")
     SimpleMaterialLoader.materialSet.forEach {
       try {
+        if (it.skipRecipeGeneration) return@forEach
         SimpleMaterialRecipeLoader(it).loadRecipes()
       } catch (e: Exception) {
         Log.error("Error occurred on loading material recipe loader at: ${it.internalName}", e)

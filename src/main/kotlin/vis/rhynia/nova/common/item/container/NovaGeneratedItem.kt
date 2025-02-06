@@ -13,7 +13,6 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.EnumChatFormatting.BOLD
 import net.minecraft.util.EnumChatFormatting.GRAY
 import net.minecraft.util.EnumChatFormatting.RESET
@@ -29,7 +28,7 @@ class NovaGeneratedItem(val orePrefix: OrePrefixes) :
   init {
     creativeTab = NovaTab.TabItem
     materialSet.forEach {
-      if (!it.isOrePrefixAllowed(orePrefix)) return@forEach
+      if (!it.isTypeValid(orePrefix)) return@forEach
       GTOreDictUnificator.registerOre(
           orePrefix.name + it.internalName, ItemStack(this, 1, it.id.toInt()))
     }
@@ -63,7 +62,8 @@ class NovaGeneratedItem(val orePrefix: OrePrefixes) :
             OrePrefixes.stickLong to "长%material棒",
             OrePrefixes.spring to "%material弹簧",
             OrePrefixes.springSmall to "小型%material弹簧",
-            OrePrefixes.gear to "%material齿轮",
+            OrePrefixes.gearGt to "%material齿轮",
+            OrePrefixes.gearGtSmall to "小型%material齿轮",
             OrePrefixes.ring to "%material环",
             OrePrefixes.rotor to "%material转子",
             OrePrefixes.screw to "%material螺丝",
@@ -127,7 +127,7 @@ class NovaGeneratedItem(val orePrefix: OrePrefixes) :
       aList: MutableList<ItemStack>
   ) {
     materialSet.forEach { material ->
-      if (!material.isOrePrefixAllowed(orePrefix)) return@forEach
+      if (!material.isTypeValid(orePrefix)) return@forEach
       aList.add(ItemStack(this, 1, material.id.toInt()))
     }
   }

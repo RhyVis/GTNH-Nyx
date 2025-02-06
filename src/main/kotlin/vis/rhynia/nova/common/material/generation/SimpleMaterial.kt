@@ -100,6 +100,12 @@ class SimpleMaterial(
   var mass: Int = 64
 
   /**
+   * Whether to skip the recipe generation, if the custom recipe is provided, it should be set to
+   * true
+   */
+  var skipRecipeGeneration: Boolean = false
+
+  /**
    * Add the tooltip to the material, commonly used as elemental representation, e.g. "Fe" for iron.
    *
    * Should be called before `addTooltip`
@@ -117,11 +123,25 @@ class SimpleMaterial(
   // region OrePrefix
   private val allowedOrePrefixes: MutableSet<OrePrefixes> = mutableSetOf()
 
-  fun isOrePrefixAllowed(prefix: OrePrefixes) =
-      allowedOrePrefixes.contains(prefix) && prefix !in disabledOrePrefixes
+  /**
+   * Check if the ore prefix is valid for the material
+   *
+   * @param prefix The ore prefix
+   */
+  fun isTypeValid(prefix: OrePrefixes) =
+      prefix in allowedOrePrefixes && prefix !in disabledOrePrefixes
 
+  /**
+   * Check if the ore prefixes are valid for the material
+   *
+   * @param prefixes The ore prefixes
+   */
+  fun isTypeValid(vararg prefixes: OrePrefixes) = prefixes.all(::isTypeValid)
+
+  /** Get all the valid ore prefixes for the material */
   fun getFinalOrePrefixes() = allowedOrePrefixes.filter { it !in disabledOrePrefixes }
 
+  /** Manually add the ore prefix to the material */
   fun addOrePrefix(prefix: OrePrefixes) {
     allowedOrePrefixes.add(prefix)
   }
@@ -138,7 +158,7 @@ class SimpleMaterial(
    */
   fun get(orePrefix: OrePrefixes, amount: Int = 1): ItemStack =
       SimpleMaterialLoader.itemMap[orePrefix]?.let {
-        if (!isOrePrefixAllowed(orePrefix)) return@let null
+        if (!isTypeValid(orePrefix)) return@let null
         ItemStack(it, amount, id.toInt())
       }
           ?: let {
@@ -297,7 +317,8 @@ class SimpleMaterial(
               OrePrefixes.spring,
               OrePrefixes.springSmall,
               OrePrefixes.bolt,
-              OrePrefixes.gear,
+              OrePrefixes.gearGt,
+              OrePrefixes.gearGtSmall,
               OrePrefixes.ring,
               OrePrefixes.rotor,
               OrePrefixes.screw,
