@@ -39,12 +39,12 @@ import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.enums.ref.Tier
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
-import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.api.util.StackUtil.copyAmountUnsafe
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
 
+@Suppress("SpellCheckingInspection")
 class MicroAssemblyRecipePool : RecipePool() {
   private val ma = NovaRecipeMaps.microAssemblyRecipes
   private val partOpticalMultiply = 4
@@ -58,103 +58,81 @@ class MicroAssemblyRecipePool : RecipePool() {
   private fun loadMain() {
     // region 光学元件
     // 二极管
-    builder()
-        .itemInputs(
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, Materials.Tritanium, 1),
-                partOpticalMultiply * 32 * 4),
-            ItemUtil.setStackSize(MaterialsAlloy.LAFIUM.getFoil(1), partOpticalMultiply * 32 * 2),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(
-                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
-                partOpticalMultiply * 32))
-        .fluidInputs(
-            FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
-        .itemOutputs(
-            ItemUtil.setStackSize(
-                ItemList.Circuit_Parts_DiodeXSMD.get(1), partOpticalMultiply * 32 * 64))
-        .eut(RECIPE_ZPM)
-        .durSec(partOpticalMultiply * 32 * 5)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              GTOreDictUnificator.get(OrePrefixes.foil, Materials.Tritanium, 1)
+                  .ofSize(partOpticalMultiply * 32 * 4),
+              MaterialsAlloy.LAFIUM.getFoil(1).ofSize(partOpticalMultiply * 32 * 2),
+              GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1)
+                  .ofSize(partOpticalMultiply * 32))
+          .fluidInputs(
+              FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
+              SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+          .eut(RECIPE_ZPM)
+          .durSec(partOpticalMultiply * 32 * 5)
+    }
     // 电阻
-    builder()
-        .itemInputs(
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, Materials.Naquadria, 1),
-                partOpticalMultiply * 32 * 4),
-            ItemUtil.setStackSize(
-                MaterialsAlloy.PIKYONIUM.getFoil(1), partOpticalMultiply * 32 * 2),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(
-                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
-                partOpticalMultiply * 32))
-        .fluidInputs(
-            FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
-        .itemOutputs(
-            ItemUtil.setStackSize(
-                ItemList.Circuit_Parts_ResistorXSMD.get(1), partOpticalMultiply * 32 * 32))
-        .eut(RECIPE_ZPM)
-        .durSec(partOpticalMultiply * 32 * 5)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              GTOreDictUnificator.get(OrePrefixes.foil, Materials.Naquadria, 1)
+                  .ofSize(partOpticalMultiply * 32 * 4),
+              MaterialsAlloy.PIKYONIUM.getFoil(1).ofSize(partOpticalMultiply * 32 * 2),
+              GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1)
+                  .ofSize(partOpticalMultiply * 32))
+          .fluidInputs(
+              FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
+              SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+          .itemOutputs(
+              ItemList.Circuit_Parts_ResistorXSMD.get(1).ofSize(partOpticalMultiply * 32 * 32))
+          .eut(RECIPE_ZPM)
+          .durSec(partOpticalMultiply * 32 * 5)
+    }
     // 晶体管
-    builder()
-        .itemInputs(
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, Materials.BlackPlutonium, 1),
-                partOpticalMultiply * 32 * 4),
-            ItemUtil.setStackSize(
-                MaterialsAlloy.TRINIUM_REINFORCED_STEEL.getFoil(1), partOpticalMultiply * 32 * 2),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(
-                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
-                partOpticalMultiply * 32))
-        .fluidInputs(
-            FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
-        .itemOutputs(
-            ItemUtil.setStackSize(
-                ItemList.Circuit_Parts_TransistorXSMD.get(1), partOpticalMultiply * 32 * 32))
-        .eut(RECIPE_ZPM)
-        .durSec(partOpticalMultiply * 32 * 5)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              GTOreDictUnificator.get(OrePrefixes.foil, Materials.BlackPlutonium, 1)
+                  .ofSize(partOpticalMultiply * 32 * 4),
+              MaterialsAlloy.TRINIUM_REINFORCED_STEEL.getFoil(1)
+                  .ofSize(partOpticalMultiply * 32 * 2),
+              GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1)
+                  .ofSize(partOpticalMultiply * 32))
+          .fluidInputs(
+              FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
+              SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+          .itemOutputs(
+              ItemList.Circuit_Parts_TransistorXSMD.get(1).ofSize(partOpticalMultiply * 32 * 32))
+          .eut(RECIPE_ZPM)
+          .durSec(partOpticalMultiply * 32 * 5)
+    }
     // 电容
-    builder()
-        .itemInputs(
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(OrePrefixes.foil, Materials.Draconium, 1),
-                partOpticalMultiply * 32 * 4),
-            ItemUtil.setStackSize(MaterialsAlloy.CINOBITE.getFoil(1), partOpticalMultiply * 32 * 2),
-            ItemUtil.setStackSize(
-                GTOreDictUnificator.get(
-                    OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1),
-                partOpticalMultiply * 32))
-        .fluidInputs(
-            FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
-        .itemOutputs(
-            ItemUtil.setStackSize(
-                ItemList.Circuit_Parts_CapacitorXSMD.get(1), partOpticalMultiply * 32 * 32))
-        .eut(RECIPE_ZPM)
-        .durSec(partOpticalMultiply * 32 * 5)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              GTOreDictUnificator.get(OrePrefixes.foil, Materials.Draconium, 1)
+                  .ofSize(partOpticalMultiply * 32 * 4),
+              MaterialsAlloy.CINOBITE.getFoil(1).ofSize(partOpticalMultiply * 32 * 2),
+              GTOreDictUnificator.get(OrePrefixes.foil, SuperConductorPart.ZPM.getMaterial(true), 1)
+                  .ofSize(partOpticalMultiply * 32))
+          .fluidInputs(
+              FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
+              SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+          .itemOutputs(
+              ItemList.Circuit_Parts_CapacitorXSMD.get(1).ofSize(partOpticalMultiply * 32 * 32))
+          .eut(RECIPE_ZPM)
+          .durSec(partOpticalMultiply * 32 * 5)
+    }
     // 电感
-    builder()
-        .itemInputs(
-            ItemUtil.setStackSize(
-                GGMaterial.hikarium.get(OrePrefixes.foil, 1), partOpticalMultiply * 32 * 4),
-            ItemUtil.setStackSize(
-                GGMaterial.artheriumSn.get(OrePrefixes.foil, 1), partOpticalMultiply * 32))
-        .fluidInputs(
-            FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
-            SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
-        .itemOutputs(
-            ItemUtil.setStackSize(
-                ItemList.Circuit_Parts_InductorXSMD.get(1), partOpticalMultiply * 32 * 32))
-        .eut(RECIPE_ZPM)
-        .durSec(partOpticalMultiply * 32 * 5)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              GGMaterial.hikarium.get(OrePrefixes.foil, 1).ofSize(partOpticalMultiply * 32 * 4),
+              GGMaterial.artheriumSn.get(OrePrefixes.foil, 1).ofSize(partOpticalMultiply * 32))
+          .fluidInputs(
+              FluidUtil.getFluidStack("xenoxene", partOpticalMultiply * 32 * INGOTS),
+              SuperConductorPart.LuV.getMolten(partOpticalMultiply * 16 * INGOTS))
+          .itemOutputs(
+              ItemList.Circuit_Parts_InductorXSMD.get(1).ofSize(partOpticalMultiply * 32 * 32))
+          .eut(RECIPE_ZPM)
+          .durSec(partOpticalMultiply * 32 * 5)
+    }
     // endregion
 
     // region MISC
@@ -364,7 +342,7 @@ class MicroAssemblyRecipePool : RecipePool() {
         .itemInputs(
             BartPart.EliteBoard.getItemStack(1),
             // getCoreItem("EngravedGoldChip").copyAmountUnsafe(16 * 16),
-            Materials.Gold.getPlates(1).setSize(16 * 20),
+            Materials.Gold.getPlates(1).ofSize(16 * 20),
             BartPart.ASOC.getItemStack(8),
             BartPart.NOR.getItemStack(32))
         .fluidInputs(
@@ -429,7 +407,7 @@ class MicroAssemblyRecipePool : RecipePool() {
         .itemInputs(
             ItemRefer.HiC_T4.get(8),
             // getCoreItem("EngravedManyullynCrystalChip", 64),
-            getCoreItem("ManyullynCrystal").setSize(64 + 32),
+            getCoreItem("ManyullynCrystal").ofSize(64 + 32),
             ItemList.Circuit_Chip_BioCPU.get(1))
         .fluidInputs(
             GGMaterial.titaniumBetaC.getMolten(4 * 1728),
@@ -503,43 +481,39 @@ class MicroAssemblyRecipePool : RecipePool() {
         .durSec(4)
         .addTo(ma)
     // Spacial 2
-    builder()
-        .itemInputs(
-            GTModHandler.getModItem(
-                NewHorizonsCoreMod.ID, "item.EngineeringProcessorSpatialPulsatingCore", 64),
-            ItemUtil.setStackSize(
-                GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 64),
-                4 * 64),
-            ItemUtil.setStackSize(Materials.Redstone.getPlates(64), 4 * 64),
-            ItemUtil.setStackSize(Materials.NetherQuartz.getPlates(64), 4 * 64),
-            ItemStack(Items.ender_pearl, 64))
-        .fluidInputs(
-            SolderMaterial.IndaAlloy.getFluidStack(4 * INGOTS),
-        )
-        .itemOutputs(
-            GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 4, 33))
-        .eut(RECIPE_LuV)
-        .durSec(4)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              GTModHandler.getModItem(
+                  NewHorizonsCoreMod.ID, "item.EngineeringProcessorSpatialPulsatingCore", 64),
+              GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 64)
+                  .ofSize(4 * 64),
+              Materials.Redstone.getPlates(64).ofSize(4 * 64),
+              Materials.NetherQuartz.getPlates(64).ofSize(4 * 64),
+              ItemStack(Items.ender_pearl, 64))
+          .fluidInputs(
+              SolderMaterial.IndaAlloy.getFluidStack(4 * INGOTS),
+          )
+          .itemOutputs(
+              GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 4, 33))
+          .eut(RECIPE_LuV)
+          .durSec(4)
+    }
     // Spacial 3
-    builder()
-        .itemInputs(
-            GTModHandler.getModItem(
-                    NewHorizonsCoreMod.ID, "item.EngineeringProcessorSpatialPulsatingCore", 1)
-                .setSize(256),
-            GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 1)
-                .setSize(16 * 64),
-            Materials.Redstone.getPlates(1).setSize(16 * 64),
-            Materials.NetherQuartz.getPlates(1).setSize(16 * 64),
-            ItemStack(Items.ender_eye, 64))
-        .fluidInputs(
-            SolderMaterial.MutatedLivingAlloy.getFluidStack(4 * INGOTS),
-        )
-        .itemOutputs(
-            GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 34))
-        .eut(RECIPE_UV)
-        .durSec(4)
-        .addTo(ma)
+    altBuilder(ma) {
+      it.itemInputs(
+              NewHorizonsCoreMod.getItem("item.EngineeringProcessorSpatialPulsatingCore", 1)
+                  .ofSize(256),
+              NewHorizonsCoreMod.getItem("item.ChargedCertusQuartzPlate", 1).ofSize(16 * 64),
+              Materials.Redstone.getPlates(1).ofSize(16 * 64),
+              Materials.NetherQuartz.getPlates(1).ofSize(16 * 64),
+              ItemStack(Items.ender_eye, 64))
+          .fluidInputs(
+              SolderMaterial.MutatedLivingAlloy.getFluidStack(4 * INGOTS),
+          )
+          .itemOutputs(AppliedEnergistics2.getItem("item.ItemMultiMaterial", 1, 34))
+          .eut(RECIPE_UV)
+          .durSec(4)
+    }
     // endregion
 
     // region EOHC

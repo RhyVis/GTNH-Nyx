@@ -17,6 +17,7 @@ object NovaMaterials : Loader {
 
   val Null =
       SimpleMaterial(0, "null", "空", shortArrayOf(250, 250, 250, 255)).also {
+        it.skipRecipeGeneration = true
         it.textureSet = TextureSet.SET_NONE
         it.protons = 999
         it.mass = 999

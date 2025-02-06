@@ -514,7 +514,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
 
     // region 戴森球
     if (GTNHIntergalactic.isModLoaded) {
-      fun dsi(amount: Int, meta: Int) = GalaxySpace.getItem("DysonSwarmItems", amount, meta)
+      fun dsi(amount: Int, meta: Int) = GalaxySpace.getItem("item.DysonSwarmItems", amount, meta)
       // 耐高温网 1024
       builder()
           .itemInputs(
@@ -531,7 +531,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
               MaterialsAlloy.SILICON_CARBIDE.getFluidStack(48 * INGOTS))
           .itemOutputs(
               // Reminder: GSItems will be switched to IGItems in future
-              dsi(1, 3).setSize(1024),
+              dsi(1, 3).ofSize(1024),
               // ItemUtil.setStackSize(ItemUtil.getItemStack(GSItems.DysonSwarmItems, 1, 3), 1024)
               )
           .eut(RECIPE_LuV)
@@ -550,7 +550,7 @@ class IntegratedAssemblyRecipePool : RecipePool() {
               ItemList.Sensor_UEV.get(4))
           .fluidInputs(SolderMaterial.MutatedLivingAlloy.getFluidStack(256 * INGOTS))
           .itemOutputs(
-              dsi(1, 0).setSize(8 * 64),
+              dsi(1, 0).ofSize(8 * 64),
               // GTUtility.copyAmountUnsafe(8 * 64, ItemUtil.getItemStack(GSItems.DysonSwarmItems,
               // 1, 0))
               )

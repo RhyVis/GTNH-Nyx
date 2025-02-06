@@ -19,6 +19,7 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.INGOT
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.loader.container.NovaWirelessHatchList
 
+/** Enum class for tiered components and materials. */
 @Suppress("unused", "SpellCheckingInspection")
 enum class Tier(private val material: Materials) {
   ULV(Materials.ULV),
@@ -37,6 +38,7 @@ enum class Tier(private val material: Materials) {
   UXV(Materials.UXV),
   MAX(Materials.MAX);
 
+  /** Enum class for tiered components. */
   enum class Component(private val enumNamePrefix: String) {
     ElectricMotor("Electric_Motor"),
     ElectricPiston("Electric_Piston"),
@@ -191,23 +193,21 @@ enum class Tier(private val material: Materials) {
         Hatch.WirelessLaser -> getLaserWireless(1, amount)
       }
 
-  fun getDynamoHatch(amount: Int): ItemStack {
-    return when (this) {
-      MAX -> fail("MAX dynamo hatch")
-      else ->
-          ItemList.valueOf("Hatch_Dynamo_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
+  fun getDynamoHatch(amount: Int): ItemStack =
+      when (this) {
+        MAX -> fail("MAX dynamo hatch")
+        else ->
+            ItemList.valueOf("Hatch_Dynamo_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
 
-  fun getEnergyHatch(amount: Int): ItemStack {
-    return when (this) {
-      MAX -> fail("MAX energy hatch")
-      else ->
-          ItemList.valueOf("Hatch_Energy_$this")
-              .get(amount.toLong(), NovaItemList.TestItem01.get(1))
-    }
-  }
+  fun getEnergyHatch(amount: Int): ItemStack =
+      when (this) {
+        MAX -> fail("MAX energy hatch")
+        else ->
+            ItemList.valueOf("Hatch_Energy_$this")
+                .get(amount.toLong(), NovaItemList.TestItem01.get(1))
+      }
 
   fun getEnergyHatch4A(amount: Int): ItemStack =
       when (this) {

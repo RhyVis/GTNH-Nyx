@@ -350,6 +350,7 @@ class SimpleMaterialRecipeLoader(private val mat: SimpleMaterial) : RecipePool()
   }
 
   private fun loadMiscRecipes() {
+    if (!mat.flagMisc) return
     val volMultiply = 30
 
     // Bolt

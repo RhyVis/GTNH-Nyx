@@ -1,12 +1,9 @@
 package vis.rhynia.nova.common.tile.hatch
 
-import gregtech.api.enums.Textures
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.metatileentity.MetaTileEntity
-import gregtech.api.objects.GTRenderedTexture
 import gtPlusPlus.core.util.minecraft.FluidUtils
-import net.minecraft.world.World
 import net.minecraftforge.fluids.Fluid
 import vis.rhynia.nova.common.tile.base.NovaMTEHatchFluidGenerator
 
@@ -30,41 +27,9 @@ class NovaMTEHatchOil : NovaMTEHatchFluidGenerator {
     return NovaMTEHatchOil(this.mName, this.mTier.toInt(), this.mDescriptionArray, this.mTextures)
   }
 
-  override fun getCustomTooltip(): Array<String?> {
-    val aTooltip = arrayOfNulls<String>(4)
-    aTooltip[0] = "地下的油泉，就在你家门口!"
-    aTooltip[1] = "每5秒填充至最大容量."
-    aTooltip[2] = "别让美国人知道了."
-    return aTooltip
-  }
+  override val customTooltip: Array<String>
+    get() = arrayOf("地下的油泉，就在你家门口!", "每5秒填充至最大容量.", "别让美国人知道了.")
 
-  override fun getFluidToGenerate(): Fluid? {
-    return FluidUtils.getFluidStack("liquid_medium_oil", 1).getFluid()
-  }
-
-  override fun getAmountOfFluidToGenerate(): Int {
-    return 2000000000
-  }
-
-  override fun getMaxTickTime(): Int {
-    return 100
-  }
-
-  override fun getCapacity(): Int {
-    return 2000000000
-  }
-
-  override fun doesHatchMeetConditionsToGenerate(): Boolean {
-    return true
-  }
-
-  override fun generateParticles(aWorld: World?, name: String?) {}
-
-  override fun getTexturesActive(aBaseTexture: ITexture?): Array<ITexture?> {
-    return arrayOf<ITexture?>(aBaseTexture, GTRenderedTexture(Textures.BlockIcons.OVERLAY_FUSION1))
-  }
-
-  override fun getTexturesInactive(aBaseTexture: ITexture?): Array<ITexture?> {
-    return arrayOf<ITexture?>(aBaseTexture, GTRenderedTexture(Textures.BlockIcons.OVERLAY_FUSION1))
-  }
+  override val fluidToGenerate: Fluid
+    get() = FluidUtils.getFluidStack("liquid_medium_oil", 1).getFluid()
 }

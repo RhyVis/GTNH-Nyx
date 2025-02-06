@@ -1,19 +1,17 @@
 package vis.rhynia.nova.common.tile.base
 
 import gregtech.api.enums.Textures
-import gregtech.api.interfaces.IIconContainer
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.metatileentity.MetaTileEntity
 import gregtech.api.metatileentity.implementations.MTEHatchInput
-import gregtech.api.objects.GTRenderedTexture
 import gregtech.api.objects.XSTR
+import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gtPlusPlus.core.util.minecraft.FluidUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
@@ -21,16 +19,11 @@ import vis.rhynia.nova.api.enums.NovaValues
 
 @Suppress("unused", "SpellCheckingInspection")
 abstract class NovaMTEHatchFluidGenerator : MTEHatchInput {
-  companion object {
-    protected val floatGen: XSTR = XSTR()
-  }
 
-  var mProgresstime: Int = 0
-  var mMaxProgresstime: Int = 0
   constructor(
       aID: Int,
-      aName: String?,
-      aNameRegional: String?,
+      aName: String,
+      aNameRegional: String,
       aTier: Int
   ) : super(aID, aName, aNameRegional, aTier)
 
@@ -41,76 +34,62 @@ abstract class NovaMTEHatchFluidGenerator : MTEHatchInput {
       aTextures: Array<Array<Array<ITexture>>>
   ) : super(aName, aTier, aDescription, aTextures)
 
-  abstract fun getCustomTooltip(): Array<String?>
-
-  abstract fun getFluidToGenerate(): Fluid?
-
-  abstract fun getAmountOfFluidToGenerate(): Int
-
-  abstract fun getMaxTickTime(): Int
-
-  @Synchronized
-  override fun getDescription(): Array<String?> {
-    mDescriptionArray[1] = "容量: " + GTUtility.formatNumbers(getCapacity().toLong()) + "L"
-    val hatchTierString: Array<String> =
-        arrayOf<String>("仓室等级: ${GTUtility.getColoredTierNameFromTier(mTier)}")
-
-    val aCustomTips = getCustomTooltip()
-    val desc = arrayOfNulls<String>(mDescriptionArray.size + aCustomTips.size + 2)
-    System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.size)
-    System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.size, 1)
-    System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.size + 1, aCustomTips.size)
-    desc[mDescriptionArray.size + aCustomTips.size] = NovaValues.CommonStrings.AddByNova
-    return desc
-  }
-
-  @Suppress("DEPRECATION")
-  override fun getTexturesActive(aBaseTexture: ITexture?): Array<ITexture?> {
-    return arrayOf<ITexture?>(
-        aBaseTexture, GTRenderedTexture(Textures.BlockIcons.OVERLAY_MUFFLER as IIconContainer))
-  }
-
-  @Suppress("DEPRECATION")
-  override fun getTexturesInactive(aBaseTexture: ITexture?): Array<ITexture?> {
-    return arrayOf<ITexture?>(
-        aBaseTexture, GTRenderedTexture(Textures.BlockIcons.OVERLAY_MUFFLER as IIconContainer))
-  }
-
-  override fun isSimpleMachine(): Boolean {
-    return true
-  }
-
-  override fun isFacingValid(facing: ForgeDirection?): Boolean {
-    return true
-  }
-
-  override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean {
-    return true
-  }
-
-  override fun isValidSlot(aIndex: Int): Boolean {
-    return false
-  }
-
   abstract override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity?
+
+  var mProgresstime: Int = 0
+  var mMaxProgresstime: Int = 0
+
+  companion object {
+    protected val floatGen: XSTR = XSTR()
+  }
+
+  abstract val customTooltip: Array<String>
+
+  abstract val fluidToGenerate: Fluid
+
+  override fun getDescription(): Array<String> {
+    val capacityString = "容量: ${GTUtility.formatNumbers(capacity.toLong())}L"
+    val hatchTierString = "仓室等级: ${GTUtility.getColoredTierNameFromTier(mTier)}"
+    return buildList {
+          addAll(mDescriptionArray)
+          add(capacityString)
+          add(hatchTierString)
+          addAll(customTooltip)
+          add(NovaValues.CommonStrings.AddByNova)
+        }
+        .filterNotNull()
+        .toTypedArray()
+  }
+
+  override fun getTexturesActive(aBaseTexture: ITexture?): Array<ITexture?> {
+    return arrayOf(aBaseTexture, TextureFactory.of(Textures.BlockIcons.OVERLAY_FUSION1))
+  }
+
+  override fun getTexturesInactive(aBaseTexture: ITexture?): Array<ITexture?> {
+    return arrayOf(aBaseTexture, TextureFactory.of(Textures.BlockIcons.OVERLAY_FUSION1))
+  }
+
+  override fun isSimpleMachine(): Boolean = true
+
+  override fun isFacingValid(facing: ForgeDirection?): Boolean = true
+
+  override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean = true
+
+  override fun isValidSlot(aIndex: Int): Boolean = false
 
   override fun allowPullStack(
       aBaseMetaTileEntity: IGregTechTileEntity?,
       aIndex: Int,
       side: ForgeDirection?,
       aStack: ItemStack?
-  ): Boolean {
-    return false
-  }
+  ): Boolean = false
 
   override fun allowPutStack(
       aBaseMetaTileEntity: IGregTechTileEntity?,
       aIndex: Int,
       side: ForgeDirection?,
       aStack: ItemStack?
-  ): Boolean {
-    return false
-  }
+  ): Boolean = false
 
   override fun onPostTick(aBaseMetaTileEntity: IGregTechTileEntity, aTick: Long) {
     super.onPostTick(aBaseMetaTileEntity, aTick)
@@ -120,7 +99,7 @@ abstract class NovaMTEHatchFluidGenerator : MTEHatchInput {
       mMaxProgresstime = 0
     } else {
       aBaseMetaTileEntity.isActive = true
-      mMaxProgresstime = getMaxTickTime()
+      mMaxProgresstime = 100
       if (++mProgresstime >= mMaxProgresstime) {
         if (this.canTankBeFilled()) {
           addFluidToHatch(aTick)
@@ -130,67 +109,35 @@ abstract class NovaMTEHatchFluidGenerator : MTEHatchInput {
     }
   }
 
-  override fun getProgresstime(): Int {
-    return mProgresstime
-  }
+  override fun getProgresstime(): Int = mProgresstime
 
-  override fun maxProgresstime(): Int {
-    return mMaxProgresstime
-  }
+  override fun maxProgresstime(): Int = mMaxProgresstime
 
   override fun increaseProgress(aProgress: Int): Int {
     mProgresstime += aProgress
     return mMaxProgresstime - mProgresstime
   }
 
-  abstract fun generateParticles(aWorld: World?, name: String?)
+  override fun getTankPressure(): Int = 100
 
-  override fun getTankPressure(): Int {
-    return 100
-  }
+  override fun getCapacity(): Int = 2_000_000_000
 
-  override fun getCapacity(): Int {
-    return 2000000000
-  }
+  override fun canTankBeEmptied(): Boolean = true
 
-  override fun canTankBeEmptied(): Boolean {
-    return true
-  }
+  override fun canTankBeFilled(): Boolean = true
 
-  abstract fun doesHatchMeetConditionsToGenerate(): Boolean
+  override fun doesEmptyContainers(): Boolean = false
 
-  fun addFluidToHatch(aTick: Long): Boolean {
-    if (!doesHatchMeetConditionsToGenerate()) {
-      return false
-    }
-    val aFillAmount =
-        this.fill(
-            FluidUtils.getFluidStack(getFluidToGenerate(), getAmountOfFluidToGenerate()), true)
-    if (aFillAmount > 0) {
-      if (this.baseMetaTileEntity.isClientSide) {
-        generateParticles(this.baseMetaTileEntity.world, "cloud")
-      }
-    }
-    return aFillAmount > 0
-  }
+  override fun doesFillContainers(): Boolean = true
 
-  override fun canTankBeFilled(): Boolean {
-    return true
-  }
-
-  override fun doesEmptyContainers(): Boolean {
-    return false
-  }
-
-  override fun doesFillContainers(): Boolean {
-    return true
-  }
+  fun addFluidToHatch(aTick: Long): Boolean =
+      this.fill(FluidUtils.getFluidStack(fluidToGenerate, getCapacity()), true) > 0
 
   override fun fill(aFluid: FluidStack?, doFill: Boolean): Int {
     if (aFluid == null ||
         aFluid.getFluid().id <= 0 ||
         aFluid.amount <= 0 ||
-        aFluid.getFluid() !== getFluidToGenerate() ||
+        aFluid.getFluid() != fluidToGenerate ||
         !canTankBeFilled()) {
       return 0
     }
@@ -225,17 +172,11 @@ abstract class NovaMTEHatchFluidGenerator : MTEHatchInput {
     return space
   }
 
-  override fun canFill(aSide: ForgeDirection?, aFluid: Fluid?): Boolean {
-    return false
-  }
+  override fun canFill(aSide: ForgeDirection?, aFluid: Fluid?): Boolean = false
 
-  override fun fill(arg0: ForgeDirection?, arg1: FluidStack?, arg2: Boolean): Int {
-    return 0
-  }
+  override fun fill(arg0: ForgeDirection?, arg1: FluidStack?, arg2: Boolean): Int = 0
 
-  override fun fill_default(aSide: ForgeDirection?, aFluid: FluidStack?, doFill: Boolean): Int {
-    return 0
-  }
+  override fun fill_default(aSide: ForgeDirection?, aFluid: FluidStack?, doFill: Boolean): Int = 0
 
   override fun saveNBTData(aNBT: NBTTagCompound) {
     aNBT.setInteger("mProgresstime", mProgresstime)

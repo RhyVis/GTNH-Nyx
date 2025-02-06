@@ -5,6 +5,7 @@ import gregtech.api.gui.modularui.GTUITextures
 import gregtech.api.recipe.RecipeMap
 import gregtech.api.recipe.RecipeMapBackend
 import gregtech.api.recipe.RecipeMapBuilder
+import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.recipe.frontend.AstralForgeRecipeFrontend
 import vis.rhynia.nova.api.recipe.frontend.IntegratedAssemblyFrontend
 import vis.rhynia.nova.api.recipe.frontend.MicroAssemblyFrontend
@@ -18,7 +19,7 @@ object NovaRecipeMaps {
       RecipeMapBuilder.of("nova.recipe.astralForge")
           .maxIO(16, 16, 8, 8)
           .minInputs(1, 0)
-          // .logo(VA_Values.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .logoSize(17, 17)
           .logoPos(79, 52)
           .neiTransferRect(80, 30, 15, 15)
@@ -37,7 +38,7 @@ object NovaRecipeMaps {
       RecipeMapBuilder.of("nova.recipe.thermonuclearControl")
           .maxIO(4, 0, 2, 4)
           .minInputs(1, 0)
-          // .logo(VA_Values.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .logoSize(17, 17)
           .logoPos(79, 52)
           .progressBar(GTUITextures.PROGRESSBAR_MIXER, ProgressBar.Direction.CIRCULAR_CW)
@@ -50,12 +51,12 @@ object NovaRecipeMaps {
           .frontend(::ThermonuclearControlFrontend)
           .build()
 
-  /** Transcendent Reactor (TR) Recipe */
-  val transcendentReactorRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("nova.recipe.transcendentReactor")
+  /** Transcendent Reactor (TR) Recipe (w/ stack 64+) */
+  val transcendentReactorRecipes: RecipeMap<NovaRecipeMapBackend> =
+      RecipeMapBuilder.of("nova.recipe.transcendentReactor", ::NovaRecipeMapBackend)
           .maxIO(16, 6, 8, 6)
           .minInputs(1, 0)
-          // .logo(NovaValues.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .logoSize(17, 17)
           .logoPos(84, 80)
           .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -68,12 +69,12 @@ object NovaRecipeMaps {
           .frontend(::TranscendentReactorFrontend)
           .build()
 
-  /** Integrated Assembly (IA) Recipe */
-  val integratedAssemblyRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("nova.recipe.integratedAssembly")
+  /** Integrated Assembly (IA) Recipe (w/ stack 64+) */
+  val integratedAssemblyRecipes: RecipeMap<NovaRecipeMapBackend> =
+      RecipeMapBuilder.of("nova.recipe.integratedAssembly", ::NovaRecipeMapBackend)
           .maxIO(12, 1, 8, 0)
           .minInputs(1, 0)
-          // .logo(VA_Values.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .logoSize(17, 17)
           .logoPos(79 + 18 * 4, 8 + 18 * 4)
           .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -87,12 +88,12 @@ object NovaRecipeMaps {
           .frontend(::IntegratedAssemblyFrontend)
           .build()
 
-  /** Micro Assembly (MA) Recipe */
-  val microAssemblyRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("nova.recipe.microAssembly")
+  /** Micro Assembly (MA) Recipe (w/ stack 64+) */
+  val microAssemblyRecipes: RecipeMap<NovaRecipeMapBackend> =
+      RecipeMapBuilder.of("nova.recipe.microAssembly", ::NovaRecipeMapBackend)
           .maxIO(8, 1, 8, 0)
           .minInputs(1, 0)
-          // .logo(VA_Values.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .logoSize(17, 17)
           .logoPos(79 + 18 * 4, 8 + 18 * 3)
           .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -106,24 +107,24 @@ object NovaRecipeMaps {
           .frontend(::MicroAssemblyFrontend)
           .build()
 
-  /** Superconducting Forming (SF) Recipe (Allow 64+ Stack) */
-  val superconductingFormingRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("nova.recipe.superconductingForming")
+  /** Superconducting Forming (SF) Recipe (w/ stack 64+) */
+  val superconductingFormingRecipes: RecipeMap<NovaRecipeMapBackend> =
+      RecipeMapBuilder.of("nova.recipe.superconductingForming", ::NovaRecipeMapBackend)
           .maxIO(6, 2, 3, 2)
           .minInputs(1, 0)
-          // .logo(VA_Values.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .disableOptimize()
           .neiHandlerInfo {
             it.setDisplayStack(NovaItemList.AssemblyMatrix.get(1)).setMaxRecipesPerPage(2)
           }
           .build()
 
-  /** Quark Refactoring (QR) Recipe (Allow 64+ Stack) */
-  val quarkRefactoringRecipes: RecipeMap<RecipeMapBackend> =
-      RecipeMapBuilder.of("nova.recipe.quarkRefactoring")
+  /** Quark Refactoring (QR) Recipe (w/ stack 64+) */
+  val quarkRefactoringRecipes: RecipeMap<NovaRecipeMapBackend> =
+      RecipeMapBuilder.of("nova.recipe.quarkRefactoring", ::NovaRecipeMapBackend)
           .maxIO(6, 2, 3, 2)
           .minInputs(1, 0)
-          // .logo(VA_Values.TextureSets.VA_LOGO_32)
+          .logo(NovaValues.TextureSets.NovaLogo32)
           .disableOptimize()
           .neiHandlerInfo {
             it.setDisplayStack(NovaItemList.DenseEndpoint.get(1)).setMaxRecipesPerPage(2)

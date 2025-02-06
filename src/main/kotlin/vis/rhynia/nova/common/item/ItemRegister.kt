@@ -31,7 +31,7 @@ object ItemRegister {
       NovaItemList.TestItem01
         .register(it, 0, arrayOf(
           "我相信它没什么用",
-          "如果在配方需求物中发现了它，代表又一个Null被按下不表"
+          "如果在配方中发现了它，代表又一个Null被按下不表"
         ))
       NovaItemList.LapotronMatrix
         .register(it, 1, "兰波顿密度达到了极致")

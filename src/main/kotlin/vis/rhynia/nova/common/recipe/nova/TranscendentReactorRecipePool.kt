@@ -21,7 +21,6 @@ import vis.rhynia.nova.api.enums.NovaValues.RecipeValues.RECIPE_UXV
 import vis.rhynia.nova.api.enums.ref.SuperConductorPart
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.FluidUtil
-import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.common.loader.container.NovaItemList
 import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.recipe.RecipePool
@@ -43,139 +42,134 @@ class TranscendentReactorRecipePool : RecipePool() {
 
     // region 催化剂
     // DTCC
-    builder()
-        .itemInputs(
-            GTUtility.getIntegratedCircuit(1),
-            ItemUtil.setStackSize(Materials.Iron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Calcium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Niobium.getDust(1), recipeModifier))
-        .fluidInputs(
-            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA / 4),
-            Materials.Helium.getGas(ingotModifier))
-        .fluidOutputs(
-            MaterialsUEVplus.ExcitedDTCC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterials.AstralResidue.getLiquid(catalystACA / 8))
-        .specialValue(HeatingCoilLevel.UEV.heat.toInt())
-        .noOptimize()
-        .eut(RECIPE_UEV)
-        .durSec(10)
-        .addTo(tr)
+    altBuilder(tr) {
+      it.itemInputs(
+              GTUtility.getIntegratedCircuit(1),
+              Materials.Iron.getDust(1).ofSize(recipeModifier),
+              Materials.Calcium.getDust(1).ofSize(recipeModifier),
+              Materials.Niobium.getDust(1).ofSize(recipeModifier))
+          .fluidInputs(
+              NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA / 4),
+              Materials.Helium.getGas(ingotModifier))
+          .fluidOutputs(
+              MaterialsUEVplus.ExcitedDTCC.getFluid((recipeModifier * outputModifier).toLong()),
+              NovaMaterials.AstralResidue.getLiquid(catalystACA / 8))
+          .specialValue(HeatingCoilLevel.UEV.heat.toInt())
+          .eut(RECIPE_UEV)
+          .durSec(10)
+    }
 
     // DTPC
-    builder()
-        .itemInputs(
-            GTUtility.getIntegratedCircuit(2),
-            ItemUtil.setStackSize(Materials.Iron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Calcium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Niobium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Nickel.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Boron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Sulfur.getDust(1), recipeModifier))
-        .fluidInputs(
-            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA / 2),
-            Materials.Helium.getGas(ingotModifier),
-            Materials.Radon.getGas(ingotModifier))
-        .fluidOutputs(
-            MaterialsUEVplus.ExcitedDTPC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterials.AstralResidue.getLiquid(catalystACA / 4))
-        .specialValue(HeatingCoilLevel.UIV.heat.toInt())
-        .noOptimize()
-        .eut(RECIPE_UIV)
-        .durSec(10)
-        .addTo(tr)
+    altBuilder(tr) {
+      it.itemInputs(
+              GTUtility.getIntegratedCircuit(2),
+              Materials.Iron.getDust(1).ofSize(recipeModifier),
+              Materials.Calcium.getDust(1).ofSize(recipeModifier),
+              Materials.Niobium.getDust(1).ofSize(recipeModifier),
+              Materials.Nickel.getDust(1).ofSize(recipeModifier),
+              Materials.Boron.getDust(1).ofSize(recipeModifier),
+              Materials.Sulfur.getDust(1).ofSize(recipeModifier))
+          .fluidInputs(
+              NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA / 2),
+              Materials.Helium.getGas(ingotModifier),
+              Materials.Radon.getGas(ingotModifier))
+          .fluidOutputs(
+              MaterialsUEVplus.ExcitedDTPC.getFluid((recipeModifier * outputModifier).toLong()),
+              NovaMaterials.AstralResidue.getLiquid(catalystACA / 4))
+          .specialValue(HeatingCoilLevel.UIV.heat.toInt())
+          .eut(RECIPE_UIV)
+          .durSec(10)
+    }
 
     // DTRC
-    builder()
-        .itemInputs(
-            GTUtility.getIntegratedCircuit(3),
-            ItemUtil.setStackSize(Materials.Iron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Calcium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Niobium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Nickel.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Boron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Sulfur.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Zinc.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Silver.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Titanium.getDust(1), recipeModifier))
-        .fluidInputs(
-            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA),
-            Materials.Helium.getGas(ingotModifier),
-            Materials.Radon.getGas(ingotModifier),
-            Materials.Nitrogen.getGas(ingotModifier))
-        .fluidOutputs(
-            MaterialsUEVplus.ExcitedDTRC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterials.AstralResidue.getLiquid(catalystACA / 2))
-        .specialValue(HeatingCoilLevel.UMV.heat.toInt())
-        .noOptimize()
-        .eut(RECIPE_UMV)
-        .durSec(10)
-        .addTo(tr)
+    altBuilder(tr) {
+      it.itemInputs(
+              GTUtility.getIntegratedCircuit(3),
+              Materials.Iron.getDust(1).ofSize(recipeModifier),
+              Materials.Calcium.getDust(1).ofSize(recipeModifier),
+              Materials.Niobium.getDust(1).ofSize(recipeModifier),
+              Materials.Nickel.getDust(1).ofSize(recipeModifier),
+              Materials.Boron.getDust(1).ofSize(recipeModifier),
+              Materials.Sulfur.getDust(1).ofSize(recipeModifier),
+              Materials.Zinc.getDust(1).ofSize(recipeModifier),
+              Materials.Silver.getDust(1).ofSize(recipeModifier),
+              Materials.Titanium.getDust(1).ofSize(recipeModifier))
+          .fluidInputs(
+              NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA),
+              Materials.Helium.getGas(ingotModifier),
+              Materials.Radon.getGas(ingotModifier),
+              Materials.Nitrogen.getGas(ingotModifier))
+          .fluidOutputs(
+              MaterialsUEVplus.ExcitedDTRC.getFluid((recipeModifier * outputModifier).toLong()),
+              NovaMaterials.AstralResidue.getLiquid(catalystACA / 2))
+          .specialValue(HeatingCoilLevel.UMV.heat.toInt())
+          .eut(RECIPE_UMV)
+          .durSec(10)
+    }
 
     // DTEC
-    builder()
-        .itemInputs(
-            GTUtility.getIntegratedCircuit(4),
-            ItemUtil.setStackSize(Materials.Iron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Calcium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Niobium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Nickel.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Boron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Sulfur.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Zinc.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Silver.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Titanium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Americium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Bismuth.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Tin.getDust(1), recipeModifier))
-        .fluidInputs(
-            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA * 2),
-            Materials.Helium.getGas(ingotModifier),
-            Materials.Radon.getGas(ingotModifier),
-            Materials.Nitrogen.getGas(ingotModifier),
-            Materials.Oxygen.getGas(ingotModifier))
-        .fluidOutputs(
-            MaterialsUEVplus.ExcitedDTEC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterials.AstralResidue.getLiquid(catalystACA))
-        .specialValue(HeatingCoilLevel.UXV.heat.toInt())
-        .noOptimize()
-        .eut(RECIPE_UXV)
-        .durSec(10)
-        .addTo(tr)
+    altBuilder(tr) {
+      it.itemInputs(
+              GTUtility.getIntegratedCircuit(4),
+              Materials.Iron.getDust(1).ofSize(recipeModifier),
+              Materials.Calcium.getDust(1).ofSize(recipeModifier),
+              Materials.Niobium.getDust(1).ofSize(recipeModifier),
+              Materials.Nickel.getDust(1).ofSize(recipeModifier),
+              Materials.Boron.getDust(1).ofSize(recipeModifier),
+              Materials.Sulfur.getDust(1).ofSize(recipeModifier),
+              Materials.Zinc.getDust(1).ofSize(recipeModifier),
+              Materials.Silver.getDust(1).ofSize(recipeModifier),
+              Materials.Titanium.getDust(1).ofSize(recipeModifier),
+              Materials.Americium.getDust(1).ofSize(recipeModifier),
+              Materials.Bismuth.getDust(1).ofSize(recipeModifier),
+              Materials.Tin.getDust(1).ofSize(recipeModifier))
+          .fluidInputs(
+              NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA * 2),
+              Materials.Helium.getGas(ingotModifier),
+              Materials.Radon.getGas(ingotModifier),
+              Materials.Nitrogen.getGas(ingotModifier),
+              Materials.Oxygen.getGas(ingotModifier))
+          .fluidOutputs(
+              MaterialsUEVplus.ExcitedDTEC.getFluid((recipeModifier * outputModifier).toLong()),
+              NovaMaterials.AstralResidue.getLiquid(catalystACA))
+          .specialValue(HeatingCoilLevel.UXV.heat.toInt())
+          .eut(RECIPE_UXV)
+          .durSec(10)
+    }
 
     // DTSC
-    builder()
-        .itemInputs(
-            GTUtility.getIntegratedCircuit(5),
-            ItemUtil.setStackSize(Materials.Iron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Calcium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Niobium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Nickel.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Boron.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Sulfur.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Zinc.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Silver.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Titanium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Americium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Bismuth.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Tin.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Lead.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Thorium.getDust(1), recipeModifier),
-            ItemUtil.setStackSize(Materials.Plutonium241.getDust(1), recipeModifier))
-        .fluidInputs(
-            NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA * 4),
-            Materials.Helium.getGas(ingotModifier),
-            Materials.Radon.getGas(ingotModifier),
-            Materials.Nitrogen.getGas(ingotModifier),
-            Materials.Oxygen.getGas(ingotModifier),
-            MaterialsUEVplus.RawStarMatter.getFluid(recipeModifier * 100L))
-        .fluidOutputs(
-            MaterialsUEVplus.ExcitedDTSC.getFluid((recipeModifier * outputModifier).toLong()),
-            NovaMaterials.AstralResidue.getLiquid(catalystACA * 2))
-        .specialValue(HeatingCoilLevel.MAX.heat.toInt())
-        .noOptimize()
-        .eut(RECIPE_MAX)
-        .durSec(10)
-        .addTo(tr)
+    altBuilder(tr) {
+      it.itemInputs(
+              GTUtility.getIntegratedCircuit(5),
+              Materials.Iron.getDust(1).ofSize(recipeModifier),
+              Materials.Calcium.getDust(1).ofSize(recipeModifier),
+              Materials.Niobium.getDust(1).ofSize(recipeModifier),
+              Materials.Nickel.getDust(1).ofSize(recipeModifier),
+              Materials.Boron.getDust(1).ofSize(recipeModifier),
+              Materials.Sulfur.getDust(1).ofSize(recipeModifier),
+              Materials.Zinc.getDust(1).ofSize(recipeModifier),
+              Materials.Silver.getDust(1).ofSize(recipeModifier),
+              Materials.Titanium.getDust(1).ofSize(recipeModifier),
+              Materials.Americium.getDust(1).ofSize(recipeModifier),
+              Materials.Bismuth.getDust(1).ofSize(recipeModifier),
+              Materials.Tin.getDust(1).ofSize(recipeModifier),
+              Materials.Lead.getDust(1).ofSize(recipeModifier),
+              Materials.Thorium.getDust(1).ofSize(recipeModifier),
+              Materials.Plutonium241.getDust(1).ofSize(recipeModifier))
+          .fluidInputs(
+              NovaMaterials.AstralCatalystBaseExcited.getLiquid(catalystACA * 4),
+              Materials.Helium.getGas(ingotModifier),
+              Materials.Radon.getGas(ingotModifier),
+              Materials.Nitrogen.getGas(ingotModifier),
+              Materials.Oxygen.getGas(ingotModifier),
+              MaterialsUEVplus.RawStarMatter.getFluid(recipeModifier * 100L))
+          .fluidOutputs(
+              MaterialsUEVplus.ExcitedDTSC.getFluid((recipeModifier * outputModifier).toLong()),
+              NovaMaterials.AstralResidue.getLiquid(catalystACA * 2))
+          .specialValue(HeatingCoilLevel.MAX.heat.toInt())
+          .eut(RECIPE_MAX)
+          .durSec(10)
+    }
   }
 
   private fun loadMisc() {

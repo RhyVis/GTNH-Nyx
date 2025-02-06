@@ -46,6 +46,12 @@ interface MetaVariant {
    */
   fun isValidVariant(meta: Int): Boolean = getVariantIds().contains(meta)
 
+  /**
+   * Register the icons of all variants.
+   *
+   * @param register the icon register
+   * @param iconFunc the function to get the icon name of given meta
+   */
   fun MetaVariant.registerVariantIcon(register: IIconRegister, iconFunc: (Int) -> String) =
       this.getVariantIds().associate { it to register.registerIcon(iconFunc(it)) }
 }

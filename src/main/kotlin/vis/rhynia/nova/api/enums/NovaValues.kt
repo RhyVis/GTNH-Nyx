@@ -40,6 +40,7 @@ object NovaValues {
   }
 
   object TextureSets {
+    // TODO: Re-draw this icon
     val NovaLogo32: UITexture = UITexture.fullImage("nova", "gui/picture/va_logo_32_t")
   }
 
