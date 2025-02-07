@@ -28,7 +28,11 @@ class NovaMTEDenseEndpoint : NovaMTECubeBase<NovaMTEDenseEndpoint> {
   }
 
   // region Process
-  private var pRecipeMode: Byte = 0
+  private val pRecipeMode =
+      ModeContainer.of(
+          BartWorksRecipeMaps.electricImplosionCompressorRecipes,
+          RecipeMaps.nanoForgeRecipes,
+          NovaRecipeMaps.quarkRefactoringRecipes)
 
   override fun onScrewdriverRightClick(
       side: ForgeDirection?,
@@ -38,28 +42,16 @@ class NovaMTEDenseEndpoint : NovaMTECubeBase<NovaMTEDenseEndpoint> {
       aZ: Float
   ) {
     if (baseMetaTileEntity.isServerSide) {
-      this.pRecipeMode = ((this.pRecipeMode + 1) % 3).toByte()
+      pRecipeMode.next()
       GTUtility.sendChatToPlayer(
           aPlayer,
-          StatCollector.translateToLocal("nova.DenseEndpoint.pRecipeMode." + this.pRecipeMode))
+          StatCollector.translateToLocal("nova.DenseEndpoint.pRecipeMode.${pRecipeMode.index}"))
     }
   }
 
-  override fun getRecipeMap(): RecipeMap<*>? {
-    return when (pRecipeMode.toInt()) {
-      0 -> BartWorksRecipeMaps.electricImplosionCompressorRecipes
-      1 -> RecipeMaps.nanoForgeRecipes
-      2 -> NovaRecipeMaps.quarkRefactoringRecipes
-      else -> RecipeMaps.assemblerRecipes
-    }
-  }
+  override fun getRecipeMap(): RecipeMap<*>? = pRecipeMode.current
 
-  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>?> {
-    return listOf<RecipeMap<*>?>(
-        BartWorksRecipeMaps.electricImplosionCompressorRecipes,
-        RecipeMaps.nanoForgeRecipes,
-        NovaRecipeMaps.quarkRefactoringRecipes)
-  }
+  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>?> = pRecipeMode.all
 
   override fun getRecipeCatalystPriority(): Int = -10
 
@@ -77,7 +69,7 @@ class NovaMTEDenseEndpoint : NovaMTECubeBase<NovaMTEDenseEndpoint> {
     }
 
   override fun setProcessingLogicPower(logic: ProcessingLogic) {
-    if (pRecipeMode == 1.toByte()) {
+    if (pRecipeMode.index == 1) {
       // Nano Forge use full EU import
       logic.setAvailableVoltage(maxInputEu)
       logic.setAvailableAmperage(1)
@@ -113,13 +105,13 @@ class NovaMTEDenseEndpoint : NovaMTECubeBase<NovaMTEDenseEndpoint> {
           .toolTipFinisher(NovaValues.CommonStrings.NovaNuclear)
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.setByte("pRecipeMode", pRecipeMode)
     super.saveNBTData(aNBT)
+    pRecipeMode.saveNBTData(aNBT ?: throw NullPointerException("NBT Tag Missing"), "pRecipeMode")
   }
 
   override fun loadNBTData(aNBT: NBTTagCompound?) {
-    pRecipeMode = aNBT?.getByte("pRecipeMode") ?: 0
     super.loadNBTData(aNBT)
+    pRecipeMode.loadNBTData(aNBT ?: throw NullPointerException("NBT Tag Missing"), "pRecipeMode")
   }
   // endregion
 }

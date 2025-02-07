@@ -65,6 +65,6 @@ nova.pItemProcess.1=Item Mode
 nova.gui.desc.import_energy=Energy Level
 
 GT5U.gui.text.importing_energy=§bImporting Energy
-GT5U.gui.text.no_core_set=§7No Core Set
+GT5U.gui.text.no_selected_energy_core_set=§7No Core Set
 GT5U.gui.text.no_mode_set=No IC found for mode setting
 GT5U.gui.text.no_recipe_map_set=No available RecipeMap

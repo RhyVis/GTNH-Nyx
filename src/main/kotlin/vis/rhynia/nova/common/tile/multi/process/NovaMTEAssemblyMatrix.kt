@@ -15,7 +15,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.multitileentity.multiblock.casing.Glasses.chainAllGlasses
 import gregtech.api.recipe.RecipeMap
-import gregtech.api.recipe.RecipeMaps
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
@@ -48,17 +47,20 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
     private const val D_OFFSET = 0
   }
 
-  // region Processing Logic
-  private var mRecipeMode: Byte = 0 // 0-sAssemblyMatrixRecipes,1-sMicroAssemblyRecipes,2-SC recipes
+  private val pRecipeMode =
+      ModeContainer.of(
+          NovaRecipeMaps.integratedAssemblyRecipes,
+          NovaRecipeMaps.microAssemblyRecipes,
+          NovaRecipeMaps.superconductingFormingRecipes)
   private var pModifier = 1
 
   override fun createProcessingLogic(): ProcessingLogic {
     return object : ProcessingLogic() {
       override fun process(): CheckRecipeResult {
         pModifier = 1
+
         var perfectOC = false
-        val stack = controllerSlot
-        if (stack != null) {
+        controllerSlot?.let { stack ->
           if (ItemUtil.isAstralInfinityGem(stack)) {
             pModifier = stack.stackSize
           } else if (ItemUtil.isAstralInfinityComplex(stack)) {
@@ -66,6 +68,7 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
             perfectOC = true
           }
         }
+
         setMaxParallel(rMaxParallel)
         setSpeedBonus(rDurationModifier)
         setOverclock(if (perfectOC) 2.0 else 1.0, 2.0)
@@ -76,7 +79,7 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
 
   override val rMaxParallel: Int
     get() =
-        when (mRecipeMode.toInt()) {
+        when (pRecipeMode.index) {
           0 -> 4096 * pModifier
           1 -> 1024 * pModifier
           2 -> 2048 * pModifier
@@ -86,13 +89,7 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
   override val rDurationModifier: Double
     get() = 0.95.pow(GTUtility.getTier(this.maxInputVoltage).toDouble())
 
-  override fun getRecipeMap(): RecipeMap<*> =
-      when (mRecipeMode.toInt()) {
-        0 -> NovaRecipeMaps.integratedAssemblyRecipes
-        1 -> NovaRecipeMaps.microAssemblyRecipes
-        2 -> NovaRecipeMaps.superconductingFormingRecipes
-        else -> RecipeMaps.nanoForgeRecipes
-      }
+  override fun getRecipeMap(): RecipeMap<*> = pRecipeMode.current
 
   override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>> =
       listOf(
@@ -108,10 +105,10 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
       aZ: Float
   ) {
     if (baseMetaTileEntity.isServerSide) {
-      this.mRecipeMode = ((this.mRecipeMode + 1) % 3).toByte()
+      pRecipeMode.next()
       GTUtility.sendChatToPlayer(
           aPlayer,
-          StatCollector.translateToLocal("nova.AssemblyMatrix.mRecipeMode." + this.mRecipeMode))
+          StatCollector.translateToLocal("nova.AssemblyMatrix.mRecipeMode.${pRecipeMode.index}"))
     }
   }
   // endregion
@@ -205,19 +202,19 @@ class NovaMTEAssemblyMatrix : NovaMTEBase<NovaMTEAssemblyMatrix> {
           .toolTipFinisher(NovaValues.CommonStrings.NovaGigaFac)
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.let {
-      it.setInteger("mRecipeMode", mRecipeMode.toInt())
-      it.setInteger("pModifier", pModifier)
-    }
     super.saveNBTData(aNBT)
+    if (aNBT == null) return
+
+    aNBT.setInteger("pModifier", pModifier)
+    pRecipeMode.saveNBTData(aNBT, "pRecipeMode")
   }
 
   override fun loadNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.let {
-      mRecipeMode = it.getInteger("mRecipeMode").toByte()
-      pModifier = it.getInteger("pModifier")
-    }
     super.loadNBTData(aNBT)
+    if (aNBT == null) return
+
+    pModifier = aNBT.getInteger("pModifier")
+    pRecipeMode.loadNBTData(aNBT, "pRecipeMode")
   }
   // endregion
 }

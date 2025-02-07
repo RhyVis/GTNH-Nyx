@@ -3,8 +3,6 @@ package vis.rhynia.nova.common.tile.hatch
 import com.gtnewhorizons.modularui.api.drawable.IDrawable
 import com.gtnewhorizons.modularui.api.screen.ModularWindow
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext
-import com.gtnewhorizons.modularui.api.widget.Widget
-import com.gtnewhorizons.modularui.api.widget.Widget.ClickData
 import com.gtnewhorizons.modularui.common.widget.ButtonWidget
 import com.gtnewhorizons.modularui.common.widget.DrawableWidget
 import com.gtnewhorizons.modularui.common.widget.TextWidget
@@ -21,11 +19,10 @@ import gregtech.api.interfaces.modularui.IAddUIWidgets
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.metatileentity.MetaTileEntity
 import gregtech.api.metatileentity.implementations.MTETieredMachineBlock
-import gregtech.api.objects.GTRenderedTexture
+import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
 import java.util.UUID
-import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.math.abs
@@ -44,7 +41,6 @@ import tectech.util.TTUtility
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.enums.NovaValues.TextureSets.NovaLogo32
 
-@Suppress("unused", "deprecated")
 class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechLogo {
   private var wireless = false
   private var ownerUUID: UUID? = null
@@ -63,7 +59,7 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
       aNameRegional,
       aTier,
       0,
-      arrayOf<String?>(
+      arrayOf(
           "从虚空中抽取能量",
           "使用方式与Debug发电机无异",
           "使用螺丝刀切换至无线模式",
@@ -102,9 +98,10 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
   }
 
   @SideOnly(Side.CLIENT)
+  @Suppress("SpellCheckingInspection")
   override fun registerIcons(aBlockIconRegister: IIconRegister?) {
     super.registerIcons(aBlockIconRegister)
-    GENNY = GTRenderedTexture(Textures.BlockIcons.CustomIcon("iconsets/GENNY"))
+    GENNY = TextureFactory.of(Textures.BlockIcons.CustomIcon("iconsets/GENNY"))
   }
 
   override fun getTexture(
@@ -114,8 +111,8 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
       colorIndex: Int,
       aActive: Boolean,
       aRedstone: Boolean
-  ): Array<ITexture?> {
-    return arrayOf<ITexture?>(
+  ): Array<ITexture> {
+    return arrayOf(
         MACHINE_CASINGS_TT[mTier.toInt()][colorIndex + 1],
         if (side != facing)
             if (wireless)
@@ -124,30 +121,24 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
             else
                 (if (aActive) OVERLAYS_ENERGY_OUT_POWER_TT[mTier.toInt()]
                 else OVERLAYS_ENERGY_IN_POWER_TT[mTier.toInt()])
-        else GENNY)
+        else GENNY!!)
   }
 
-  override fun getTextureSet(aTextures: Array<ITexture?>?): Array<Array<Array<ITexture?>?>?>? {
-    return null
-  }
+  override fun getTextureSet(aTextures: Array<ITexture?>?): Array<Array<Array<ITexture?>?>?>? = null
 
   override fun allowPutStack(
       iGregTechTileEntity: IGregTechTileEntity?,
       i: Int,
       side: ForgeDirection?,
       itemStack: ItemStack?
-  ): Boolean {
-    return false
-  }
+  ): Boolean = false
 
   override fun allowPullStack(
       iGregTechTileEntity: IGregTechTileEntity?,
       i: Int,
       side: ForgeDirection?,
       itemStack: ItemStack?
-  ): Boolean {
-    return false
-  }
+  ): Boolean = false
 
   override fun saveNBTData(aNBT: NBTTagCompound) {
     aNBT.setInteger("eEUT", this.eUT)
@@ -170,12 +161,7 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
     if (aBaseMetaTileEntity.isServerSide) {
       aBaseMetaTileEntity.isActive = producing
       if (!wireless) {
-        euVar =
-            if (aBaseMetaTileEntity.isActive) {
-              maxEUStore()
-            } else {
-              0
-            }
+        euVar = if (aBaseMetaTileEntity.isActive) maxEUStore() else 0
       } else {
         val t = (aTick % 20).toByte()
         if (aBaseMetaTileEntity.isActive && TRANSFER_AT == t) {
@@ -196,13 +182,9 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
     return true
   }
 
-  override fun isFacingValid(facing: ForgeDirection?): Boolean {
-    return true
-  }
+  override fun isFacingValid(facing: ForgeDirection?): Boolean = true
 
-  override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean {
-    return true
-  }
+  override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean = true
 
   override fun isElectric(): Boolean = true
 
@@ -239,17 +221,7 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
     else (abs((eUT.toLong() * this.aMP).toDouble()).toInt() shl 2).toLong()
   }
 
-  fun minimumStoredEU(): Long = abs((eUT.toLong() * this.aMP).toDouble()).toLong()
-
-  fun progresstime(): Int = baseMetaTileEntity.universalEnergyStored.toInt()
-
-  override fun maxProgresstime(): Int {
-    return baseMetaTileEntity.universalEnergyCapacity.toInt()
-  }
-
-  fun useModularUI(): Boolean {
-    return true
-  }
+  override fun maxProgresstime(): Int = baseMetaTileEntity.universalEnergyCapacity.toInt()
 
   override fun addGregTechLogo(builder: ModularWindow.Builder) {
     builder.widget(DrawableWidget().setDrawable(NovaLogo32).setSize(17, 17).setPos(113, 56))
@@ -274,22 +246,8 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
                 .setDefaultColor(COLOR_TEXT_WHITE.get())
                 .setPos(46, 46))
 
-    addLabelledIntegerTextField(
-        builder,
-        "EUT: ",
-        24,
-        Supplier { this.eUT },
-        Consumer { EUT: Int? -> this.eUT = EUT!! },
-        46,
-        8)
-    addLabelledIntegerTextField(
-        builder,
-        "AMP: ",
-        24,
-        Supplier { this.aMP },
-        Consumer { AMP: Int? -> this.aMP = AMP!! },
-        46,
-        34)
+    addLabelledIntegerTextField(builder, "EUT: ", { this.eUT }, { this.eUT = it!! }, 8)
+    addLabelledIntegerTextField(builder, "AMP: ", { this.aMP }, { this.aMP = it!! }, 34)
 
     addChangeNumberButton(
         builder, GTUITextures.OVERLAY_BUTTON_MINUS_LARGE, { it -> eUT -= it!! }, 512, 64, 7, 4)
@@ -331,25 +289,23 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
   private fun addLabelledIntegerTextField(
       builder: ModularWindow.Builder,
       label: String,
-      labelWidth: Int,
       getter: Supplier<Int?>?,
       setter: Consumer<Int?>?,
-      xPos: Int,
       yPos: Int
   ) {
-    val itfw = TextFieldWidget()
+    val t = TextFieldWidget()
     val ltw = TextWidget(label)
+    val xPos = 46
     builder
         .widget(ltw.setDefaultColor(COLOR_TEXT_WHITE.get()).setPos(xPos, yPos))
         .widget(
-            itfw
-                .setSetterInt(setter)
+            t.setSetterInt(setter)
                 .setGetterInt(getter)
                 .setTextColor(COLOR_TEXT_WHITE.get())
                 .setBackground(
                     GTUITextures.BACKGROUND_TEXT_FIELD.withOffset(
                         (-1).toFloat(), (-1).toFloat(), (2).toFloat(), (2).toFloat()))
-                .setPos(xPos + labelWidth, yPos - 1)
+                .setPos(xPos + 24, yPos - 1)
                 .setSize(56, 10))
   }
 
@@ -364,17 +320,16 @@ class NovaMTEZeroGenerator : MTETieredMachineBlock, IAddUIWidgets, IAddGregtechL
   ) {
     builder.widget(
         ButtonWidget()
-            .setOnClick(
-                BiConsumer { clickData: ClickData?, widget: Widget? ->
-                  setter.accept(if (clickData!!.shift) changeNumberShift else changeNumber)
-                  producing = aMP.toLong() * this.eUT >= 0
-                })
+            .setOnClick { clickData, widget ->
+              setter.accept(if (clickData!!.shift) changeNumberShift else changeNumber)
+              producing = aMP.toLong() * this.eUT >= 0
+            }
             .setBackground(GTUITextures.BUTTON_STANDARD, overlay)
             .setSize(18, 18)
             .setPos(xPos, yPos))
   }
 
   companion object {
-    var GENNY: GTRenderedTexture? = null
+    var GENNY: ITexture? = null
   }
 }

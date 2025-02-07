@@ -375,4 +375,66 @@ abstract class NovaMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
   override fun loadNBTData(aNBT: NBTTagCompound?) {
     super.loadNBTData(aNBT)
   }
+
+  /** Mode Container for switching between modes. */
+  protected open class ModeContainerPrimitive(val size: Int) {
+    /** Current index of the mode. */
+    var index = 0
+      protected set
+
+    /** Get the next index, return to 0 if reached the end. */
+    fun next(): Int {
+      index = (index + 1) % size
+      return index
+    }
+
+    /** Get the previous index, return to the end if reached 0. */
+    fun prev(): Int {
+      index = (index - 1 + size) % size
+      return index
+    }
+
+    /** Save the mode index to NBT. */
+    fun saveNBTData(aNBT: NBTTagCompound, key: String) {
+      aNBT.setInteger(key, index)
+    }
+
+    /** Load the mode index from NBT. */
+    fun loadNBTData(aNBT: NBTTagCompound, key: String) {
+      index = aNBT.getInteger(key)
+    }
+  }
+
+  /**
+   * Mode Container for switching between modes, with additional type support.
+   *
+   * @param T Type of the modes.
+   */
+  protected class ModeContainer<T>(private val modes: Array<out T>) :
+      ModeContainerPrimitive(modes.size) {
+
+    companion object {
+      /** Create a ModeContainer with vararg modes. */
+      inline fun <reified T> of(vararg modes: T): ModeContainer<T> = ModeContainer(modes)
+    }
+
+    /** Current mode. */
+    val current: T
+      get() = modes[index]
+
+    val all: Collection<T>
+      get() = modes.toCollection(mutableListOf())
+
+    /** Get the next mode, return to the first mode if reached the end. */
+    fun nextMode(): T {
+      next()
+      return modes[index]
+    }
+
+    /** Get the previous mode, return to the last mode if reached the first. */
+    fun prevMode(): T {
+      prev()
+      return modes[index]
+    }
+  }
 }

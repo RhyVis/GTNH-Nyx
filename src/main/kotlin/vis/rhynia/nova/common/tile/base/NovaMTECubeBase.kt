@@ -14,6 +14,7 @@ import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.HatchElement.InputHatch
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
+import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
@@ -47,8 +48,23 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
   protected open val sCoreBlock: Pair<Block, Int>?
     @OverrideOnly get() = null
 
-  protected val sCoreBlockRef: IStructureElement<T>
+  /**
+   * The core block element used in structure definition, if this one is overridden, sCoreBlock is
+   * no more needed
+   */
+  protected open val sCoreBlockEl: IStructureElement<T>
     get() = sCoreBlock?.let { ofBlock(it.first, it.second) } ?: isAir()
+
+  /** The hatches allowed on the casings */
+  protected open val sCasingHatch: Array<IHatchElement<in T>>
+    get() =
+        arrayOf(
+            InputBus,
+            InputHatch,
+            OutputBus,
+            OutputHatch,
+            Energy.or(ExoticEnergy),
+            Dynamo.or(ExoticDynamo))
 
   final override val sControllerBlock: Pair<Block, Int>
     get() = sCasingBlock
@@ -83,20 +99,14 @@ abstract class NovaMTECubeBase<T : NovaMTEBase<T>> : NovaMTEBase<T> {
         true)
   }
 
-  override fun genStructureDefinition(): IStructureDefinition<T> =
+  final override fun genStructureDefinition(): IStructureDefinition<T> =
       StructureDefinition.builder<T>()
           .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-          .addElement('B', sCoreBlockRef)
+          .addElement('B', sCoreBlockEl)
           .addElement(
               'C',
               HatchElementBuilder.builder<T>()
-                  .atLeast(
-                      InputBus,
-                      InputHatch,
-                      OutputBus,
-                      OutputHatch,
-                      Energy.or(ExoticEnergy),
-                      Dynamo.or(ExoticDynamo))
+                  .atLeast(*sCasingHatch)
                   .adder { t, aTileEntity, aBaseCasingIndex ->
                     t.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
                   }

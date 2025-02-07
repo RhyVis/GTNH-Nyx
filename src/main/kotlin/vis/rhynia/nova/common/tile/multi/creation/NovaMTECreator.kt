@@ -4,16 +4,18 @@ import com.gtnewhorizons.modularui.api.screen.ModularWindow
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext
 import com.gtnewhorizons.modularui.common.widget.CycleButtonWidget
 import gregtech.api.GregTechAPI
-import gregtech.api.enums.Materials
+import gregtech.api.enums.HatchElement.InputBus
+import gregtech.api.enums.HatchElement.OutputBus
+import gregtech.api.enums.HatchElement.OutputHatch
 import gregtech.api.enums.Textures
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.gui.modularui.GTUITextures
+import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.metatileentity.BaseTileEntity
-import gregtech.api.metatileentity.implementations.MTEHatchInputBus
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.recipe.check.CheckRecipeResultRegistry
 import gregtech.api.util.GTUtility
@@ -39,10 +41,15 @@ import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
+import vis.rhynia.nova.api.enums.CheckRecipeResultRef
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.api.util.MathUtil
+import vis.rhynia.nova.api.util.NBTUtil.getFluid
+import vis.rhynia.nova.api.util.NBTUtil.getItem
+import vis.rhynia.nova.api.util.NBTUtil.setFluid
 import vis.rhynia.nova.common.loader.container.NovaItemList
+import vis.rhynia.nova.common.material.NovaMaterials
 import vis.rhynia.nova.common.tile.base.NovaMTECubeBase
 
 class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
@@ -54,17 +61,37 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
     return NovaMTECreator(this.mName)
   }
 
-  private var pItemProcess = true
+  private var pItemProcessMode = true
+  private val pItemProcessModeInt
+    get() = if (pItemProcessMode) 1 else 0
   private var pRecipeTime: Byte = 0
+
   private var pMultiplier = 0
   private var pBase = 0
-  private var pProduce = 0L
+  private var pCost = 0L
+    get() = if (field < 0) 0 else field
+
   private var pUUID: UUID? = null
-  private var pName: String? = ""
-  private val pFluidStackZeroPoint: FluidStack = Materials.Water.getFluid(1)
-  private var pFluidStackStore = pFluidStackZeroPoint
-  private val pItemStackZeroPoint: ItemStack = NovaItemList.TestItem01.get(1)
+
+  private var pProcessDisplayName: String = ""
+
+  private val pItemStackZeroPoint: ItemStack by lazy { NovaItemList.TestItem01.get(1) }
   private var pItemStackStore = pItemStackZeroPoint
+    set(value) {
+      if (value != pItemStackZeroPoint) {
+        field = value
+        pProcessDisplayName = value.getDisplayName()
+      }
+    }
+
+  private val pFluidStackZeroPoint: FluidStack by lazy { NovaMaterials.Null.getFluid(1) }
+  private var pFluidStackStore = pFluidStackZeroPoint
+    set(value) {
+      if (value != pFluidStackZeroPoint) {
+        field = value
+        pProcessDisplayName = value.localizedName
+      }
+    }
 
   override fun onScrewdriverRightClick(
       side: ForgeDirection?,
@@ -82,65 +109,53 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
   override fun createProcessingLogic(): ProcessingLogic? = null
 
   override fun checkProcessing(): CheckRecipeResult {
-    resetState()
-    val tempStack = controllerSlot
+    mMaxProgresstime = 20 * (pRecipeTime + 1)
+    mEfficiencyIncrease = 10000
+
+    pBase = 0
+    pMultiplier = 0
+    pCost = 0
+
+    val tempStack = controllerSlot ?: return CheckRecipeResultRegistry.NO_RECIPE
 
     mInputBusses
-        .stream()
-        .map(MTEHatchInputBus::getRealInventory)
-        .filter { Objects.nonNull(it) }
+        .mapNotNull { it.realInventory }
         .filter { it.size > 0 }
-        .peek { stacks ->
-          pBase +=
-              stacks
-                  .filter { ItemUtil.isAstralInfinityComplex(it) }
-                  .map { it.stackSize }
-                  .reduce { a, b -> Integer.sum(a, b) }
-        }
-        .peek { stacks ->
+        .forEach { stacks ->
+          pBase += stacks.filter { ItemUtil.isAstralInfinityComplex(it) }.sumOf { it.stackSize }
           pMultiplier +=
               MathUtil.clampVal(
-                  stacks
-                      .filter { GTUtility.isAnyIntegratedCircuit(it) }
-                      .map { it.stackSize }
-                      .reduce { a: Int, b: Int -> Integer.sum(a, b) },
+                  stacks.filter { GTUtility.isAnyIntegratedCircuit(it) }.sumOf { it.stackSize },
                   0,
                   24)
         }
-        .close()
 
-    pProduce = (pBase * 2.0.pow(min(48.0, pMultiplier.toDouble()).toDouble())).toLong()
-    if (pProduce < 0) {
-      pProduce = -pProduce
-    }
+    pCost = (pBase * 2.0.pow(min(48.0, pMultiplier.toDouble())).toLong())
 
-    if (pItemProcess) {
-      if (tempStack == null) {
-        return CheckRecipeResultRegistry.NO_RECIPE
-      }
-      setWorkingItem(tempStack)
-      if (pItemStackStore.isItemEqual(pItemStackZeroPoint)) {
-        return CheckRecipeResultRegistry.NO_RECIPE
-      }
+    if (pItemProcessMode) {
+      pItemStackStore = tempStack
 
-      if (addEUToGlobalEnergyMap(pUUID, -pProduce)) {
-        outputItemToAENetwork(pItemStackStore, pProduce)
+      if (tempStack.isItemEqual(pItemStackZeroPoint)) return CheckRecipeResultRegistry.NO_RECIPE
+
+      if (addEUToGlobalEnergyMap(pUUID, -pCost)) {
+        outputItemToAENetwork(pItemStackStore, pCost)
         return CheckRecipeResultRegistry.SUCCESSFUL
+      } else {
+        return CheckRecipeResultRef.INSUFFICIENT_POWER_NO_VAL
       }
     } else {
-      val tempFluidStack = GTUtility.convertCellToFluid(tempStack)
+      pFluidStackStore =
+          GTUtility.convertCellToFluid(tempStack) ?: return CheckRecipeResultRegistry.NO_RECIPE
 
-      if (tempFluidStack == null) {
-        return CheckRecipeResultRegistry.NO_RECIPE
-      }
-      setWorkingFluid(tempFluidStack)
-      if (tempFluidStack.isFluidEqual(pFluidStackZeroPoint)) {
+      if (pFluidStackStore.isFluidEqual(pFluidStackZeroPoint)) {
         return CheckRecipeResultRegistry.NO_RECIPE
       }
 
-      if (addEUToGlobalEnergyMap(pUUID, -pProduce)) {
-        outputFluidToAENetwork(pFluidStackStore, pProduce)
+      if (addEUToGlobalEnergyMap(pUUID, -pCost)) {
+        outputFluidToAENetwork(pFluidStackStore, pCost)
         return CheckRecipeResultRegistry.SUCCESSFUL
+      } else {
+        return CheckRecipeResultRef.INSUFFICIENT_POWER_NO_VAL
       }
     }
 
@@ -163,34 +178,22 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
 
   override fun supportsSingleRecipeLocking(): Boolean = false
 
-  private fun setWorkingItem(itemStack: ItemStack) {
-    pItemStackStore = itemStack
-    pName = itemStack.getDisplayName()
-  }
-
-  private fun setWorkingFluid(fluidStack: FluidStack) {
-    pFluidStackStore = fluidStack
-    pName = fluidStack.localizedName
-  }
-
-  private fun resetState() {
-    mMaxProgresstime = 20 * (pRecipeTime + 1)
-    mEfficiencyIncrease = 10000
-    pBase = 0
-    pMultiplier = 0
-    pProduce = 0
-  }
   // endregion
 
   // region Structure
+
   override val sCasingBlock: Pair<Block, Int>
     get() = GregTechAPI.sBlockCasings8 to 7
+
+  override val sCasingHatch: Array<IHatchElement<in NovaMTECreator>>
+    get() = arrayOf(InputBus, OutputBus, OutputHatch)
 
   override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
 
   override val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_ON to OVERLAY_DTPF_ON
+
   // endregion
 
   // region Info
@@ -212,7 +215,7 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
     super.addUIWidgets(builder, buildContext)
     builder.widget(
         CycleButtonWidget()
-            .setToggle({ pItemProcess }, { pItemProcess = it })
+            .setToggle({ pItemProcessMode }, { pItemProcessMode = it })
             .setTextureGetter {
               if (it == 1) GTUITextures.OVERLAY_BUTTON_AUTOOUTPUT_ITEM
               else GTUITextures.OVERLAY_BUTTON_AUTOOUTPUT_FLUID
@@ -223,14 +226,14 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
             .setSize(16, 16)
             .dynamicTooltip {
               mutableListOf(
-                  StatCollector.translateToLocal(
-                      "nova.pItemProcess." + (if (pItemProcess) 1 else 0)))
+                  StatCollector.translateToLocal("nova.pItemProcess.$pItemProcessModeInt"))
             }
             .setUpdateTooltipEveryTick(true)
             .setTooltipShowUpDelay(BaseTileEntity.TOOLTIP_DELAY))
   }
 
-  override fun getInfoDataExtra(): Array<String> = arrayOf("${AQUA}复制目标: ${GOLD}$pName")
+  override fun getInfoDataExtra(): Array<String> =
+      arrayOf("${AQUA}复制目标: ${GOLD}$pProcessDisplayName")
 
   override fun getWailaBody(
       itemStack: ItemStack?,
@@ -239,11 +242,11 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
       config: IWailaConfigHandler?
   ) {
     super.getWailaBody(itemStack, currentTip, accessor, config)
-    val tag = accessor?.nbtData
-    if (!tag!!.getString("pName").isEmpty()) {
+    if (accessor?.nbtData?.getString("pName")?.isNotEmpty() == true) {
       currentTip as MutableList<String?>
-      currentTip.add("${WHITE}复制目标: ${AQUA}${tag.getString("pName")}")
-      currentTip.add("${WHITE}生产总量: ${GREEN}${GTUtility.formatNumbers(tag.getLong("pProduce"))}")
+      currentTip.add("${WHITE}复制目标: ${AQUA}${accessor.nbtData.getString("pName")}")
+      currentTip.add(
+          "${WHITE}生产总量: ${GREEN}${GTUtility.formatNumbers(accessor.nbtData.getLong("pProduce"))}")
     }
   }
 
@@ -258,8 +261,8 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
   ) {
     super.getWailaNBTData(player, tile, tag, world, x, y, z)
     if (baseMetaTileEntity?.isActive == true && tag != null) {
-      tag.setString("pName", pName)
-      tag.setLong("pProduce", pProduce)
+      tag.setString("pName", pProcessDisplayName)
+      tag.setLong("pProduce", pCost)
     }
   }
 
@@ -270,14 +273,11 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
     aNBT.setByte("pRecipeTime", pRecipeTime)
     aNBT.setInteger("pMultiplier", pMultiplier)
     aNBT.setInteger("pBase", pBase)
-    aNBT.setLong("pProduce", pProduce)
-    aNBT.setString("pName", pName)
-    aNBT.setBoolean("pItemProcess", pItemProcess)
+    aNBT.setLong("pProduce", pCost)
+    aNBT.setString("pName", pProcessDisplayName)
+    aNBT.setBoolean("pItemProcessMode", pItemProcessMode)
     aNBT.setTag("pItemStackStore", GTUtility.saveItem(pItemStackStore))
-    NBTTagCompound().let {
-      pFluidStackStore.writeToNBT(it)
-      aNBT.setTag("pFluidStackStore", it)
-    }
+    aNBT.setFluid("pFluidStackStore", pFluidStackStore)
   }
 
   override fun loadNBTData(aNBT: NBTTagCompound?) {
@@ -287,11 +287,11 @@ class NovaMTECreator : NovaMTECubeBase<NovaMTECreator> {
     pRecipeTime = aNBT.getByte("pRecipeTime")
     pMultiplier = aNBT.getInteger("pMultiplier")
     pBase = aNBT.getInteger("pBase")
-    pProduce = aNBT.getLong("pProduce")
-    pName = aNBT.getString("pName")
-    pItemProcess = aNBT.getBoolean("pItemProcess")
-    pItemStackStore = GTUtility.loadItem(aNBT, "pItemStackStore")
-    pFluidStackStore = GTUtility.loadFluid(aNBT, "pFluidStackStore")
+    pCost = aNBT.getLong("pProduce")
+    pProcessDisplayName = aNBT.getString("pName")
+    pItemProcessMode = aNBT.getBoolean("pItemProcessMode")
+    pItemStackStore = aNBT.getItem("pItemStackStore")
+    pFluidStackStore = aNBT.getFluid("pFluidStackStore")
   }
   // endregion
 }

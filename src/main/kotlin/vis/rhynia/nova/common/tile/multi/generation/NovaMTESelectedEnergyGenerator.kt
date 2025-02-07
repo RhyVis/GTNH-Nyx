@@ -26,6 +26,7 @@ import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.UNDERLINE
 import net.minecraft.util.EnumChatFormatting.WHITE
 import net.minecraft.world.World
+import vis.rhynia.nova.api.enums.CheckRecipeResultRef
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.util.ItemUtil
 import vis.rhynia.nova.api.util.MathUtil
@@ -52,34 +53,29 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
 
   override fun checkProcessing(): CheckRecipeResult {
     resetState()
-    controllerSlot.let {
+
+    controllerSlot?.let {
       pCoreValue =
           if (ItemUtil.isAstralInfinityComplex(it)) {
             it.stackSize
           } else if (ItemUtil.isAstralInfinityGauge(it)) {
             it.stackSize * 4
           } else {
-            return SimpleCheckRecipeResult.ofFailure("no_core_set")
+            return CheckRecipeResultRef.NO_SELECTED_ENERGY_CORE
           }
     }
+        ?: return CheckRecipeResultRef.NO_SELECTED_ENERGY_CORE
 
-    for (inputBus in mInputBusses) {
-      for (itemStack in inputBus.realInventory) {
-        if (ItemUtil.isCalibration(itemStack)) {
-          pBaseValue += itemStack.stackSize.toLong()
-        }
-        if (pTweakValue <= 0 && GTUtility.isAnyIntegratedCircuit(itemStack)) {
-          pTweakValue = MathUtil.clampVal(itemStack.getItemDamage(), 2, 24)
-        }
+    mInputBusses.forEach { bus ->
+      bus.realInventory.forEach { itemStack ->
+        if (ItemUtil.isCalibration(itemStack)) pBaseValue += itemStack.stackSize.toLong()
+        if (pTweakValue <= 0 && GTUtility.isAnyIntegratedCircuit(itemStack))
+            pTweakValue = MathUtil.clampVal(itemStack.getItemDamage(), 2, 24)
       }
     }
 
-    if (pBaseValue <= 0) {
-      pBaseValue = 1L
-    }
-    if (pTweakValue <= 0) {
-      pTweakValue = 1
-    }
+    if (pBaseValue <= 0) pBaseValue = 1L
+    if (pTweakValue <= 0) pTweakValue = 2
 
     pConstruct =
         BigInteger.valueOf(pBaseValue)
@@ -112,21 +108,14 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
     }
   }
 
-  override fun supportsVoidProtection(): Boolean {
-    return false
-  }
+  override fun supportsVoidProtection(): Boolean = false
 
-  override fun supportsInputSeparation(): Boolean {
-    return false
-  }
+  override fun supportsInputSeparation(): Boolean = false
 
-  override fun supportsBatchMode(): Boolean {
-    return false
-  }
+  override fun supportsBatchMode(): Boolean = false
 
-  override fun supportsSingleRecipeLocking(): Boolean {
-    return false
-  }
+  override fun supportsSingleRecipeLocking(): Boolean = false
+
   // endregion
 
   // region Structure
@@ -179,32 +168,31 @@ class NovaMTESelectedEnergyGenerator : NovaMTECubeBase<NovaMTESelectedEnergyGene
       z: Int
   ) {
     super.getWailaNBTData(player, tile, tag, world, x, y, z)
-    val tileEntity = baseMetaTileEntity
-    if (tileEntity?.isActive == true) {
+    if (baseMetaTileEntity?.isActive == true) {
       tag?.setByteArray("pConstructW", pConstruct.toByteArray())
     }
   }
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.let {
-      it.setInteger("pCoreValue", pCoreValue)
-      it.setInteger("pTweakValue", pTweakValue)
-      it.setLong("pBaseValue", pBaseValue)
-      it.setByteArray("pConstruct", pConstruct.toByteArray())
-      it.setByteArray("pEnergy", pEnergy.toByteArray())
-    }
     super.saveNBTData(aNBT)
+    if (aNBT == null) return
+
+    aNBT.setInteger("pCoreValue", pCoreValue)
+    aNBT.setInteger("pTweakValue", pTweakValue)
+    aNBT.setLong("pBaseValue", pBaseValue)
+    aNBT.setByteArray("pConstruct", pConstruct.toByteArray())
+    aNBT.setByteArray("pEnergy", pEnergy.toByteArray())
   }
 
   override fun loadNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.let {
-      pCoreValue = it.getInteger("pCoreValue")
-      pTweakValue = it.getInteger("pTweakValue")
-      pBaseValue = it.getLong("pBaseValue")
-      pConstruct = BigInteger(it.getByteArray("pConstruct"))
-      pEnergy = BigInteger(it.getByteArray("pEnergy"))
-    }
     super.loadNBTData(aNBT)
+    if (aNBT == null) return
+
+    pCoreValue = aNBT.getInteger("pCoreValue")
+    pTweakValue = aNBT.getInteger("pTweakValue")
+    pBaseValue = aNBT.getLong("pBaseValue")
+    pConstruct = BigInteger(aNBT.getByteArray("pConstruct"))
+    pEnergy = BigInteger(aNBT.getByteArray("pEnergy"))
   }
   // endregion
 }

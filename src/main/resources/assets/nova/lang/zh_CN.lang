@@ -65,6 +65,6 @@ nova.pItemProcess.1=物品模式
 nova.gui.desc.import_energy=能量输出
 
 GT5U.gui.text.importing_energy=§b导入能量中
-GT5U.gui.text.no_core_set=§7没有能量核心
+GT5U.gui.text.no_selected_energy_core_set=§7没有能量核心
 GT5U.gui.text.no_mode_set=没有用电路设定模式
 GT5U.gui.text.no_recipe_map_set=没有可用配方图

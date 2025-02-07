@@ -362,9 +362,7 @@ class SimpleMaterial(
   var flagFluid: Boolean = false
     set(value) = if (value) field = true else Unit
 
-  /**
-   * The fluid state map, it contains the fluid state and the temperature
-   */
+  /** The fluid state map, it contains the fluid state and the temperature */
   val fluidStateMap: MutableMap<FluidState, Pair<String, Int>> = mutableMapOf()
 
   /**

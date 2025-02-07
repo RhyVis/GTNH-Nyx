@@ -1,11 +1,14 @@
 package vis.rhynia.nova.common.tile.multi.process
 
-import com.google.common.collect.ImmutableList
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment
-import com.gtnewhorizon.structurelib.structure.ITierConverter
 import com.gtnewhorizon.structurelib.structure.StructureDefinition
-import com.gtnewhorizon.structurelib.structure.StructureUtility
+import com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock
+import com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered
+import com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain
+import com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass
+import com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
+import com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel
 import gregtech.api.GregTechAPI
 import gregtech.api.enums.HatchElement.Energy
 import gregtech.api.enums.HatchElement.ExoticEnergy
@@ -32,7 +35,6 @@ import gregtech.api.util.HatchElementBuilder
 import gregtech.api.util.MultiblockTooltipBuilder
 import gregtech.common.blocks.BlockCasings1
 import java.util.function.BiConsumer
-import java.util.function.Consumer
 import kotlin.math.min
 import kotlin.math.pow
 import net.minecraft.block.Block
@@ -47,7 +49,8 @@ import net.minecraft.util.StatCollector
 import net.minecraftforge.common.util.ForgeDirection
 import org.apache.commons.lang3.tuple.Pair as ApPair
 import tectech.thing.CustomItemList
-import tectech.thing.casing.TTCasingsContainer
+import tectech.thing.casing.TTCasingsContainer.SpacetimeCompressionFieldGenerators
+import tectech.thing.casing.TTCasingsContainer.TimeAccelerationFieldGenerator
 import vis.rhynia.nova.api.enums.NovaValues
 import vis.rhynia.nova.api.recipe.NovaRecipeMaps
 import vis.rhynia.nova.api.util.MathUtil
@@ -68,12 +71,17 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
   }
 
   // region Processing Logic
-  private var mRecipeMode: Byte = 0 // 0-sUltimateHeaterRecipes,1-sTranscendentReactorRecipes
   private var mCoilLevel: HeatingCoilLevel? = null
 
   private var uSpacetimeCompressionCount = 0
   private var uTimeAccelerationField = 0
   private var uStarArrayCount = 0
+
+  private var pRecipeMode =
+      ModeContainer.of(
+          NovaRecipeMaps.thermonuclearControlRecipes,
+          NovaRecipeMaps.transcendentReactorRecipes,
+          RecipeMaps.fusionRecipes)
 
   override fun createProcessingLogic(): ProcessingLogic {
     return object : ProcessingLogic() {
@@ -110,21 +118,9 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
         (1.0 - MathUtil.clampVal((0.0005 * uSpacetimeCompressionCount), 0.0, 0.9)) /
             (1 + uStarArrayCount)
 
-  override fun getRecipeMap(): RecipeMap<*>? {
-    return when (mRecipeMode.toInt()) {
-      0 -> NovaRecipeMaps.thermonuclearControlRecipes
-      1 -> NovaRecipeMaps.transcendentReactorRecipes
-      2 -> RecipeMaps.fusionRecipes
-      else -> RecipeMaps.nanoForgeRecipes
-    }
-  }
+  override fun getRecipeMap(): RecipeMap<*>? = pRecipeMode.current
 
-  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>?> {
-    return listOf<RecipeMap<*>?>(
-        NovaRecipeMaps.thermonuclearControlRecipes,
-        NovaRecipeMaps.transcendentReactorRecipes,
-        RecipeMaps.fusionRecipes)
-  }
+  override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>?> = pRecipeMode.all
 
   override fun getRecipeCatalystPriority(): Int = -20
 
@@ -136,10 +132,10 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
       aZ: Float
   ) {
     if (baseMetaTileEntity.isServerSide) {
-      this.mRecipeMode = ((this.mRecipeMode + 1) % 3).toByte()
+      pRecipeMode.next()
       GTUtility.sendChatToPlayer(
           aPlayer,
-          StatCollector.translateToLocal("append.UltimateHeater.mRecipeMode." + this.mRecipeMode))
+          StatCollector.translateToLocal("append.UltimateHeater.mRecipeMode.${pRecipeMode.index}"))
     }
   }
   // endregion
@@ -183,82 +179,71 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
 
   override fun genStructureDefinition(): IStructureDefinition<NovaMTEAtomMacro> =
       StructureDefinition.builder<NovaMTEAtomMacro>()
-          .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
-          .addElement('A', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 12))
-          .addElement('B', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 15))
+          .addShape(STRUCTURE_PIECE_MAIN, transpose(structureShape))
+          .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 12))
+          .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 15))
           .addElement(
               'C',
-              StructureUtility.ofChain(
-                  StructureUtility.onElementPass(
-                      Consumer { t: NovaMTEAtomMacro -> t.uTimeAccelerationField = -1 },
-                      StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14)),
-                  StructureUtility.ofBlocksTiered(
-                      ITierConverter { block: Block?, meta: Int ->
-                        if (block === TTCasingsContainer.TimeAccelerationFieldGenerator) meta
-                        else null
+              ofChain(
+                  onElementPass(
+                      { t -> t.uTimeAccelerationField = -1 },
+                      ofBlock(GregTechAPI.sBlockCasings1, 14)),
+                  ofBlocksTiered(
+                      { block, meta ->
+                        if (block === TimeAccelerationFieldGenerator) meta else null
                       },
-                      ImmutableList.of<ApPair<Block, Int>>(
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 0),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 1),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 2),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 3),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 4),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 5),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 6),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 7),
-                          ApPair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 8)),
+                      listOf(
+                          ApPair.of(TimeAccelerationFieldGenerator, 0),
+                          ApPair.of(TimeAccelerationFieldGenerator, 1),
+                          ApPair.of(TimeAccelerationFieldGenerator, 2),
+                          ApPair.of(TimeAccelerationFieldGenerator, 3),
+                          ApPair.of(TimeAccelerationFieldGenerator, 4),
+                          ApPair.of(TimeAccelerationFieldGenerator, 5),
+                          ApPair.of(TimeAccelerationFieldGenerator, 6),
+                          ApPair.of(TimeAccelerationFieldGenerator, 7),
+                          ApPair.of(TimeAccelerationFieldGenerator, 8)),
                       -1,
-                      { t: NovaMTEAtomMacro, meta: Int -> t.uTimeAccelerationField = meta },
+                      { t, tier -> t.uTimeAccelerationField = tier!! },
                       { it.uTimeAccelerationField })))
           .addElement(
               'D',
-              StructureUtility.withChannel<NovaMTEAtomMacro>(
+              withChannel<NovaMTEAtomMacro>(
                   "coil",
-                  ofCoil(
-                      BiConsumer { obj: NovaMTEAtomMacro, aCoilLevel: HeatingCoilLevel ->
-                        obj.setCoilLevel(aCoilLevel)
-                      }) { it.getCoilLevel() }))
+                  ofCoil(BiConsumer { t, aCoilLevel -> t.setCoilLevel(aCoilLevel) }) {
+                    it.getCoilLevel()
+                  }))
           .addElement(
               'E',
-              StructureUtility.ofChain(
-                  StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14),
-                  StructureUtility.onElementPass(
+              ofChain(
+                  ofBlock(GregTechAPI.sBlockCasings1, 14),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 1 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 0)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 0)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 2 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 1)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 1)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 4 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 2)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 8 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 3)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 3)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 16 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 4)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 4)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 32 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 5)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 5)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 64 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 6)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 6)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 128 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 7)),
-                  StructureUtility.onElementPass(
+                      ofBlock(SpacetimeCompressionFieldGenerators, 7)),
+                  onElementPass(
                       { it.uSpacetimeCompressionCount += 256 },
-                      StructureUtility.ofBlock(
-                          TTCasingsContainer.SpacetimeCompressionFieldGenerators, 8))))
-          .addElement('F', StructureUtility.ofBlock(GregTechAPI.sBlockCasings1, 14))
+                      ofBlock(SpacetimeCompressionFieldGenerators, 8))))
+          .addElement('F', ofBlock(GregTechAPI.sBlockCasings1, 14))
           .addElement(
               'G',
               HatchElementBuilder.builder<NovaMTEAtomMacro>()
@@ -341,7 +326,7 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
 
   private val textureIndex = GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings1, 12)
 
-  override val sControllerBlock: kotlin.Pair<Block, Int>
+  override val sControllerBlock: Pair<Block, Int>
     get() = null!! // Special case
 
   override fun getTexture(
@@ -397,28 +382,29 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
           "${AQUA}时空压缩: ${GOLD}${GTUtility.formatNumbers(uSpacetimeCompressionCount.toLong())}",
           "${AQUA}时间加速: ${GOLD}${GTUtility.formatNumbers(uTimeAccelerationField.toLong())}",
           "${AQUA}星阵数量: ${GOLD}${GTUtility.formatNumbers(uStarArrayCount.toLong())}")
+
   override fun saveNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.let {
-      it.setInteger("mRecipeMode", mRecipeMode.toInt())
-      it.setInteger("uSpacetimeCompressionField", uSpacetimeCompressionCount)
-      it.setInteger("uTimeAccelerationField", uTimeAccelerationField)
-      it.setInteger("uStarArrayCount", uStarArrayCount)
-    }
     super.saveNBTData(aNBT)
+    if (aNBT == null) return
+    aNBT.setInteger("uSpacetimeCompressionField", uSpacetimeCompressionCount)
+    aNBT.setInteger("uTimeAccelerationField", uTimeAccelerationField)
+    aNBT.setInteger("uStarArrayCount", uStarArrayCount)
+    pRecipeMode.saveNBTData(aNBT, "pRecipeMode")
   }
 
   override fun loadNBTData(aNBT: NBTTagCompound?) {
-    aNBT?.let {
-      mRecipeMode = it.getInteger("mRecipeMode").toByte()
-      uSpacetimeCompressionCount = it.getInteger("uSpacetimeCompressionField")
-      uTimeAccelerationField = it.getInteger("uTimeAccelerationField")
-      uStarArrayCount = it.getInteger("uStarArrayCount")
-    }
     super.loadNBTData(aNBT)
+    if (aNBT == null) return
+    uSpacetimeCompressionCount = aNBT.getInteger("uSpacetimeCompressionField")
+    uTimeAccelerationField = aNBT.getInteger("uTimeAccelerationField")
+    uStarArrayCount = aNBT.getInteger("uStarArrayCount")
+    pRecipeMode.loadNBTData(aNBT, "pRecipeMode")
   }
+
   // endregion
 
   // region Selector
+
   fun setCoilLevel(aCoilLevel: HeatingCoilLevel) {
     this.mCoilLevel = aCoilLevel
   }
@@ -426,5 +412,6 @@ class NovaMTEAtomMacro : NovaMTEBase<NovaMTEAtomMacro> {
   fun getCoilLevel(): HeatingCoilLevel {
     return this.mCoilLevel ?: HeatingCoilLevel.None
   }
+
   // endregion
 }
