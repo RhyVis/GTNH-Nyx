@@ -9,7 +9,6 @@ import gregtech.api.recipe.RecipeMap
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTRecipe
 import gregtech.api.util.GTRecipeBuilder
-import kubatech.loaders.MobHandlerLoader.recipeMap
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import vis.rhynia.nova.Log
@@ -77,10 +76,10 @@ abstract class RecipePool {
    * @param backend RecipeMap Backend
    * @param action Recipe Builder Action
    */
-  protected inline fun altBuilder(
+  internal inline fun altBuilder(
       backend: RecipeMap<NovaRecipeMapBackend>,
-      action: (builder: NovaRecipeBuilder) -> NovaRecipeBuilder
-  ) = NovaRecipeBuilder().apply { action(this).inject(backend) }
+      action: NovaRecipeBuilder.() -> NovaRecipeBuilder
+  ) = NovaRecipeBuilder().apply { this.action().inject(backend) }
 
   protected fun Mods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
       GTModHandler.getModItem(
@@ -141,7 +140,7 @@ abstract class RecipePool {
   protected fun SimpleMaterial.getBucketMolten(amount: Int): FluidStack =
       this.getMolten((amount * NovaValues.RecipeValues.BUCKET).toInt())
 
-  class NovaRecipeBuilder {
+  internal class NovaRecipeBuilder {
     private var inputItems: Array<ItemStack> = arrayOf()
     private var outputItems: Array<ItemStack> = arrayOf()
     private var inputFluids: Array<FluidStack> = arrayOf()
@@ -187,7 +186,7 @@ abstract class RecipePool {
         this.also { this.specialValue = specialValue }
 
     /** Renamed inject method to avoid misuse in lambda calls */
-    fun inject(recipeMap: RecipeMap<*>): NovaRecipeBuilder {
+    internal fun inject(recipeMap: RecipeMap<*>): NovaRecipeBuilder {
       GTRecipe(
               false,
               inputItems,

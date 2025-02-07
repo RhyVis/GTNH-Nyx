@@ -16,7 +16,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
   override fun loadRecipes() {
     // Wire x1 from dust
     for (sc in SuperConductorPart.entries) altBuilder(sf) {
-      it.itemInputs(GTUtility.getIntegratedCircuit(1), sc.getPump(4), sc.getDust(1).ofSize(128))
+      itemInputs(GTUtility.getIntegratedCircuit(1), sc.getPump(4), sc.getDust(1).ofSize(128))
           .itemOutputs(sc.getWire(1).ofSize(512))
           .fluidInputs(
               NovaMaterials.Astrium.getMolten(sc.multiplier * INGOTS),
@@ -28,7 +28,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
 
     // Wire x1 from molten
     for (sc in SuperConductorPart.entries) altBuilder(sf) {
-      it.itemInputs(GTUtility.getIntegratedCircuit(11), sc.getPump(4))
+      itemInputs(GTUtility.getIntegratedCircuit(11), sc.getPump(4))
           .itemOutputs(sc.getWire(1).ofSize(512))
           .fluidInputs(
               sc.getMolten(128 * INGOTS), Materials.Helium.getGas(sc.multiplier * 8L * BUCKETS))
@@ -38,7 +38,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
 
     // Frame from molten
     for (sc in SuperConductorPart.entries) altBuilder(sf) {
-      it.itemInputs(GTUtility.getIntegratedCircuit(4), sc.getDust(1).ofSize(256))
+      itemInputs(GTUtility.getIntegratedCircuit(4), sc.getDust(1).ofSize(256))
           .itemOutputs(sc.getFrame(64))
           .fluidInputs(SolderMaterial.SolderingAlloy.getFluidStack(2 * sc.multiplier * INGOTS))
           .eut(sc.recipeVoltageLow)
@@ -47,7 +47,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
 
     // Solenoid from molten
     for (sc in SuperConductorPart.entries) altBuilder(sf) {
-      it.itemInputs(GTUtility.getIntegratedCircuit(8), sc.getWire(1).ofSize(128))
+      itemInputs(GTUtility.getIntegratedCircuit(8), sc.getWire(1).ofSize(128))
           .itemOutputs(sc.getSolenoid(16))
           .fluidInputs(SolderMaterial.IndaAlloy.getFluidStack(sc.powVal * INGOTS))
           .eut(sc.recipeVoltageHigh)
@@ -56,7 +56,7 @@ class SuperconductingFormingRecipePool : RecipePool() {
 
     // Base from Sx
     for (sc in SuperConductorPart.entries) altBuilder(sf) {
-      it.itemInputs(
+      itemInputs(
               GTUtility.getIntegratedCircuit(24),
               sc.getSolenoid(0),
               NovaMaterials.Astrium.getDust(1).ofSize(16 * sc.multiplier))

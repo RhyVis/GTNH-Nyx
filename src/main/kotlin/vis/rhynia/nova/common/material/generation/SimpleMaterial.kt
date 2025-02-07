@@ -170,14 +170,17 @@ class SimpleMaterial(
 
   // region Dust
 
-  private var hasDust: Boolean = false
-
-  val flagDust: Boolean
-    get() = hasDust
+  /**
+   * Flag to enable dusts for the material
+   *
+   * incluiding dust, dustSmall, dustTiny
+   */
+  var flagDust: Boolean = false
+    set(value) = if (value) field = true else Unit
 
   /** Enable dusts for the material */
   fun enableDusts() {
-    hasDust = true
+    flagDust = true
     addOrePrefix(OrePrefixes.dust)
     addOrePrefix(OrePrefixes.dustSmall)
     addOrePrefix(OrePrefixes.dustTiny)
@@ -195,10 +198,13 @@ class SimpleMaterial(
 
   // region Ingot
 
-  private var hasIngot: Boolean = false
-
-  val flagIngot: Boolean
-    get() = hasIngot
+  /**
+   * Flag to enable ingots for the material
+   *
+   * incluiding ingot, ingotDouble, ingotTriple, ingotQuadruple, ingotQuintuple, ingotHot, nugget
+   */
+  var flagIngot: Boolean = false
+    set(value) = if (value) field = true else Unit
 
   /**
    * Enable ingots for the material
@@ -218,7 +224,7 @@ class SimpleMaterial(
           )
   ) {
     if (prefixes.isEmpty()) return
-    hasIngot = true
+    flagIngot = true
     prefixes.forEach(this::addOrePrefix)
   }
 
@@ -234,10 +240,13 @@ class SimpleMaterial(
 
   // region Plate
 
-  private var hasPlate: Boolean = false
-
-  val flagPlate: Boolean
-    get() = hasPlate
+  /**
+   * Flag to enable plates for the material
+   *
+   * incluiding plate, plateDouble, plateTriple, plateQuadruple, plateQuintuple, plateDense, foil
+   */
+  var flagPlate: Boolean = false
+    set(value) = if (value) field = true else Unit
 
   /**
    * Enable plates for the material
@@ -257,20 +266,29 @@ class SimpleMaterial(
           )
   ) {
     if (orePrefixes.isEmpty()) return
-    hasPlate = true
+    flagPlate = true
     orePrefixes.forEach(this::addOrePrefix)
   }
 
+  /**
+   * Get the plate item stack
+   *
+   * @param amount The amount of plate
+   * @return The plate item stack
+   */
   fun getPlate(amount: Int = 1) = get(OrePrefixes.plate, amount)
 
   // endregion
 
   // region Gem
 
-  private var hasGem: Boolean = false
-
-  val flagGem: Boolean
-    get() = hasGem
+  /**
+   * Flag to enable gems for the material
+   *
+   * incluiding gem, gemChipped, gemFlawed, gemFlawless, gemExquisite, lens
+   */
+  var flagGem: Boolean = false
+    set(value) = if (value) field = true else Unit
 
   /**
    * Enable gems for the material
@@ -289,7 +307,7 @@ class SimpleMaterial(
           )
   ) {
     if (orePrefixes.isEmpty()) return
-    hasGem = true
+    flagGem = true
     orePrefixes.forEach(this::addOrePrefix)
   }
 
@@ -299,10 +317,13 @@ class SimpleMaterial(
 
   // region Misc
 
-  private var hasMisc: Boolean = false
-
-  val flagMisc: Boolean
-    get() = hasMisc
+  /**
+   * Flag to enable misc items for the material
+   *
+   * incluiding stick, stickLong, spring, springSmall, bolt, gearGt, gearGtSmall, ring, rotor, screw
+   */
+  var flagMisc: Boolean = false
+    set(value) = if (value) field = true else Unit
 
   /**
    * Enable misc items for the material
@@ -325,7 +346,7 @@ class SimpleMaterial(
           )
   ) {
     if (orePrefixes.isEmpty()) return
-    hasMisc = true
+    flagMisc = true
     orePrefixes.forEach(this::addOrePrefix)
   }
 
@@ -333,11 +354,17 @@ class SimpleMaterial(
 
   // region Fluid
 
-  private var hasFluid: Boolean = false
+  /**
+   * Flag to enable fluids for the material
+   *
+   * incluiding gas, liquid, molten, plasma, slurry
+   */
+  var flagFluid: Boolean = false
+    set(value) = if (value) field = true else Unit
 
-  val flagFluid: Boolean
-    get() = hasFluid
-
+  /**
+   * The fluid state map, it contains the fluid state and the temperature
+   */
   val fluidStateMap: MutableMap<FluidState, Pair<String, Int>> = mutableMapOf()
 
   /**
@@ -347,21 +374,21 @@ class SimpleMaterial(
    */
   fun enableFluids(vararg states: Pair<FluidState, Int>) {
     if (states.isEmpty()) return
-    hasFluid = true
+    flagFluid = true
     states.forEach { (state, temperature) ->
       fluidStateMap[state] =
           when (state) {
-            GAS -> "n.gas.$internalName"
-            LIQUID -> "n.liquid.$internalName"
-            MOLTEN -> "n.molten.$internalName"
-            PLASMA -> "n.plasma.$internalName"
-            SLURRY -> "n.slurry.$internalName"
+            GAS -> "gas.$internalName.n"
+            LIQUID -> "liquid.$internalName.n"
+            MOLTEN -> "molten.$internalName.n"
+            PLASMA -> "plasma.$internalName.n"
+            SLURRY -> "slurry.$internalName.n"
           } to temperature
       when (state) {
         LIQUID -> addOrePrefix(OrePrefixes.cell)
         MOLTEN -> addOrePrefix(OrePrefixes.cellMolten)
         PLASMA -> addOrePrefix(OrePrefixes.cellPlasma)
-        else -> null
+        else -> Unit
       }
     }
   }
@@ -442,7 +469,7 @@ class SimpleMaterial(
    * @throws IllegalArgumentException If the material does not have a valid cell state
    */
   fun getCell(state: FluidState, amount: Int = 1): ItemStack {
-    if (state == GAS || state == SLURRY || state !in fluidStateMap) {
+    if (state !in fluidStateMap || state == GAS || state == SLURRY) {
       Log.warn("Material $internalName does not have a valid cell state $state")
       throw IllegalArgumentException(
           "Material $internalName does not have a valid cell state $state")

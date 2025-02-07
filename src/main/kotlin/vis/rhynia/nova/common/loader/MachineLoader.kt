@@ -24,26 +24,30 @@ import vis.rhynia.nova.common.tile.multi.process.NovaMTEKelvinTransformField
 object MachineLoader : Loader {
 
   // region sig Machine
-  var InfiniteLiquidAirHatch: ItemStack? = null
-  var InfiniteDistilledWaterHatch: ItemStack? = null
-  var InfiniteLavaHatch: ItemStack? = null
-  var InfiniteOilHatch: ItemStack? = null
-  var InfiniteLubricantHatch: ItemStack? = null
-  var InfiniteSteamHatch: ItemStack? = null
-  var ZeroGenerator: ItemStack? = null
-  var HumongousCalibrationInputHatch: ItemStack? = null
-  var HumongousCalibrationHalfInputHatch: ItemStack? = null
+
+  lateinit var InfiniteLiquidAirHatch: ItemStack
+  lateinit var InfiniteDistilledWaterHatch: ItemStack
+  lateinit var InfiniteLavaHatch: ItemStack
+  lateinit var InfiniteOilHatch: ItemStack
+  lateinit var InfiniteLubricantHatch: ItemStack
+  lateinit var InfiniteSteamHatch: ItemStack
+  lateinit var ZeroGenerator: ItemStack
+  lateinit var HumongousCalibrationInputHatch: ItemStack
+  lateinit var HumongousCalibrationHalfInputHatch: ItemStack
+
   // endregion
 
   // region multi Machine controller
-  var AstralForge: ItemStack? = null
-  var AtomMacro: ItemStack? = null
-  var AssemblyMatrix: ItemStack? = null
-  var KelvinTransformField: ItemStack? = null
-  var SelectedEnergyGenerator: ItemStack? = null
-  var Creator: ItemStack? = null
-  var EyeOfUltimate: ItemStack? = null
-  var DenseEndpoint: ItemStack? = null
+
+  lateinit var AstralForge: ItemStack
+  lateinit var AtomMacro: ItemStack
+  lateinit var AssemblyMatrix: ItemStack
+  lateinit var KelvinTransformField: ItemStack
+  lateinit var SelectedEnergyGenerator: ItemStack
+  lateinit var Creator: ItemStack
+  lateinit var EyeOfUltimate: ItemStack
+  lateinit var DenseEndpoint: ItemStack
+
   // endregion
 
   override fun load() {

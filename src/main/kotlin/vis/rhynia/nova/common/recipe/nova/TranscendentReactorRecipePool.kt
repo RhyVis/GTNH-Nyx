@@ -43,7 +43,7 @@ class TranscendentReactorRecipePool : RecipePool() {
     // region 催化剂
     // DTCC
     altBuilder(tr) {
-      it.itemInputs(
+      itemInputs(
               GTUtility.getIntegratedCircuit(1),
               Materials.Iron.getDust(1).ofSize(recipeModifier),
               Materials.Calcium.getDust(1).ofSize(recipeModifier),
@@ -61,7 +61,7 @@ class TranscendentReactorRecipePool : RecipePool() {
 
     // DTPC
     altBuilder(tr) {
-      it.itemInputs(
+      itemInputs(
               GTUtility.getIntegratedCircuit(2),
               Materials.Iron.getDust(1).ofSize(recipeModifier),
               Materials.Calcium.getDust(1).ofSize(recipeModifier),
@@ -83,7 +83,7 @@ class TranscendentReactorRecipePool : RecipePool() {
 
     // DTRC
     altBuilder(tr) {
-      it.itemInputs(
+      itemInputs(
               GTUtility.getIntegratedCircuit(3),
               Materials.Iron.getDust(1).ofSize(recipeModifier),
               Materials.Calcium.getDust(1).ofSize(recipeModifier),
@@ -109,7 +109,7 @@ class TranscendentReactorRecipePool : RecipePool() {
 
     // DTEC
     altBuilder(tr) {
-      it.itemInputs(
+      itemInputs(
               GTUtility.getIntegratedCircuit(4),
               Materials.Iron.getDust(1).ofSize(recipeModifier),
               Materials.Calcium.getDust(1).ofSize(recipeModifier),
@@ -139,7 +139,7 @@ class TranscendentReactorRecipePool : RecipePool() {
 
     // DTSC
     altBuilder(tr) {
-      it.itemInputs(
+      itemInputs(
               GTUtility.getIntegratedCircuit(5),
               Materials.Iron.getDust(1).ofSize(recipeModifier),
               Materials.Calcium.getDust(1).ofSize(recipeModifier),

@@ -21,15 +21,15 @@ import vis.rhynia.nova.proxy.CommonProxy
     acceptedMinecraftVersions = "[1.7.10]")
 class Nova {
   companion object {
-    @JvmStatic val NovaModLogger: Logger by lazy { LogManager.getLogger(Constant.MOD_ID) }
+    val NovaModLogger: Logger by lazy { LogManager.getLogger(Constant.MOD_ID) }
+
+    val DevEnv: Boolean by lazy { Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean }
 
     @JvmStatic
     @SidedProxy(
         clientSide = "vis.rhynia.nova.proxy.ClientProxy",
         serverSide = "vis.rhynia.nova.proxy.CommonProxy")
     lateinit var proxy: CommonProxy
-
-    val DevEnv: Boolean = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
   }
 
   @Mod.EventHandler fun preInit(event: FMLPreInitializationEvent) = proxy.preInit(event)

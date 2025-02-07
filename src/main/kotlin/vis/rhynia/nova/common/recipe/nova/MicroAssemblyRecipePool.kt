@@ -59,7 +59,7 @@ class MicroAssemblyRecipePool : RecipePool() {
     // region 光学元件
     // 二极管
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               GTOreDictUnificator.get(OrePrefixes.foil, Materials.Tritanium, 1)
                   .ofSize(partOpticalMultiply * 32 * 4),
               MaterialsAlloy.LAFIUM.getFoil(1).ofSize(partOpticalMultiply * 32 * 2),
@@ -73,7 +73,7 @@ class MicroAssemblyRecipePool : RecipePool() {
     }
     // 电阻
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               GTOreDictUnificator.get(OrePrefixes.foil, Materials.Naquadria, 1)
                   .ofSize(partOpticalMultiply * 32 * 4),
               MaterialsAlloy.PIKYONIUM.getFoil(1).ofSize(partOpticalMultiply * 32 * 2),
@@ -89,7 +89,7 @@ class MicroAssemblyRecipePool : RecipePool() {
     }
     // 晶体管
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               GTOreDictUnificator.get(OrePrefixes.foil, Materials.BlackPlutonium, 1)
                   .ofSize(partOpticalMultiply * 32 * 4),
               MaterialsAlloy.TRINIUM_REINFORCED_STEEL.getFoil(1)
@@ -106,7 +106,7 @@ class MicroAssemblyRecipePool : RecipePool() {
     }
     // 电容
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               GTOreDictUnificator.get(OrePrefixes.foil, Materials.Draconium, 1)
                   .ofSize(partOpticalMultiply * 32 * 4),
               MaterialsAlloy.CINOBITE.getFoil(1).ofSize(partOpticalMultiply * 32 * 2),
@@ -122,7 +122,7 @@ class MicroAssemblyRecipePool : RecipePool() {
     }
     // 电感
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               GGMaterial.hikarium.get(OrePrefixes.foil, 1).ofSize(partOpticalMultiply * 32 * 4),
               GGMaterial.artheriumSn.get(OrePrefixes.foil, 1).ofSize(partOpticalMultiply * 32))
           .fluidInputs(
@@ -482,7 +482,7 @@ class MicroAssemblyRecipePool : RecipePool() {
         .addTo(ma)
     // Spacial 2
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               GTModHandler.getModItem(
                   NewHorizonsCoreMod.ID, "item.EngineeringProcessorSpatialPulsatingCore", 64),
               GTModHandler.getModItem(NewHorizonsCoreMod.ID, "item.ChargedCertusQuartzPlate", 64)
@@ -500,7 +500,7 @@ class MicroAssemblyRecipePool : RecipePool() {
     }
     // Spacial 3
     altBuilder(ma) {
-      it.itemInputs(
+      itemInputs(
               NewHorizonsCoreMod.getItem("item.EngineeringProcessorSpatialPulsatingCore", 1)
                   .ofSize(256),
               NewHorizonsCoreMod.getItem("item.ChargedCertusQuartzPlate", 1).ofSize(16 * 64),

@@ -5,6 +5,10 @@ import vis.rhynia.nova.common.block.base.AbstractMetaBlock
 import vis.rhynia.nova.common.item.base.AbstractMetaItem
 
 object RegistryUtil {
+  fun registerMetaItem(item: AbstractMetaItem, meta: Int): ItemStack {
+    return item.registerVariant(meta)
+  }
+
   fun registerMetaItem(item: AbstractMetaItem, meta: Int, tooltip: Array<String>?): ItemStack {
     tooltip?.let { item.setTooltips(meta, it) }
     return item.registerVariant(meta)
