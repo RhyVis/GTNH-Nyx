@@ -3,7 +3,7 @@ apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'com.github.gmazzo.buildconfig'
 
 buildConfig {
-    packageName("vis.rhynia.nova")
+    packageName("rhynia.constellation")
     buildConfigField('String', 'MODVER', "\"${project.modVersion}\"")
     useKotlinOutput { topLevelConstants = true }
 }
