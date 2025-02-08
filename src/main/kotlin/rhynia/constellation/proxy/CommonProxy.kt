@@ -7,7 +7,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
 import rhynia.constellation.CEL_MOD_NAME
 import rhynia.constellation.Config
-import rhynia.constellation.Constellation
+import rhynia.constellation.Constellation.DevEnv
 import rhynia.constellation.Log
 import rhynia.constellation.Tags
 import rhynia.constellation.init.MachineLoader
@@ -20,7 +20,7 @@ open class CommonProxy {
   open fun preInit(event: FMLPreInitializationEvent) {
     Log.info(
         "Hello Minecraft! $CEL_MOD_NAME initializing at version ${Tags.VERSION}" +
-            if (Constellation.Companion.DevEnv) " (dev)" else null)
+            if (DevEnv) " (dev)" else null)
     Config.syncConfig(event.suggestedConfigurationFile)
 
     Log.info("Initializing $CEL_MOD_NAME materials...")

@@ -4,10 +4,8 @@ import java.io.File
 import net.minecraftforge.common.config.Configuration
 
 object Config {
-  private const val CATEGORY_GENERAL = Configuration.CATEGORY_GENERAL
-  private var greeting: String = "Hello World"
-
   private const val CATEGORY_RECIPE = "recipe"
+
   var loadTstRecipe: Boolean = true
   var loadWirelessHatchRecipe: Boolean = true
 
@@ -20,8 +18,6 @@ object Config {
   @JvmStatic
   fun syncConfig(configFile: File) {
     Configuration(configFile).run {
-      greeting = getString("Greeting", CATEGORY_GENERAL, greeting, "How shall I greet?")
-
       loadTstRecipe =
           getBoolean("LoadTstRecipe", CATEGORY_RECIPE, loadTstRecipe, "Load TST recipe?")
       loadWirelessHatchRecipe =
