@@ -1,4 +1,3 @@
 package rhynia.constellation.proxy
 
-@Suppress("unused")
-class ClientProxy : CommonProxy()
+@Suppress("unused") class ClientProxy : CommonProxy()
