@@ -1,4 +1,4 @@
-package rhynia.constellation.common.block
+package rhynia.constellation.init.registry
 
 import rhynia.constellation.common.block.base.CelMetaBlock
 import rhynia.constellation.common.block.casing.EyeOfHarmonyCore

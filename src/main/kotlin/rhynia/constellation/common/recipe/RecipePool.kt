@@ -19,6 +19,11 @@ import rhynia.constellation.api.recipe.CelRecipeMapBackend
 import rhynia.constellation.common.container.CelItemList
 import rhynia.constellation.common.material.generation.CelMaterial
 
+/**
+ * Base class for all recipe loaders, impl [loadRecipes] method, and call it in complete-init stage.
+ *
+ * Provide various helper methods for recipe creation.
+ */
 @Suppress("unused")
 abstract class RecipePool {
   /** Load recipes into the recipe pool at Complete Load Stage */
@@ -62,12 +67,6 @@ abstract class RecipePool {
   /** Alias for RA.stdBuilder() */
   protected fun builder(): GTRecipeBuilder = GTRecipeBuilder.builder().noOptimize()
 
-  protected fun builder(`if`: Boolean) = if (`if`) builder() else null
-
-  protected fun builder(requiredMod: Mods) = builder(requiredMod.isModLoaded)
-
-  protected fun builder(vararg requiredMods: Mods) = builder(requiredMods.all { it.isModLoaded })
-
   /**
    * Create a new recipe builder with the given action and add it to the recipe map
    *
@@ -81,6 +80,15 @@ abstract class RecipePool {
       backend: RecipeMap<CelRecipeMapBackend>,
       action: CelRecipeBuilder.() -> CelRecipeBuilder
   ) = CelRecipeBuilder().apply { this.action().inject(backend) }
+
+  /**
+   * Require mods to be loaded before executing the action
+   *
+   * @param requiredMods Mods to be checked
+   */
+  protected inline fun requireMods(vararg requiredMods: Mods, action: () -> Unit) {
+    if (requiredMods.all { it.isModLoaded }) action()
+  }
 
   protected fun Mods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
       GTModHandler.getModItem(
@@ -183,7 +191,7 @@ abstract class RecipePool {
         this.also { this.specialValue = specialValue }
 
     /** Renamed inject method to avoid misuse in lambda calls */
-    internal fun inject(recipeMap: RecipeMap<*>): CelRecipeBuilder {
+    internal fun inject(recipeMap: RecipeMap<*>) {
       GTRecipe(
               false,
               inputItems,
@@ -200,8 +208,6 @@ abstract class RecipePool {
             mOutputs = outputItems.clone()
           }
           .let { recipeMap.add(it) }
-
-      return this
     }
   }
 }

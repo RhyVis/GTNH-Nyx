@@ -27,8 +27,8 @@ import rhynia.constellation.common.recipe.gt.QuantumForceTransformerRecipePool
 
 object RecipeLoader : Loader {
   override fun load() {
-    // Nova
-    Log.info("Loading Nova additional recipes...")
+    // Constellation
+    Log.info("Loading Constellation additional recipes...")
     arrayOf<RecipePool>(
             AstralForgeRecipePool(),
             IntegratedAssemblyRecipePool(),
@@ -47,7 +47,7 @@ object RecipeLoader : Loader {
           }
         }
     // GT
-    Log.info("Loading GT related recipes...")
+    Log.info("Loading GregTech related recipes...")
     arrayOf<RecipePool>(
             AssemblerRecipePool(),
             CentrifugeRecipePool(),
@@ -71,8 +71,8 @@ object RecipeLoader : Loader {
           }
         }
     // Material System
-    Log.info("Loading material related recipes...")
-    CelMaterialLoader.materialSet.forEach {
+    Log.info("Loading Material related recipes...")
+    CelMaterialLoader.MaterialSet.forEach {
       try {
         if (it.skipRecipeGeneration) return@forEach
         CelMaterialRecipeLoader(it).loadRecipes()

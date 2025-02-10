@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
-import rhynia.constellation.common.item.ItemRecord
+import rhynia.constellation.init.registry.ItemRecord
 
 object CelTab {
   val TabItem: CreativeTabs =

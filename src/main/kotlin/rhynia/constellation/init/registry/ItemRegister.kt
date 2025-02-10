@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting
 import rhynia.constellation.api.util.RegistryUtil
 import rhynia.constellation.common.container.CelItemList
-import rhynia.constellation.common.item.ItemRecord
 import rhynia.constellation.common.item.base.AbstractMetaItem
 
 object ItemRegister {

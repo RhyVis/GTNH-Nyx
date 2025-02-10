@@ -21,14 +21,14 @@ import net.minecraft.util.EnumChatFormatting.WHITE
 import net.minecraft.util.IIcon
 import rhynia.constellation.client.CelTab
 import rhynia.constellation.common.material.CelMaterials
-import rhynia.constellation.common.material.generation.CelMaterialLoader.materialMap
-import rhynia.constellation.common.material.generation.CelMaterialLoader.materialSet
+import rhynia.constellation.common.material.generation.CelMaterialLoader.MaterialMap
+import rhynia.constellation.common.material.generation.CelMaterialLoader.MaterialSet
 
 class CelGeneratedMetaItem(val orePrefix: OrePrefixes) :
     MetaGeneratedItem("CelGenMetaItem${orePrefix.name}", 32766, 0) {
   init {
     creativeTab = CelTab.TabItem
-    materialSet.forEach {
+    MaterialSet.forEach {
       if (!it.isTypeValid(orePrefix)) return@forEach
       GTOreDictUnificator.registerOre(
           orePrefix.name + it.internalName, ItemStack(this, 1, it.id.toInt()))
@@ -94,7 +94,7 @@ class CelGeneratedMetaItem(val orePrefix: OrePrefixes) :
       aStack: ItemStack?,
       aPlayer: EntityPlayer?
   ) {
-    val material = materialMap[aStack?.itemDamage?.toShort()] ?: return
+    val material = MaterialMap[aStack?.itemDamage?.toShort()] ?: return
     material.elementTooltip.forEach { aList.add(it) }
     if (material.extraTooltip.isNotEmpty()) {
       if (isShiftKeyDown()) material.extraTooltip.forEach { aList.add(it) }
@@ -103,15 +103,15 @@ class CelGeneratedMetaItem(val orePrefix: OrePrefixes) :
   }
 
   override fun getItemStackDisplayName(stack: ItemStack): String? {
-    val material = materialMap[stack.itemDamage.toShort()] ?: CelMaterials.Null
+    val material = MaterialMap[stack.itemDamage.toShort()] ?: CelMaterials.Null
     return typedName.replace("%material", material.displayName)
   }
 
   override fun getIconContainer(aMetaData: Int): IIconContainer? {
-    return if (materialMap[aMetaData.toShort()] == null) null
+    return if (MaterialMap[aMetaData.toShort()] == null) null
     else if (orePrefix.mTextureIndex.toInt() == -1) proxyIconContainerBartWorks(aMetaData)
     else
-        materialMap[aMetaData.toShort()]
+        MaterialMap[aMetaData.toShort()]
             ?.textureSet
             ?.mTextures
             ?.get(orePrefix.mTextureIndex.toInt())
@@ -119,7 +119,7 @@ class CelGeneratedMetaItem(val orePrefix: OrePrefixes) :
 
   @SideOnly(Side.CLIENT)
   private fun proxyIconContainerBartWorks(aMetaData: Int): IIconContainer? {
-    return PrefixTextureLinker.texMap[orePrefix]?.get(materialMap[aMetaData.toShort()]?.textureSet)
+    return PrefixTextureLinker.texMap[orePrefix]?.get(MaterialMap[aMetaData.toShort()]?.textureSet)
   }
 
   override fun getSubItems(
@@ -127,19 +127,19 @@ class CelGeneratedMetaItem(val orePrefix: OrePrefixes) :
       aCreativeTab: CreativeTabs?,
       aList: MutableList<ItemStack>
   ) {
-    materialSet.forEach { material ->
+    MaterialSet.forEach { material ->
       if (!material.isTypeValid(orePrefix)) return@forEach
       aList.add(ItemStack(this, 1, material.id.toInt()))
     }
   }
 
   override fun getRGBa(aStack: ItemStack?): ShortArray {
-    return materialMap[aStack?.itemDamage?.toShort()]?.color ?: shortArrayOf(0, 0, 0, 255)
+    return MaterialMap[aStack?.itemDamage?.toShort()]?.color ?: shortArrayOf(0, 0, 0, 255)
   }
 
   override fun getIconFromDamage(aMetaData: Int): IIcon? {
-    return if (aMetaData < 0 || aMetaData >= materialSet.size) null
-    else if (materialMap[aMetaData.toShort()] == null) null else getIconContainer(aMetaData)?.icon
+    return if (aMetaData < 0 || aMetaData >= MaterialSet.size) null
+    else if (MaterialMap[aMetaData.toShort()] == null) null else getIconContainer(aMetaData)?.icon
   }
 
   override fun getItemStackLimit(aStack: ItemStack?): Int {

@@ -26,7 +26,9 @@ class CelMaterial(
     val id: Short,
     /**
      * Internal name of the material, should be unique and not contain any space, anyway I will
-     * remove the space
+     * remove the space.
+     *
+     * 2025.02.09 Add more strict rule by only allowing [A-Za-z0-9_]
      */
     internalName: String,
     /** Localized display name of the material */
@@ -39,7 +41,7 @@ class CelMaterial(
     val color: ShortArray
 ) {
   init {
-    CelMaterialLoader.materialSet.add(this)
+    CelMaterialLoader.MaterialSet.add(this)
   }
 
   companion object {
@@ -82,26 +84,50 @@ class CelMaterial(
             }
             .joinToString("")
 
-    fun shouldHasCell(state: FluidState) = state in setOf(LIQUID, MOLTEN, PLASMA)
+    fun FluidState.shouldHasCell() = this in setOf(LIQUID, MOLTEN, PLASMA)
 
-    fun shouldHasForestryCell(state: FluidState) =
-        Mods.Forestry.isModLoaded && state in setOf(LIQUID, MOLTEN)
+    fun FluidState.shouldHasForestryCell() =
+        Mods.Forestry.isModLoaded && this in setOf(LIQUID, MOLTEN)
   }
 
   // region Material Metadata
-  val internalName: String = internalName.replace(" ", "")
 
+  /**
+   * The name used in registration, when it comes to 'finding' a material, [id] is more commonly
+   * used
+   */
+  val internalName: String = internalName.replace(Regex("[^A-Za-z0-9]"), "")
+
+  /** Element desc such as Fe, Au, etc. */
   var elementTooltip: Array<String> = arrayOf()
+
+  /** Additional tooltip for the material, need to press shift to see */
   var extraTooltip: Array<String> = arrayOf()
 
+  /** The texture set for the material, it should be one of the [TextureSet] */
   var textureSet: TextureSet = TextureSet.SET_NONE
 
-  var protons = 32
+  var protons: Int = 32
+
   var mass: Int = 64
+
+  /** Whether the material has been initialized, cannot be set to false again */
+  var hasInitialiated = false
+    set(value) {
+      if (value) {
+        Log.debug("Material $internalName has been initialized")
+        field = true
+      } else {
+        throw IllegalStateException(
+            "Material $internalName's initalizaion should not be set to false again")
+      }
+    }
 
   /**
    * Whether to skip the recipe generation, if the custom recipe is provided, it should be set to
    * true
+   *
+   * @see CelMaterialRecipeLoader
    */
   var skipRecipeGeneration: Boolean = false
 
@@ -109,18 +135,31 @@ class CelMaterial(
    * Add the tooltip to the material, commonly used as elemental representation, e.g. "Fe" for iron.
    *
    * Should be called before `addTooltip`
+   *
+   * @param e The element desc
+   * @param subscript Whether to subscript the numbers
    */
-  fun addElementalTooltip(vararg e: String) {
-    elementTooltip += e
+  fun addElementalTooltip(vararg e: String, subscript: Boolean = true) {
+    elementTooltip += e.map { if (subscript) it.subscriptNumbers() else it }
   }
 
-  /** Add additional tooltip to the material, need to press shift */
+  /**
+   * Add additional tooltip to the material, need to press shift
+   *
+   * @param tooltips The additional tooltips
+   */
   fun addExtraTooltip(vararg tooltips: String) {
     extraTooltip += tooltips
   }
+
   // endregion
 
   // region OrePrefix
+
+  /**
+   * The allowed ore prefixes for the material, in another word, the OrePrefixes can be used to
+   * generate item for the material
+   */
   private val allowedOrePrefixes: MutableSet<OrePrefixes> = mutableSetOf()
 
   /**
@@ -157,12 +196,17 @@ class CelMaterial(
    * @return The item stack
    */
   fun get(orePrefix: OrePrefixes, amount: Int = 1): ItemStack =
-      CelMaterialLoader.itemMap[orePrefix]?.let {
-        if (!isTypeValid(orePrefix)) return@let null
+      CelMaterialLoader.ItemMap[orePrefix]?.let {
+        if (!isTypeValid(orePrefix))
+            return let {
+              Log.error(
+                  "Material $internalName does not have a valid item for ore prefix $orePrefix")
+              CelItemList.TestItem01.get(0)
+            }
         ItemStack(it, amount, id.toInt())
       }
           ?: let {
-            Log.error("Material $internalName does not have a valid item for ore prefix $orePrefix")
+            Log.error("OrePrefix $orePrefix is not registered by any material")
             CelItemList.TestItem01.get(0)
           }
 
@@ -176,7 +220,11 @@ class CelMaterial(
    * incluiding dust, dustSmall, dustTiny
    */
   var flagDust: Boolean = false
-    set(value) = if (value) field = true else Unit
+    private set(value) {
+      if (hasInitialiated)
+          throw IllegalStateException("Material $internalName has been initialized")
+      if (value) field = true
+    }
 
   /** Enable dusts for the material */
   fun enableDusts() {
@@ -204,7 +252,11 @@ class CelMaterial(
    * incluiding ingot, ingotDouble, ingotTriple, ingotQuadruple, ingotQuintuple, ingotHot, nugget
    */
   var flagIngot: Boolean = false
-    set(value) = if (value) field = true else Unit
+    private set(value) {
+      if (hasInitialiated)
+          throw IllegalStateException("Material $internalName has been initialized")
+      if (value) field = true
+    }
 
   /**
    * Enable ingots for the material
@@ -246,7 +298,11 @@ class CelMaterial(
    * incluiding plate, plateDouble, plateTriple, plateQuadruple, plateQuintuple, plateDense, foil
    */
   var flagPlate: Boolean = false
-    set(value) = if (value) field = true else Unit
+    private set(value) {
+      if (hasInitialiated)
+          throw IllegalStateException("Material $internalName has been initialized")
+      if (value) field = true
+    }
 
   /**
    * Enable plates for the material
@@ -288,7 +344,11 @@ class CelMaterial(
    * incluiding gem, gemChipped, gemFlawed, gemFlawless, gemExquisite, lens
    */
   var flagGem: Boolean = false
-    set(value) = if (value) field = true else Unit
+    private set(value) {
+      if (hasInitialiated)
+          throw IllegalStateException("Material $internalName has been initialized")
+      if (value) field = true
+    }
 
   /**
    * Enable gems for the material
@@ -311,6 +371,12 @@ class CelMaterial(
     orePrefixes.forEach(this::addOrePrefix)
   }
 
+  /**
+   * Get the gem itemstack
+   *
+   * @param amount The amount of gem
+   * @return The gem item stack
+   */
   fun getGem(amount: Int = 1) = get(OrePrefixes.gem, amount)
 
   // endregion
@@ -323,7 +389,11 @@ class CelMaterial(
    * incluiding stick, stickLong, spring, springSmall, bolt, gearGt, gearGtSmall, ring, rotor, screw
    */
   var flagMisc: Boolean = false
-    set(value) = if (value) field = true else Unit
+    private set(value) {
+      if (hasInitialiated)
+          throw IllegalStateException("Material $internalName has been initialized")
+      if (value) field = true
+    }
 
   /**
    * Enable misc items for the material
@@ -360,7 +430,11 @@ class CelMaterial(
    * incluiding gas, liquid, molten, plasma, slurry
    */
   var flagFluid: Boolean = false
-    set(value) = if (value) field = true else Unit
+    private set(value) {
+      if (hasInitialiated)
+          throw IllegalStateException("Material $internalName has been initialized")
+      if (value) field = true
+    }
 
   /** The fluid state map, it contains the fluid state and the temperature */
   val fluidStateMap: MutableMap<FluidState, Pair<String, Int>> = mutableMapOf()
@@ -399,7 +473,7 @@ class CelMaterial(
    * @throws IllegalArgumentException If the material does not have a valid fluid state
    */
   fun getFluid(state: FluidState): Fluid =
-      CelMaterialLoader.fluidMap[this]?.get(state)
+      CelMaterialLoader.FluidMap[this.id]?.get(state)
           ?: throw IllegalArgumentException(
               "Material $internalName does not have a valid fluid state $state")
 

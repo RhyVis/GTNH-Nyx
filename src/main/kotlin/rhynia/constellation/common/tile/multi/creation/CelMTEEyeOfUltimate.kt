@@ -38,9 +38,9 @@ import net.minecraftforge.fluids.FluidStack
 import org.apache.commons.lang3.tuple.Pair as ApachePair
 import rhynia.constellation.api.enums.CelValues
 import rhynia.constellation.api.enums.CheckRecipeResultRef
-import rhynia.constellation.common.block.BlockRecord
 import rhynia.constellation.common.container.CelItemList
 import rhynia.constellation.common.tile.base.CelMTECubeBase
+import rhynia.constellation.init.registry.BlockRecord
 import tectech.TecTech.eyeOfHarmonyRecipeStorage
 import tectech.recipe.EyeOfHarmonyRecipe
 import tectech.thing.CustomItemList

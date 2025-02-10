@@ -58,8 +58,9 @@ class ChemicalReactorRecipePool : RecipePool() {
 
     // 干细胞
     val stemCell = GregTech.getItem("gt.metaitem.03", 64, 32073)
-    builder(GTNHIntergalactic)?.also {
-      it.itemInputs(CelMaterials.Astrium.getDust(12), Materials.Osmiridium.getDust(8))
+    requireMods(GTNHIntergalactic) {
+      builder()
+          .itemInputs(CelMaterials.Astrium.getDust(12), Materials.Osmiridium.getDust(8))
           .itemOutputs(*Array(3) { stemCell }, Materials.MysteriousCrystal.getDust(2))
           .fluidInputs(Materials.GrowthMediumSterilized.getFluid(4000))
           .fluidOutputs(FluidUtil.getFluidStack("bacterialsludge", 4000))

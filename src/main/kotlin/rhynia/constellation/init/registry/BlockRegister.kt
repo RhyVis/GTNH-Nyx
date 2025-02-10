@@ -4,11 +4,11 @@ import cpw.mods.fml.common.registry.GameRegistry
 import gregtech.api.interfaces.IItemContainer
 import net.minecraft.util.EnumChatFormatting.*
 import rhynia.constellation.api.util.RegistryUtil
-import rhynia.constellation.common.block.BlockRecord.EyeOfHarmonyCoreCasing
-import rhynia.constellation.common.block.BlockRecord.MetaBlock01
 import rhynia.constellation.common.block.base.AbstractMetaBlock
 import rhynia.constellation.common.block.base.CelMetaBlockItem
 import rhynia.constellation.common.container.CelItemList
+import rhynia.constellation.init.registry.BlockRecord.EyeOfHarmonyCoreCasing
+import rhynia.constellation.init.registry.BlockRecord.MetaBlock01
 
 @Suppress("unused")
 object BlockRegister {

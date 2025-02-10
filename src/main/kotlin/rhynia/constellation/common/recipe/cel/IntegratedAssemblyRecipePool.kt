@@ -74,8 +74,9 @@ class IntegratedAssemblyRecipePool : RecipePool() {
   private fun loadMain() {
     // region MISC
     // 光辉玻璃板
-    builder(AdvancedSolarPanel)?.also {
-      it.itemInputs(Materials.Sunnarium.getPlates(16))
+    requireMods(AdvancedSolarPanel) {
+      builder()
+          .itemInputs(Materials.Sunnarium.getPlates(16))
           .fluidInputs(
               Materials.Glass.getIngotMolten(72),
               Materials.Glowstone.getIngotMolten(16),
@@ -88,8 +89,9 @@ class IntegratedAssemblyRecipePool : RecipePool() {
     }
 
     // 无尽箱子
-    builder(AvaritiaAddons)?.also {
-      it.itemInputs(
+    requireMods(AvaritiaAddons) {
+      builder()
+          .itemInputs(
               GTModHandler.getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 10, 60),
               ItemList.Quantum_Chest_IV.get(18),
               GTModHandler.getModItem(Avaritia.ID, "Resource", 36, 0),
@@ -104,9 +106,11 @@ class IntegratedAssemblyRecipePool : RecipePool() {
           .durSec(4)
           .addTo(ia)
     }
+
     // 中子压缩机
-    builder(TinkersGregworks, Avaritia)?.also {
-      it.itemInputs(
+    requireMods(TinkersGregworks, Avaritia) {
+      builder()
+          .itemInputs(
               ItemList.Hull_UV.get(1),
               Tier.UV.getComponent(Tier.Component.ElectricMotor, 4),
               Tier.UV.getComponent(Tier.Component.ElectricPiston, 8),
@@ -142,8 +146,9 @@ class IntegratedAssemblyRecipePool : RecipePool() {
         .durSec(4)
         .addTo(ia)
     // Gravitation Engine
-    builder(GraviSuite)?.also {
-      it.itemInputs(
+    requireMods(GraviSuite) {
+      builder()
+          .itemInputs(
               SuperConductorPart.LuV.getPrefix(OrePrefixes.wireGt16, 4),
               ItemList.IV_Coil.get(16),
               GTOreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 64),

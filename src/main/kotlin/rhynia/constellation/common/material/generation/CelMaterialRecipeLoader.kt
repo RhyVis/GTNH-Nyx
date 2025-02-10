@@ -51,8 +51,15 @@ import net.minecraftforge.fluids.FluidContainerRegistry
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
 import rhynia.constellation.api.enums.CelValues
+import rhynia.constellation.common.material.generation.CelMaterial.Companion.shouldHasCell
+import rhynia.constellation.common.material.generation.CelMaterial.Companion.shouldHasForestryCell
 import rhynia.constellation.common.recipe.RecipePool
 
+/**
+ * Automatically generates recipes for the given material.
+ *
+ * The recipes will be enabled by the flags in the material.
+ */
 class CelMaterialRecipeLoader(private val mat: CelMaterial) : RecipePool() {
   override fun loadRecipes() {
     loadDustRecipes()
@@ -102,8 +109,8 @@ class CelMaterialRecipeLoader(private val mat: CelMaterial) : RecipePool() {
 
   private fun loadCellRecipes() {
     if (!mat.flagFluid) return
-    CelMaterialLoader.fluidMap[mat]?.forEach { (state, fluid) ->
-      if (CelMaterial.Companion.shouldHasCell(state))
+    CelMaterialLoader.FluidMap[mat.id]?.forEach { (state, fluid) ->
+      if (state.shouldHasCell())
           FluidContainerRegistry.FluidContainerData(
                   FluidStack(fluid, 1000),
                   mat.getCell(state),
@@ -114,7 +121,7 @@ class CelMaterialRecipeLoader(private val mat: CelMaterial) : RecipePool() {
                 FluidContainerRegistry.registerFluidContainer(it)
               }
 
-      if (CelMaterial.Companion.shouldHasForestryCell(state))
+      if (state.shouldHasForestryCell())
           FluidContainerRegistry.FluidContainerData(
                   FluidStack(fluid, 1000),
                   GTModHandler.getModItem(Mods.Forestry.ID, "waxCapsule", 1),
@@ -166,22 +173,22 @@ class CelMaterialRecipeLoader(private val mat: CelMaterial) : RecipePool() {
               .addTo(hammerRecipes)
         }
 
-    builder(mat.isTypeValid(dustTiny))?.also {
-      it.itemInputs(mat.get(gemChipped))
-          .itemOutputs(mat.get(dustTiny))
-          .duration(3 * CelValues.RecipeValues.SECOND + 4 * CelValues.RecipeValues.TICK)
-          .eut(16)
-          .addTo(hammerRecipes)
-    }
+    if (mat.isTypeValid(dustTiny))
+        builder()
+            .itemInputs(mat.get(gemChipped))
+            .itemOutputs(mat.get(dustTiny))
+            .duration(3 * CelValues.RecipeValues.SECOND + 4 * CelValues.RecipeValues.TICK)
+            .eut(16)
+            .addTo(hammerRecipes)
 
     if (mat.isTypeValid(lens)) {
-      builder(mat.isTypeValid(plate))?.also {
-        it.itemInputs(mat.get(plate))
-            .itemOutputs(mat.get(lens))
-            .durMin(1)
-            .eut(CelValues.RecipeValues.RECIPE_MV)
-            .addTo(cutterRecipes)
-      }
+      if (mat.isTypeValid(plate))
+          builder()
+              .itemInputs(mat.get(plate))
+              .itemOutputs(mat.get(lens))
+              .durMin(1)
+              .eut(CelValues.RecipeValues.RECIPE_MV)
+              .addTo(cutterRecipes)
       builder()
           .itemInputs(mat.get(gemExquisite))
           .itemOutputs(mat.get(lens), mat.get(dust, 2))
@@ -267,19 +274,19 @@ class CelMaterialRecipeLoader(private val mat: CelMaterial) : RecipePool() {
     }
 
     if (mat.flagIngot) {
-      if (mat.isTypeValid(stick)) {
+      if (mat.flagMisc) {
         GTModHandler.addCraftingRecipe(
             mat.get(stick, 2), GTProxy.tBits, arrayOf("s", "X", 'X', mat.get(stickLong)))
         GTModHandler.addCraftingRecipe(
             mat.get(stick), GTProxy.tBits, arrayOf("f ", " X", 'X', mat.get(ingot)))
 
-        builder(mat.flagDust)?.also {
-          it.itemInputs(mat.get(ingot))
-              .itemOutputs(mat.get(stick), mat.get(dustSmall, 2))
-              .duration(max(1, mat.mass * 5))
-              .eut(16)
-              .addTo(latheRecipes)
-        }
+        if (mat.flagDust)
+            builder()
+                .itemInputs(mat.get(ingot))
+                .itemOutputs(mat.get(stick), mat.get(dustSmall, 2))
+                .duration(max(1, mat.mass * 5))
+                .eut(16)
+                .addTo(latheRecipes)
 
         builder()
             .itemInputs(mat.get(stick, 2))
