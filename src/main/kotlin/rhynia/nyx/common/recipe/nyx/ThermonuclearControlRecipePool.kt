@@ -10,6 +10,7 @@ import gregtech.api.util.GTRecipeBuilder.INGOTS
 import gregtech.api.util.GTUtility
 import gtPlusPlus.core.material.MaterialsAlloy
 import gtPlusPlus.core.material.MaterialsElements
+import rhynia.nyx.api.enums.NyxValues.RecipeValues.RECIPE_MAX
 import rhynia.nyx.api.enums.NyxValues.RecipeValues.RECIPE_UEV
 import rhynia.nyx.api.enums.NyxValues.RecipeValues.RECIPE_UHV
 import rhynia.nyx.api.enums.NyxValues.RecipeValues.RECIPE_UIV
@@ -88,6 +89,7 @@ class ThermonuclearControlRecipePool : RecipePool() {
     // endregion
 
     // region 特殊材料制造
+
     // 兰波顿核心
     builder()
         .itemInputs(
@@ -120,9 +122,20 @@ class ThermonuclearControlRecipePool : RecipePool() {
         .eut(RECIPE_UEV)
         .durSec(30)
         .addTo(tc)
+
+    // 太初物质（测试）
+    builder()
+        .itemInputs(GTUtility.getIntegratedCircuit(10), NyxItemList.AstriumInfinityGauge.get(0))
+        .fluidInputs(NyxMaterials.AstralResidue.getLiquid(512 * BUCKETS))
+        .fluidOutputs(NyxMaterials.PrimordialEssence.getPlasma(100))
+        .eut(RECIPE_MAX)
+        .durMin(4)
+        .addTo(tc)
+
     // endregion
 
     // region 聚变
+
     // MetaStableOg
     builder()
         .itemInputs(
@@ -292,6 +305,7 @@ class ThermonuclearControlRecipePool : RecipePool() {
         .eut(RECIPE_UIV)
         .durSec(80)
         .addTo(tc)
+
     // endregion
 
     loadBatchAdder()
@@ -306,15 +320,13 @@ class ThermonuclearControlRecipePool : RecipePool() {
             Materials.Oxygen,
             Materials.Fluorine,
             Materials.Chlorine)
-    for (materials in gas2plasma) {
-      builder()
-          .itemInputs(GTUtility.getIntegratedCircuit(12), NyxItemList.LensAstriumInfinity.get(0))
-          .fluidInputs(materials.getGas(128 * INGOTS.toLong()))
-          .fluidOutputs(materials.getPlasma(128 * INGOTS.toLong()))
-          .eut(RECIPE_UEV)
-          .durSec(12)
-          .addTo(tc)
-    }
+    for (materials in gas2plasma) builder()
+        .itemInputs(GTUtility.getIntegratedCircuit(12), NyxItemList.LensAstriumInfinity.get(0))
+        .fluidInputs(materials.getGas(128 * INGOTS.toLong()))
+        .fluidOutputs(materials.getPlasma(128 * INGOTS.toLong()))
+        .eut(RECIPE_UEV)
+        .durSec(12)
+        .addTo(tc)
     // endregion
 
     // region Dust to Plasma (UEV)
@@ -328,18 +340,16 @@ class ThermonuclearControlRecipePool : RecipePool() {
             Materials.Phosphorus,
             Materials.Sulfur,
             Materials.Strontium)
-    for (materials in dust2plasma) {
-      builder()
-          .itemInputs(
-              GTUtility.getIntegratedCircuit(12),
-              NyxItemList.LensAstriumInfinity.get(0),
-              materials.getDust(64),
-              materials.getDust(64))
-          .fluidOutputs(materials.getPlasma(128 * INGOTS.toLong()))
-          .eut(RECIPE_UEV)
-          .durSec(12)
-          .addTo(tc)
-    }
+    for (materials in dust2plasma) builder()
+        .itemInputs(
+            GTUtility.getIntegratedCircuit(12),
+            NyxItemList.LensAstriumInfinity.get(0),
+            materials.getDust(64),
+            materials.getDust(64))
+        .fluidOutputs(materials.getPlasma(128 * INGOTS.toLong()))
+        .eut(RECIPE_UEV)
+        .durSec(12)
+        .addTo(tc)
     // endregion
 
     // region Molten to Plasma (UEV)
@@ -365,15 +375,13 @@ class ThermonuclearControlRecipePool : RecipePool() {
             Materials.Zinc,
             Materials.Platinum,
             Materials.Osmium)
-    for (materials in molten2plasma) {
-      builder()
-          .itemInputs(GTUtility.getIntegratedCircuit(12), NyxItemList.LensAstriumInfinity.get(0))
-          .fluidInputs(materials.getMolten(128 * INGOTS.toLong()))
-          .fluidOutputs(materials.getPlasma(128 * INGOTS.toLong()))
-          .eut(RECIPE_UEV)
-          .durSec(12)
-          .addTo(tc)
-    }
+    for (materials in molten2plasma) builder()
+        .itemInputs(GTUtility.getIntegratedCircuit(12), NyxItemList.LensAstriumInfinity.get(0))
+        .fluidInputs(materials.getMolten(128 * INGOTS.toLong()))
+        .fluidOutputs(materials.getPlasma(128 * INGOTS.toLong()))
+        .eut(RECIPE_UEV)
+        .durSec(12)
+        .addTo(tc)
     // endregion
   }
 }

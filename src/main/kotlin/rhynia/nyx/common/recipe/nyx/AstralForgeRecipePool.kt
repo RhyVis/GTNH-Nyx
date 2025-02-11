@@ -110,7 +110,7 @@ class AstralForgeRecipePool : RecipePool() {
             NyxMaterials.Astrium.getDust(64),
             NyxMaterials.AstralCatalystBase.getDust(16))
         .itemOutputs(NyxMaterials.AstriumInfinity.getDust(1))
-        .fluidOutputs(NyxMaterials.AstralCatalystBase.getLiquid(48 * BUCKETS))
+        .fluidOutputs(NyxMaterials.AstralCatalystBase.getLiquid(64 * BUCKETS))
         .noOptimize()
         .eut(RECIPE_UV)
         .durSec(20)

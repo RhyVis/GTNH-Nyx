@@ -31,7 +31,7 @@ class NyxGeneratedMetaItem(val orePrefix: OrePrefixes) :
     MaterialSet.forEach {
       if (!it.isTypeValid(orePrefix)) return@forEach
       GTOreDictUnificator.registerOre(
-          orePrefix.name + it.internalName, ItemStack(this, 1, it.id.toInt()))
+          orePrefix.name + it.internalNameTitleCase, ItemStack(this, 1, it.id.toInt()))
     }
   }
 

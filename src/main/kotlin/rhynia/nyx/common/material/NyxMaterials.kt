@@ -15,6 +15,7 @@ object NyxMaterials : Loader {
     Log.info("Adding materials by Nyx...")
   }
 
+  /** Null material, used for some special cases. */
   val Null =
       NyxMaterial(0, "null", "空", shortArrayOf(250, 250, 250, 255)).also {
         it.skipRecipeGeneration = true
@@ -109,6 +110,15 @@ object NyxMaterials : Loader {
         it.textureSet = TextureSet.SET_FLUID
         it.addElementalTooltip("Aμ°")
         it.enableFluids(LIQUID to 0)
+      }
+
+  val PrimordialEssence =
+      NyxMaterial(205, "PrimordialEssence", "太初物质", shortArrayOf(20, 5, 40, 255)).also {
+        it.textureSet = TextureSet.SET_NETHERSTAR
+        it.addElementalTooltip("E°")
+        it.enableDusts()
+        it.enableGems()
+        it.enableFluids(MOLTEN to 1, PLASMA to 36963)
       }
 
   val LapotronEnhancedFluid =

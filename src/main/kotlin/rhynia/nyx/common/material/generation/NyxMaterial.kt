@@ -98,6 +98,11 @@ class NyxMaterial(
    */
   val internalName: String = internalName.replace(Regex("[^A-Za-z0-9]"), "")
 
+  /** The title case of the internal name, used in orePrefixes, etc. */
+  val internalNameTitleCase: String by lazy {
+    internalName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+  }
+
   /** Element desc such as Fe, Au, etc. */
   var elementTooltip: Array<String> = arrayOf()
 

@@ -11,7 +11,9 @@ import gregtech.api.util.GTUtility
 import gtPlusPlus.api.recipe.GTPPRecipeMaps
 import gtPlusPlus.core.material.MaterialsElements
 import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.enums.NyxValues.RecipeValues.RECIPE_UIV
 import rhynia.nyx.api.util.FluidUtil
+import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.common.material.NyxMaterials
 import rhynia.nyx.common.recipe.RecipePool
 
@@ -82,6 +84,15 @@ class MixerRecipePool : RecipePool() {
         .durSec(5)
         .addTo(mx)
 
+    // 太初物质（测试）
+    builder()
+        .itemInputs(GTUtility.getIntegratedCircuit(8), NyxItemList.PreTesseract.get(4))
+        .fluidInputs(NyxMaterials.PrimordialEssence.getPlasma(1000))
+        .fluidOutputs(NyxMaterials.PrimordialEssence.getIngotMolten(2))
+        .eut(RECIPE_UIV)
+        .durSec(16)
+        .addTo(mx)
+
     // endregion
 
     // endregion
@@ -116,6 +127,7 @@ class MixerRecipePool : RecipePool() {
     // endregion
 
     // region 极寒-烈焰
+
     // 极寒
     builder()
         .itemInputs(
@@ -145,6 +157,7 @@ class MixerRecipePool : RecipePool() {
         .eut(NyxValues.RecipeValues.RECIPE_IV)
         .durSec(32)
         .addTo(mx)
+
     // endregion
   }
 }
