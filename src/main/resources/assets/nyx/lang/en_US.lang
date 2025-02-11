@@ -1,0 +1,65 @@
+ModName=Nyx
+
+item.ultimate.name=Useless
+
+item.MetaItem01.0.name=Test
+item.MetaItem01.1.name=Lapotron Matrix
+item.MetaItem01.2.name=Crystal Matrix
+item.MetaItem01.3.name=Dense Mica Insulator Foil
+item.MetaItem01.4.name=Pre Tesseract
+
+item.MetaItem01.1001.name=Astral Infinite Gem
+item.MetaItem01.1002.name=Astral Moment
+item.MetaItem01.1003.name=Astral Gauge
+
+item.MetaItem01.3001.name=Astral Energy Lens
+item.MetaItem01.3002.name=Astral Magical Lens
+item.MetaItem01.3003.name=Primoium Lens
+item.MetaItem01.3004.name=Originium Lens
+
+item.MetaItem02.0.name=Calibration
+item.MetaItem02.1.name=Assembly - DTPF
+
+tile.MetaBlock01.0.name=What?
+
+tile.EyeOfHarmonyCore.0.name=§fCrude§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.1.name=§fPrimitive§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.2.name=§fStable§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.3.name=§fAdvanced§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.4.name=§fSuperb§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.5.name=§fExotic§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.6.name=§fPerfect§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.7.name=§fTipler§r Integrated Spatio-temporal Convolver
+tile.EyeOfHarmonyCore.8.name=§f§lGallifreyan§r Integrated Spatio-temporal Convolver
+
+nyx.recipe.astralForge=Astra Forge
+nyx.recipe.thermonuclearControl=Thermonuclear Control
+nyx.recipe.transcendentReactor=Transcendent Reactor
+nyx.recipe.integratedAssembly=Integrated Assembly
+nyx.recipe.microAssembly=Micro Assembly
+nyx.recipe.superconductingForming=Superconducting Foaming
+nyx.recipe.voidEnergyGenerator=Astral Energy
+nyx.recipe.quarkRefactoring=Quark Refactoring
+
+nyx.AssemblyMatrix.pRecipeMode.0=Matrix Assembly Mode
+nyx.AssemblyMatrix.pRecipeMode.1=Micro Assembly Mode
+nyx.AssemblyMatrix.pRecipeMode.2=Superconducting Foaming Mode
+
+nyx.AtomMacro.pRecipeMode.0=Ultimate Heater Mode
+nyx.AtomMacro.pRecipeMode.1=Transcendent Reactor Mode
+nyx.AtomMacro.pRecipeMode.2=Fusion Mode
+
+nyx.KelvinTransformField.pRecipeMode.0=Vacuum Mode
+nyx.KelvinTransformField.pRecipeMode.1=Thermodynamics Mode(Not added)
+
+nyx.DenseEndpoint.pRecipeMode.0=Electric Implosion Compressor Mode
+nyx.DenseEndpoint.pRecipeMode.1=Nano Forge Mode
+nyx.DenseEndpoint.pRecipeMode.2=Quark Refactoring Mode
+
+nyx.Creator.pItemProcess.0=Fluid Mode
+nyx.Creator.pItemProcess.1=Item Mode
+
+GT5U.gui.text.importing_energy=§bImporting Energy
+GT5U.gui.text.no_selected_energy_core_set=§7No Core Set
+GT5U.gui.text.no_mode_set=No IC found for mode setting
+GT5U.gui.text.no_recipe_map_set=No available RecipeMap

@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8.5-GTNH",
+  "package": "rhynia.nyx.mixins",
+  "refmap": "mixins.nyx.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ae.MixinPortableCell",
+    "ae.MixinQuantumCell",
+    "bw.MixinMegaMultiBase",
+    "bw.MixinVoidMiner"
+  ],
+  "client": [],
+  "server": [
+    "pp.MixinElementalDuplicator",
+    "pp.MixinIndustrialDehydrator",
+    "pp.MixinIndustrialFluidHeater",
+    "pp.MixinIndustrialMacerator",
+    "pp.MixinIndustrialWashPlant",
+    "pp.MixinMassFabricator",
+    "pp.MixinMegaAlloyBlastSmelter",
+    "pp.MixinTreeFarm",
+    "bw.MixinCircuitAssemblyLine"
+  ]
+}
