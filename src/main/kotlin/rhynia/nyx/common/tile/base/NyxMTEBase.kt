@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.FluidUtil.idEqual
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 
@@ -251,13 +252,13 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
           setEuModifier(rEuModifier)
           setMaxParallel(rMaxParallel)
           setSpeedBonus(rDurationModifier)
-          setOverclock(if (rPerfectOverclock) 2.0 else 1.0, 2.0)
+          setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
           return super.process()
         }
       }
 
-  protected open val rPerfectOverclock
-    @OverrideOnly get() = false
+  protected open val rOverclockType: OverclockType
+    @OverrideOnly get() = OverclockType.Normal
 
   protected open val rEuModifier
     @OverrideOnly get() = 1.0

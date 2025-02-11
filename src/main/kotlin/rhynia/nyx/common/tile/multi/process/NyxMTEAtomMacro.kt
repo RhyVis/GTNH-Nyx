@@ -49,6 +49,7 @@ import net.minecraft.util.StatCollector
 import net.minecraftforge.common.util.ForgeDirection
 import org.apache.commons.lang3.tuple.Pair as ApPair
 import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.recipe.NyxRecipeMaps
 import rhynia.nyx.api.util.MathUtil
 import rhynia.nyx.common.tile.base.NyxMTEBase
@@ -94,14 +95,14 @@ class NyxMTEAtomMacro : NyxMTEBase<NyxMTEAtomMacro> {
         setEuModifier(rEuModifier)
         setMaxParallel(rMaxParallel)
         setSpeedBonus(rDurationModifier)
-        setOverclock(if (rPerfectOverclock) 2.0 else 1.0, 2.0)
+        setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
         return super.process()
       }
     }
   }
 
-  override val rPerfectOverclock: Boolean
-    get() = (mCoilLevel?.tier ?: -1) > 11
+  override val rOverclockType: OverclockType
+    get() = if ((mCoilLevel?.tier ?: -1) > 11) OverclockType.Perfect else OverclockType.Normal
 
   override val rMaxParallel: Int
     get() = (1 + uStarArrayCount) * (1 + uSpacetimeCompressionCount)

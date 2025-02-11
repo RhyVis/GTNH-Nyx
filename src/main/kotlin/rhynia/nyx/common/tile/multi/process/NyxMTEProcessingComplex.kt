@@ -22,6 +22,7 @@ import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import rhynia.nyx.api.enums.CheckRecipeResultRef
 import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.ItemUtil
 import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.common.tile.base.NyxMTECubeBase
@@ -77,11 +78,11 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
         }
       }
 
+  override val rOverclockType: OverclockType
+    get() = OverclockType.Perfect
+
   override val rMaxParallel: Int
     get() = pRunParallel
-
-  override val rPerfectOverclock: Boolean
-    get() = true
 
   private fun getRecipeMapFromStack(stack: ItemStack): RecipeMap<*>? {
     val mapArray = ProcessReference.ProcessingMap[stack.unlocalizedName] ?: return null

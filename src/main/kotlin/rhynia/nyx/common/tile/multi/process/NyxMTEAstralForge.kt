@@ -35,6 +35,7 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.EnumChatFormatting.RED
 import org.apache.commons.lang3.tuple.Pair as ApPair
 import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.recipe.NyxRecipeMaps
 import rhynia.nyx.common.tile.base.NyxMTEBase
 import tectech.thing.casing.TTCasingsContainer
@@ -55,8 +56,8 @@ class NyxMTEAstralForge : NyxMTEBase<NyxMTEAstralForge> {
 
   private var uStableField = 0 // 0-8, update from structure
 
-  override val rPerfectOverclock: Boolean
-    get() = uStableField >= 7
+  override val rOverclockType: OverclockType
+    get() = if (uStableField >= 7) OverclockType.PerfectHalfVol else OverclockType.Normal
 
   override val rDurationModifier: Double
     get() =

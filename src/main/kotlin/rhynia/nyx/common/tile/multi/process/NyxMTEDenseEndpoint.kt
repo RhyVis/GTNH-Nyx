@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.StatCollector
 import net.minecraftforge.common.util.ForgeDirection
 import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.recipe.NyxRecipeMaps
 import rhynia.nyx.common.tile.base.NyxMTECubeBase
 
@@ -55,8 +56,7 @@ class NyxMTEDenseEndpoint : NyxMTECubeBase<NyxMTEDenseEndpoint> {
 
   override fun getRecipeCatalystPriority(): Int = -10
 
-  override val rPerfectOverclock: Boolean
-    get() = true
+  override val rOverclockType: OverclockType = OverclockType.Perfect
 
   override val rMaxParallel: Int
     get() {
