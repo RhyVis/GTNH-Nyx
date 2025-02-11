@@ -1,6 +1,5 @@
 package rhynia.nyx.proxy
 
-import com.gtnewhorizon.structurelib.StructureLib
 import cpw.mods.fml.common.event.FMLInitializationEvent
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
@@ -48,6 +47,6 @@ open class CommonProxy {
 
   // register server commands
   open fun serverStarting(event: FMLServerStartingEvent) {
-    StructureLib.DEBUG_MODE = true
+    // StructureLib.DEBUG_MODE = true
   }
 }

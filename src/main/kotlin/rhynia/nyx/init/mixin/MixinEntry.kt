@@ -6,6 +6,7 @@ import gregtech.api.enums.Mods.BartWorks
 import gregtech.api.enums.Mods.GTPlusPlus
 import rhynia.nyx.Log
 
+/** Store all late mixins, will be loaded by MixinManager */
 @Suppress("unused", "SpellCheckingInspection")
 enum class MixinEntry(builder: MixinBuilder) {
 
@@ -79,10 +80,13 @@ enum class MixinEntry(builder: MixinBuilder) {
       classes.addAll(mixinClasses)
     }
 
+    /** Set the target mod ID, must be called or the entry will be invalid */
     fun toMod(id: String) = apply { targetModId = id }
 
+    /** Convert Mods to mod ID */
     fun toMod(targetMod: Mods) = toMod(targetMod.ID)
 
+    /** Extra condition checked when loading the mixin */
     fun applyIf(ai: () -> Boolean) = apply { condition = ai }
   }
 }
