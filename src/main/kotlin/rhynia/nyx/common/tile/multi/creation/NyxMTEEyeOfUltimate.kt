@@ -221,9 +221,9 @@ class NyxMTEEyeOfUltimate : NyxMTECubeBase<NyxMTEEyeOfUltimate> {
           .addInfo("每个星阵提供8并行, 每个星矩提供2并行.")
           .addInfo("不产出能量, 直接从无线电网获取所需能量.")
           .beginStructureBlock(3, 3, 3, false)
-          .addInputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addOutputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addOutputHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
+          .addInputBus()
+          .addOutputBus()
+          .addOutputHatch()
           .toolTipFinisher(NyxValues.CommonStrings.NyxGigaFac)
 
   override fun getInfoDataExtra(): Array<String> =

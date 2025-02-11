@@ -20,6 +20,7 @@ import rhynia.nyx.common.tile.multi.process.NyxMTEAstralForge
 import rhynia.nyx.common.tile.multi.process.NyxMTEAtomMacro
 import rhynia.nyx.common.tile.multi.process.NyxMTEDenseEndpoint
 import rhynia.nyx.common.tile.multi.process.NyxMTEKelvinTransformField
+import rhynia.nyx.common.tile.multi.process.NyxMTEProcessingComplex
 
 object MachineLoader : Loader {
 
@@ -47,6 +48,7 @@ object MachineLoader : Loader {
   lateinit var Creator: ItemStack
   lateinit var EyeOfUltimate: ItemStack
   lateinit var DenseEndpoint: ItemStack
+  lateinit var ProcessingComplex: ItemStack
 
   // endregion
 
@@ -73,6 +75,8 @@ object MachineLoader : Loader {
       NyxMTEEyeOfUltimate(17507, "MTEEyeOfUltimate", "终极之眼").getStackForm(1)
     DenseEndpoint =
       NyxMTEDenseEndpoint(17508, "MTEDenseEndpoint", "致密极点").getStackForm(1)
+    ProcessingComplex =
+      NyxMTEProcessingComplex(17509, "MTEProcessingComplex", "处理矩阵").getStackForm(1)
 
     InfiniteLiquidAirHatch =
       NyxHatchLiquidAir(17401, "MTEInfiniteLiquidAirHatch", "无限液气仓", 10).getStackForm(1)
@@ -106,6 +110,7 @@ object MachineLoader : Loader {
     NyxItemList.Creator.set(Creator)
     NyxItemList.EyeOfUltimate.set(EyeOfUltimate)
     NyxItemList.DenseEndpoint.set(DenseEndpoint)
+    NyxItemList.ProcessingComplex.set(ProcessingComplex)
 
     NyxItemList.InfiniteLiquidAirHatch.set(InfiniteLiquidAirHatch)
     NyxItemList.InfiniteDistilledWaterHatch.set(InfiniteDistilledWaterHatch)

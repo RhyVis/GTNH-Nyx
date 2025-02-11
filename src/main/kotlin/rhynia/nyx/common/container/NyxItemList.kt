@@ -67,6 +67,7 @@ enum class NyxItemList : IItemContainer {
   Creator,
   EyeOfUltimate,
   DenseEndpoint,
+  ProcessingComplex,
   // endregion
 
   // Sig Block

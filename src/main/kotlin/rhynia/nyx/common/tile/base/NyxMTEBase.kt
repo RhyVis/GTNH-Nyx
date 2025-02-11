@@ -354,7 +354,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
           ) +
           getInfoDataExtra()
 
-  /** Extra information added after getInfoData() */
+  /** Extra information added after [getInfoData] */
   @OverrideOnly protected open fun getInfoDataExtra(): Array<String> = arrayOf()
 
   protected fun MultiblockTooltipBuilder.addChangeModeByScrewdriver(): MultiblockTooltipBuilder =

@@ -53,26 +53,14 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
           resetState()
           pMachineStack = controllerSlot ?: return CheckRecipeResultRef.NO_RECIPE_MAP_SET
           pRunParallel = pMachineStack!!.stackSize * 16
-          mInputBusses.forEach { inputBus ->
-            inputBus.realInventory.forEach { itemStack ->
-              itemStack?.let {
-                if (!pCalibrationSet && ItemUtil.isCalibration(it)) {
-                  pOrdinal = it.stackSize.coerceIn(1, 24)
-                  pCalibrationSet = true
-                }
-                if (ItemUtil.isAstralInfinityComplex(it)) {
-                  pRunParallel += it.stackSize * 2048
-                }
-              }
-            }
-          }
+          calculateState()
 
           getRecipeMapFromStack(pMachineStack!!)?.let { setRecipeMap(it) }
               ?: return CheckRecipeResultRef.NO_RECIPE_MAP_SET
           setEuModifier(rEuModifier)
           setMaxParallel(pRunParallel)
           setSpeedBonus(rDurationModifier)
-          setOverclock(2.0, 2.0)
+          setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
 
           return super.process()
         }
@@ -91,6 +79,22 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
     mapArray[pOrdinal.coerceIn(1, mapArraySize) - 1].let {
       pDisplayName = StatCollector.translateToLocal(it.unlocalizedName)
       return it
+    }
+  }
+
+  private fun calculateState() {
+    mInputBusses.forEach { bus ->
+      bus.realInventory.forEach { itemStack ->
+        itemStack?.let {
+          if (!pCalibrationSet && ItemUtil.isCalibration(it)) {
+            pOrdinal = it.stackSize.coerceIn(1, 24)
+            pCalibrationSet = true
+          }
+          if (ItemUtil.isAstralInfinityComplex(it)) {
+            pRunParallel += it.stackSize * 2048
+          }
+        }
+      }
     }
   }
 
@@ -121,7 +125,6 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
   internal enum class ProcessType(
       val pRecipeMap: RecipeMap<*>,
       val pMachineStack: ItemStack,
-      val pExtData: ProcessExtData = ProcessExtData.DEFAULT,
   ) {
     // spotless:off
     // GT++
@@ -158,15 +161,6 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
     // GT5U
     DTPF(RecipeMaps.plasmaForgeRecipes, NyxItemList.AssemblyDTPF.get(1))
     // spotless:on
-  }
-
-  internal data class ProcessExtData(
-      val pBaseParallel: Int = 1,
-      val pDurationModifier: Double = 1.0,
-  ) {
-    companion object {
-      val DEFAULT = ProcessExtData(1, 1.0)
-    }
   }
 
   // endregion
