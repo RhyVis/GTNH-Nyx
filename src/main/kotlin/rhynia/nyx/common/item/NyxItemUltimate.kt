@@ -1,4 +1,4 @@
-package rhynia.nyx.common.item.container
+package rhynia.nyx.common.item
 
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly

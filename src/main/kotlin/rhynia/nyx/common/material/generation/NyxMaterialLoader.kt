@@ -7,7 +7,7 @@ import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidRegistry
 import rhynia.nyx.Log
 import rhynia.nyx.api.interfaces.Loader
-import rhynia.nyx.common.item.container.NyxGeneratedMetaItem
+import rhynia.nyx.common.item.NyxGeneratedMetaItem
 
 object NyxMaterialLoader : Loader {
   override fun load() {

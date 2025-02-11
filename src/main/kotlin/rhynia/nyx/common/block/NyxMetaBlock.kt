@@ -1,4 +1,4 @@
-package rhynia.nyx.common.block.base
+package rhynia.nyx.common.block
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EnumCreatureType

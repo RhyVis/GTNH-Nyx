@@ -1,4 +1,4 @@
-package rhynia.nyx.common.item.base
+package rhynia.nyx.common.item
 
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
-import org.jetbrains.annotations.ApiStatus.OverrideOnly
+import org.jetbrains.annotations.ApiStatus
 import rhynia.nyx.NYX_MOD_ID
 import rhynia.nyx.api.interfaces.item.MetaTooltip
 import rhynia.nyx.api.interfaces.item.MetaVariant
@@ -34,7 +34,7 @@ abstract class AbstractMetaItem(protected val rawName: String) : Item(), MetaVar
    * `nova:'rawName'/0`.
    */
   open val iconName: String?
-    @OverrideOnly get() = null
+    @ApiStatus.OverrideOnly get() = null
 
   override fun getMetadata(meta: Int): Int = meta
 

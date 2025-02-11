@@ -1,4 +1,4 @@
-package rhynia.nyx.common.block.base
+package rhynia.nyx.common.block
 
 import gregtech.api.GregTechAPI
 import net.minecraft.block.Block
@@ -14,6 +14,8 @@ open class NyxMetaMachine(rawName: String) : NyxMetaBlock(rawName) {
   init {
     GregTechAPI.registerMachineBlock(this, -1)
     setHarvestLevel("wrench", wrenchLevel)
+    setHardness(9.0f)
+    setResistance(5.0f)
   }
 
   protected val wrenchLevel: Int

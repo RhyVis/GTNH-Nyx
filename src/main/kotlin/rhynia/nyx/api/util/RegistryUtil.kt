@@ -1,8 +1,8 @@
 package rhynia.nyx.api.util
 
 import net.minecraft.item.ItemStack
-import rhynia.nyx.common.block.base.AbstractMetaBlock
-import rhynia.nyx.common.item.base.AbstractMetaItem
+import rhynia.nyx.common.block.AbstractMetaBlock
+import rhynia.nyx.common.item.AbstractMetaItem
 
 @Suppress("unused")
 object RegistryUtil {

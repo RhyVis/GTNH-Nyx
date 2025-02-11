@@ -4,8 +4,8 @@ import cpw.mods.fml.common.registry.GameRegistry
 import gregtech.api.interfaces.IItemContainer
 import net.minecraft.util.EnumChatFormatting.*
 import rhynia.nyx.api.util.RegistryUtil
-import rhynia.nyx.common.block.base.AbstractMetaBlock
-import rhynia.nyx.common.block.base.NyxMetaBlockItem
+import rhynia.nyx.common.block.AbstractMetaBlock
+import rhynia.nyx.common.block.NyxMetaBlockItem
 import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.init.registry.BlockRecord.EyeOfHarmonyCoreCasing
 import rhynia.nyx.init.registry.BlockRecord.MetaBlock01

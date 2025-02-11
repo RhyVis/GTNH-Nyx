@@ -1,4 +1,4 @@
-package rhynia.nyx.common.item.container
+package rhynia.nyx.common.item
 
 import bartworks.client.textures.PrefixTextureLinker
 import cpw.mods.fml.relauncher.Side

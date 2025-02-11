@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting
 import rhynia.nyx.api.util.RegistryUtil
 import rhynia.nyx.common.container.NyxItemList
-import rhynia.nyx.common.item.base.AbstractMetaItem
+import rhynia.nyx.common.item.AbstractMetaItem
 
 object ItemRegister {
   fun register() {
