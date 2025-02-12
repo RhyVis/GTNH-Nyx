@@ -1,6 +1,13 @@
 package rhynia.nyx.common.tile.multi.process
 
 import gregtech.api.GregTechAPI
+import gregtech.api.enums.HatchElement.Energy
+import gregtech.api.enums.HatchElement.ExoticEnergy
+import gregtech.api.enums.HatchElement.InputBus
+import gregtech.api.enums.HatchElement.InputHatch
+import gregtech.api.enums.HatchElement.OutputBus
+import gregtech.api.enums.HatchElement.OutputHatch
+import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.recipe.RecipeMap
@@ -31,13 +38,6 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
   constructor(aId: Int, aName: String, aNameRegional: String) : super(aId, aName, aNameRegional)
   constructor(aName: String) : super(aName)
   override fun newMetaEntity(aTileEntity: IGregTechTileEntity?) = NyxMTEProcessingComplex(mName)
-
-  // region Structure
-
-  override val sCasingBlock: Pair<Block, Int>
-    get() = GregTechAPI.sBlockCasings8 to 7
-
-  // endregion
 
   // region Process
 
@@ -165,6 +165,16 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
 
   // endregion
 
+  // region Structure
+
+  override val sCasingBlock: Pair<Block, Int>
+    get() = GregTechAPI.sBlockCasings8 to 7
+
+  override val sCasingHatch: Array<IHatchElement<in NyxMTEProcessingComplex>>
+    get() = arrayOf(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+
+  // endregion
+
   // region Information
 
   override fun createTooltip(): MultiblockTooltipBuilder =
@@ -176,11 +186,11 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
           .addInfo("在一个机器组对应多个配方时, 用标定指示的数量决定配方.")
           .addInfo("控制器中每个机器组对应16并行, 放入星矩等效为2048并行.")
           .beginStructureBlock(3, 3, 3, false)
-          .addInputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addInputHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addOutputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addOutputHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addEnergyHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
+          .addInputBus()
+          .addInputHatch()
+          .addOutputBus()
+          .addOutputHatch()
+          .addEnergyHatch()
           .toolTipFinisher(NyxValues.CommonStrings.NyxGigaFac)
 
   override fun getInfoDataExtra(): Array<String> = arrayOf("${AQUA}执行配方: ${GOLD}$pDisplayName")

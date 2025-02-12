@@ -1,9 +1,11 @@
 package rhynia.nyx.common.tile.multi.generation
 
 import gregtech.api.GregTechAPI
+import gregtech.api.enums.HatchElement.InputBus
 import gregtech.api.enums.Textures
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
+import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
@@ -122,6 +124,9 @@ class NyxMTESelectedEnergyGenerator : NyxMTECubeBase<NyxMTESelectedEnergyGenerat
   override val sCasingBlock: Pair<Block, Int>
     get() = GregTechAPI.sBlockCasings1 to 12
 
+  override val sCasingHatch: Array<IHatchElement<in NyxMTESelectedEnergyGenerator>>
+    get() = arrayOf(InputBus)
+
   override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
     get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
 
@@ -138,7 +143,7 @@ class NyxMTESelectedEnergyGenerator : NyxMTECubeBase<NyxMTESelectedEnergyGenerat
           .addInfo("发电 = 电路板编号^(星矩/星规) * 标定指示 * MAX A/t.")
           .addInfo("产出的能量将直接输出至无线网络.")
           .beginStructureBlock(3, 3, 3, false)
-          .addInputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
+          .addInputBus()
           .toolTipFinisher(NyxValues.CommonStrings.NyxMagical)
 
   override fun getInfoDataExtra(): Array<String> =

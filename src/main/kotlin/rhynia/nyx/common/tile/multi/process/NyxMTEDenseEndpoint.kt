@@ -2,6 +2,13 @@ package rhynia.nyx.common.tile.multi.process
 
 import bartworks.API.recipe.BartWorksRecipeMaps
 import gregtech.api.GregTechAPI
+import gregtech.api.enums.HatchElement.Energy
+import gregtech.api.enums.HatchElement.ExoticEnergy
+import gregtech.api.enums.HatchElement.InputBus
+import gregtech.api.enums.HatchElement.InputHatch
+import gregtech.api.enums.HatchElement.OutputBus
+import gregtech.api.enums.HatchElement.OutputHatch
+import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
@@ -85,6 +92,9 @@ class NyxMTEDenseEndpoint : NyxMTECubeBase<NyxMTEDenseEndpoint> {
   override val sCasingBlock: Pair<Block, Int>
     get() = GregTechAPI.sBlockCasings8 to 10
 
+  override val sCasingHatch: Array<IHatchElement<in NyxMTEDenseEndpoint>>
+    get() = arrayOf(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+
   // endregion
 
   // region Info
@@ -96,10 +106,11 @@ class NyxMTEDenseEndpoint : NyxMTECubeBase<NyxMTEDenseEndpoint> {
           .addInfo("最大并行为128*最大输入电流.")
           .addInfo("执行无损超频.")
           .beginStructureBlock(3, 3, 3, false)
-          .addInputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addInputHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addOutputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addEnergyHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
+          .addInputBus()
+          .addInputHatch()
+          .addOutputBus()
+          .addOutputHatch()
+          .addEnergyHatch()
           .toolTipFinisher(NyxValues.CommonStrings.NyxNuclear)
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {

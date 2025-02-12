@@ -190,12 +190,12 @@ class NyxMTEAssemblyMatrix : NyxMTEBase<NyxMTEAssemblyMatrix> {
           .addInfo("高效组装各类基础元件.")
           .addInfo("在控制器内放入星极和星矩来决定并行.")
           .addInfo("电压每提高1级, 加速5%(叠乘计算).")
-          .addInfo(NyxValues.CommonStrings.ChangeModeByScrewdriver)
+          .addChangeModeByScrewdriver()
           .beginStructureBlock(3, 3, 7, false)
-          .addInputHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addInputBus(NyxValues.CommonStrings.BluePrintInfo, 1)
-          .addOutputBus(NyxValues.CommonStrings.BluePrintInfo, 2)
-          .addEnergyHatch(NyxValues.CommonStrings.BluePrintInfo, 1)
+          .addInputBus()
+          .addInputHatch()
+          .addOutputBus(2)
+          .addEnergyHatch()
           .toolTipFinisher(NyxValues.CommonStrings.NyxGigaFac)
 
   override fun saveNBTData(aNBT: NBTTagCompound?) {

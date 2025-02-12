@@ -15,6 +15,10 @@ object Config {
   var Recipe_TR_CatalystACRModifier: Int = 2000
   var Recipe_OPT_Modifier: Int = 4
 
+  private const val CATEGORY_MACHINE = "machine"
+
+  var MTE_Creator_UseEnergy: Boolean = true
+
   @JvmStatic
   fun syncConfig(configFile: File) {
     Configuration(configFile).run {
@@ -67,6 +71,9 @@ object Config {
               1,
               Int.Companion.MAX_VALUE / 16,
               "Recipe_OPT_Modifier")
+
+      MTE_Creator_UseEnergy =
+          getBoolean("MTE_Creator_UseEnergy", CATEGORY_MACHINE, true, "Creator复制物品与流体是否使用能量")
 
       if (hasChanged()) save()
     }

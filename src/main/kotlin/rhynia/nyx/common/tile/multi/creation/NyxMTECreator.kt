@@ -41,6 +41,7 @@ import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
+import rhynia.nyx.Config
 import rhynia.nyx.api.enums.CheckRecipeResultRef
 import rhynia.nyx.api.enums.NyxValues
 import rhynia.nyx.api.util.ItemUtil
@@ -93,6 +94,8 @@ class NyxMTECreator : NyxMTECubeBase<NyxMTECreator> {
       }
     }
 
+  private val pUseEnergy: Boolean by lazy { Config.MTE_Creator_UseEnergy }
+
   override fun onScrewdriverRightClick(
       side: ForgeDirection?,
       aPlayer: EntityPlayer?,
@@ -137,7 +140,7 @@ class NyxMTECreator : NyxMTECubeBase<NyxMTECreator> {
 
       if (tempStack.isItemEqual(pItemStackZeroPoint)) return CheckRecipeResultRegistry.NO_RECIPE
 
-      if (addEUToGlobalEnergyMap(pUUID, -pCost)) {
+      if (!pUseEnergy || addEUToGlobalEnergyMap(pUUID, -pCost)) {
         outputItemToAENetwork(pItemStackStore, pCost)
         return CheckRecipeResultRegistry.SUCCESSFUL
       } else {
@@ -151,7 +154,7 @@ class NyxMTECreator : NyxMTECubeBase<NyxMTECreator> {
         return CheckRecipeResultRegistry.NO_RECIPE
       }
 
-      if (addEUToGlobalEnergyMap(pUUID, -pCost)) {
+      if (!pUseEnergy || addEUToGlobalEnergyMap(pUUID, -pCost)) {
         outputFluidToAENetwork(pFluidStackStore, pCost)
         return CheckRecipeResultRegistry.SUCCESSFUL
       } else {
