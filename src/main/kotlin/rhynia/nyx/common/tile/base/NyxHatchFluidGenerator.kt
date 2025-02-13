@@ -31,7 +31,7 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
       aName: String,
       aTier: Int,
       aDescription: Array<String>,
-      aTextures: Array<Array<Array<ITexture>>>
+      aTextures: Array<Array<Array<ITexture>>>?
   ) : super(aName, aTier, aDescription, aTextures)
 
   abstract override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity?

@@ -20,7 +20,7 @@ class NyxHatchOil : NyxHatchFluidGenerator {
       aName: String,
       aTier: Int,
       aDescription: Array<String>,
-      aTextures: Array<Array<Array<ITexture>>>
+      aTextures: Array<Array<Array<ITexture>>>?
   ) : super(aName, aTier, aDescription, aTextures)
 
   override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity {
