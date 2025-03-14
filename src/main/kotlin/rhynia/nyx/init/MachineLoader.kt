@@ -3,6 +3,8 @@ package rhynia.nyx.init
 import gregtech.api.GregTechAPI
 import net.minecraft.item.ItemStack
 import rhynia.nyx.Config
+import rhynia.nyx.Log
+import rhynia.nyx.MOD_ID
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.api.interfaces.Loader
 import rhynia.nyx.common.container.NyxItemList
@@ -64,10 +66,21 @@ object MachineLoader : Loader {
   }
 
   private fun checkOccupation() {
-    for (i in (offset + 1)..(offset + 50)) {
+    for (i in (offset + 1)..(offset + 40)) {
       if (GregTechAPI.METATILEENTITIES[i] != null) {
-        throw IllegalStateException(
-            "ID $i preserved by $MOD_NAME is occupied by ${GregTechAPI.METATILEENTITIES[i].localName}")
+        val mte = GregTechAPI.METATILEENTITIES[i]
+
+        Log.warn("=========================================")
+        Log.warn("           ID CRASH DETECTED             ")
+        Log.warn("Seems that there's a conflict with ID $i")
+        Log.warn("$MOD_NAME will preserve ${(offset + 1)..(offset + 40)} for machine ids")
+        Log.warn("Now ID $i is occupied by ${mte.localName} form ${mte.javaClass}")
+        Log.warn("If this is an MTE from GT:NH, report this to $MOD_NAME's author")
+        Log.warn("If from another self-installed mod, you can change the offset in config")
+        Log.warn("It's named $MOD_ID.cfg in your config folder")
+        Log.warn("=========================================")
+
+        throw IllegalStateException("ID $i preserved by $MOD_NAME is occupied by ${mte.localName}")
       }
     }
   }
