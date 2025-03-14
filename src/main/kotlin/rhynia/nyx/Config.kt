@@ -6,6 +6,8 @@ import net.minecraftforge.common.config.Configuration
 object Config {
   private const val CATEGORY_RECIPE = "recipe"
 
+  var MTE_ID_OFFSET: Short = 17850
+
   var loadTstRecipe: Boolean = true
   var loadWirelessHatchRecipe: Boolean = true
 
@@ -22,6 +24,17 @@ object Config {
   @JvmStatic
   fun syncConfig(configFile: File) {
     Configuration(configFile).run {
+      MTE_ID_OFFSET =
+          getInt(
+                  "MTE_OFFSET",
+                  CATEGORY_MACHINE,
+                  17850,
+                  0,
+                  Short.MAX_VALUE.toInt(),
+                  "MTE ID Offset, using to solve conflicts with other custom mods " +
+                      "!!!DANGER TO CHANGE IN EXISTING SAVE!!!")
+              .toShort()
+
       loadTstRecipe =
           getBoolean("LoadTstRecipe", CATEGORY_RECIPE, loadTstRecipe, "Load TST recipe?")
       loadWirelessHatchRecipe =
