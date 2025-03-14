@@ -1,6 +1,11 @@
 package rhynia.nyx.init
 
+import gregtech.api.GregTechAPI
 import net.minecraft.item.ItemStack
+import rhynia.nyx.Config
+import rhynia.nyx.Log
+import rhynia.nyx.MOD_ID
+import rhynia.nyx.MOD_NAME
 import rhynia.nyx.api.interfaces.Loader
 import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.common.tile.hatch.NyxHatchDistilledWater
@@ -52,52 +57,75 @@ object MachineLoader : Loader {
 
   // endregion
 
+  private val offset by lazy { Config.MTE_ID_OFFSET }
+
   override fun load() {
+    checkOccupation()
     initializeMachineClass()
     initializeItemList()
+  }
+
+  private fun checkOccupation() {
+    for (i in (offset + 1)..(offset + 40)) {
+      if (GregTechAPI.METATILEENTITIES[i] != null) {
+        val mte = GregTechAPI.METATILEENTITIES[i]
+
+        Log.warn("=========================================")
+        Log.warn("           ID CRASH DETECTED             ")
+        Log.warn("Seems that there's a conflict with ID $i")
+        Log.warn("$MOD_NAME will preserve ${(offset + 1)..(offset + 40)} for machine ids")
+        Log.warn("Now ID $i is occupied by ${mte.localName} form ${mte.javaClass}")
+        Log.warn("If this is an MTE from GT:NH, report this to $MOD_NAME's author")
+        Log.warn("If from another self-installed mod, you can change the offset in config")
+        Log.warn("It's named $MOD_ID.cfg in your config folder")
+        Log.warn("=========================================")
+
+        throw IllegalStateException("ID $i preserved by $MOD_NAME is occupied by ${mte.localName}")
+      }
+    }
   }
 
   // spotless:off
   private fun initializeMachineClass() {
     AstralForge =
-      NyxMTEAstralForge(17501, "MTEAstralForge", "星辉锻造台").getStackForm(1)
+      NyxMTEAstralForge(offset + 1, "MTEAstralForge", "星辉锻造台").getStackForm(1)
     AtomMacro =
-      NyxMTEAtomMacro(17502, "MTEUltimateHeater", "粒子宏").getStackForm(1)
+      NyxMTEAtomMacro(offset + 2, "MTEUltimateHeater", "粒子宏").getStackForm(1)
     AssemblyMatrix =
-      NyxMTEAssemblyMatrix(17503, "MTEAssemblyMatrix", "组装矩阵").getStackForm(1)
+      NyxMTEAssemblyMatrix(offset + 3, "MTEAssemblyMatrix", "组装矩阵").getStackForm(1)
     KelvinTransformField =
-      NyxMTEKelvinTransformField(17504, "MTEKelvinTransformField", "开尔文变换场").getStackForm(1)
+      NyxMTEKelvinTransformField(offset + 4, "MTEKelvinTransformField", "开尔文变换场").getStackForm(1)
     SelectedEnergyGenerator =
-      NyxMTESelectedEnergyGenerator(17505, "MTESelectedEnergyGenerator", "能量发生器").getStackForm(1)
+      NyxMTESelectedEnergyGenerator(offset + 5, "MTESelectedEnergyGenerator", "能量发生器").getStackForm(1)
     Creator =
-      NyxMTECreator(17506, "MTECreator", "逆向奇点").getStackForm(1)
+      NyxMTECreator(offset + 6, "MTECreator", "逆向奇点").getStackForm(1)
     EyeOfUltimate =
-      NyxMTEEyeOfUltimate(17507, "MTEEyeOfUltimate", "终极之眼").getStackForm(1)
+      NyxMTEEyeOfUltimate(offset + 7, "MTEEyeOfUltimate", "终极之眼").getStackForm(1)
     DenseEndpoint =
-      NyxMTEDenseEndpoint(17508, "MTEDenseEndpoint", "致密极点").getStackForm(1)
+      NyxMTEDenseEndpoint(offset + 8, "MTEDenseEndpoint", "致密极点").getStackForm(1)
     ProcessingComplex =
-      NyxMTEProcessingComplex(17509, "MTEProcessingComplex", "处理矩阵").getStackForm(1)
+      NyxMTEProcessingComplex(offset + 9, "MTEProcessingComplex", "处理矩阵").getStackForm(1)
 
     InfiniteLiquidAirHatch =
-      NyxHatchLiquidAir(17401, "MTEInfiniteLiquidAirHatch", "无限液气仓", 10).getStackForm(1)
+      NyxHatchLiquidAir(offset + 21, "MTEInfiniteLiquidAirHatch", "无限液气仓", 10).getStackForm(1)
     InfiniteDistilledWaterHatch =
-      NyxHatchDistilledWater(17402, "MTEInfiniteDistilledWaterHatch", "无限蒸馏仓", 9).getStackForm(1)
+      NyxHatchDistilledWater(offset + 22, "MTEInfiniteDistilledWaterHatch", "无限蒸馏仓", 9).getStackForm(1)
     InfiniteLavaHatch =
-      NyxHatchLava(17403, "MTEInfiniteLavaHatch", "无限岩浆仓", 8).getStackForm(1)
+      NyxHatchLava(offset + 23, "MTEInfiniteLavaHatch", "无限岩浆仓", 8).getStackForm(1)
     InfiniteOilHatch =
-      NyxHatchOil(17404, "MTEInfiniteOilHatch", "无限石油仓", 8).getStackForm(1)
+      NyxHatchOil(offset + 24, "MTEInfiniteOilHatch", "无限石油仓", 8).getStackForm(1)
     InfiniteLubricantHatch =
-      NyxHatchLubricant(17405, "MTEInfiniteLubricantHatch", "无限润滑油仓", 10).getStackForm(1)
+      NyxHatchLubricant(offset + 25, "MTEInfiniteLubricantHatch", "无限润滑油仓", 10).getStackForm(1)
     InfiniteSteamHatch =
-      NyxHatchSteam(17406, "MTEInfiniteSteamHatch", "无限蒸汽仓", 8).getStackForm(1)
+      NyxHatchSteam(offset + 26, "MTEInfiniteSteamHatch", "无限蒸汽仓", 8).getStackForm(1)
 
     ZeroGenerator =
-      NyxMTEZeroGenerator(17407, "MTEZeroGenerator", "零点发生器", 14).getStackForm(1)
+      NyxMTEZeroGenerator(offset + 27, "MTEZeroGenerator", "零点发生器", 14).getStackForm(1)
 
     HumongousCalibrationHalfInputHatch =
-      NyxHatchHumongousCalibrationHalfInput(17408, "MTECalibrationHalfInputHatch", "鸿蒙半标定仓").getStackForm(1)
+      NyxHatchHumongousCalibrationHalfInput(offset + 28, "MTECalibrationHalfInputHatch", "鸿蒙半标定仓").getStackForm(1)
     HumongousCalibrationInputHatch =
-      NyxMTEHatchHumongousCalibrationInput(17409, "MTECalibrationInputHatch", "鸿蒙标定仓").getStackForm(1)
+      NyxMTEHatchHumongousCalibrationInput(offset + 29, "MTECalibrationInputHatch", "鸿蒙标定仓").getStackForm(1)
   }
   // spotless:on
 

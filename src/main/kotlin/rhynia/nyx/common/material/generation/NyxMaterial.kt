@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.Log
+import rhynia.nyx.api.util.firstCharUpperCase
 import rhynia.nyx.common.container.NyxItemList
 
 /**
@@ -99,9 +100,7 @@ class NyxMaterial(
   val internalName: String = internalName.replace(Regex("[^A-Za-z0-9]"), "")
 
   /** The title case of the internal name, used in orePrefixes, etc. */
-  val internalNameTitleCase: String by lazy {
-    internalName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-  }
+  val internalNameTitleCase: String by lazy { internalName.firstCharUpperCase() }
 
   /** Element desc such as Fe, Au, etc. */
   var elementTooltip: Array<String> = arrayOf()

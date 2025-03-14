@@ -15,8 +15,8 @@ import rhynia.nyx.proxy.CommonProxy
 
 @Suppress("SpellCheckingInspection")
 @Mod(
-    modid = NYX_MOD_ID,
-    name = NYX_MOD_NAME,
+    modid = MOD_ID,
+    name = MOD_NAME,
     version = Tags.VERSION,
     modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter",
     dependencies = "required-after:forgelin;required-after:gregtech;required-after:dreamcraft;",
@@ -25,7 +25,7 @@ object Nyx {
 
   val DevEnv: Boolean by lazy { Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean }
 
-  val ModLogger: Logger by lazy { LogManager.getLogger(NYX_MOD_NAME) }
+  val ModLogger: Logger by lazy { LogManager.getLogger(MOD_NAME) }
 
   @JvmStatic
   @SidedProxy(
@@ -42,9 +42,3 @@ object Nyx {
 
   @EventHandler fun serverStarting(event: FMLServerStartingEvent) = proxy.serverStarting(event)
 }
-
-internal val Any.Log: Logger
-  get() = Nyx.ModLogger
-
-internal const val NYX_MOD_ID = "nyx"
-internal const val NYX_MOD_NAME = "Nyx"

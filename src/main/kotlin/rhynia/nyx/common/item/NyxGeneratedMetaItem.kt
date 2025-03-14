@@ -19,19 +19,21 @@ import net.minecraft.util.EnumChatFormatting.GRAY
 import net.minecraft.util.EnumChatFormatting.RESET
 import net.minecraft.util.EnumChatFormatting.WHITE
 import net.minecraft.util.IIcon
+import rhynia.nyx.api.util.firstCharUpperCase
 import rhynia.nyx.client.NyxTab
 import rhynia.nyx.common.material.NyxMaterials
 import rhynia.nyx.common.material.generation.NyxMaterialLoader.MaterialMap
 import rhynia.nyx.common.material.generation.NyxMaterialLoader.MaterialSet
 
 class NyxGeneratedMetaItem(val orePrefix: OrePrefixes) :
-    MetaGeneratedItem("NyxGenMetaItem${orePrefix.name}", 32766, 0) {
+    MetaGeneratedItem("GenItem${orePrefix.name.firstCharUpperCase()}", 32766, 0) {
   init {
     creativeTab = NyxTab.TabItem
     MaterialSet.forEach {
       if (!it.isTypeValid(orePrefix)) return@forEach
       GTOreDictUnificator.registerOre(
-          orePrefix.name + it.internalNameTitleCase, ItemStack(this, 1, it.id.toInt()))
+          orePrefix.name.firstCharUpperCase() + it.internalNameTitleCase,
+          ItemStack(this, 1, it.id.toInt()))
     }
   }
 

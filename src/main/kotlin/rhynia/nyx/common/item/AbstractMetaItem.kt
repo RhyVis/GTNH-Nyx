@@ -9,7 +9,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import org.jetbrains.annotations.ApiStatus
-import rhynia.nyx.NYX_MOD_ID
+import rhynia.nyx.MOD_ID
 import rhynia.nyx.api.interfaces.item.MetaTooltip
 import rhynia.nyx.api.interfaces.item.MetaVariant
 import rhynia.nyx.client.NyxTab
@@ -25,7 +25,7 @@ abstract class AbstractMetaItem(protected val rawName: String) : Item(), MetaVar
     maxDamage = 0
     creativeTab = NyxTab.TabItem
     unlocalizedName = rawName
-    iconString = "${NYX_MOD_ID}:${iconName ?: "$rawName/0"}"
+    iconString = "${MOD_ID}:${iconName ?: "$rawName/0"}"
   }
 
   /**
@@ -80,7 +80,7 @@ abstract class AbstractMetaItem(protected val rawName: String) : Item(), MetaVar
 
   @SideOnly(Side.CLIENT)
   override fun registerIcons(register: IIconRegister) {
-    iconMap = this.registerVariantIcon(register) { "${NYX_MOD_ID}:$rawName/$it" }
+    iconMap = this.registerVariantIcon(register) { "${MOD_ID}:$rawName/$it" }
     itemIcon = iconMap[0]
   }
 

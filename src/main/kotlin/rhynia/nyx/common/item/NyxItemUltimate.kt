@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.BLUE
 import net.minecraft.util.EnumChatFormatting.RED
-import rhynia.nyx.NYX_MOD_ID
+import rhynia.nyx.MOD_ID
 import rhynia.nyx.client.NyxTab.TabItem
 
 class NyxItemUltimate() : Item() {
@@ -18,7 +18,7 @@ class NyxItemUltimate() : Item() {
     setCreativeTab(TabItem)
     setMaxStackSize(1)
     setUnlocalizedName("ultimate")
-    setTextureName("$NYX_MOD_ID:ultimate")
+    setTextureName("$MOD_ID:ultimate")
   }
 
   @SideOnly(Side.CLIENT)
