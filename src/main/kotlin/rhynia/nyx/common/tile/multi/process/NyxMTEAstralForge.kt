@@ -57,7 +57,7 @@ class NyxMTEAstralForge : NyxMTEBase<NyxMTEAstralForge> {
   private var uStableField = 0 // 0-8, update from structure
 
   override val rOverclockType: OverclockType
-    get() = if (uStableField >= 7) OverclockType.PerfectHalfVol else OverclockType.Normal
+    get() = if (uStableField >= 7) OverclockType.Perfect else OverclockType.Normal
 
   override val rDurationModifier: Double
     get() =

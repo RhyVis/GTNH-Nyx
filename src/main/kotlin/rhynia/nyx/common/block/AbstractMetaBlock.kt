@@ -10,7 +10,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
-import rhynia.nyx.NYX_MOD_ID
+import rhynia.nyx.MOD_ID
 import rhynia.nyx.api.interfaces.item.MetaTooltip
 import rhynia.nyx.api.interfaces.item.MetaVariant
 import rhynia.nyx.client.NyxTab.TabBlock
@@ -79,7 +79,7 @@ abstract class AbstractMetaBlock(
 
   @SideOnly(Side.CLIENT)
   override fun registerBlockIcons(register: IIconRegister) {
-    iconMap = this.registerVariantIcon(register) { "${NYX_MOD_ID}:$rawName/$it" }
+    iconMap = this.registerVariantIcon(register) { "${MOD_ID}:$rawName/$it" }
     blockIcon = iconMap[0]
   }
 
