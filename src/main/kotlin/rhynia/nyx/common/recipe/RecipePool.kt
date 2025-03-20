@@ -9,13 +9,13 @@ import gregtech.api.recipe.RecipeMap
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTRecipe
 import gregtech.api.util.GTRecipeBuilder
-import kotlin.jvm.java
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.Log
 import rhynia.nyx.api.enums.NyxMods
 import rhynia.nyx.api.enums.NyxValues
 import rhynia.nyx.api.recipe.NyxRecipeMapBackend
+import rhynia.nyx.api.util.StackUtil.copyAmountUnsafe
 import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.common.material.generation.NyxMaterial
 
@@ -102,15 +102,15 @@ abstract class RecipePool {
           meta,
           NyxItemList.TestItem01.get(amount.toLong() * 6 + 1))
 
-  protected fun ItemStack.ofSize(size: Int): ItemStack = this.apply { this.stackSize = size }
+  protected infix fun ItemStack.ofSize(size: Int): ItemStack = this.apply { this.stackSize = size }
 
-  protected fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder =
+  protected infix fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder =
       this.duration(seconds * NyxValues.RecipeValues.SECOND)
 
-  protected fun GTRecipeBuilder.durMin(minutes: Int): GTRecipeBuilder =
+  protected infix fun GTRecipeBuilder.durMin(minutes: Int): GTRecipeBuilder =
       this.duration(minutes * NyxValues.RecipeValues.MINUTE)
 
-  protected fun GTRecipeBuilder.durHour(hours: Int): GTRecipeBuilder =
+  protected infix fun GTRecipeBuilder.durHour(hours: Int): GTRecipeBuilder =
       this.duration(hours * NyxValues.RecipeValues.HOUR)
 
   protected fun Materials.getBucketFluid(amount: Int): FluidStack =
@@ -144,6 +144,9 @@ abstract class RecipePool {
 
   protected fun NyxMaterial.getBucketMolten(amount: Int): FluidStack =
       this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
+
+  protected fun IItemContainer.getAmountUnsafe(amount: Int): ItemStack =
+      this.get(1).copyAmountUnsafe(amount)
 
   internal class NyxRecipeBuilder {
     private var inputItems: Array<ItemStack> = arrayOf()
