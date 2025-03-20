@@ -2,7 +2,8 @@ package rhynia.nyx.init.registry
 
 import cpw.mods.fml.common.registry.GameRegistry
 import gregtech.api.interfaces.IItemContainer
-import net.minecraft.util.EnumChatFormatting.*
+import net.minecraft.util.EnumChatFormatting.AQUA
+import net.minecraft.util.EnumChatFormatting.BOLD
 import rhynia.nyx.api.util.RegistryUtil
 import rhynia.nyx.common.block.AbstractMetaBlock
 import rhynia.nyx.common.block.NyxMetaBlockItem
@@ -27,25 +28,25 @@ object BlockRegister {
           }
 
   // spotless:off
-  private fun registerBlockContainers() {
-    NyxItemList.TestMetaBlock01
-      .register(MetaBlock01, 0, arrayOf("我相信它没什么用", "仅作测试之用"))
+    private fun registerBlockContainers() {
+        NyxItemList.TestMetaBlock01
+            .register(MetaBlock01, 0, arrayOf("我相信它没什么用", "仅作测试之用"))
 
-    arrayOf(
-      NyxItemList.EOHCoreT1,
-      NyxItemList.EOHCoreT2,
-      NyxItemList.EOHCoreT3,
-      NyxItemList.EOHCoreT4,
-      NyxItemList.EOHCoreT5,
-      NyxItemList.EOHCoreT6,
-      NyxItemList.EOHCoreT7,
-      NyxItemList.EOHCoreT8,
-      NyxItemList.EOHCoreT9
-    ).forEachIndexed { index, item ->
-      item.register(EyeOfHarmonyCoreCasing, index, "${BOLD}${AQUA}允许执行鸿蒙之眼T${index + 1}配方")
+        arrayOf(
+            NyxItemList.EOHCoreT1,
+            NyxItemList.EOHCoreT2,
+            NyxItemList.EOHCoreT3,
+            NyxItemList.EOHCoreT4,
+            NyxItemList.EOHCoreT5,
+            NyxItemList.EOHCoreT6,
+            NyxItemList.EOHCoreT7,
+            NyxItemList.EOHCoreT8,
+            NyxItemList.EOHCoreT9
+        ).forEachIndexed { index, item ->
+            item.register(EyeOfHarmonyCoreCasing, index, "${BOLD}${AQUA}允许执行鸿蒙之眼T${index + 1}配方")
+        }
     }
-  }
-  // spotless:on
+    // spotless:on
 
   private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int) {
     this.set(RegistryUtil.registerMetaBlock(block, meta, null))

@@ -1,7 +1,11 @@
 package rhynia.nyx.common.material.generation
 
 import gregtech.api.enums.FluidState
-import gregtech.api.enums.FluidState.*
+import gregtech.api.enums.FluidState.GAS
+import gregtech.api.enums.FluidState.LIQUID
+import gregtech.api.enums.FluidState.MOLTEN
+import gregtech.api.enums.FluidState.PLASMA
+import gregtech.api.enums.FluidState.SLURRY
 import gregtech.api.enums.Mods
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.enums.TextureSet

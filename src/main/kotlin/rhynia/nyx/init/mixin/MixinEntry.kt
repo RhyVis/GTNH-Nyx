@@ -12,36 +12,49 @@ enum class MixinEntry(builder: MixinBuilder) {
 
   // spotless:off
 
-  PortableCell(
-    MixinBuilder().ofClasses("ae.MixinPortableCell").toMod(AppliedEnergistics2)),
-  QuantumCell(
-    MixinBuilder().ofClasses("ae.MixinQuantumCell").toMod(AppliedEnergistics2)),
+    PortableCell(
+        MixinBuilder().ofClasses("ae.MixinPortableCell").toMod(AppliedEnergistics2)
+    ),
+    QuantumCell(
+        MixinBuilder().ofClasses("ae.MixinQuantumCell").toMod(AppliedEnergistics2)
+    ),
 
-  CircuitAssemblyLine(
-    MixinBuilder().ofClasses("bw.MixinCircuitAssemblyLine").toMod(BartWorks)),
-  MegaMultiBase(
-    MixinBuilder().ofClasses("bw.MixinMegaMultiBase").toMod(BartWorks)),
-  VoidMiner(
-    MixinBuilder().ofClasses("bw.MixinVoidMiner").toMod(BartWorks)),
+    CircuitAssemblyLine(
+        MixinBuilder().ofClasses("bw.MixinCircuitAssemblyLine").toMod(BartWorks)
+    ),
+    MegaMultiBase(
+        MixinBuilder().ofClasses("bw.MixinMegaMultiBase").toMod(BartWorks)
+    ),
+    VoidMiner(
+        MixinBuilder().ofClasses("bw.MixinVoidMiner").toMod(BartWorks)
+    ),
 
-  ElementalDuplicator(
-    MixinBuilder().ofClasses("pp.MixinElementalDuplicator").toMod(GTPlusPlus)),
-  IndustrialDehydrator(
-    MixinBuilder().ofClasses("pp.MixinIndustrialDehydrator").toMod(GTPlusPlus)),
-  IndustrialFluidHeater(
-    MixinBuilder().ofClasses("pp.MixinIndustrialFluidHeater").toMod(GTPlusPlus)),
-  IndustrialMacerator(
-    MixinBuilder().ofClasses("pp.MixinIndustrialMacerator").toMod(GTPlusPlus)),
-  IndustrialWashPlant(
-    MixinBuilder().ofClasses("pp.MixinIndustrialWashPlant").toMod(GTPlusPlus)),
-  MassFabricator(
-    MixinBuilder().ofClasses("pp.MixinMassFabricator").toMod(GTPlusPlus)),
-  MegaAlloyBlastSmelter(
-    MixinBuilder().ofClasses("pp.MixinMegaAlloyBlastSmelter").toMod(GTPlusPlus)),
-  TreeFarm(
-    MixinBuilder().ofClasses("pp.MixinTreeFarm").toMod(GTPlusPlus)),
+    ElementalDuplicator(
+        MixinBuilder().ofClasses("pp.MixinElementalDuplicator").toMod(GTPlusPlus)
+    ),
+    IndustrialDehydrator(
+        MixinBuilder().ofClasses("pp.MixinIndustrialDehydrator").toMod(GTPlusPlus)
+    ),
+    IndustrialFluidHeater(
+        MixinBuilder().ofClasses("pp.MixinIndustrialFluidHeater").toMod(GTPlusPlus)
+    ),
+    IndustrialMacerator(
+        MixinBuilder().ofClasses("pp.MixinIndustrialMacerator").toMod(GTPlusPlus)
+    ),
+    IndustrialWashPlant(
+        MixinBuilder().ofClasses("pp.MixinIndustrialWashPlant").toMod(GTPlusPlus)
+    ),
+    MassFabricator(
+        MixinBuilder().ofClasses("pp.MixinMassFabricator").toMod(GTPlusPlus)
+    ),
+    MegaAlloyBlastSmelter(
+        MixinBuilder().ofClasses("pp.MixinMegaAlloyBlastSmelter").toMod(GTPlusPlus)
+    ),
+    TreeFarm(
+        MixinBuilder().ofClasses("pp.MixinTreeFarm").toMod(GTPlusPlus)
+    ),
 
-  // spotless:on
+    // spotless:on
   ;
 
   val modId: String =

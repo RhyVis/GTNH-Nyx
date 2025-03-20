@@ -86,48 +86,52 @@ object MachineLoader : Loader {
   }
 
   // spotless:off
-  private fun initializeMachineClass() {
-    AstralForge =
-      NyxMTEAstralForge(offset + 1, "MTEAstralForge", "星辉锻造台").getStackForm(1)
-    AtomMacro =
-      NyxMTEAtomMacro(offset + 2, "MTEUltimateHeater", "粒子宏").getStackForm(1)
-    AssemblyMatrix =
-      NyxMTEAssemblyMatrix(offset + 3, "MTEAssemblyMatrix", "组装矩阵").getStackForm(1)
-    KelvinTransformField =
-      NyxMTEKelvinTransformField(offset + 4, "MTEKelvinTransformField", "开尔文变换场").getStackForm(1)
-    SelectedEnergyGenerator =
-      NyxMTESelectedEnergyGenerator(offset + 5, "MTESelectedEnergyGenerator", "能量发生器").getStackForm(1)
-    Creator =
-      NyxMTECreator(offset + 6, "MTECreator", "逆向奇点").getStackForm(1)
-    EyeOfUltimate =
-      NyxMTEEyeOfUltimate(offset + 7, "MTEEyeOfUltimate", "终极之眼").getStackForm(1)
-    DenseEndpoint =
-      NyxMTEDenseEndpoint(offset + 8, "MTEDenseEndpoint", "致密极点").getStackForm(1)
-    ProcessingComplex =
-      NyxMTEProcessingComplex(offset + 9, "MTEProcessingComplex", "处理矩阵").getStackForm(1)
+    private fun initializeMachineClass() {
+        AstralForge =
+            NyxMTEAstralForge(offset + 1, "MTEAstralForge", "星辉锻造台").getStackForm(1)
+        AtomMacro =
+            NyxMTEAtomMacro(offset + 2, "MTEUltimateHeater", "粒子宏").getStackForm(1)
+        AssemblyMatrix =
+            NyxMTEAssemblyMatrix(offset + 3, "MTEAssemblyMatrix", "组装矩阵").getStackForm(1)
+        KelvinTransformField =
+            NyxMTEKelvinTransformField(offset + 4, "MTEKelvinTransformField", "开尔文变换场").getStackForm(1)
+        SelectedEnergyGenerator =
+            NyxMTESelectedEnergyGenerator(offset + 5, "MTESelectedEnergyGenerator", "能量发生器").getStackForm(1)
+        Creator =
+            NyxMTECreator(offset + 6, "MTECreator", "逆向奇点").getStackForm(1)
+        EyeOfUltimate =
+            NyxMTEEyeOfUltimate(offset + 7, "MTEEyeOfUltimate", "终极之眼").getStackForm(1)
+        DenseEndpoint =
+            NyxMTEDenseEndpoint(offset + 8, "MTEDenseEndpoint", "致密极点").getStackForm(1)
+        ProcessingComplex =
+            NyxMTEProcessingComplex(offset + 9, "MTEProcessingComplex", "处理矩阵").getStackForm(1)
 
-    InfiniteLiquidAirHatch =
-      NyxHatchLiquidAir(offset + 21, "MTEInfiniteLiquidAirHatch", "无限液气仓", 10).getStackForm(1)
-    InfiniteDistilledWaterHatch =
-      NyxHatchDistilledWater(offset + 22, "MTEInfiniteDistilledWaterHatch", "无限蒸馏仓", 9).getStackForm(1)
-    InfiniteLavaHatch =
-      NyxHatchLava(offset + 23, "MTEInfiniteLavaHatch", "无限岩浆仓", 8).getStackForm(1)
-    InfiniteOilHatch =
-      NyxHatchOil(offset + 24, "MTEInfiniteOilHatch", "无限石油仓", 8).getStackForm(1)
-    InfiniteLubricantHatch =
-      NyxHatchLubricant(offset + 25, "MTEInfiniteLubricantHatch", "无限润滑油仓", 10).getStackForm(1)
-    InfiniteSteamHatch =
-      NyxHatchSteam(offset + 26, "MTEInfiniteSteamHatch", "无限蒸汽仓", 8).getStackForm(1)
+        InfiniteLiquidAirHatch =
+            NyxHatchLiquidAir(offset + 21, "MTEInfiniteLiquidAirHatch", "无限液气仓", 10).getStackForm(1)
+        InfiniteDistilledWaterHatch =
+            NyxHatchDistilledWater(offset + 22, "MTEInfiniteDistilledWaterHatch", "无限蒸馏仓", 9).getStackForm(1)
+        InfiniteLavaHatch =
+            NyxHatchLava(offset + 23, "MTEInfiniteLavaHatch", "无限岩浆仓", 8).getStackForm(1)
+        InfiniteOilHatch =
+            NyxHatchOil(offset + 24, "MTEInfiniteOilHatch", "无限石油仓", 8).getStackForm(1)
+        InfiniteLubricantHatch =
+            NyxHatchLubricant(offset + 25, "MTEInfiniteLubricantHatch", "无限润滑油仓", 10).getStackForm(1)
+        InfiniteSteamHatch =
+            NyxHatchSteam(offset + 26, "MTEInfiniteSteamHatch", "无限蒸汽仓", 8).getStackForm(1)
 
-    ZeroGenerator =
-      NyxMTEZeroGenerator(offset + 27, "MTEZeroGenerator", "零点发生器", 14).getStackForm(1)
+        ZeroGenerator =
+            NyxMTEZeroGenerator(offset + 27, "MTEZeroGenerator", "零点发生器", 14).getStackForm(1)
 
-    HumongousCalibrationHalfInputHatch =
-      NyxHatchHumongousCalibrationHalfInput(offset + 28, "MTECalibrationHalfInputHatch", "鸿蒙半标定仓").getStackForm(1)
-    HumongousCalibrationInputHatch =
-      NyxMTEHatchHumongousCalibrationInput(offset + 29, "MTECalibrationInputHatch", "鸿蒙标定仓").getStackForm(1)
-  }
-  // spotless:on
+        HumongousCalibrationHalfInputHatch =
+            NyxHatchHumongousCalibrationHalfInput(
+                offset + 28,
+                "MTECalibrationHalfInputHatch",
+                "鸿蒙半标定仓"
+            ).getStackForm(1)
+        HumongousCalibrationInputHatch =
+            NyxMTEHatchHumongousCalibrationInput(offset + 29, "MTECalibrationInputHatch", "鸿蒙标定仓").getStackForm(1)
+    }
+    // spotless:on
 
   private fun initializeItemList() {
     NyxItemList.AstralForge.set(AstralForge)

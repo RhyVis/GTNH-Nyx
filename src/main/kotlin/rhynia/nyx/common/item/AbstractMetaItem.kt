@@ -42,6 +42,7 @@ abstract class AbstractMetaItem(protected val rawName: String) : Item(), MetaVar
 
   override fun getUnlocalizedName(stack: ItemStack?): String =
       "${super.getUnlocalizedName()}.${stack?.itemDamage ?: 0}"
+
   override fun getIconFromDamage(meta: Int): IIcon = iconMap[meta] ?: itemIcon
 
   // region MetaVariant Implementation

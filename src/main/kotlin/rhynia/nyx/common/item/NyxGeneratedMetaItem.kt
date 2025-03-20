@@ -8,7 +8,6 @@ import gregtech.api.enums.OrePrefixes
 import gregtech.api.interfaces.IIconContainer
 import gregtech.api.items.MetaGeneratedItem
 import gregtech.api.util.GTOreDictUnificator
-import kotlin.collections.get
 import net.minecraft.client.gui.GuiScreen.isShiftKeyDown
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer

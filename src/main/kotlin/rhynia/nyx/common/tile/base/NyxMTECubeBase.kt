@@ -27,6 +27,7 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
       aName: String,
       aNameRegional: String
   ) : super(aId, aName, aNameRegional)
+
   protected constructor(aName: String) : super(aName)
 
   protected companion object {

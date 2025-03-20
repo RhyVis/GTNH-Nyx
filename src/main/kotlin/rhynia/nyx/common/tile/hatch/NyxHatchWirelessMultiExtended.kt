@@ -65,9 +65,10 @@ class NyxHatchWirelessMultiExtended : MTEHatchEnergyMulti, IWirelessEnergyHatchI
           "${GRAY}不连接导线，此方块可以从网络中抽取EU.",
           "${AQUA}额外能源仓系列",
           "${StatCollector.translateToLocal("gt.blockmachines.hatch.energytunnel.desc.1")}: ${YELLOW}${
-        GTUtility.formatNumbers(
-          aAmp * GTValues.V[aTier]
-        )}${GRAY}EU/t",
+                GTUtility.formatNumbers(
+                    aAmp * GTValues.V[aTier]
+                )
+            }${GRAY}EU/t",
       ),
       aAmp)
 

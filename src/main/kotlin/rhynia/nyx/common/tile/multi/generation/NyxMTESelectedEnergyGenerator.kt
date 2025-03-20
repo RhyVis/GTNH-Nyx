@@ -158,8 +158,8 @@ class NyxMTESelectedEnergyGenerator : NyxMTECubeBase<NyxMTESelectedEnergyGenerat
     super.getWailaBody(itemStack, currentTip, accessor, config)
     currentTip!!.plus(
         "${WHITE}等效能量: ${AQUA}${
-      GTUtility.formatNumbers(pConstruct)
-    } ${WHITE}${UNDERLINE}MAX${WHITE} EU/t")
+                GTUtility.formatNumbers(pConstruct)
+            } ${WHITE}${UNDERLINE}MAX${WHITE} EU/t")
   }
 
   override fun getWailaNBTData(

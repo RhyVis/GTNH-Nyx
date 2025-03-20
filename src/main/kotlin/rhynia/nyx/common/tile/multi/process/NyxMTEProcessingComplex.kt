@@ -37,6 +37,7 @@ import rhynia.nyx.common.tile.base.NyxMTECubeBase
 class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
   constructor(aId: Int, aName: String, aNameRegional: String) : super(aId, aName, aNameRegional)
   constructor(aName: String) : super(aName)
+
   override fun newMetaEntity(aTileEntity: IGregTechTileEntity?) = NyxMTEProcessingComplex(mName)
 
   // region Process
@@ -127,40 +128,51 @@ class NyxMTEProcessingComplex : NyxMTECubeBase<NyxMTEProcessingComplex> {
       val pMachineStack: ItemStack,
   ) {
     // spotless:off
-    // GT++
-    AlloySmelter(
-        GTPPRecipeMaps.alloyBlastSmelterRecipes,
-        GregtechItemList.Industrial_AlloySmelter.get(1)),
-    ChemicalDehydrator(
-        GTPPRecipeMaps.chemicalDehydratorNonCellRecipes,
-        GregtechItemList.Controller_Vacuum_Furnace.get(1)),
-    VacuumFurnace(
-        GTPPRecipeMaps.vacuumFurnaceRecipes,
-        GregtechItemList.Controller_Vacuum_Furnace.get(1)),
-    ArcFurnace(
-        RecipeMaps.arcFurnaceRecipes,
-        GregtechItemList.Industrial_Arc_Furnace.get(1)),
-    PlasmaArcFurnace(
-        RecipeMaps.plasmaArcFurnaceRecipes,
-        GregtechItemList.Industrial_Arc_Furnace.get(1)),
-    FluidHeater(
-        RecipeMaps.fluidHeaterRecipes,
-        GregtechItemList.Controller_IndustrialFluidHeater.get(1)),
-    MolecularTransformer(
-        GTPPRecipeMaps.molecularTransformerRecipes,
-        GregtechItemList.Controller_MolecularTransformer.get(1)),
-    OreWash(
-        RecipeMaps.oreWasherRecipes,
-        GregtechItemList.Industrial_WashPlant.get(1)),
-    SimpleWash(
-        GTPPRecipeMaps.simpleWasherRecipes,
-        GregtechItemList.Industrial_WashPlant.get(1)),
-    ChemicalWash(
-        RecipeMaps.chemicalBathRecipes,
-        GregtechItemList.Industrial_WashPlant.get(1)),
-    // GT5U
-    DTPF(RecipeMaps.plasmaForgeRecipes, NyxItemList.AssemblyDTPF.get(1))
-    // spotless:on
+        // GT++
+        AlloySmelter(
+            GTPPRecipeMaps.alloyBlastSmelterRecipes,
+            GregtechItemList.Industrial_AlloySmelter.get(1)
+        ),
+        ChemicalDehydrator(
+            GTPPRecipeMaps.chemicalDehydratorNonCellRecipes,
+            GregtechItemList.Controller_Vacuum_Furnace.get(1)
+        ),
+        VacuumFurnace(
+            GTPPRecipeMaps.vacuumFurnaceRecipes,
+            GregtechItemList.Controller_Vacuum_Furnace.get(1)
+        ),
+        ArcFurnace(
+            RecipeMaps.arcFurnaceRecipes,
+            GregtechItemList.Industrial_Arc_Furnace.get(1)
+        ),
+        PlasmaArcFurnace(
+            RecipeMaps.plasmaArcFurnaceRecipes,
+            GregtechItemList.Industrial_Arc_Furnace.get(1)
+        ),
+        FluidHeater(
+            RecipeMaps.fluidHeaterRecipes,
+            GregtechItemList.Controller_IndustrialFluidHeater.get(1)
+        ),
+        MolecularTransformer(
+            GTPPRecipeMaps.molecularTransformerRecipes,
+            GregtechItemList.Controller_MolecularTransformer.get(1)
+        ),
+        OreWash(
+            RecipeMaps.oreWasherRecipes,
+            GregtechItemList.Industrial_WashPlant.get(1)
+        ),
+        SimpleWash(
+            GTPPRecipeMaps.simpleWasherRecipes,
+            GregtechItemList.Industrial_WashPlant.get(1)
+        ),
+        ChemicalWash(
+            RecipeMaps.chemicalBathRecipes,
+            GregtechItemList.Industrial_WashPlant.get(1)
+        ),
+
+        // GT5U
+        DTPF(RecipeMaps.plasmaForgeRecipes, NyxItemList.AssemblyDTPF.get(1))
+        // spotless:on
   }
 
   // endregion

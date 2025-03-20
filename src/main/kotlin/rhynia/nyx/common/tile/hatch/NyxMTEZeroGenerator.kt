@@ -22,7 +22,7 @@ import gregtech.api.metatileentity.implementations.MTETieredMachineBlock
 import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
 import gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
-import java.util.UUID
+import java.util.*
 import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.math.abs

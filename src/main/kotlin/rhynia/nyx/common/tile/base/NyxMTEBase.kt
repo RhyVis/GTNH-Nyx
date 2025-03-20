@@ -51,6 +51,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
       aName: String,
       aNameRegional: String
   ) : super(aId, aName, aNameRegional)
+
   protected constructor(aName: String) : super(aName)
 
   protected companion object {
@@ -61,11 +62,13 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         object : IHatchElement<NyxMTEBase<*>> {
           override fun mteClasses(): List<Class<out IMetaTileEntity>> =
               listOf(MTEHatchDynamoMulti::class.java)
+
           override fun adder(): IGTHatchAdder<in NyxMTEBase<*>> =
               object : IGTHatchAdder<NyxMTEBase<*>> {
                 override fun apply(c: NyxMTEBase<*>, t: IGregTechTileEntity?, i: Short?): Boolean =
                     c.addDynamoToMachineList(t, i!!.toInt())
               }
+
           override fun name(): String = "ExoticDynamo"
           override fun count(t: NyxMTEBase<*>?): Long {
             return (t ?: return 0).mExoticDynamoHatches.size.toLong()

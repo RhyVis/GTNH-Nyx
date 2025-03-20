@@ -97,13 +97,13 @@ class NyxMTEAstralForge : NyxMTEBase<NyxMTEAstralForge> {
   }
 
   // spotless:off
-  @Suppress("SpellCheckingInspection")
-  private val structureShape = arrayOf(
-    arrayOf("  E  ", "  G  ", "EGFGE", "  G  ", "  E  "),
-    arrayOf(" D~D ", "D   D", "B C B", "D   D", " DBD "),
-    arrayOf(" BBB ", "BAAAB", "BAAAB", "BAAAB", " BBB ")
-  )
-  // spotless:on
+    @Suppress("SpellCheckingInspection")
+    private val structureShape = arrayOf(
+        arrayOf("  E  ", "  G  ", "EGFGE", "  G  ", "  E  "),
+        arrayOf(" D~D ", "D   D", "B C B", "D   D", " DBD "),
+        arrayOf(" BBB ", "BAAAB", "BAAAB", "BAAAB", " BBB ")
+    )
+    // spotless:on
 
   override fun genStructureDefinition(): IStructureDefinition<NyxMTEAstralForge> =
       StructureDefinition.builder<NyxMTEAstralForge>()

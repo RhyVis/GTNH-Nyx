@@ -170,12 +170,12 @@ class NyxMTEAssemblyMatrix : NyxMTEBase<NyxMTEAssemblyMatrix> {
           .build()
 
   // spotless:off
-  private val structureShape = arrayOf(
-    arrayOf("CCC", "CDC", "CDC", "CDC", "CDC", "CDC", "FFF"),
-    arrayOf("C~C", "ABA", "ABA", "ABA", "ABA", "ABA", "FFF"),
-    arrayOf("CCC", "TTT", "TTT", "TTT", "TTT", "TTT", "FFF")
-  )
-  // spotless:on
+    private val structureShape = arrayOf(
+        arrayOf("CCC", "CDC", "CDC", "CDC", "CDC", "CDC", "FFF"),
+        arrayOf("C~C", "ABA", "ABA", "ABA", "ABA", "ABA", "FFF"),
+        arrayOf("CCC", "TTT", "TTT", "TTT", "TTT", "TTT", "FFF")
+    )
+    // spotless:on
 
   override val sControllerBlock: Pair<Block, Int>
     get() = GregTechAPI.sBlockCasings2 to 9
