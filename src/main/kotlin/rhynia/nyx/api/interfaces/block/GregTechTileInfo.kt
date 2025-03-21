@@ -12,9 +12,9 @@ package rhynia.nyx.api.interfaces.block
  * in the tooltip. But actually this two functions is disabled by default.
  */
 interface GregTechTileInfo {
-  val infoNoMobSpawn: Boolean
-    get() = true
+    val infoNoMobSpawn: Boolean
+        get() = true
 
-  val infoNotTileEntity: Boolean
-    get() = true
+    val infoNotTileEntity: Boolean
+        get() = true
 }

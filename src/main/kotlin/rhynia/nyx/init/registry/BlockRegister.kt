@@ -13,21 +13,20 @@ import rhynia.nyx.init.registry.BlockRecord.MetaBlock01
 
 @Suppress("unused")
 object BlockRegister {
-  fun register() {
-    registerBlocks()
-    registerBlockContainers()
-  }
+    fun register() {
+        registerBlocks()
+        registerBlockContainers()
+    }
 
-  private fun registerBlocks() =
-      arrayOf(
-              MetaBlock01,
-              EyeOfHarmonyCoreCasing,
-          )
-          .forEach {
+    private fun registerBlocks() =
+        arrayOf(
+            MetaBlock01,
+            EyeOfHarmonyCoreCasing,
+        ).forEach {
             GameRegistry.registerBlock(it, NyxMetaBlockItem::class.java, it.unlocalizedName)
-          }
+        }
 
-  // spotless:off
+    // spotless:off
     private fun registerBlockContainers() {
         NyxItemList.TestMetaBlock01
             .register(MetaBlock01, 0, arrayOf("我相信它没什么用", "仅作测试之用"))
@@ -41,22 +40,33 @@ object BlockRegister {
             NyxItemList.EOHCoreT6,
             NyxItemList.EOHCoreT7,
             NyxItemList.EOHCoreT8,
-            NyxItemList.EOHCoreT9
+            NyxItemList.EOHCoreT9,
         ).forEachIndexed { index, item ->
             item.register(EyeOfHarmonyCoreCasing, index, "${BOLD}${AQUA}允许执行鸿蒙之眼T${index + 1}配方")
         }
     }
     // spotless:on
 
-  private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int) {
-    this.set(RegistryUtil.registerMetaBlock(block, meta, null))
-  }
+    private fun IItemContainer.register(
+        block: AbstractMetaBlock,
+        meta: Int,
+    ) {
+        this.set(RegistryUtil.registerMetaBlock(block, meta, null))
+    }
 
-  private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int, tooltip: Array<String>) {
-    this.set(RegistryUtil.registerMetaBlock(block, meta, tooltip))
-  }
+    private fun IItemContainer.register(
+        block: AbstractMetaBlock,
+        meta: Int,
+        tooltip: Array<String>,
+    ) {
+        this.set(RegistryUtil.registerMetaBlock(block, meta, tooltip))
+    }
 
-  private fun IItemContainer.register(block: AbstractMetaBlock, meta: Int, tooltip: String) {
-    this.set(RegistryUtil.registerMetaBlock(block, meta, tooltip))
-  }
+    private fun IItemContainer.register(
+        block: AbstractMetaBlock,
+        meta: Int,
+        tooltip: String,
+    ) {
+        this.set(RegistryUtil.registerMetaBlock(block, meta, tooltip))
+    }
 }

@@ -8,16 +8,17 @@ import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.common.material.NyxMaterials
 
 object NBTUtil {
-  fun NBTTagCompound.getItem(key: String): ItemStack =
-      GTUtility.loadItem(this, key) ?: NyxItemList.TestItem01.get(1)
+    fun NBTTagCompound.getItem(key: String): ItemStack = GTUtility.loadItem(this, key) ?: NyxItemList.TestItem01.get(1)
 
-  fun NBTTagCompound.getFluid(key: String): FluidStack =
-      GTUtility.loadFluid(this, key) ?: NyxMaterials.Null.getFluid(1)
+    fun NBTTagCompound.getFluid(key: String): FluidStack = GTUtility.loadFluid(this, key) ?: NyxMaterials.Null.getFluid(1)
 
-  fun NBTTagCompound.setFluid(key: String, fluidStack: FluidStack) {
-    NBTTagCompound().let {
-      fluidStack.writeToNBT(it)
-      this.setTag(key, it)
+    fun NBTTagCompound.setFluid(
+        key: String,
+        fluidStack: FluidStack,
+    ) {
+        NBTTagCompound().let {
+            fluidStack.writeToNBT(it)
+            this.setTag(key, it)
+        }
     }
-  }
 }

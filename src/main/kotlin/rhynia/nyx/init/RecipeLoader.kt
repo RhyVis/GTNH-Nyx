@@ -26,10 +26,10 @@ import rhynia.nyx.common.recipe.nyx.ThermonuclearControlRecipePool
 import rhynia.nyx.common.recipe.nyx.TranscendentReactorRecipePool
 
 object RecipeLoader : Loader {
-  override fun load() {
-    // Nyx
-    Log.info("Loading Nyx additional recipes...")
-    arrayOf<RecipePool>(
+    override fun load() {
+        // Nyx
+        Log.info("Loading Nyx additional recipes...")
+        arrayOf<RecipePool>(
             AstralForgeRecipePool(),
             IntegratedAssemblyRecipePool(),
             MicroAssemblyRecipePool(),
@@ -37,18 +37,17 @@ object RecipeLoader : Loader {
             SuperconductingFormingRecipePool(),
             ThermonuclearControlRecipePool(),
             TranscendentReactorRecipePool(),
-        )
-        .forEach {
-          try {
-            it.loadRecipes()
-          } catch (e: Exception) {
-            Log.error("Error occurred on loading recipe pool at: ${it.javaClass.simpleName}", e)
-            throw e
-          }
+        ).forEach {
+            try {
+                it.loadRecipes()
+            } catch (e: Exception) {
+                Log.error("Error occurred on loading recipe pool at: ${it.javaClass.simpleName}", e)
+                throw e
+            }
         }
-    // GT
-    Log.info("Loading GregTech related recipes...")
-    arrayOf<RecipePool>(
+        // GT
+        Log.info("Loading GregTech related recipes...")
+        arrayOf<RecipePool>(
             AssemblerRecipePool(),
             CentrifugeRecipePool(),
             ChemicalReactorRecipePool(),
@@ -61,25 +60,24 @@ object RecipeLoader : Loader {
             MixerRecipePool(),
             PlasmaForgeRecipePool(),
             QuantumForceTransformerRecipePool(),
-        )
-        .forEach {
-          try {
-            it.loadRecipes()
-          } catch (e: Exception) {
-            Log.error("Error occurred on loading recipe pool at: ${it.javaClass.simpleName}", e)
-            throw e
-          }
+        ).forEach {
+            try {
+                it.loadRecipes()
+            } catch (e: Exception) {
+                Log.error("Error occurred on loading recipe pool at: ${it.javaClass.simpleName}", e)
+                throw e
+            }
         }
-    // Material System
-    Log.info("Loading Material related recipes...")
-    NyxMaterialLoader.MaterialSet.forEach {
-      try {
-        if (it.skipRecipeGeneration) return@forEach
-        NyxMaterialRecipeLoader(it).loadRecipes()
-      } catch (e: Exception) {
-        Log.error("Error occurred on loading material recipe loader at: ${it.internalName}", e)
-        throw e
-      }
+        // Material System
+        Log.info("Loading Material related recipes...")
+        NyxMaterialLoader.MaterialSet.forEach {
+            try {
+                if (it.skipRecipeGeneration) return@forEach
+                NyxMaterialRecipeLoader(it).loadRecipes()
+            } catch (e: Exception) {
+                Log.error("Error occurred on loading material recipe loader at: ${it.internalName}", e)
+                throw e
+            }
+        }
     }
-  }
 }

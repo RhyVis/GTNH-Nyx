@@ -11,42 +11,46 @@ import rhynia.nyx.common.container.NyxItemList
 
 @Suppress("unused")
 enum class BundleChip : RefHelper {
-  ULV,
-  LV,
-  MV,
-  HV,
-  EV,
-  IV,
-  LuV,
-  ZPM,
-  UV,
-  UHV,
-  UEV,
-  UIV,
-  UMV,
-  UXV,
-  MAX;
+    ULV,
+    LV,
+    MV,
+    HV,
+    EV,
+    IV,
+    LuV,
+    ZPM,
+    UV,
+    UHV,
+    UEV,
+    UIV,
+    UMV,
+    UXV,
+    MAX,
+    ;
 
-  companion object {
-    const val CIRCUIT_WRAP_NAME = "circuitWrap"
-  }
+    companion object {
+        const val CIRCUIT_WRAP_NAME = "circuitWrap"
+    }
 
-  override fun getItemStack(amount: Int): ItemStack =
-      if (amount > 64)
-          GTModHandler.getModItem(
-                  GoodGenerator.MOD_ID,
-                  CIRCUIT_WRAP_NAME,
-                  1,
-                  this.ordinal,
-                  NyxItemList.TestItem01.get(1))
-              .copyAmountUnsafe(amount)
-      else
-          GTModHandler.getModItem(
-              GoodGenerator.MOD_ID,
-              CIRCUIT_WRAP_NAME,
-              1,
-              this.ordinal,
-              NyxItemList.TestItem01.get(1))
+    override fun getItemStack(amount: Int): ItemStack =
+        if (amount > 64) {
+            GTModHandler
+                .getModItem(
+                    GoodGenerator.MOD_ID,
+                    CIRCUIT_WRAP_NAME,
+                    1,
+                    this.ordinal,
+                    NyxItemList.TestItem01.get(1),
+                ).copyAmountUnsafe(amount)
+        } else {
+            GTModHandler.getModItem(
+                GoodGenerator.MOD_ID,
+                CIRCUIT_WRAP_NAME,
+                1,
+                this.ordinal,
+                NyxItemList.TestItem01.get(1),
+            )
+        }
 
-  override fun getFluidStack(amount: Int): FluidStack = Materials.Water.getFluid(1)
+    override fun getFluidStack(amount: Int): FluidStack = Materials.Water.getFluid(1)
 }

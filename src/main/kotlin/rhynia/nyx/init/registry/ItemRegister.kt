@@ -9,27 +9,29 @@ import rhynia.nyx.common.container.NyxItemList
 import rhynia.nyx.common.item.AbstractMetaItem
 
 object ItemRegister {
-  fun register() {
-    registerItems()
-    registerItemContainers()
-  }
-
-  private fun registerItems() {
-    arrayOf(ItemRecord.MetaItem01, ItemRecord.MetaItem02, ItemRecord.ItemUltimate).forEach {
-      GameRegistry.registerItem(it, it.unlocalizedName)
+    fun register() {
+        registerItems()
+        registerItemContainers()
     }
-  }
 
-  // spotless:off
+    private fun registerItems() {
+        arrayOf(ItemRecord.MetaItem01, ItemRecord.MetaItem02, ItemRecord.ItemUltimate).forEach {
+            GameRegistry.registerItem(it, it.unlocalizedName)
+        }
+    }
+
+    // spotless:off
     private fun registerItemContainers() {
         (ItemRecord.MetaItem01 as AbstractMetaItem).let {
             // Production
             NyxItemList.TestItem01
                 .register(
-                    it, 0, arrayOf(
+                    it,
+                    0,
+                    arrayOf(
                         "我相信它没什么用",
-                        "如果在配方中发现了它，代表又一个Null被按下不表"
-                    )
+                        "如果在配方中发现了它，代表又一个Null被按下不表",
+                    ),
                 )
             NyxItemList.LapotronMatrix
                 .register(it, 1, "兰波顿密度达到了极致")
@@ -42,26 +44,29 @@ object ItemRegister {
 
             // Resource
             NyxItemList.AstriumInfinityGem.register(
-                it, 1001,
+                it,
+                1001,
                 arrayOf(
                     "Aμⁿ",
-                    "能量络合物"
-                )
+                    "能量络合物",
+                ),
             )
             NyxItemList.AstriumInfinityComplex.register(
-                it, 1002,
+                it,
+                1002,
                 arrayOf(
                     "-[Aμⁿ-Aμⁿ]-",
-                    "${EnumChatFormatting.DARK_RED}高维能量络合物"
-                )
+                    "${EnumChatFormatting.DARK_RED}高维能量络合物",
+                ),
             )
             NyxItemList.AstriumInfinityGauge.register(
-                it, 1003,
+                it,
+                1003,
                 arrayOf(
                     "┌Aμⁿ-Aμⁿ┐",
                     "└Aμⁿ-Aμⁿ┘",
-                    "${EnumChatFormatting.DARK_PURPLE}时空之空洞"
-                )
+                    "${EnumChatFormatting.DARK_PURPLE}时空之空洞",
+                ),
             )
 
             // Lens
@@ -87,11 +92,19 @@ object ItemRegister {
     }
     // spotless:on
 
-  private fun IItemContainer.register(item: AbstractMetaItem, meta: Int, tooltip: Array<String>) {
-    this.set(RegistryUtil.registerMetaItem(item, meta, tooltip))
-  }
+    private fun IItemContainer.register(
+        item: AbstractMetaItem,
+        meta: Int,
+        tooltip: Array<String>,
+    ) {
+        this.set(RegistryUtil.registerMetaItem(item, meta, tooltip))
+    }
 
-  private fun IItemContainer.register(item: AbstractMetaItem, meta: Int, tooltip: String) {
-    this.set(RegistryUtil.registerMetaItem(item, meta, tooltip))
-  }
+    private fun IItemContainer.register(
+        item: AbstractMetaItem,
+        meta: Int,
+        tooltip: String,
+    ) {
+        this.set(RegistryUtil.registerMetaItem(item, meta, tooltip))
+    }
 }

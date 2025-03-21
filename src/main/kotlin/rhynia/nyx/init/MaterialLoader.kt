@@ -7,10 +7,10 @@ import rhynia.nyx.init.registry.BlockRegister
 import rhynia.nyx.init.registry.ItemRegister
 
 object MaterialLoader : Loader {
-  override fun load() {
-    ItemRegister.register()
-    BlockRegister.register()
-    NyxMaterials.load()
-    NyxMaterialLoader.load()
-  }
+    override fun load() {
+        ItemRegister.register()
+        BlockRegister.register()
+        NyxMaterials.load()
+        NyxMaterialLoader.load()
+    }
 }

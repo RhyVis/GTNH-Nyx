@@ -26,191 +26,197 @@ import rhynia.nyx.common.material.generation.NyxMaterial
  */
 @Suppress("unused")
 abstract class RecipePool {
-  /** Load recipes into the recipe pool at Complete Load Stage */
-  abstract fun loadRecipes()
+    /** Load recipes into the recipe pool at Complete Load Stage */
+    abstract fun loadRecipes()
 
-  protected companion object {
-    val coreItemList: Class<*> by lazy {
-      try {
-        @Suppress("SpellCheckingInspection")
-        Class.forName("com.dreammaster.gthandler.CustomItemList")
-      } catch (e: ClassNotFoundException) {
-        Log.error("Failed to load CoreMod RecipeLoader", e)
-        NyxItemList::class.java
-      }
-    }
-
-    fun getCoreItem(name: String, amount: Int = 1): ItemStack =
-        try {
-          coreItemList.enumConstants
-              .firstOrNull { it.toString() == name }
-              .takeIf { it is IItemContainer }
-              ?.let { (it as IItemContainer).get(amount.toLong()) }
-              ?: let {
-                Log.error("Failed to get item $name from CoreMod, with null result")
-                NyxItemList.TestItem01.get(0)
-              }
-        } catch (e: Exception) {
-          Log.error("Failed to get item $name from CoreMod, with error", e)
-          NyxItemList.TestItem01.get(666)
+    protected companion object {
+        val coreItemList: Class<*> by lazy {
+            try {
+                @Suppress("SpellCheckingInspection")
+                Class.forName("com.dreammaster.gthandler.CustomItemList")
+            } catch (e: ClassNotFoundException) {
+                Log.error("Failed to load CoreMod RecipeLoader", e)
+                NyxItemList::class.java
+            }
         }
 
-    fun getCoreItemAlt(name: String, amount: Int = 1): ItemStack =
+        fun getCoreItem(
+            name: String,
+            amount: Int = 1,
+        ): ItemStack =
+            try {
+                coreItemList.enumConstants
+                    .firstOrNull { it.toString() == name }
+                    .takeIf { it is IItemContainer }
+                    ?.let { (it as IItemContainer).get(amount.toLong()) }
+                    ?: let {
+                        Log.error("Failed to get item $name from CoreMod, with null result")
+                        NyxItemList.TestItem01.get(0)
+                    }
+            } catch (e: Exception) {
+                Log.error("Failed to get item $name from CoreMod, with error", e)
+                NyxItemList.TestItem01.get(666)
+            }
+
+        fun getCoreItemAlt(
+            name: String,
+            amount: Int = 1,
+        ): ItemStack =
+            GTModHandler.getModItem(
+                Mods.NewHorizonsCoreMod.ID,
+                name,
+                amount.toLong(),
+                0,
+                NyxItemList.TestItem01.get(amount.toLong() * 6 + 1),
+            )
+    }
+
+    /** Alias for RA.stdBuilder() */
+    protected fun builder(): GTRecipeBuilder = GTRecipeBuilder.builder().noOptimize()
+
+    /**
+     * Create a new recipe builder with the given action and add it to the recipe map
+     *
+     * Use together with NyxRecipeMapBackend related recipe map to avoid 64+ stack problem with GT
+     * Meta Generated Items
+     *
+     * @param backend RecipeMap Backend
+     * @param action Recipe Builder Action
+     */
+    internal inline fun altBuilder(
+        backend: RecipeMap<NyxRecipeMapBackend>,
+        action: NyxRecipeBuilder.() -> NyxRecipeBuilder,
+    ) = NyxRecipeBuilder().apply { this.action().inject(backend) }
+
+    /**
+     * Require mods to be loaded before executing the action
+     *
+     * @param requiredMods Mods to be checked
+     */
+    protected inline fun requireMods(
+        vararg requiredMods: Mods,
+        action: () -> Unit,
+    ) {
+        if (requiredMods.all { it.isModLoaded }) action()
+    }
+
+    protected fun Mods.getItem(
+        name: String,
+        amount: Int = 1,
+        meta: Int = 0,
+    ): ItemStack =
         GTModHandler.getModItem(
-            Mods.NewHorizonsCoreMod.ID,
+            this.ID,
             name,
             amount.toLong(),
-            0,
-            NyxItemList.TestItem01.get(amount.toLong() * 6 + 1))
-  }
+            meta,
+            NyxItemList.TestItem01.get(amount.toLong() * 6 + 1),
+        )
 
-  /** Alias for RA.stdBuilder() */
-  protected fun builder(): GTRecipeBuilder = GTRecipeBuilder.builder().noOptimize()
+    protected fun NyxMods.getItem(
+        name: String,
+        amount: Int = 1,
+        meta: Int = 0,
+    ): ItemStack =
+        GTModHandler.getModItem(
+            this.modId,
+            name,
+            amount.toLong(),
+            meta,
+            NyxItemList.TestItem01.get(amount.toLong() * 6 + 1),
+        )
 
-  /**
-   * Create a new recipe builder with the given action and add it to the recipe map
-   *
-   * Use together with NyxRecipeMapBackend related recipe map to avoid 64+ stack problem with GT
-   * Meta Generated Items
-   *
-   * @param backend RecipeMap Backend
-   * @param action Recipe Builder Action
-   */
-  internal inline fun altBuilder(
-      backend: RecipeMap<NyxRecipeMapBackend>,
-      action: NyxRecipeBuilder.() -> NyxRecipeBuilder
-  ) = NyxRecipeBuilder().apply { this.action().inject(backend) }
+    protected infix fun ItemStack.ofSize(size: Int): ItemStack = this.apply { this.stackSize = size }
 
-  /**
-   * Require mods to be loaded before executing the action
-   *
-   * @param requiredMods Mods to be checked
-   */
-  protected inline fun requireMods(vararg requiredMods: Mods, action: () -> Unit) {
-    if (requiredMods.all { it.isModLoaded }) action()
-  }
+    protected infix fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder = this.duration(seconds * NyxValues.RecipeValues.SECOND)
 
-  protected fun Mods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
-      GTModHandler.getModItem(
-          this.ID, name, amount.toLong(), meta, NyxItemList.TestItem01.get(amount.toLong() * 6 + 1))
+    protected infix fun GTRecipeBuilder.durMin(minutes: Int): GTRecipeBuilder = this.duration(minutes * NyxValues.RecipeValues.MINUTE)
 
-  protected fun NyxMods.getItem(name: String, amount: Int = 1, meta: Int = 0): ItemStack =
-      GTModHandler.getModItem(
-          this.modId,
-          name,
-          amount.toLong(),
-          meta,
-          NyxItemList.TestItem01.get(amount.toLong() * 6 + 1))
+    protected infix fun GTRecipeBuilder.durHour(hours: Int): GTRecipeBuilder = this.duration(hours * NyxValues.RecipeValues.HOUR)
 
-  protected infix fun ItemStack.ofSize(size: Int): ItemStack = this.apply { this.stackSize = size }
+    protected fun Materials.getBucketFluid(amount: Int): FluidStack = this.getFluid(amount * NyxValues.RecipeValues.BUCKET)
 
-  protected infix fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder =
-      this.duration(seconds * NyxValues.RecipeValues.SECOND)
+    protected fun Materials.getIngotFluid(amount: Int): FluidStack = this.getFluid(amount * NyxValues.RecipeValues.INGOT)
 
-  protected infix fun GTRecipeBuilder.durMin(minutes: Int): GTRecipeBuilder =
-      this.duration(minutes * NyxValues.RecipeValues.MINUTE)
+    protected fun Materials.getBucketMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.BUCKET)
 
-  protected infix fun GTRecipeBuilder.durHour(hours: Int): GTRecipeBuilder =
-      this.duration(hours * NyxValues.RecipeValues.HOUR)
+    protected fun Materials.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.INGOT)
 
-  protected fun Materials.getBucketFluid(amount: Int): FluidStack =
-      this.getFluid(amount * NyxValues.RecipeValues.BUCKET)
+    protected fun Werkstoff.getDust(amount: Int): ItemStack = this.get(OrePrefixes.dust, amount)
 
-  protected fun Materials.getIngotFluid(amount: Int): FluidStack =
-      this.getFluid(amount * NyxValues.RecipeValues.INGOT)
+    protected fun Werkstoff.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.INGOT.toInt())
 
-  protected fun Materials.getBucketMolten(amount: Int): FluidStack =
-      this.getMolten(amount * NyxValues.RecipeValues.BUCKET)
+    protected fun Werkstoff.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.INGOT).toInt())
 
-  protected fun Materials.getIngotMolten(amount: Int): FluidStack =
-      this.getMolten(amount * NyxValues.RecipeValues.INGOT)
+    protected fun Werkstoff.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
 
-  protected fun Werkstoff.getDust(amount: Int): ItemStack = this.get(OrePrefixes.dust, amount)
+    protected fun NyxMaterial.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.INGOT.toInt())
 
-  protected fun Werkstoff.getIngotMolten(amount: Int): FluidStack =
-      this.getMolten(amount * NyxValues.RecipeValues.INGOT.toInt())
+    protected fun NyxMaterial.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.INGOT).toInt())
 
-  protected fun Werkstoff.getIngotMolten(amount: Long): FluidStack =
-      this.getMolten((amount * NyxValues.RecipeValues.INGOT).toInt())
+    protected fun NyxMaterial.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
 
-  protected fun Werkstoff.getBucketMolten(amount: Int): FluidStack =
-      this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
+    protected fun IItemContainer.getAmountUnsafe(amount: Int): ItemStack = this.get(1).copyAmountUnsafe(amount)
 
-  protected fun NyxMaterial.getIngotMolten(amount: Int): FluidStack =
-      this.getMolten(amount * NyxValues.RecipeValues.INGOT.toInt())
+    internal class NyxRecipeBuilder {
+        private var inputItems: Array<ItemStack> = arrayOf()
+        private var outputItems: Array<ItemStack> = arrayOf()
+        private var inputFluids: Array<FluidStack> = arrayOf()
+        private var outputFluids: Array<FluidStack> = arrayOf()
+        private var outputChance: IntArray = IntArray(0)
+        private var eut = 0
+        private var duration = 0
+        private var specialValue = 0
 
-  protected fun NyxMaterial.getIngotMolten(amount: Long): FluidStack =
-      this.getMolten((amount * NyxValues.RecipeValues.INGOT).toInt())
+        fun itemInputs(vararg inputItems: ItemStack): NyxRecipeBuilder {
+            if (inputItems.isNotEmpty()) this.inputItems += inputItems
+            return this
+        }
 
-  protected fun NyxMaterial.getBucketMolten(amount: Int): FluidStack =
-      this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
+        fun itemOutputs(vararg outputItems: ItemStack): NyxRecipeBuilder {
+            if (outputItems.isNotEmpty()) this.outputItems += outputItems
+            return this
+        }
 
-  protected fun IItemContainer.getAmountUnsafe(amount: Int): ItemStack =
-      this.get(1).copyAmountUnsafe(amount)
+        fun fluidInputs(vararg inputFluids: FluidStack): NyxRecipeBuilder {
+            if (inputFluids.isNotEmpty()) this.inputFluids += inputFluids
+            return this
+        }
 
-  internal class NyxRecipeBuilder {
-    private var inputItems: Array<ItemStack> = arrayOf()
-    private var outputItems: Array<ItemStack> = arrayOf()
-    private var inputFluids: Array<FluidStack> = arrayOf()
-    private var outputFluids: Array<FluidStack> = arrayOf()
-    private var outputChance: IntArray = IntArray(0)
-    private var eut = 0
-    private var duration = 0
-    private var specialValue = 0
+        fun fluidOutputs(vararg outputFluids: FluidStack): NyxRecipeBuilder {
+            if (outputFluids.isNotEmpty()) this.outputFluids += outputFluids
+            return this
+        }
 
-    fun itemInputs(vararg inputItems: ItemStack): NyxRecipeBuilder {
-      if (inputItems.isNotEmpty()) this.inputItems += inputItems
-      return this
+        fun outputChances(vararg outputChance: Int): NyxRecipeBuilder = this.also { this.outputChance = outputChance }
+
+        fun eut(eut: Int): NyxRecipeBuilder = this.also { this.eut = eut }
+
+        fun eut(eut: Long): NyxRecipeBuilder = this.also { this.eut = eut.toInt() }
+
+        fun duration(duration: Int): NyxRecipeBuilder = this.also { this.duration = duration }
+
+        fun durSec(seconds: Int): NyxRecipeBuilder = this.also { this.duration = seconds * NyxValues.RecipeValues.SECOND }
+
+        fun specialValue(specialValue: Int): NyxRecipeBuilder = this.also { this.specialValue = specialValue }
+
+        /** Renamed inject method to avoid misuse in lambda calls */
+        internal fun inject(recipeMap: RecipeMap<*>) {
+            GTRecipe(
+                false,
+                inputItems,
+                outputItems,
+                null,
+                outputChance,
+                inputFluids,
+                outputFluids,
+                duration,
+                eut,
+                specialValue,
+            ).apply {
+                mInputs = inputItems.clone()
+                mOutputs = outputItems.clone()
+            }.let { recipeMap.add(it) }
+        }
     }
-
-    fun itemOutputs(vararg outputItems: ItemStack): NyxRecipeBuilder {
-      if (outputItems.isNotEmpty()) this.outputItems += outputItems
-      return this
-    }
-
-    fun fluidInputs(vararg inputFluids: FluidStack): NyxRecipeBuilder {
-      if (inputFluids.isNotEmpty()) this.inputFluids += inputFluids
-      return this
-    }
-
-    fun fluidOutputs(vararg outputFluids: FluidStack): NyxRecipeBuilder {
-      if (outputFluids.isNotEmpty()) this.outputFluids += outputFluids
-      return this
-    }
-
-    fun outputChances(vararg outputChance: Int): NyxRecipeBuilder =
-        this.also { this.outputChance = outputChance }
-
-    fun eut(eut: Int): NyxRecipeBuilder = this.also { this.eut = eut }
-
-    fun eut(eut: Long): NyxRecipeBuilder = this.also { this.eut = eut.toInt() }
-
-    fun duration(duration: Int): NyxRecipeBuilder = this.also { this.duration = duration }
-
-    fun durSec(seconds: Int): NyxRecipeBuilder =
-        this.also { this.duration = seconds * NyxValues.RecipeValues.SECOND }
-
-    fun specialValue(specialValue: Int): NyxRecipeBuilder =
-        this.also { this.specialValue = specialValue }
-
-    /** Renamed inject method to avoid misuse in lambda calls */
-    internal fun inject(recipeMap: RecipeMap<*>) {
-      GTRecipe(
-              false,
-              inputItems,
-              outputItems,
-              null,
-              outputChance,
-              inputFluids,
-              outputFluids,
-              duration,
-              eut,
-              specialValue)
-          .apply {
-            mInputs = inputItems.clone()
-            mOutputs = outputItems.clone()
-          }
-          .let { recipeMap.add(it) }
-    }
-  }
 }

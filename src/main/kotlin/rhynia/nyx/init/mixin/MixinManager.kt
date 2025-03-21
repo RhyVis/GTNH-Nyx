@@ -5,8 +5,7 @@ import com.gtnewhorizon.gtnhmixins.LateMixin
 
 @LateMixin
 class MixinManager : ILateMixinLoader {
-  override fun getMixinConfig(): String = "mixins.nyx.late.json"
+    override fun getMixinConfig(): String = "mixins.nyx.late.json"
 
-  override fun getMixins(loadedMods: Set<String>): List<String> =
-      MixinEntry.findLateMixins(loadedMods)
+    override fun getMixins(loadedMods: Set<String>): List<String> = MixinEntry.findLateMixins(loadedMods)
 }

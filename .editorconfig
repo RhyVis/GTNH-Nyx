@@ -15,7 +15,7 @@ trim_trailing_whitespace = true
 [*.{bat,ini}]
 end_of_line = crlf
 
-[*.{dtd,json,info,mcmeta,md,sh,svg,xml,xsd,xsl,yaml,yml,kt}]
+[*.{dtd,json,info,mcmeta,md,sh,svg,xml,xsd,xsl,yaml,yml}]
 indent_size = 2
 
 [*.lang]

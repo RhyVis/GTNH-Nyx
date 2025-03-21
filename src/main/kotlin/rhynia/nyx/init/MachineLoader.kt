@@ -28,64 +28,63 @@ import rhynia.nyx.common.tile.multi.process.NyxMTEKelvinTransformField
 import rhynia.nyx.common.tile.multi.process.NyxMTEProcessingComplex
 
 object MachineLoader : Loader {
+    // region sig Machine
 
-  // region sig Machine
+    lateinit var InfiniteLiquidAirHatch: ItemStack
+    lateinit var InfiniteDistilledWaterHatch: ItemStack
+    lateinit var InfiniteLavaHatch: ItemStack
+    lateinit var InfiniteOilHatch: ItemStack
+    lateinit var InfiniteLubricantHatch: ItemStack
+    lateinit var InfiniteSteamHatch: ItemStack
+    lateinit var ZeroGenerator: ItemStack
+    lateinit var HumongousCalibrationInputHatch: ItemStack
+    lateinit var HumongousCalibrationHalfInputHatch: ItemStack
 
-  lateinit var InfiniteLiquidAirHatch: ItemStack
-  lateinit var InfiniteDistilledWaterHatch: ItemStack
-  lateinit var InfiniteLavaHatch: ItemStack
-  lateinit var InfiniteOilHatch: ItemStack
-  lateinit var InfiniteLubricantHatch: ItemStack
-  lateinit var InfiniteSteamHatch: ItemStack
-  lateinit var ZeroGenerator: ItemStack
-  lateinit var HumongousCalibrationInputHatch: ItemStack
-  lateinit var HumongousCalibrationHalfInputHatch: ItemStack
+    // endregion
 
-  // endregion
+    // region multi Machine controller
 
-  // region multi Machine controller
+    lateinit var AstralForge: ItemStack
+    lateinit var AtomMacro: ItemStack
+    lateinit var AssemblyMatrix: ItemStack
+    lateinit var KelvinTransformField: ItemStack
+    lateinit var SelectedEnergyGenerator: ItemStack
+    lateinit var Creator: ItemStack
+    lateinit var EyeOfUltimate: ItemStack
+    lateinit var DenseEndpoint: ItemStack
+    lateinit var ProcessingComplex: ItemStack
 
-  lateinit var AstralForge: ItemStack
-  lateinit var AtomMacro: ItemStack
-  lateinit var AssemblyMatrix: ItemStack
-  lateinit var KelvinTransformField: ItemStack
-  lateinit var SelectedEnergyGenerator: ItemStack
-  lateinit var Creator: ItemStack
-  lateinit var EyeOfUltimate: ItemStack
-  lateinit var DenseEndpoint: ItemStack
-  lateinit var ProcessingComplex: ItemStack
+    // endregion
 
-  // endregion
+    private val offset by lazy { Config.MTE_ID_OFFSET }
 
-  private val offset by lazy { Config.MTE_ID_OFFSET }
-
-  override fun load() {
-    checkOccupation()
-    initializeMachineClass()
-    initializeItemList()
-  }
-
-  private fun checkOccupation() {
-    for (i in (offset + 1)..(offset + 40)) {
-      if (GregTechAPI.METATILEENTITIES[i] != null) {
-        val mte = GregTechAPI.METATILEENTITIES[i]
-
-        Log.warn("=========================================")
-        Log.warn("           ID CRASH DETECTED             ")
-        Log.warn("Seems that there's a conflict with ID $i")
-        Log.warn("$MOD_NAME will preserve ${(offset + 1)..(offset + 40)} for machine ids")
-        Log.warn("Now ID $i is occupied by ${mte.localName} form ${mte.javaClass}")
-        Log.warn("If this is an MTE from GT:NH, report this to $MOD_NAME's author")
-        Log.warn("If from another self-installed mod, you can change the offset in config")
-        Log.warn("It's named $MOD_ID.cfg in your config folder")
-        Log.warn("=========================================")
-
-        throw IllegalStateException("ID $i preserved by $MOD_NAME is occupied by ${mte.localName}")
-      }
+    override fun load() {
+        checkOccupation()
+        initializeMachineClass()
+        initializeItemList()
     }
-  }
 
-  // spotless:off
+    private fun checkOccupation() {
+        for (i in (offset + 1)..(offset + 40)) {
+            if (GregTechAPI.METATILEENTITIES[i] != null) {
+                val mte = GregTechAPI.METATILEENTITIES[i]
+
+                Log.warn("=========================================")
+                Log.warn("           ID CRASH DETECTED             ")
+                Log.warn("Seems that there's a conflict with ID $i")
+                Log.warn("$MOD_NAME will preserve ${(offset + 1)..(offset + 40)} for machine ids")
+                Log.warn("Now ID $i is occupied by ${mte.localName} form ${mte.javaClass}")
+                Log.warn("If this is an MTE from GT:NH, report this to $MOD_NAME's author")
+                Log.warn("If from another self-installed mod, you can change the offset in config")
+                Log.warn("It's named $MOD_ID.cfg in your config folder")
+                Log.warn("=========================================")
+
+                throw IllegalStateException("ID $i preserved by $MOD_NAME is occupied by ${mte.localName}")
+            }
+        }
+    }
+
+    // spotless:off
     private fun initializeMachineClass() {
         AstralForge =
             NyxMTEAstralForge(offset + 1, "MTEAstralForge", "星辉锻造台").getStackForm(1)
@@ -126,34 +125,34 @@ object MachineLoader : Loader {
             NyxHatchHumongousCalibrationHalfInput(
                 offset + 28,
                 "MTECalibrationHalfInputHatch",
-                "鸿蒙半标定仓"
+                "鸿蒙半标定仓",
             ).getStackForm(1)
         HumongousCalibrationInputHatch =
             NyxMTEHatchHumongousCalibrationInput(offset + 29, "MTECalibrationInputHatch", "鸿蒙标定仓").getStackForm(1)
     }
     // spotless:on
 
-  private fun initializeItemList() {
-    NyxItemList.AstralForge.set(AstralForge)
-    NyxItemList.AtomMacro.set(AtomMacro)
-    NyxItemList.AssemblyMatrix.set(AssemblyMatrix)
-    NyxItemList.KelvinTransformField.set(KelvinTransformField)
-    NyxItemList.SelectedEnergyGenerator.set(SelectedEnergyGenerator)
-    NyxItemList.Creator.set(Creator)
-    NyxItemList.EyeOfUltimate.set(EyeOfUltimate)
-    NyxItemList.DenseEndpoint.set(DenseEndpoint)
-    NyxItemList.ProcessingComplex.set(ProcessingComplex)
+    private fun initializeItemList() {
+        NyxItemList.AstralForge.set(AstralForge)
+        NyxItemList.AtomMacro.set(AtomMacro)
+        NyxItemList.AssemblyMatrix.set(AssemblyMatrix)
+        NyxItemList.KelvinTransformField.set(KelvinTransformField)
+        NyxItemList.SelectedEnergyGenerator.set(SelectedEnergyGenerator)
+        NyxItemList.Creator.set(Creator)
+        NyxItemList.EyeOfUltimate.set(EyeOfUltimate)
+        NyxItemList.DenseEndpoint.set(DenseEndpoint)
+        NyxItemList.ProcessingComplex.set(ProcessingComplex)
 
-    NyxItemList.InfiniteLiquidAirHatch.set(InfiniteLiquidAirHatch)
-    NyxItemList.InfiniteDistilledWaterHatch.set(InfiniteDistilledWaterHatch)
-    NyxItemList.InfiniteLavaHatch.set(InfiniteLavaHatch)
-    NyxItemList.InfiniteOilHatch.set(InfiniteOilHatch)
-    NyxItemList.InfiniteLubricantHatch.set(InfiniteLubricantHatch)
-    NyxItemList.InfiniteSteamHatch.set(InfiniteSteamHatch)
+        NyxItemList.InfiniteLiquidAirHatch.set(InfiniteLiquidAirHatch)
+        NyxItemList.InfiniteDistilledWaterHatch.set(InfiniteDistilledWaterHatch)
+        NyxItemList.InfiniteLavaHatch.set(InfiniteLavaHatch)
+        NyxItemList.InfiniteOilHatch.set(InfiniteOilHatch)
+        NyxItemList.InfiniteLubricantHatch.set(InfiniteLubricantHatch)
+        NyxItemList.InfiniteSteamHatch.set(InfiniteSteamHatch)
 
-    NyxItemList.ZeroGenerator.set(ZeroGenerator)
+        NyxItemList.ZeroGenerator.set(ZeroGenerator)
 
-    NyxItemList.HumongousCalibrationHalfInputHatch.set(HumongousCalibrationHalfInputHatch)
-    NyxItemList.HumongousCalibrationInputHatch.set(HumongousCalibrationInputHatch)
-  }
+        NyxItemList.HumongousCalibrationHalfInputHatch.set(HumongousCalibrationHalfInputHatch)
+        NyxItemList.HumongousCalibrationInputHatch.set(HumongousCalibrationInputHatch)
+    }
 }

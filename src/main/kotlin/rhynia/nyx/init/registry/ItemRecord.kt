@@ -5,7 +5,7 @@ import rhynia.nyx.common.item.AbstractMetaItem
 import rhynia.nyx.common.item.NyxItemUltimate
 
 object ItemRecord {
-  val ItemUltimate: Item = NyxItemUltimate()
-  val MetaItem01: Item = object : AbstractMetaItem("MetaItem01") {}
-  val MetaItem02: Item = object : AbstractMetaItem("MetaItem02") {}
+    val ItemUltimate: Item = NyxItemUltimate()
+    val MetaItem01: Item = object : AbstractMetaItem("MetaItem01") {}
+    val MetaItem02: Item = object : AbstractMetaItem("MetaItem02") {}
 }

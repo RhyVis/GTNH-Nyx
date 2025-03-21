@@ -10,22 +10,30 @@ import rhynia.nyx.api.interfaces.block.GregTechTileInfo
  *
  * @param rawName the raw name of the block
  */
-open class NyxMetaBlock(rawName: String) : AbstractMetaBlock(rawName), GregTechTileInfo {
-  override fun canBeReplacedByLeaves(world: IBlockAccess?, x: Int, y: Int, z: Int): Boolean = false
+open class NyxMetaBlock(
+    rawName: String,
+) : AbstractMetaBlock(rawName),
+    GregTechTileInfo {
+    override fun canBeReplacedByLeaves(
+        world: IBlockAccess?,
+        x: Int,
+        y: Int,
+        z: Int,
+    ): Boolean = false
 
-  override fun canEntityDestroy(
-      world: IBlockAccess?,
-      x: Int,
-      y: Int,
-      z: Int,
-      entity: Entity?
-  ): Boolean = false
+    override fun canEntityDestroy(
+        world: IBlockAccess?,
+        x: Int,
+        y: Int,
+        z: Int,
+        entity: Entity?,
+    ): Boolean = false
 
-  override fun canCreatureSpawn(
-      type: EnumCreatureType?,
-      world: IBlockAccess?,
-      x: Int,
-      y: Int,
-      z: Int
-  ): Boolean = false
+    override fun canCreatureSpawn(
+        type: EnumCreatureType?,
+        world: IBlockAccess?,
+        x: Int,
+        y: Int,
+        z: Int,
+    ): Boolean = false
 }

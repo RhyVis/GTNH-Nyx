@@ -17,36 +17,37 @@ import rhynia.nyx.init.RecipeLoader
 import rhynia.nyx.init.WirelessExtraLoader
 
 open class CommonProxy {
-  // Read config, create blocks, items, etc., and register them with the GameRegistry.
-  open fun preInit(event: FMLPreInitializationEvent) {
-    Log.info(
-        "Hello Minecraft! $MOD_NAME initializing at version ${Tags.VERSION}" +
-            if (DevEnv) " (dev)" else null)
-    Config.syncConfig(event.suggestedConfigurationFile)
+    // Read config, create blocks, items, etc., and register them with the GameRegistry.
+    open fun preInit(event: FMLPreInitializationEvent) {
+        Log.info(
+            "Hello Minecraft! $MOD_NAME initializing at version ${Tags.VERSION}" +
+                if (DevEnv) " (dev)" else null,
+        )
+        Config.syncConfig(event.suggestedConfigurationFile)
 
-    Log.info("Initializing $MOD_NAME materials...")
-    MaterialLoader.load()
-  }
+        Log.info("Initializing $MOD_NAME materials...")
+        MaterialLoader.load()
+    }
 
-  // Do mod setup. Build data structures. Register recipes.
-  open fun init(event: FMLInitializationEvent) {
-    Log.info("Initializing $MOD_NAME machines...")
-    MachineLoader.load()
-    WirelessExtraLoader.load()
-  }
+    // Do mod setup. Build data structures. Register recipes.
+    open fun init(event: FMLInitializationEvent) {
+        Log.info("Initializing $MOD_NAME machines...")
+        MachineLoader.load()
+        WirelessExtraLoader.load()
+    }
 
-  // Handle interaction with other mods, complete setup.
-  open fun postInit(event: FMLPostInitializationEvent) {}
+    // Handle interaction with other mods, complete setup.
+    open fun postInit(event: FMLPostInitializationEvent) {}
 
-  // Additional loader for complete init
-  open fun completeInit(event: FMLLoadCompleteEvent) {
-    Log.info("Initializing $MOD_NAME recipes...")
-    RecipeLoader.load()
-    NyxMTEProcessingComplex.ProcessReference.generateMap()
-  }
+    // Additional loader for complete init
+    open fun completeInit(event: FMLLoadCompleteEvent) {
+        Log.info("Initializing $MOD_NAME recipes...")
+        RecipeLoader.load()
+        NyxMTEProcessingComplex.ProcessReference.generateMap()
+    }
 
-  // register server commands
-  open fun serverStarting(event: FMLServerStartingEvent) {
-    // StructureLib.DEBUG_MODE = true
-  }
+    // register server commands
+    open fun serverStarting(event: FMLServerStartingEvent) {
+        // StructureLib.DEBUG_MODE = true
+    }
 }
