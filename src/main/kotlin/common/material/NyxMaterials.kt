@@ -16,13 +16,12 @@ object NyxMaterials : Loader {
 
     /** Null material, used for some special cases. */
     val Null =
-        NyxMaterial(0, "Null", "空", shortArrayOf(250, 250, 250, 255)) {
+        NyxMaterial(0, "null", shortArrayOf(250, 250, 250, 255)) {
             skipRecipeGeneration = true
             textureSet = TextureSet.SET_NONE
             protons = 999
             mass = 999
             addElementalTooltip("N")
-            addExtraTooltip("这是虚空的元素")
             enableDusts()
             enableFluids(LIQUID to 1111, MOLTEN to 3333, GAS to 6666, PLASMA to 9999)
             enableGems()

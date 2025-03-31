@@ -10,10 +10,10 @@ import gregtech.api.enums.Mods
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.enums.TextureSet
 import net.minecraft.item.ItemStack
+import net.minecraft.util.StatCollector
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
-import rhynia.nyx.Log
-import rhynia.nyx.api.util.firstCharUpperCase
+import rhynia.nyx.ModLogger
 import rhynia.nyx.common.NyxItemList
 
 /**
@@ -36,8 +36,6 @@ class NyxMaterial(
      * 2025.02.09 Add more strict rule by only allowing [A-Za-z0-9_]
      */
     internalName: String,
-    /** Localized display name of the material */
-    val displayName: String,
     /**
      * The color of the material, it should be an array of 3 or 4 shorts, representing RGBA
      *
@@ -49,59 +47,6 @@ class NyxMaterial(
      */
     initConfig: NyxMaterial.() -> Unit = {},
 ) {
-    init {
-        if (NyxMaterialLoader.MaterialSet.any { it.id == id }) {
-            throw IllegalArgumentException("Material $internalName with id $id has been registered")
-        }
-        initConfig()
-        NyxMaterialLoader.MaterialSet.add(this)
-    }
-
-    companion object {
-        /**
-         * Let's say I don't want to generate items for these prefixes, I don't like dealing with world
-         * generation etc
-         */
-        private val disabledOrePrefixes: Set<OrePrefixes> =
-            setOf(
-                OrePrefixes.rawOre,
-                OrePrefixes.ore,
-                OrePrefixes.oreSmall,
-                OrePrefixes.dustImpure,
-                OrePrefixes.dustPure,
-                OrePrefixes.crushed,
-                OrePrefixes.crushedPurified,
-                OrePrefixes.crushedCentrifuged,
-            )
-
-        /**
-         * Subscript numbers in string, it will convert 0-9 to subscript numbers
-         *
-         * @return The string with subscript numbers
-         */
-        fun String.subscriptNumbers(): String =
-            this
-                .map {
-                    when (it) {
-                        '0' -> '\u2080'
-                        '1' -> '\u2081'
-                        '2' -> '\u2082'
-                        '3' -> '\u2083'
-                        '4' -> '\u2084'
-                        '5' -> '\u2085'
-                        '6' -> '\u2086'
-                        '7' -> '\u2087'
-                        '8' -> '\u2088'
-                        '9' -> '\u2089'
-                        else -> it
-                    }
-                }.joinToString("")
-
-        fun FluidState.shouldHasCell() = this in setOf(LIQUID, MOLTEN, PLASMA)
-
-        fun FluidState.shouldHasForestryCell() = Mods.Forestry.isModLoaded && this in setOf(LIQUID, MOLTEN)
-    }
-
     // region Material Metadata
 
     /**
@@ -110,14 +55,14 @@ class NyxMaterial(
      */
     val internalName: String = internalName.replace(Regex("[^A-Za-z0-9]"), "")
 
-    /** The title case of the internal name, used in orePrefixes, etc. */
-    val internalNameTitleCase: String by lazy { internalName.firstCharUpperCase() }
+    val localizationKey: String = "material.$internalName"
+
+    /** Localized display name of the material */
+    val displayName: String
+        get() = StatCollector.translateToLocal(localizationKey)
 
     /** Element desc such as Fe, Au, etc. */
-    var elementTooltip: Array<String> = arrayOf()
-
-    /** Additional tooltip for the material, need to press shift to see */
-    var extraTooltip: Array<String> = arrayOf()
+    val elementTooltip: MutableList<String> = mutableListOf()
 
     /** The texture set for the material, it should be one of the [TextureSet] */
     var textureSet: TextureSet = TextureSet.SET_NONE
@@ -130,7 +75,7 @@ class NyxMaterial(
     var hasInitialiated = false
         set(value) {
             if (value) {
-                Log.debug("Material $internalName has been initialized")
+                ModLogger.debug("Material $internalName has been initialized")
                 field = true
             } else {
                 throw IllegalStateException(
@@ -159,16 +104,12 @@ class NyxMaterial(
         vararg e: String,
         subscript: Boolean = true,
     ) {
-        elementTooltip += e.map { if (subscript) it.subscriptNumbers() else it }
-    }
-
-    /**
-     * Add additional tooltip to the material, need to press shift
-     *
-     * @param tooltips The additional tooltips
-     */
-    fun addExtraTooltip(vararg tooltips: String) {
-        extraTooltip += tooltips
+        e
+            .map {
+                if (subscript) it.subscriptNumbers() else it
+            }.forEach {
+                elementTooltip.add(it)
+            }
     }
 
     // endregion
@@ -220,7 +161,7 @@ class NyxMaterial(
         NyxMaterialLoader.ItemMap[orePrefix]?.let {
             if (!isTypeValid(orePrefix)) {
                 return let {
-                    Log.error(
+                    ModLogger.error(
                         "Material $internalName does not have a valid item for ore prefix $orePrefix",
                     )
                     NyxItemList.TestItem01.get(0)
@@ -229,7 +170,7 @@ class NyxMaterial(
             ItemStack(it, amount, id.toInt())
         }
             ?: let {
-                Log.error("OrePrefix $orePrefix is not registered by any material")
+                ModLogger.error("OrePrefix $orePrefix is not registered by any material")
                 NyxItemList.TestItem01.get(0)
             }
 
@@ -578,7 +519,7 @@ class NyxMaterial(
         amount: Int = 1,
     ): ItemStack {
         if (state !in fluidStateMap || state == GAS || state == SLURRY) {
-            Log.warn("Material $internalName does not have a valid cell state $state")
+            ModLogger.warn("Material $internalName does not have a valid cell state $state")
             throw IllegalArgumentException(
                 "Material $internalName does not have a valid cell state $state",
             )
@@ -594,4 +535,57 @@ class NyxMaterial(
         }
     }
     // endregion
+
+    init {
+        if (NyxMaterialLoader.MaterialSet.any { it.id == id }) {
+            throw IllegalArgumentException("Material $internalName with id $id has been registered")
+        }
+        initConfig()
+        NyxMaterialLoader.MaterialSet.add(this)
+    }
+
+    companion object {
+        /**
+         * Let's say I don't want to generate items for these prefixes, I don't like dealing with world
+         * generation etc
+         */
+        private val disabledOrePrefixes: Set<OrePrefixes> =
+            setOf(
+                OrePrefixes.rawOre,
+                OrePrefixes.ore,
+                OrePrefixes.oreSmall,
+                OrePrefixes.dustImpure,
+                OrePrefixes.dustPure,
+                OrePrefixes.crushed,
+                OrePrefixes.crushedPurified,
+                OrePrefixes.crushedCentrifuged,
+            )
+
+        /**
+         * Subscript numbers in string, it will convert 0-9 to subscript numbers
+         *
+         * @return The string with subscript numbers
+         */
+        fun String.subscriptNumbers(): String =
+            this
+                .map {
+                    when (it) {
+                        '0' -> '\u2080'
+                        '1' -> '\u2081'
+                        '2' -> '\u2082'
+                        '3' -> '\u2083'
+                        '4' -> '\u2084'
+                        '5' -> '\u2085'
+                        '6' -> '\u2086'
+                        '7' -> '\u2087'
+                        '8' -> '\u2088'
+                        '9' -> '\u2089'
+                        else -> it
+                    }
+                }.joinToString("")
+
+        fun FluidState.shouldHasCell() = this in setOf(LIQUID, MOLTEN, PLASMA)
+
+        fun FluidState.shouldHasForestryCell() = Mods.Forestry.isModLoaded && this in setOf(LIQUID, MOLTEN)
+    }
 }

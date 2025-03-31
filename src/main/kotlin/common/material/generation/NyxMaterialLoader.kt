@@ -5,7 +5,7 @@ import gregtech.api.enums.OrePrefixes
 import gregtech.api.fluid.GTFluidFactory
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidRegistry
-import rhynia.nyx.Log
+import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.Loader
 import rhynia.nyx.common.item.NyxGeneratedMetaItem
 import rhynia.nyx.common.material.generation.NyxMaterialLoader.MaterialSet
@@ -13,17 +13,17 @@ import kotlin.time.measureTime
 
 object NyxMaterialLoader : Loader {
     override fun load() {
-        Log.info("Registering materials...")
+        ModLogger.info("Registering materials...")
         measureTime {
             MaterialSet.forEach {
-                Log.debug("Loading material: ${it.id}: ${it.internalName}")
+                ModLogger.debug("Loading material: ${it.id}: ${it.internalName}")
                 generateFluid(it)
                 MaterialMap[it.id] = it
                 it.hasInitialiated = true
             }
             generateMetaItem()
         }.also {
-            Log.info("Generated ${MaterialMap.size} materials in ${it.inWholeMilliseconds}ms")
+            ModLogger.info("Generated ${MaterialMap.size} materials in ${it.inWholeMilliseconds}ms")
         }
     }
 
@@ -61,7 +61,7 @@ object NyxMaterialLoader : Loader {
             val (name, temperature) = info
             var fluid =
                 if (FluidRegistry.isFluidRegistered(name)) {
-                    Log.warn(
+                    ModLogger.warn(
                         "Fluid $name is already registered! Referring it as ${material.internalName}'s fluid.",
                     )
                     FluidRegistry.getFluid(name)
@@ -74,7 +74,7 @@ object NyxMaterialLoader : Loader {
                         .withColorRGBA(material.color)
                         .buildAndRegister()
                         .asFluid()
-                        .also { Log.debug("Generated fluid $name") }
+                        .also { ModLogger.debug("Generated fluid $name") }
                 }
             FluidMap[material.id]?.let { it[state] = fluid }
                 ?: run { FluidMap[material.id] = mutableMapOf(state to fluid) }
@@ -85,12 +85,12 @@ object NyxMaterialLoader : Loader {
         MaterialSet
             .flatMap { it.getFinalOrePrefixes() }
             .toSortedSet(compareBy { it.ordinal })
-            .also { Log.debug("Used ore prefixes: ${it.joinToString(", ") { it.name }}") }
+            .also { ModLogger.debug("Used ore prefixes: ${it.joinToString(", ") { it.name }}") }
 
     private fun generateMetaItem() {
         getUsedOrePrefixes().forEach {
             ItemMap.getOrPut(it) { NyxGeneratedMetaItem(it) }
-            Log.debug("Generated item for ${it.name}")
+            ModLogger.debug("Generated item for ${it.name}")
         }
     }
 }
