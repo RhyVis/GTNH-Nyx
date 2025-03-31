@@ -3,7 +3,7 @@ package rhynia.nyx.init.mixin
 import gregtech.api.enums.Mods
 import gregtech.api.enums.Mods.AppliedEnergistics2
 import gregtech.api.enums.Mods.BartWorks
-import rhynia.nyx.Log
+import rhynia.nyx.ModLogger
 
 /** Store all late mixins, will be loaded by MixinManager */
 @Suppress("UNUSED", "SpellCheckingInspection")
@@ -45,8 +45,8 @@ enum class MixinEntry(
                     mininsNotLoad.addAll(it.mixinClasses)
                 }
             }
-            Log.info("Mixins to load: $mixinsToLoad")
-            if (mininsNotLoad.isNotEmpty()) Log.info("Mixins not load: $mininsNotLoad")
+            ModLogger.info("Mixins to load: $mixinsToLoad")
+            if (mininsNotLoad.isNotEmpty()) ModLogger.info("Mixins not load: $mininsNotLoad")
             return mixinsToLoad
         }
     }

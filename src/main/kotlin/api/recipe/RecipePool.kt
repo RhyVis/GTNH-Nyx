@@ -11,7 +11,7 @@ import gregtech.api.util.GTRecipe
 import gregtech.api.util.GTRecipeBuilder
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
-import rhynia.nyx.Log
+import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.NyxValues
 import rhynia.nyx.api.util.copyAmountUnsafe
 import rhynia.nyx.api.util.getItem
@@ -34,7 +34,7 @@ abstract class RecipePool {
                 @Suppress("SpellCheckingInspection")
                 Class.forName("com.dreammaster.gthandler.CustomItemList")
             } catch (e: ClassNotFoundException) {
-                Log.error("Failed to load CoreMod RecipeLoader", e)
+                ModLogger.error("Failed to load CoreMod RecipeLoader", e)
                 NyxItemList::class.java
             }
         }
@@ -55,11 +55,11 @@ abstract class RecipePool {
                     .takeIf { it is IItemContainer }
                     ?.let { (it as IItemContainer).get(amount.toLong()) }
                     ?: let {
-                        Log.error("Failed to get item $name from CoreMod, with null result")
+                        ModLogger.error("Failed to get item $name from CoreMod, with null result")
                         NyxItemList.Companion.Dummy
                     }
             } catch (e: Exception) {
-                Log.error("Failed to get item $name from CoreMod, with error", e)
+                ModLogger.error("Failed to get item $name from CoreMod, with error", e)
                 NyxItemList.Companion.Dummy
             }
 

@@ -4,7 +4,7 @@ import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods.BartWorks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
-import rhynia.nyx.Log
+import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.RefHelper
 import rhynia.nyx.api.util.getItem
 import rhynia.nyx.common.NyxItemList
@@ -93,7 +93,7 @@ enum class BartPart(
 
     override fun getItemStack(amount: Int): ItemStack =
         if (deprecated) {
-            Log.error("Attempting to get deprecated item $this!")
+            ModLogger.error("Attempting to get deprecated item $this!")
             NyxItemList.Dummy
         } else {
             BartWorks.getItem(BW_GEN_ITEM_NAME, amount, meta, NyxItemList.Dummy)

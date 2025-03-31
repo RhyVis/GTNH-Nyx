@@ -13,7 +13,7 @@ import gregtech.api.util.GTOreDictUnificator
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.Range
-import rhynia.nyx.Log
+import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.NyxValues.RecipeValues.INGOT
 import rhynia.nyx.common.NyxItemList
 import tectech.thing.CustomItemList
@@ -85,7 +85,7 @@ enum class Tier(
                 ULV,
                 LV,
                 -> {
-                    Log.error(
+                    ModLogger.error(
                         "$this tier is too low for standard Super Conductor material! Using MV instead.",
                     )
                     SuperConductorPart.MV
@@ -94,7 +94,7 @@ enum class Tier(
                 UXV,
                 MAX,
                 -> {
-                    Log.error(
+                    ModLogger.error(
                         "$this tier is too high for standard Super Conductor material! Using UMV instead.",
                     )
                     SuperConductorPart.UMV
@@ -127,7 +127,7 @@ enum class Tier(
         get() = NyxItemList.TestItem01.get(1)
 
     private fun fail(info: String): ItemStack {
-        Log.error("Attempting to get $info, but it doesn't exist!")
+        ModLogger.error("Attempting to get $info, but it doesn't exist!")
         return fallbackStack
     }
 
