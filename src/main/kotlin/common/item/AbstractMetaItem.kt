@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
-import org.jetbrains.annotations.ApiStatus
 import rhynia.nyx.MOD_ID
 import rhynia.nyx.api.interfaces.item.MetaTooltip
 import rhynia.nyx.api.interfaces.item.MetaVariant
@@ -20,9 +19,17 @@ abstract class AbstractMetaItem(
 ) : Item(),
     MetaVariant,
     MetaTooltip {
-    protected var iconMap: Map<Int, IIcon> = mutableMapOf()
-    protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
-    protected val metaSet: MutableSet<Int> = mutableSetOf()
+    var iconMap: Map<Int, IIcon> = mutableMapOf()
+        private set
+    val tooltipMap: MutableMap<Int, Array<out String>?> = mutableMapOf()
+    val metaSet: MutableSet<Int> = mutableSetOf()
+
+    /**
+     * Override this to set the alternate texture name, if null defaults to
+     *
+     * `nyx:'rawName'/0`.
+     */
+    open val iconName: String? get() = null
 
     init {
         hasSubtypes = true
@@ -32,21 +39,13 @@ abstract class AbstractMetaItem(
         iconString = "${MOD_ID}:${iconName ?: "$rawName/0"}"
     }
 
-    /**
-     * Override this to set the alternate texture name, if null defaults to
-     *
-     * `nova:'rawName'/0`.
-     */
-    open val iconName: String?
-        @ApiStatus.OverrideOnly get() = null
-
     override fun getMetadata(meta: Int): Int = meta
 
     override fun getUnlocalizedName(): String = super.getUnlocalizedName()
 
     override fun getUnlocalizedName(stack: ItemStack?): String = "${super.getUnlocalizedName()}.${stack?.itemDamage ?: 0}"
 
-    override fun getIconFromDamage(meta: Int): IIcon = iconMap[meta] ?: itemIcon
+    override fun getIconFromDamage(meta: Int): IIcon? = iconMap[meta] ?: itemIcon
 
     // region MetaVariant Implementation
 
@@ -78,11 +77,11 @@ abstract class AbstractMetaItem(
 
     // region MetaTooltip Implementation
 
-    override fun getTooltips(meta: Int): Array<String>? = tooltipMap[meta]
+    override fun getTooltips(meta: Int): Array<out String>? = tooltipMap[meta]
 
     override fun setTooltips(
         meta: Int,
-        tooltips: Array<String>?,
+        tooltips: Array<out String>?,
     ) {
         if (tooltips == null) tooltipMap.remove(meta) else tooltipMap[meta] = tooltips
     }

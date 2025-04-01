@@ -2,6 +2,7 @@ package rhynia.nyx.api.util
 
 import gregtech.api.util.GTUtility
 import net.minecraft.item.ItemStack
+import rhynia.nyx.common.item.NyxDebugItem
 
 /**
  * Set the stack size of an [ItemStack] but not copy it.
@@ -29,3 +30,8 @@ fun ItemStack.copyAmountAnyway(amount: Int): ItemStack =
     } else {
         GTUtility.copyAmountUnsafe(amount, this)
     }
+
+/**
+ * Create a new [NyxDebugItem] stack with the info given.
+ */
+fun debugItem(vararg info: String) = NyxDebugItem.reportInfo(*info)

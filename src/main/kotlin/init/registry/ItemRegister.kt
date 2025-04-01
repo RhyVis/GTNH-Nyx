@@ -15,7 +15,7 @@ object ItemRegister {
     }
 
     private fun registerItems() {
-        arrayOf(ItemRecord.MetaItem01, ItemRecord.MetaItem02, ItemRecord.ItemUltimate).forEach {
+        arrayOf(ItemRecord.MetaItem01, ItemRecord.MetaItem02, ItemRecord.DebugItem, ItemRecord.ItemUltimate).forEach {
             GameRegistry.registerItem(it, it.unlocalizedName)
         }
     }

@@ -32,7 +32,7 @@ abstract class AbstractMetaBlock(
     }
 
     protected var iconMap: Map<Int, IIcon> = mutableMapOf()
-    protected val tooltipMap: MutableMap<Int, Array<String>?> = mutableMapOf()
+    protected val tooltipMap: MutableMap<Int, Array<out String>?> = mutableMapOf()
     protected val metaSet: MutableSet<Int> = mutableSetOf()
 
     override fun getUnlocalizedName(): String = super.getUnlocalizedName()
@@ -76,11 +76,11 @@ abstract class AbstractMetaBlock(
 
     // region MetaTooltip Implementation
 
-    override fun getTooltips(meta: Int): Array<String>? = tooltipMap[meta]
+    override fun getTooltips(meta: Int): Array<out String>? = tooltipMap[meta]
 
     override fun setTooltips(
         meta: Int,
-        tooltips: Array<String>?,
+        tooltips: Array<out String>?,
     ) {
         if (tooltips == null) tooltipMap.remove(meta) else tooltipMap[meta] = tooltips
     }

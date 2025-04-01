@@ -34,7 +34,8 @@ internal val ModLogger: Logger by lazy { LogManager.getLogger(MOD_NAME) }
             "required-after:dreamcraft;" +
             "required-after:GalaxySpace;" +
             "required-after:galacticgreg;" +
-            "required-after:gtnhintergalactic;",
+            "required-after:gtnhintergalactic;" +
+            "after:*;",
     acceptedMinecraftVersions = "[1.7.10]",
 )
 object Nyx {
@@ -66,19 +67,40 @@ object Config {
     var MTE_ID_OFFSET: Int = 17850
         private set
 
+    var DEBUG_PRINT_MOD_LIST = false
+        private set
+    var DEBUG_PRINT_MTE_IDS = false
+        private set
+
     private const val CATEGORY_MACHINE = "machine"
+    private const val CATEGORY_DEBUG = "debug"
 
     fun syncConfig(configFile: File) {
         Configuration(configFile).run {
             MTE_ID_OFFSET =
                 getInt(
-                    "MTE_OFFSET",
+                    "MTE_ID_OFFSET",
                     CATEGORY_MACHINE,
                     17850,
                     0,
                     Short.MAX_VALUE.toInt(),
                     "MTE ID Offset, using to solve conflicts with other custom mods " +
                         "!!!DANGER TO CHANGE IN EXISTING SAVE!!!",
+                )
+
+            DEBUG_PRINT_MOD_LIST =
+                getBoolean(
+                    "DEBUG_PRINT_MOD_LIST",
+                    CATEGORY_DEBUG,
+                    false,
+                    "Print all loaded mods to the console.",
+                )
+            DEBUG_PRINT_MTE_IDS =
+                getBoolean(
+                    "DEBUG_PRINT_MTE_IDS",
+                    CATEGORY_DEBUG,
+                    false,
+                    "Print all MTE IDs to the console.",
                 )
             if (hasChanged()) save()
         }

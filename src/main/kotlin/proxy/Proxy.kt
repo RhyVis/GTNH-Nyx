@@ -1,11 +1,13 @@
 package rhynia.nyx.proxy
 
 import com.gtnewhorizon.structurelib.StructureLib
+import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.event.FMLInitializationEvent
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
+import mrtjp.projectred.transmission.FWireModelGen.i
 import rhynia.nyx.Config
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
@@ -42,6 +44,11 @@ open class CommonProxy {
     open fun serverStarting(event: FMLServerStartingEvent) {
         if (DevEnv) {
             StructureLib.DEBUG_MODE = true
+        }
+        if (Config.DEBUG_PRINT_MOD_LIST || DevEnv) {
+            Loader.instance().activeModList.forEachIndexed { i, mod ->
+                ModLogger.warn("L: $i: ${mod.name} (${mod.modId})")
+            }
         }
     }
 }

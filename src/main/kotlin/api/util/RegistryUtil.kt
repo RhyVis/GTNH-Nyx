@@ -13,7 +13,7 @@ object RegistryUtil {
     fun registerMetaItem(
         item: AbstractMetaItem,
         meta: Int,
-        tooltip: Array<String>?,
+        tooltip: Array<out String>?,
     ): ItemStack {
         tooltip?.let { item.setTooltips(meta, it) }
         return item.registerVariant(meta)

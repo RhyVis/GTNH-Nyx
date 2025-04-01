@@ -13,7 +13,7 @@ interface MetaTooltip {
      */
     fun setTooltips(
         meta: Int,
-        tooltips: Array<String>?,
+        tooltips: Array<out String>?,
     )
 
     /**
@@ -22,5 +22,5 @@ interface MetaTooltip {
      * @param meta the meta value
      * @return the tooltips, or `null` if not set.
      */
-    fun getTooltips(meta: Int): Array<String>?
+    fun getTooltips(meta: Int): Array<out String>?
 }
