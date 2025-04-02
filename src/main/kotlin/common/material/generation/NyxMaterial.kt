@@ -21,6 +21,11 @@ import rhynia.nyx.common.NyxItemList
  *
  * The material instance should be created only once at preInit stage, then the system will handle
  * the auto generation
+ *
+ * For localization:
+ *
+ * - The localization key is `material.<internalName>`
+ * - For extra tooltips, the key is `material.<internalName>.extra.<index>`, index starting from 0, no jump
  */
 @Suppress("SpellCheckingInspection", "UNUSED")
 class NyxMaterial(

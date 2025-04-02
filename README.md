@@ -2,6 +2,8 @@
 
 ![Version](https://img.shields.io/badge/GTNH_Version-2.7.3-blue)
 
+Currently WIP.
+
 A random modification of the GT:NH mod-pack, initially inspired by TST (GTCM) in 2023,
 aiming to create something more strange and overpowered things for personal enjoyment.
 Lost interest in NH after reaching the Stargate in version 2.5.0.

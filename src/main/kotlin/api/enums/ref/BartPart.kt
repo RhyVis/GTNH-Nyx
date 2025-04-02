@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.RefHelper
+import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.api.util.getItem
-import rhynia.nyx.common.NyxItemList
 
 @Suppress("UNUSED", "SpellCheckingInspection")
 enum class BartPart(
@@ -94,9 +94,11 @@ enum class BartPart(
     override fun getItemStack(amount: Int): ItemStack =
         if (deprecated) {
             ModLogger.error("Attempting to get deprecated item $this!")
-            NyxItemList.Dummy
+            debugItem("Trying to get deprecated bw item $this")
         } else {
-            BartWorks.getItem(BW_GEN_ITEM_NAME, amount, meta, NyxItemList.Dummy)
+            BartWorks.getItem(BW_GEN_ITEM_NAME, amount, meta) {
+                debugItem("Failed to get item $this from BartWorks, with null result")
+            }
         }
 
     override fun getFluidStack(amount: Int): FluidStack = Materials.Water.getFluid(1)

@@ -47,31 +47,30 @@ class NyxGeneratedMetaItem(
 
         private val tooltipCache = mutableMapOf<Short, List<String>>()
 
-        private fun getLocalizedTooltips(id: Short): List<String> {
-            tooltipCache[id]?.let { return it }
+        private fun getLocalizedTooltips(id: Short): List<String> =
+            tooltipCache.getOrPut(id) {
+                val material = MaterialMap[id] ?: return emptyList()
+                val baseKey = "${material.localizationKey}.extra"
+                val tooltips = mutableListOf<String>()
 
-            val material = MaterialMap[id] ?: return emptyList()
-            val baseKey = "${material.localizationKey}.extra"
-            val tooltips = mutableListOf<String>()
+                var index = 0
+                while (true) {
+                    val key = "$baseKey.$index"
+                    if (StatCollector.canTranslate(key)) {
+                        tooltips.add(StatCollector.translateToLocal(key))
+                        index++
+                    } else {
+                        break
+                    }
+                }
 
-            var index = 0
-            while (true) {
-                val key = "$baseKey.$index"
-                if (StatCollector.canTranslate(key)) {
-                    tooltips.add(StatCollector.translateToLocal(key))
-                    index++
+                if (tooltips.isNotEmpty()) {
+                    tooltipCache[id] = tooltips
+                    tooltips
                 } else {
-                    break
+                    emptyList()
                 }
             }
-
-            return if (tooltips.isNotEmpty()) {
-                tooltipCache[id] = tooltips
-                tooltips
-            } else {
-                emptyList()
-            }
-        }
     }
 
     private val typedName: String

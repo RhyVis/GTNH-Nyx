@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.NyxValues
 import rhynia.nyx.api.util.copyAmountUnsafe
+import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.api.util.getItem
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.material.generation.NyxMaterial
@@ -56,11 +57,11 @@ abstract class RecipePool {
                     ?.let { (it as IItemContainer).get(amount.toLong()) }
                     ?: let {
                         ModLogger.error("Failed to get item $name from CoreMod, with null result")
-                        NyxItemList.Companion.Dummy
+                        debugItem("Failed to get item $name from CoreMod, with null result")
                     }
             } catch (e: Exception) {
                 ModLogger.error("Failed to get item $name from CoreMod, with error", e)
-                NyxItemList.Companion.Dummy
+                debugItem("Failed to get item $name from CoreMod, with error")
             }
 
         /**
@@ -69,7 +70,7 @@ abstract class RecipePool {
         fun getCoreItemAlt(
             name: String,
             amount: Int = 1,
-        ): ItemStack = Mods.NewHorizonsCoreMod.getItem(name, amount, 0, NyxItemList.Companion.Dummy)
+        ): ItemStack = Mods.NewHorizonsCoreMod.getItem(name, amount, 0) { debugItem("CoreMod item null: $name, $amount") }
     }
 
     /**

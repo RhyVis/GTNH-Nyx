@@ -4,6 +4,7 @@ import gregtech.api.enums.Mods.GoodGenerator
 import net.minecraft.item.ItemStack
 import rhynia.nyx.api.interfaces.RefHelper
 import rhynia.nyx.api.util.copyAmountAnyway
+import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.api.util.getItem
 
 @Suppress("UNUSED")
@@ -31,6 +32,6 @@ enum class BundleChip : RefHelper {
 
     override fun getItemStack(amount: Int): ItemStack =
         GoodGenerator
-            .getItem(CIRCUIT_WRAP_NAME, 1, ordinal)
+            .getItem(CIRCUIT_WRAP_NAME, 1, ordinal) { debugItem("Failed to get $CIRCUIT_WRAP_NAME:$this from GG") }
             .copyAmountAnyway(amount)
 }
