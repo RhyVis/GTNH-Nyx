@@ -72,8 +72,8 @@ object Config {
     var DEBUG_PRINT_MTE_IDS = false
         private set
 
-    private const val CATEGORY_MACHINE = "machine"
-    private const val CATEGORY_DEBUG = "debug"
+    private const val CATEGORY_MACHINE = "MACHINE"
+    private const val CATEGORY_DEBUG = "DEBUG"
 
     fun syncConfig(configFile: File) {
         Configuration(configFile).run {
