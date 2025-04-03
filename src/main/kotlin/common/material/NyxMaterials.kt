@@ -33,7 +33,7 @@ object NyxMaterials : Loader {
 
     val Restone =
         NyxMaterial(1, "restone", MaterialColors.RED) {
-            textureSet = TextureSet.SET_POWDER
+            textureSet = TextureSet.SET_LAPIS
             protons = 43
             mass = 43
             addElementalTooltip("R")
