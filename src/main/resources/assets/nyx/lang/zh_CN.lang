@@ -5,6 +5,10 @@ tile.MetaBlock01.0.name=这是什么?
 
 material.null=空
 material.null.extra.0=这是虚空的材料
+material.restone=雷石东
+material.restone.extra.0=不是红石，不是石头，甚至不是材料
+
+nyx.recipe.restoneGenerator=雷石东发电机
 
 ore.dust=%material粉
 ore.dustSmall=小堆%material粉

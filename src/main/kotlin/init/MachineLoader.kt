@@ -4,7 +4,6 @@ import gregtech.api.GregTechAPI
 import rhynia.nyx.Config
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
-import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.Loader
 import java.io.File
 
@@ -38,16 +37,15 @@ object MachineLoader : Loader {
     }
 
     private fun printMteIds() {
-        val ls = mutableListOf<Pair<Int, String>>()
-        GregTechAPI.METATILEENTITIES.forEachIndexed { i, mte ->
-            if (mte != null) ls.add(i to "${mte.localName}(${mte.javaClass.simpleName})")
+        buildList<Pair<Int, String>> {
+            GregTechAPI.METATILEENTITIES.forEachIndexed { i, mte ->
+                if (mte != null) add(i to "${mte.localName}(${mte.javaClass.simpleName})")
+            }
+            sortBy { it.first }
+        }.let { list ->
+            File("loaded_mte_ids.txt").writeText(
+                list.joinToString("\n") { "${it.first}: ${it.second}" },
+            )
         }
-        ls.sortBy { it.first }
-        ls.forEach {
-            ModLogger.warn("MTE: ${it.first}: ${it.second}")
-        }
-        File("loaded_mte_ids.txt").writeText(
-            ls.joinToString("\n") { "${it.first}: ${it.second}" },
-        )
     }
 }

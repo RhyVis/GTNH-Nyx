@@ -5,6 +5,10 @@ tile.MetaBlock01.0.name=What?
 
 material.null=Null
 material.null.extra.0=This is the material of the null
+material.restone=Restone
+material.restone.extra.0=Not redstone, not stone, not even a material
+
+nyx.recipe.restoneGenerator=Restone Generator
 
 ore.dust=%material Dust
 ore.dustSmall=Small Pile of %material Dust

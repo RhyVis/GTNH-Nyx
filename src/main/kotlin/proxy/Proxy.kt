@@ -47,7 +47,7 @@ open class CommonProxy {
         }
         if (Config.DEBUG_PRINT_MOD_LIST || DevEnv) {
             Loader.instance().activeModList.forEachIndexed { i, mod ->
-                ModLogger.warn("L: $i: ${mod.name} (${mod.modId})")
+                ModLogger.debug("L: $i: ${mod.name} (${mod.modId})")
             }
         }
     }

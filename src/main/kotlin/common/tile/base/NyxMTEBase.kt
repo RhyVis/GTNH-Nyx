@@ -37,7 +37,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
-import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.idEqual
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
@@ -388,25 +388,25 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     protected open fun getInfoDataExtra(): Array<String> = arrayOf()
 
     protected fun MultiblockTooltipBuilder.addChangeModeByScrewdriver(): MultiblockTooltipBuilder =
-        this.addInfo(NyxValues.CommonStrings.ChangeModeByScrewdriver)
+        this.addInfo(CommonString.ChangeModeByScrewdriver)
 
     protected fun MultiblockTooltipBuilder.addInputBus(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addInputBus(NyxValues.CommonStrings.BluePrintInfo, aDot)
+        this.addInputBus(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addInputHatch(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addInputHatch(NyxValues.CommonStrings.BluePrintInfo, aDot)
+        this.addInputHatch(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addOutputBus(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addOutputBus(NyxValues.CommonStrings.BluePrintInfo, aDot)
+        this.addOutputBus(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addOutputHatch(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addOutputHatch(NyxValues.CommonStrings.BluePrintInfo, aDot)
+        this.addOutputHatch(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addEnergyHatch(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addEnergyHatch(NyxValues.CommonStrings.BluePrintInfo, aDot)
+        this.addEnergyHatch(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addDynamo(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addDynamoHatch(NyxValues.CommonStrings.BluePrintInfo, aDot)
+        this.addDynamoHatch(CommonString.BluePrintInfo, aDot)
 
     override fun getWailaBody(
         itemStack: ItemStack?,

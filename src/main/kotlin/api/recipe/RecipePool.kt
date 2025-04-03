@@ -12,7 +12,12 @@ import gregtech.api.util.GTRecipeBuilder
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.ModLogger
-import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.enums.RecipeValues.BUCKET
+import rhynia.nyx.api.enums.RecipeValues.HOUR
+import rhynia.nyx.api.enums.RecipeValues.INGOT
+import rhynia.nyx.api.enums.RecipeValues.MINUTE
+import rhynia.nyx.api.enums.RecipeValues.SECOND
+import rhynia.nyx.api.enums.ref.Tier
 import rhynia.nyx.api.util.copyAmountUnsafe
 import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.api.util.getItem
@@ -85,33 +90,35 @@ abstract class RecipePool {
         if (requiredMods.all { it.isModLoaded }) action()
     }
 
-    protected fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder = this.duration(seconds * NyxValues.RecipeValues.SECOND)
+    protected fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder = this.duration(seconds * SECOND)
 
-    protected fun GTRecipeBuilder.durMin(minutes: Int): GTRecipeBuilder = this.duration(minutes * NyxValues.RecipeValues.MINUTE)
+    protected fun GTRecipeBuilder.durMin(minutes: Int): GTRecipeBuilder = this.duration(minutes * MINUTE)
 
-    protected fun GTRecipeBuilder.durHour(hours: Int): GTRecipeBuilder = this.duration(hours * NyxValues.RecipeValues.HOUR)
+    protected fun GTRecipeBuilder.durHour(hours: Int): GTRecipeBuilder = this.duration(hours * HOUR)
 
-    protected fun Materials.getBucketFluid(amount: Int): FluidStack = this.getFluid(amount * NyxValues.RecipeValues.BUCKET)
+    protected fun GTRecipeBuilder.eut(tier: Tier): GTRecipeBuilder = this.eut(tier.voltageRecipe)
 
-    protected fun Materials.getIngotFluid(amount: Int): FluidStack = this.getFluid(amount * NyxValues.RecipeValues.INGOT)
+    protected fun Materials.getBucketFluid(amount: Int): FluidStack = this.getFluid(amount * BUCKET)
 
-    protected fun Materials.getBucketMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.BUCKET)
+    protected fun Materials.getIngotFluid(amount: Int): FluidStack = this.getFluid(amount * INGOT)
 
-    protected fun Materials.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.INGOT)
+    protected fun Materials.getBucketMolten(amount: Int): FluidStack = this.getMolten(amount * BUCKET)
+
+    protected fun Materials.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * INGOT)
 
     protected fun Werkstoff.getDust(amount: Int): ItemStack = this.get(OrePrefixes.dust, amount)
 
-    protected fun Werkstoff.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.INGOT.toInt())
+    protected fun Werkstoff.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * INGOT.toInt())
 
-    protected fun Werkstoff.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.INGOT).toInt())
+    protected fun Werkstoff.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * INGOT).toInt())
 
-    protected fun Werkstoff.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
+    protected fun Werkstoff.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * BUCKET).toInt())
 
-    protected fun NyxMaterial.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * NyxValues.RecipeValues.INGOT.toInt())
+    protected fun NyxMaterial.getIngotMolten(amount: Int): FluidStack = this.getMolten(amount * INGOT.toInt())
 
-    protected fun NyxMaterial.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.INGOT).toInt())
+    protected fun NyxMaterial.getIngotMolten(amount: Long): FluidStack = this.getMolten((amount * INGOT).toInt())
 
-    protected fun NyxMaterial.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * NyxValues.RecipeValues.BUCKET).toInt())
+    protected fun NyxMaterial.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * BUCKET).toInt())
 
     protected fun IItemContainer.getAmountUnsafe(amount: Int): ItemStack = this.get(1).copyAmountUnsafe(amount)
 
@@ -153,7 +160,7 @@ abstract class RecipePool {
 
         fun duration(duration: Int): NyxRecipeBuilder = this.also { this.duration = duration }
 
-        fun durSec(seconds: Int): NyxRecipeBuilder = this.also { this.duration = seconds * NyxValues.RecipeValues.SECOND }
+        fun durSec(seconds: Int): NyxRecipeBuilder = this.also { this.duration = seconds * SECOND }
 
         fun specialValue(specialValue: Int): NyxRecipeBuilder = this.also { this.specialValue = specialValue }
 

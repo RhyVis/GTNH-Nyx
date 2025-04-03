@@ -48,7 +48,12 @@ import gregtech.common.covers.CoverLens
 import net.minecraftforge.fluids.FluidContainerRegistry
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
-import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.enums.RecipeValues.RECIPE_EV
+import rhynia.nyx.api.enums.RecipeValues.RECIPE_HV
+import rhynia.nyx.api.enums.RecipeValues.RECIPE_LV
+import rhynia.nyx.api.enums.RecipeValues.RECIPE_MV
+import rhynia.nyx.api.enums.RecipeValues.SECOND
+import rhynia.nyx.api.enums.RecipeValues.TICK
 import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.api.recipe.dsl.shapedRecipe
 import rhynia.nyx.api.recipe.dsl.withRecipeMap
@@ -188,7 +193,7 @@ class NyxMaterialRecipeLoader(
             builder
                 .itemInputs(mat.get(from))
                 .itemOutputs(mat.get(result, 2))
-                .duration(3 * NyxValues.RecipeValues.SECOND + 4 * NyxValues.RecipeValues.TICK)
+                .duration(3 * SECOND + 4 * TICK)
                 .eut(16)
                 .addTo(hammerRecipes)
         }
@@ -197,7 +202,7 @@ class NyxMaterialRecipeLoader(
             builder
                 .itemInputs(mat.get(gemChipped))
                 .itemOutputs(mat.get(dustTiny))
-                .duration(3 * NyxValues.RecipeValues.SECOND + 4 * NyxValues.RecipeValues.TICK)
+                .duration(3 * SECOND + 4 * TICK)
                 .eut(16)
                 .addTo(hammerRecipes)
         }
@@ -208,14 +213,14 @@ class NyxMaterialRecipeLoader(
                     .itemInputs(mat.get(plate))
                     .itemOutputs(mat.get(lens))
                     .durMin(1)
-                    .eut(NyxValues.RecipeValues.RECIPE_MV)
+                    .eut(RECIPE_MV)
                     .addTo(cutterRecipes)
             }
             builder
                 .itemInputs(mat.get(gemExquisite))
                 .itemOutputs(mat.get(lens), mat.get(dust, 2))
                 .durMin(2)
-                .eut(NyxValues.RecipeValues.RECIPE_LV)
+                .eut(RECIPE_LV)
                 .addTo(latheRecipes)
 
             val dye = getDyeFromColor(mat.color)
@@ -232,28 +237,28 @@ class NyxMaterialRecipeLoader(
                     .itemInputs(mat.get(gemChipped, 3), it)
                     .itemOutputs(mat.get(gemFlawed, 1))
                     .durSec(30)
-                    .eut(NyxValues.RecipeValues.RECIPE_LV)
+                    .eut(RECIPE_LV)
                     .addTo(laserEngraverRecipes)
 
                 builder
                     .itemInputs(mat.get(gemFlawed, 3), it)
                     .itemOutputs(mat.get(gem, 1))
                     .durSec(30)
-                    .eut(NyxValues.RecipeValues.RECIPE_MV)
+                    .eut(RECIPE_MV)
                     .addTo(laserEngraverRecipes)
 
                 builder
                     .itemInputs(mat.get(gem, 3), it)
                     .itemOutputs(mat.get(gemFlawless, 1))
                     .durMin(1)
-                    .eut(NyxValues.RecipeValues.RECIPE_HV)
+                    .eut(RECIPE_HV)
                     .addTo(laserEngraverRecipes)
 
                 builder
                     .itemInputs(mat.get(gemFlawless, 3), it)
                     .itemOutputs(mat.get(gemExquisite, 1))
                     .durMin(2)
-                    .eut(NyxValues.RecipeValues.RECIPE_EV)
+                    .eut(RECIPE_EV)
                     .addTo(laserEngraverRecipes)
             }
         }
