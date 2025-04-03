@@ -59,6 +59,23 @@ nyx.wirelessExt.tooltip.1=§7不连接导线，此方块可以从网络中抽取
 nyx.wirelessExt.tooltip.2=§b额外能源仓系列
 
 nyx.common.amp=安
+nyx.common.NyxMagical=§bNyx§cCreation§7 - §a魔法揭示
+nyx.common.NyxNuclear=§bNyx§cCreation§7 - §a热核反应
+nyx.common.NyxGigaFac=§bNyx§cCreation§7 - §a超级工厂
+nyx.common.AddByNyx=由 §aNyx§7 添加
+nyx.common.BluePrintInfo=如§9蓝§b图§7所示相对位置
+nyx.common.BluePrintTip=请参考§9结构§1库§7全息投影，构建主体结构
+nyx.common.StructureTooComplex=结构太复杂了!
+nyx.common.ChangeModeByScrewdriver=使用螺丝刀切换模式.
+
+nyx.machine.copier.name=COPIER
+nyx.machine.copier.type=物质复制器
+nyx.machine.copier.info.0=COPIER的控制器
+nyx.machine.copier.info.1=复制控制器槽位中的物品, 并输出到AE网络.
+nyx.machine.copier.info.2=使用螺丝刀切换物品或流体模式.
+nyx.machine.copier.waila.0=§f复制原型: §b%s
+nyx.machine.copier.waila.1.item=§f复制模式: §a物品
+nyx.machine.copier.waila.1.fluid=§f复制模式: §a流体
 
 GT5U.gui.text.importing_energy=§b导入能量中
 GT5U.gui.text.no_selected_energy_core_set=§7没有能量核心

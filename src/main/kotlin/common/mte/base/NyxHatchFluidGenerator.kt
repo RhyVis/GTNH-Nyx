@@ -1,4 +1,4 @@
-package rhynia.nyx.common.tile.base
+package rhynia.nyx.common.mte.base
 
 import gregtech.api.enums.Textures
 import gregtech.api.interfaces.ITexture

@@ -1,4 +1,4 @@
-package rhynia.nyx.common.tile.base
+package rhynia.nyx.common.mte.base
 
 import com.google.common.math.LongMath
 import gregtech.api.enums.GTValues
