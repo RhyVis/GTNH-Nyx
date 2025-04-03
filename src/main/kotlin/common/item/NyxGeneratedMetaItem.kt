@@ -37,7 +37,7 @@ class NyxGeneratedMetaItem(
 
     companion object {
         private fun getLocalizedTypeName(prefix: OrePrefixes): String =
-            "ore.${prefix.name}".let {
+            "nyx.ore.${prefix.name}".let {
                 if (StatCollector.canTranslate(it)) {
                     StatCollector.translateToLocal(it)
                 } else {

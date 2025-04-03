@@ -17,7 +17,10 @@ import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.RecipeValues
 import rhynia.nyx.api.enums.RecipeValues.INGOT
 import rhynia.nyx.common.NyxItemList
+import rhynia.nyx.common.NyxWirelessHatchList
+import rhynia.nyx.common.item.NyxDebugItem
 import tectech.thing.CustomItemList
+import kotlin.collections.get
 
 /** Enum class for tiered components and materials. */
 @Suppress("unused", "SpellCheckingInspection")
@@ -128,10 +131,11 @@ enum class Tier(
     private val fallbackStack: ItemStack
         get() = NyxItemList.TestItem01.get(1)
 
-    private fun fail(info: String): ItemStack {
-        ModLogger.error("Attempting to get $info, but it doesn't exist!")
-        return fallbackStack
-    }
+    private fun fail(info: String): ItemStack =
+        "Attempting to get $info, but it doesn't exist!".let {
+            ModLogger.error(it)
+            NyxDebugItem.reportInfo(it)
+        }
 
     fun getSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount)
 
@@ -405,6 +409,15 @@ enum class Tier(
                     .valueOf("eM_energyWirelessTunnel${tier}_UXV")
                     .get(amount.toLong(), NyxItemList.TestItem01.get(1))
 
-            else -> NyxItemList.Dummy
+            else -> NyxWirelessHatchList.valueOf("ExtLaser${this}$tier").get(amount)
         }
+
+    companion object {
+        val G_ALL: Array<Tier>
+            get() = entries.toTypedArray()
+        val G_COMMON: Array<Tier>
+            get() = entries.filter { it != ULV && it != MAX }.toTypedArray()
+        val G_MEDIUM: Array<Tier>
+            get() = arrayOf(IV, LuV, ZPM, UV, UHV, UEV, UIV, UMV, UXV)
+    }
 }

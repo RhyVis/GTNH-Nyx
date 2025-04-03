@@ -9,6 +9,7 @@ import gregtech.api.interfaces.IItemContainer
 import gregtech.api.recipe.RecipeMap
 import gregtech.api.util.GTRecipe
 import gregtech.api.util.GTRecipeBuilder
+import gregtech.api.util.GTUtility
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.ModLogger
@@ -89,6 +90,8 @@ abstract class RecipePool {
     ) {
         if (requiredMods.all { it.isModLoaded }) action()
     }
+
+    protected fun ic(id: Int): ItemStack = GTUtility.getIntegratedCircuit(id)
 
     protected fun GTRecipeBuilder.durSec(seconds: Int): GTRecipeBuilder = this.duration(seconds * SECOND)
 

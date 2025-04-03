@@ -6,7 +6,8 @@ import rhynia.nyx.api.interfaces.Loader
 import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.common.material.generation.NyxMaterialLoader
 import rhynia.nyx.common.material.generation.NyxMaterialRecipeLoader
-import rhynia.nyx.common.recipe.GregTechAddonRecipes
+import rhynia.nyx.common.recipe.GTAddonRecipes
+import rhynia.nyx.common.recipe.GTEasyWirelessRecipes
 import rhynia.nyx.common.recipe.TestRecipe
 
 object RecipeLoader : Loader {
@@ -29,7 +30,8 @@ object RecipeLoader : Loader {
     private fun loadCommonRecipes() {
         ModLogger.info("Loading common recipes...")
         arrayOf<RecipePool>(
-            GregTechAddonRecipes(),
+            GTAddonRecipes(),
+            GTEasyWirelessRecipes(),
         ).forEach { pool ->
             try {
                 pool.loadRecipes()

@@ -2,12 +2,12 @@ package rhynia.nyx.api.interfaces
 
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
-import rhynia.nyx.common.NyxItemList
+import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.common.material.NyxMaterials
 
 /** RefHelper interface for getting ItemStack and FluidStack */
 interface RefHelper {
-    fun getItemStack(amount: Int): ItemStack = NyxItemList.Dummy
+    fun getItemStack(amount: Int): ItemStack = debugItem("Should not happen in RefHelper")
 
     fun getItemStack(amount: Long): ItemStack = getItemStack(amount.toInt())
 

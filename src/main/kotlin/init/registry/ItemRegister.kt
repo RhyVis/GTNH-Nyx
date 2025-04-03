@@ -4,7 +4,9 @@ import cpw.mods.fml.common.registry.GameRegistry
 import gregtech.api.interfaces.IItemContainer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import rhynia.nyx.MOD_NAME
 import rhynia.nyx.api.util.RegistryUtil
+import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.item.AbstractMetaItem
 import rhynia.nyx.init.registry.ItemRecord.DebugItem
@@ -27,6 +29,7 @@ object ItemRegister {
         ).forEach {
             GameRegistry.registerItem(it, it.unlocalizedName)
         }
+        debugItem("$MOD_NAME Initialised!")
     }
 
     private fun registerItemContainers() {

@@ -26,10 +26,10 @@ import rhynia.nyx.common.material.MaterialColors
  *
  * For localization:
  *
- * - The localization key is `material.<internalName>`
- * - For extra tooltips, the key is `material.<internalName>.extra.<index>`, index starting from 0, no jump
+ * - The localization key is `nyx.material.<internalName>`
+ * - For extra tooltips, the key is `nyx.material.<internalName>.extra.<index>`, index starting from 0, no jump
  */
-@Suppress("SpellCheckingInspection", "UNUSED")
+@Suppress("UNUSED", "SpellCheckingInspection")
 class NyxMaterial(
     /**
      * The material id, it should be unique and not larger than 32767, used as item meta in
@@ -70,7 +70,7 @@ class NyxMaterial(
      */
     val internalName: String = internalName.replace(Regex("[^A-Za-z0-9]"), "")
 
-    val localizationKey: String = "material.$internalName"
+    val localizationKey: String = "nyx.material.$internalName"
 
     /** Localized display name of the material */
     val displayName: String

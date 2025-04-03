@@ -64,7 +64,10 @@ object Nyx {
 
 @Suppress("ktlint:standard:property-naming")
 object Config {
-    var MTE_ID_OFFSET: Int = 17850
+    var MTE_ID_OFFSET: Int = 17800
+        private set
+
+    var RECIPE_EASY_WIRELESS = false
         private set
 
     var DEBUG_PRINT_MOD_LIST = false
@@ -73,19 +76,31 @@ object Config {
         private set
 
     private const val CATEGORY_MACHINE = "MACHINE"
+    private const val CATEGORY_RECIPE = "RECIPE"
     private const val CATEGORY_DEBUG = "DEBUG"
 
+    private const val VERSION_FLAG = "1.0"
+
     fun syncConfig(configFile: File) {
-        Configuration(configFile).run {
+        Configuration(configFile, VERSION_FLAG).run {
             MTE_ID_OFFSET =
                 getInt(
                     "MTE_ID_OFFSET",
                     CATEGORY_MACHINE,
-                    17850,
+                    17800,
                     0,
                     Short.MAX_VALUE.toInt(),
-                    "MTE ID Offset, using to solve conflicts with other custom mods " +
+                    "MTE ID Offset, using to solve conflicts with other custom mods, " +
+                        "preserves OFFSET+1..OFFSET+100 range." +
                         "!!!DANGER TO CHANGE IN EXISTING SAVE!!!",
+                )
+
+            RECIPE_EASY_WIRELESS =
+                getBoolean(
+                    "RECIPE_EASY_WIRELESS",
+                    CATEGORY_RECIPE,
+                    false,
+                    "Enable easy wireless recipes",
                 )
 
             DEBUG_PRINT_MOD_LIST =
