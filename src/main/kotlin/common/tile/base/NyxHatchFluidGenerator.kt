@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
-import rhynia.nyx.api.enums.NyxValues
+import rhynia.nyx.api.enums.CommonString.AddByNyx
 
 @Suppress("UNUSED", "SpellCheckingInspection")
 abstract class NyxHatchFluidGenerator : MTEHatchInput {
@@ -54,7 +54,7 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
             add(capacityString)
             add(hatchTierString)
             addAll(customTooltip)
-            add(NyxValues.CommonStrings.AddByNyx)
+            add(AddByNyx)
         }.filterNotNull().toTypedArray()
     }
 

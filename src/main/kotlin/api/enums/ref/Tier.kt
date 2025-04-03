@@ -14,30 +14,35 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.Range
 import rhynia.nyx.ModLogger
-import rhynia.nyx.api.enums.NyxValues.RecipeValues.INGOT
+import rhynia.nyx.api.enums.RecipeValues
+import rhynia.nyx.api.enums.RecipeValues.INGOT
 import rhynia.nyx.common.NyxItemList
+import rhynia.nyx.common.NyxWirelessHatchList
+import rhynia.nyx.common.item.NyxDebugItem
 import tectech.thing.CustomItemList
+import kotlin.collections.get
 
 /** Enum class for tiered components and materials. */
 @Suppress("unused", "SpellCheckingInspection")
 enum class Tier(
     private val material: Materials,
+    val recipeVol: Long,
 ) {
-    ULV(Materials.ULV),
-    LV(Materials.LV),
-    MV(Materials.MV),
-    HV(Materials.HV),
-    EV(Materials.EV),
-    IV(Materials.IV),
-    LuV(Materials.LuV),
-    ZPM(Materials.ZPM),
-    UV(Materials.UV),
-    UHV(Materials.UHV),
-    UEV(Materials.UEV),
-    UIV(Materials.UIV),
-    UMV(Materials.UMV),
-    UXV(Materials.UXV),
-    MAX(Materials.MAX),
+    ULV(Materials.ULV, RecipeValues.RECIPE_ULV),
+    LV(Materials.LV, RecipeValues.RECIPE_LV),
+    MV(Materials.MV, RecipeValues.RECIPE_MV),
+    HV(Materials.HV, RecipeValues.RECIPE_HV),
+    EV(Materials.EV, RecipeValues.RECIPE_EV),
+    IV(Materials.IV, RecipeValues.RECIPE_IV),
+    LuV(Materials.LuV, RecipeValues.RECIPE_LuV),
+    ZPM(Materials.ZPM, RecipeValues.RECIPE_ZPM),
+    UV(Materials.UV, RecipeValues.RECIPE_UV),
+    UHV(Materials.UHV, RecipeValues.RECIPE_UHV),
+    UEV(Materials.UEV, RecipeValues.RECIPE_UEV),
+    UIV(Materials.UIV, RecipeValues.RECIPE_UIV),
+    UMV(Materials.UMV, RecipeValues.RECIPE_UMV),
+    UXV(Materials.UXV, RecipeValues.RECIPE_UXV),
+    MAX(Materials.MAX, RecipeValues.RECIPE_MAX),
     ;
 
     /** Enum class for tiered components. */
@@ -126,10 +131,11 @@ enum class Tier(
     private val fallbackStack: ItemStack
         get() = NyxItemList.TestItem01.get(1)
 
-    private fun fail(info: String): ItemStack {
-        ModLogger.error("Attempting to get $info, but it doesn't exist!")
-        return fallbackStack
-    }
+    private fun fail(info: String): ItemStack =
+        "Attempting to get $info, but it doesn't exist!".let {
+            ModLogger.error(it)
+            NyxDebugItem.reportInfo(it)
+        }
 
     fun getSolder(amount: Int): FluidStack = solderMaterial.getFluidStack(amount)
 
@@ -403,6 +409,15 @@ enum class Tier(
                     .valueOf("eM_energyWirelessTunnel${tier}_UXV")
                     .get(amount.toLong(), NyxItemList.TestItem01.get(1))
 
-            else -> NyxItemList.Dummy
+            else -> NyxWirelessHatchList.valueOf("ExtLaser${this}$tier").get(amount)
         }
+
+    companion object {
+        val G_ALL: Array<Tier>
+            get() = entries.toTypedArray()
+        val G_COMMON: Array<Tier>
+            get() = entries.filter { it != ULV && it != MAX }.toTypedArray()
+        val G_MEDIUM: Array<Tier>
+            get() = arrayOf(IV, LuV, ZPM, UV, UHV, UEV, UIV, UMV, UXV)
+    }
 }

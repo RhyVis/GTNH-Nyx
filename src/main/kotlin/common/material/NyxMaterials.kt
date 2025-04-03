@@ -9,6 +9,7 @@ import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.Loader
 import rhynia.nyx.common.material.generation.NyxMaterial
 
+@Suppress("UNUSED", "SpellCheckingInspection")
 object NyxMaterials : Loader {
     override fun load() {
         ModLogger.info("Adding materials by Nyx...")
@@ -28,5 +29,16 @@ object NyxMaterials : Loader {
             enableIngots()
             enablePlates()
             enableMisc()
+        }
+
+    val Restone =
+        NyxMaterial(1, "restone", MaterialColors.RED) {
+            textureSet = TextureSet.SET_LAPIS
+            protons = 43
+            mass = 43
+            addElementalTooltip("R")
+            enableDusts()
+            enableGems()
+            enableFluids(MOLTEN to 1241)
         }
 }

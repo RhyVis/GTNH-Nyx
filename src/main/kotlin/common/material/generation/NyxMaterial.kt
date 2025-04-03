@@ -9,20 +9,27 @@ import gregtech.api.enums.FluidState.SLURRY
 import gregtech.api.enums.Mods
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.enums.TextureSet
+import gregtech.api.interfaces.IColorModulationContainer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.StatCollector
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.ModLogger
 import rhynia.nyx.common.NyxItemList
+import rhynia.nyx.common.material.MaterialColors
 
 /**
  * Simple material class, it is used to generate materials for GT5U
  *
  * The material instance should be created only once at preInit stage, then the system will handle
  * the auto generation
+ *
+ * For localization:
+ *
+ * - The localization key is `nyx.material.<internalName>`
+ * - For extra tooltips, the key is `nyx.material.<internalName>.extra.<index>`, index starting from 0, no jump
  */
-@Suppress("SpellCheckingInspection", "UNUSED")
+@Suppress("UNUSED", "SpellCheckingInspection")
 class NyxMaterial(
     /**
      * The material id, it should be unique and not larger than 32767, used as item meta in
@@ -39,14 +46,22 @@ class NyxMaterial(
     /**
      * The color of the material, it should be an array of 3 or 4 shorts, representing RGBA
      *
-     * @see gregtech.api.interfaces.IColorModulationContainer
+     * @see IColorModulationContainer
      */
     val color: ShortArray,
     /**
      * The initialization config, it will be called when the material is initialized
      */
     initConfig: NyxMaterial.() -> Unit = {},
-) {
+) : IColorModulationContainer {
+    constructor(
+        id: Short,
+        internalName: String,
+        colors: MaterialColors,
+        initConfig: NyxMaterial.() -> Unit,
+    ) :
+        this(id, internalName, colors.rgba, initConfig)
+
     // region Material Metadata
 
     /**
@@ -55,7 +70,7 @@ class NyxMaterial(
      */
     val internalName: String = internalName.replace(Regex("[^A-Za-z0-9]"), "")
 
-    val localizationKey: String = "material.$internalName"
+    val localizationKey: String = "nyx.material.$internalName"
 
     /** Localized display name of the material */
     val displayName: String
@@ -111,6 +126,8 @@ class NyxMaterial(
                 elementTooltip.add(it)
             }
     }
+
+    override fun getRGBA(): ShortArray = color
 
     // endregion
 
