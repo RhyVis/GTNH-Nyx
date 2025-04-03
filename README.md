@@ -19,6 +19,8 @@ Features may need to be enabled in the `nyx.cfg` config file.
 
 - Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. Enable in config `RECIPE_EASY_WIRELESS`
 
+![easy_wireless](img/easy_wireless.png)
+
 ### Note: About ID Conflicts
 
 I don't know how other self-made mods take MTE IDs, the only thing I can do is to give a config file used

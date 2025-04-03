@@ -58,6 +58,8 @@ nyx.wirelessExt.tooltip.0=§7将能量存储于全局网络中，上限为2^(2^3
 nyx.wirelessExt.tooltip.1=§7不连接导线，此方块可以从网络中抽取EU.
 nyx.wirelessExt.tooltip.2=§b额外能源仓系列
 
+nyx.common.amp=安
+
 GT5U.gui.text.importing_energy=§b导入能量中
 GT5U.gui.text.no_selected_energy_core_set=§7没有能量核心
 GT5U.gui.text.no_mode_set=没有用电路设定模式

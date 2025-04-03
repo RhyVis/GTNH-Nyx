@@ -86,7 +86,7 @@ class GTEasyWirelessRecipes : RecipePool() {
                 newRecipe {
                     itemInputs(
                         tier.getEnergyHatch16A(1),
-                        tier.getCircuit(4),
+                        tier.getCircuit(2),
                         tier.getComponent(Tier.Component.Emitter, 1),
                         tier.getComponent(Tier.Component.Sensor, 1),
                         ic(22),
@@ -99,7 +99,7 @@ class GTEasyWirelessRecipes : RecipePool() {
                 newRecipe {
                     itemInputs(
                         tier.getEnergyHatch64A(1),
-                        tier.getCircuit(8),
+                        tier.getCircuit(2),
                         tier.getComponent(Tier.Component.Emitter, 1),
                         tier.getComponent(Tier.Component.Sensor, 1),
                         ic(22),
@@ -114,9 +114,9 @@ class GTEasyWirelessRecipes : RecipePool() {
                     newRecipe {
                         itemInputs(
                             tier.getLaserTarget(lvl, 1),
-                            tier.getCircuit(16),
-                            tier.getComponent(Tier.Component.Emitter, 4),
-                            tier.getComponent(Tier.Component.Sensor, 4),
+                            tier.getCircuit(3),
+                            tier.getComponent(Tier.Component.Emitter, 2),
+                            tier.getComponent(Tier.Component.Sensor, 2),
                             ic(22),
                         )
                         fluidInputs(tier.getIngotSolder(16))

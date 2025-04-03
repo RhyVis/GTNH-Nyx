@@ -43,18 +43,29 @@ object MachineLoader : Loader {
 
     private fun initExtraWirelessLaser() {
         if (!Config.RECIPE_EASY_WIRELESS) return
-        val initialOffset = Config.MTE_ID_OFFSET + 99 - NyxWirelessHatchList.entries.size
+        val initialOffset = Config.MTE_ID_OFFSET + 100 - NyxWirelessHatchList.entries.size // Keep last one id free
+
+        val zh = StatCollector.translateToLocal("nyx.common.amp") != "A"
+
         NyxWirelessHatchList.entries.forEach { wireless ->
             wireless.set(
                 NyxHatchWirelessMultiExtended(
                     aID = initialOffset + wireless.ordinal,
                     aName = "nyx.hatch.$wireless.${wireless.tier}",
                     aNameRegional =
-                        StatCollector.translateToLocalFormatted(
-                            "nyx.wirelessExt.name",
-                            GTUtility.formatNumbers(wireless.amp.toLong()),
-                            wireless.tierName,
-                        ),
+                        if (zh) {
+                            StatCollector.translateToLocalFormatted(
+                                "nyx.wirelessExt.name",
+                                GTUtility.formatNumbers(wireless.amp.toLong()),
+                                wireless.tierName,
+                            )
+                        } else {
+                            StatCollector.translateToLocalFormatted(
+                                "nyx.wirelessExt.name",
+                                wireless.tierName,
+                                GTUtility.formatNumbers(wireless.amp.toLong()),
+                            )
+                        },
                     aTier = wireless.tier,
                     aAmp = wireless.amp,
                 ).getStackForm(1),

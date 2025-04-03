@@ -17,6 +17,8 @@ WIP重构阶段。
 
 - 添加了IV~UMV无线激光，以及所有无线能源仓的简单配方。启用配置: `RECIPE_EASY_WIRELESS`
 
+![easy_wireless](img/easy_wireless.png)
+
 ### 注意：关于ID冲突
 
 我不知道别的私货是怎么占MTE的ID的，大概我只能保证和官方ID不冲突，和我常用的不冲突，你可以在冲突的时候，到`config/nyx.cfg`里调整ID偏移量，

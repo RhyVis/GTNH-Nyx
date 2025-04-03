@@ -53,10 +53,12 @@ nyx.ore.wireFine=Fine %material Wire
 
 nyx.tooltip.press_more_info=Press §b§fShift§r§7 for more info
 
-nyx.wirelessExt.name=%s %sA/t Wireless Energy
+nyx.wirelessExt.name=%s %sA Wireless Energy Hatch
 nyx.wirelessExt.tooltip.0=§7Stores energy globally in a network, up to 2^(2^31) EU.
 nyx.wirelessExt.tooltip.1=§7Does not connect to wires. This block withdraws EU from the network.
 nyx.wirelessExt.tooltip.2=§bExtra Wireless Energy Series
+
+nyx.common.amp=A
 
 GT5U.gui.text.importing_energy=§bImporting Energy
 GT5U.gui.text.no_selected_energy_core_set=§7No Core Set
