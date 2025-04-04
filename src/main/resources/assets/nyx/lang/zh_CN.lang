@@ -72,10 +72,14 @@ nyx.machine.copier.name=COPIER
 nyx.machine.copier.type=物质复制器
 nyx.machine.copier.info.0=COPIER的控制器
 nyx.machine.copier.info.1=复制控制器槽位中的物品, 并输出到AE网络.
-nyx.machine.copier.info.2=使用螺丝刀切换物品或流体模式.
+nyx.machine.copier.info.2=在控制器输入每次复制的数量.
 nyx.machine.copier.waila.0=§f复制原型: §b%s
-nyx.machine.copier.waila.1.item=§f复制模式: §a物品
-nyx.machine.copier.waila.1.fluid=§f复制模式: §a流体
+nyx.machine.copier.waila.1=§f复制数量: §a%s
+nyx.machine.copier.waila.2.item=§f复制模式: §a物品
+nyx.machine.copier.waila.2.fluid=§f复制模式: §a流体
+nyx.machine.copier.gui.t.0=物品模式
+nyx.machine.copier.gui.t.1=流体模式
+nyx.machine.copier.gui.t.2=复制数量
 
 GT5U.gui.text.importing_energy=§b导入能量中
 GT5U.gui.text.no_selected_energy_core_set=§7没有能量核心

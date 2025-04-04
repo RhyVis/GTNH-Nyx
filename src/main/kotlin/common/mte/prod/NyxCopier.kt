@@ -1,12 +1,14 @@
 package rhynia.nyx.common.mte.prod
 
 import com.gtnewhorizons.modularui.api.math.Alignment
+import com.gtnewhorizons.modularui.api.math.Color
 import com.gtnewhorizons.modularui.api.screen.ModularWindow
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext
 import com.gtnewhorizons.modularui.common.widget.CycleButtonWidget
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn
 import com.gtnewhorizons.modularui.common.widget.SlotWidget
 import com.gtnewhorizons.modularui.common.widget.TextWidget
+import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget
 import gregtech.api.GregTechAPI
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
@@ -36,6 +38,7 @@ import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
+import rhynia.nyx.Config
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.material.NyxMaterials
@@ -53,6 +56,24 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
     override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): IMetaTileEntity = NyxCopier(mName)
 
     private var pItemMode = true
+    private var pRunning = false
+        set(value) {
+            field = value
+            if (value) {
+                mMaxProgresstime = Config.MTE_COPIER_TICK
+                mEfficiency = 10000
+                mEfficiencyIncrease = 10000
+            } else {
+                mMaxProgresstime = 0
+                mEfficiency = 0
+                mEfficiencyIncrease = 0
+                mOutputItems = null
+                mOutputFluids = null
+                pCopyItem = pCopyItemBase
+                pCopyFluid = pCopyFluidBase
+                pDisplayName = "×"
+            }
+        }
 
     private var pDisplayName: String = "×"
     private val pCopyItemBase: ItemStack by lazy { NyxItemList.TestItem01.get(1) }
@@ -62,10 +83,19 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
             field = value
         }
     private val pCopyFluidBase: FluidStack by lazy { NyxMaterials.Null.getFluid() }
-    private var pCopyFluid: FluidStack = pCopyFluidBase
+    private var pCopyFluid: FluidStack = pCopyFluidBase.copy()
         set(value) {
             pDisplayName = value.localizedName
             field = value
+        }
+    private var pAmount: Long = 0
+        set(value) {
+            field =
+                if (value > 0) {
+                    value
+                } else {
+                    0
+                }
         }
 
     private lateinit var pUUID: UUID
@@ -79,48 +109,37 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
     ) {
         if (!baseMetaTileEntity.isServerSide) return
         pItemMode = !pItemMode
+        GTUtility.sendChatToPlayer(aPlayer, "COPIER Mode: ${if (pItemMode) "Item" else "Fluid"}")
     }
 
-    override fun onPreTick(
-        aBaseMetaTileEntity: IGregTechTileEntity?,
-        aTick: Long,
-    ) {
-        super.onPreTick(aBaseMetaTileEntity, aTick)
-        if (aTick == 1L) {
-            pUUID = baseMetaTileEntity.ownerUuid
-            strongCheckOrAddUser(pUUID)
-            checkNotNull(pUUID) { "UUID NULL!" }
-        }
+    override fun onFirstTick(aBaseMetaTileEntity: IGregTechTileEntity?) {
+        super.onFirstTick(aBaseMetaTileEntity)
+        pUUID = baseMetaTileEntity.ownerUuid
+        strongCheckOrAddUser(pUUID)
+        checkNotNull(pUUID) { "UUID NULL!" }
     }
 
     override fun createProcessingLogic(): ProcessingLogic? = null
 
     override fun checkProcessing(): CheckRecipeResult {
-        resetStatus()
-        return checkRun(controllerSlot)
-    }
-
-    private fun resetStatus() {
-        mMaxProgresstime = 100
-        mEfficiency = 10000
-        mEfficiencyIncrease = 10000
-        pCopyItem = pCopyItemBase
-        pCopyFluid = pCopyFluidBase
-        pDisplayName = "×"
-    }
-
-    private fun checkRun(stackToCopy: ItemStack?): CheckRecipeResult {
-        if (stackToCopy == null) return CheckRecipeResultRegistry.NO_RECIPE
+        pRunning = false
+        val stackToCopy = controllerSlot ?: return CheckRecipeResultRegistry.NO_RECIPE
         if (pItemMode) {
             pCopyItem = stackToCopy
             if (stackToCopy.isItemEqual(pCopyItemBase)) return CheckRecipeResultRegistry.NO_RECIPE
-            outputItemToAENetwork(pCopyItem, 1024)
+            if (!outputItem(pCopyItem, pAmount)) return CheckRecipeResultRegistry.NO_RECIPE
         } else {
             pCopyFluid = GTUtility.convertCellToFluid(stackToCopy) ?: return CheckRecipeResultRegistry.NO_RECIPE
             if (pCopyFluid.isFluidEqual(pCopyFluidBase)) return CheckRecipeResultRegistry.NO_RECIPE
-            outputFluidToAENetwork(pCopyFluid, 128_000)
+            if (!outputFluid(pCopyFluid, pAmount)) return CheckRecipeResultRegistry.NO_RECIPE
         }
+        pRunning = true
         return CheckRecipeResultRegistry.SUCCESSFUL
+    }
+
+    override fun onDisableWorking() {
+        super.onDisableWorking()
+        pRunning = false
     }
 
     override fun supportsVoidProtection(): Boolean = false
@@ -132,7 +151,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
     override fun supportsSingleRecipeLocking(): Boolean = false
 
     override val sCasingBlock: Pair<Block, Int>
-        get() = GregTechAPI.sBlockCasings8 to 7
+        get() = GregTechAPI.sBlockCasings2 to 0
 
     override val sCasingHatch: Array<IHatchElement<in NyxCopier>>
         get() = arrayOf(OutputBus, OutputHatch)
@@ -158,22 +177,36 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         buildContext: UIBuildContext?,
     ) {
         super.addUIWidgets(builder, buildContext)
-        builder.widget(
-            CycleButtonWidget()
-                .setToggle({ pItemMode }, { pItemMode = it })
-                .setTextureGetter {
-                    if (it == 1) {
-                        GTUITextures.OVERLAY_BUTTON_AUTOOUTPUT_ITEM
-                    } else {
-                        GTUITextures.OVERLAY_BUTTON_AUTOOUTPUT_FLUID
-                    }
-                }.setPlayClickSound(true)
-                .setBackground(GTUITextures.BUTTON_STANDARD)
-                .setPos(80, 91)
-                .setSize(16, 16)
-                .setUpdateTooltipEveryTick(true)
-                .setTooltipShowUpDelay(BaseTileEntity.TOOLTIP_DELAY),
-        )
+        builder
+            .widget(
+                CycleButtonWidget()
+                    .setToggle({ pItemMode }, { pItemMode = it })
+                    .setTextureGetter {
+                        if (it == 1) {
+                            GTUITextures.OVERLAY_BUTTON_AUTOOUTPUT_ITEM
+                        } else {
+                            GTUITextures.OVERLAY_BUTTON_AUTOOUTPUT_FLUID
+                        }
+                    }.setPlayClickSound(true)
+                    .setUpdateTooltipEveryTick(true)
+                    .setBackground(GTUITextures.BUTTON_STANDARD)
+                    .setPos(80, 91)
+                    .setSize(16, 16)
+                    .dynamicTooltip {
+                        listOf(StatCollector.translateToLocal("nyx.machine.copier.gui.t.${if (pItemMode) 0 else 1}"))
+                    }.setTooltipShowUpDelay(BaseTileEntity.TOOLTIP_DELAY),
+            ).widget(
+                TextFieldWidget()
+                    .setGetterLong { pAmount }
+                    .setSetterLong { pAmount = it }
+                    .setNumbersLong { it.takeIf { it >= 0 } ?: 0L }
+                    .setTextColor(Color.WHITE.normal)
+                    .setTextAlignment(Alignment.CenterLeft)
+                    .addTooltip(StatCollector.translateToLocal("nyx.machine.copier.gui.t.2"))
+                    .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD)
+                    .setPos(98, 91)
+                    .setSize(96, 16),
+            )
     }
 
     override fun drawTexts(
@@ -181,25 +214,36 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         inventorySlot: SlotWidget,
     ) {
         super.drawTexts(screenElements, inventorySlot)
-        screenElements.widget(
-            TextWidget
-                .dynamicString { StatCollector.translateToLocalFormatted("nyx.machine.copier.waila.0", pDisplayName) }
-                .setSynced(true)
-                .setTextAlignment(Alignment.CenterLeft)
-                .setEnabled { baseMetaTileEntity.isActive },
-        )
-        screenElements.widget(
-            TextWidget
-                .dynamicString {
-                    if (pItemMode) {
-                        StatCollector.translateToLocal("nyx.machine.copier.waila.1.item")
-                    } else {
-                        StatCollector.translateToLocal("nyx.machine.copier.waila.1.fluid")
-                    }
-                }.setSynced(true)
-                .setTextAlignment(Alignment.CenterLeft)
-                .setEnabled { baseMetaTileEntity.isActive },
-        )
+        screenElements
+            .widget(
+                TextWidget
+                    .dynamicString {
+                        StatCollector.translateToLocalFormatted("nyx.machine.copier.waila.0", pDisplayName)
+                    }.setSynced(true)
+                    .setTextAlignment(Alignment.CenterLeft)
+                    .setEnabled { baseMetaTileEntity.isActive },
+            ).widget(
+                TextWidget
+                    .dynamicString {
+                        StatCollector.translateToLocalFormatted(
+                            "nyx.machine.copier.waila.1",
+                            GTUtility.formatNumbers(pAmount),
+                        )
+                    }.setSynced(true)
+                    .setTextAlignment(Alignment.CenterLeft)
+                    .setEnabled { baseMetaTileEntity.isActive },
+            ).widget(
+                TextWidget
+                    .dynamicString {
+                        if (pItemMode) {
+                            StatCollector.translateToLocal("nyx.machine.copier.waila.2.item")
+                        } else {
+                            StatCollector.translateToLocal("nyx.machine.copier.waila.2.fluid")
+                        }
+                    }.setSynced(true)
+                    .setTextAlignment(Alignment.CenterLeft)
+                    .setEnabled { baseMetaTileEntity.isActive },
+            )
     }
 
     override fun getWailaBody(
@@ -212,11 +256,17 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         val displayName = accessor.nbtData.getString("pDisplayName")
         if (displayName.isEmpty()) return
         currentTip.add(StatCollector.translateToLocalFormatted("nyx.machine.copier.waila.0", displayName))
+        currentTip.add(
+            StatCollector.translateToLocalFormatted(
+                "nyx.machine.copier.waila.1",
+                accessor.nbtData.getString("pAmount"),
+            ),
+        )
         val mode = accessor.nbtData.getInteger("pItemMode").takeIf { it != 0 } ?: return
         if (mode == 1) {
-            currentTip.add(StatCollector.translateToLocal("nyx.machine.copier.waila.1.item"))
+            currentTip.add(StatCollector.translateToLocal("nyx.machine.copier.waila.2.item"))
         } else {
-            currentTip.add(StatCollector.translateToLocal("nyx.machine.copier.waila.1.fluid"))
+            currentTip.add(StatCollector.translateToLocal("nyx.machine.copier.waila.2.fluid"))
         }
     }
 
@@ -230,8 +280,9 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         z: Int,
     ) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z)
-        if (baseMetaTileEntity?.isActive == true) {
+        if (baseMetaTileEntity != null && pRunning) {
             tag.setString("pDisplayName", pDisplayName)
+            tag.setString("pAmount", GTUtility.formatNumbers(pAmount))
             tag.setInteger("pItemMode", if (pItemMode) 1 else -1)
         }
     }
@@ -241,6 +292,8 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         if (aNBT == null) return
 
         aNBT.setBoolean("pItemMode", pItemMode)
+        aNBT.setBoolean("pRunning", pRunning)
+        aNBT.setLong("pAmount", pAmount)
     }
 
     override fun loadNBTData(aNBT: NBTTagCompound?) {
@@ -248,5 +301,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         if (aNBT == null) return
 
         pItemMode = aNBT.getBoolean("pItemMode")
+        pRunning = aNBT.getBoolean("pRunning")
+        pAmount = aNBT.getLong("pAmount")
     }
 }

@@ -41,6 +41,7 @@ import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.idEqual
+import rhynia.nyx.api.util.size
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 
 @Suppress("UNUSED")
@@ -242,12 +243,12 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 Textures.BlockIcons.getCasingTextureForId(sControllerCasingIndex),
                 TextureFactory
                     .builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
+                    .addIcon(sControllerIcon.first)
                     .extFacing()
                     .build(),
                 TextureFactory
                     .builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+                    .addIcon(sControllerIcon.second)
                     .extFacing()
                     .glow()
                     .build(),
@@ -319,6 +320,47 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         }
 
         return amount <= 0
+    }
+
+    protected fun outputItem(
+        item: ItemStack?,
+        amount: Long,
+    ): Boolean {
+        if (item == null || amount <= 0) return false
+        var amount = amount
+
+        if (amount <= Int.MAX_VALUE) {
+            addOutput(item.copy() size amount.toInt())
+        } else {
+            while (amount > Int.MAX_VALUE) {
+                addOutput(item.copy() size Int.MAX_VALUE)
+                amount -= Int.MAX_VALUE
+            }
+        }
+
+        updateSlots()
+
+        return true
+    }
+
+    protected fun outputFluid(
+        fluid: FluidStack?,
+        amount: Long,
+    ): Boolean {
+        if (fluid == null || amount <= 0) return false
+        var amount = amount
+        if (amount <= Int.MAX_VALUE) {
+            addOutput(fluid.copy() size amount.toInt())
+        } else {
+            while (amount > Int.MAX_VALUE) {
+                addOutput(fluid.copy() size Int.MAX_VALUE)
+                amount -= Int.MAX_VALUE
+            }
+        }
+
+        updateSlots()
+
+        return true
     }
 
     protected fun outputItemToAENetwork(
