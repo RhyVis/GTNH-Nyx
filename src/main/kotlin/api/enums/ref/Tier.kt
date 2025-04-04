@@ -1,11 +1,11 @@
 package rhynia.nyx.api.enums.ref
 
-import goodgenerator.main.GoodGenerator
 import gregtech.api.enums.GTValues
 import gregtech.api.enums.ItemList
 import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods.BartWorks
 import gregtech.api.enums.Mods.GTPlusPlus
+import gregtech.api.enums.Mods.GoodGenerator
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.interfaces.IItemContainer
 import gregtech.api.util.GTModHandler
@@ -16,14 +16,15 @@ import org.jetbrains.annotations.Range
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.RecipeValues
 import rhynia.nyx.api.enums.RecipeValues.INGOT
+import rhynia.nyx.api.util.getItem
 import rhynia.nyx.common.NyxItemList
-import rhynia.nyx.common.NyxWirelessHatchList
+import rhynia.nyx.common.NyxWirelessDynamoList
+import rhynia.nyx.common.NyxWirelessEnergyList
 import rhynia.nyx.common.item.NyxDebugItem
 import tectech.thing.CustomItemList
-import kotlin.collections.get
 
 /** Enum class for tiered components and materials. */
-@Suppress("unused", "SpellCheckingInspection")
+@Suppress("UNUSED", "SpellCheckingInspection")
 enum class Tier(
     private val material: Materials,
     val recipeVol: Long,
@@ -131,9 +132,9 @@ enum class Tier(
     private val fallbackStack: ItemStack
         get() = NyxItemList.TestItem01.get(1)
 
-    private fun fail(info: String): ItemStack =
+    private fun fail(vararg info: String): ItemStack =
         "Attempting to get $info, but it doesn't exist!".let {
-            ModLogger.error(it)
+            ModLogger.error(it.toString())
             NyxDebugItem.reportInfo(it)
         }
 
@@ -152,7 +153,7 @@ enum class Tier(
         if (this == ULV) {
             fail("ULV component of ${component.name}")
         } else {
-            component.ofTier(this).get(amount.toLong(), fallbackStack)
+            component.ofTier(this).get(amount.toLong()) ?: fallbackStack
         }
 
     fun getCoil(amount: Int): ItemStack =
@@ -164,19 +165,25 @@ enum class Tier(
             MAX,
             -> fail("$this coil")
 
-            else -> ItemList.valueOf("${this}_Coil").get(amount.toLong(), NyxItemList.TestItem01.get(1))
+            else ->
+                try {
+                    ItemList.valueOf("${this}_Coil").get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("Coil $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getComponentAssemblyCasing(amount: Int): ItemStack =
         if (this == ULV) {
             fail("ULV component assembly casing")
         } else {
-            GTModHandler.getModItem(
-                GoodGenerator.MOD_ID,
+            GoodGenerator.getItem(
                 "componentAssemblylineCasing",
-                amount.toLong(),
+                amount,
                 this.ordinal - 1,
-            )
+            ) {
+                fail("Component Assemblyline Casing $this not found! Using fallback.")
+            }
         }
 
     fun getGlass(amount: Int): ItemStack =
@@ -193,12 +200,13 @@ enum class Tier(
             -> GTModHandler.getModItem(BartWorks.ID, "BW_GlasBlocks2", amount.toLong())
 
             else ->
-                GTModHandler.getModItem(
-                    BartWorks.ID,
+                BartWorks.getItem(
                     "BW_GlasBlocks",
-                    amount.toLong(),
+                    amount,
                     this.ordinal - 3,
-                )
+                ) {
+                    fail("Glass $this not found! Using fallback.")
+                }
         }
 
     fun getBufferCore(amount: Int): ItemStack =
@@ -212,11 +220,12 @@ enum class Tier(
             -> GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", amount.toLong())
 
             else ->
-                GTModHandler.getModItem(
-                    GTPlusPlus.ID,
+                GTPlusPlus.getItem(
                     "item.itemBufferCore${this.ordinal + 1}",
-                    amount.toLong(),
-                )
+                    amount,
+                ) {
+                    fail("BufferCore $this not found! Using fallback.")
+                }
         }
 
     fun getCasing(amount: Int): ItemStack =
@@ -236,7 +245,12 @@ enum class Tier(
             UMV,
             UXV,
             MAX,
-            -> ItemList.valueOf("Casing_$this").get(amount.toLong(), fail("casing $this"))
+            ->
+                try {
+                    ItemList.valueOf("Casing_$this").get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("casing $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getHull(amount: Int): ItemStack =
@@ -256,7 +270,12 @@ enum class Tier(
             UMV,
             UXV,
             MAX,
-            -> ItemList.valueOf("Hull_$this").get(amount.toLong(), fail("hull $this"))
+            ->
+                try {
+                    ItemList.valueOf("Hull_$this").get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("hull $this")
+                }
         }
 
     fun getHatch(
@@ -275,25 +294,33 @@ enum class Tier(
         Hatch.WirelessEnergy4A -> getEnergyWireless4A(amount)
         Hatch.WirelessEnergy16A -> getEnergyWireless16A(amount)
         Hatch.WirelessEnergy64A -> getEnergyWireless64A(amount)
-        Hatch.WirelessLaser -> getLaserWireless(1, amount)
+        Hatch.WirelessLaser -> getLaserEnergyWireless(1, amount)
     }
 
     fun getDynamoHatch(amount: Int): ItemStack =
         when (this) {
             MAX -> fail("MAX dynamo hatch")
             else ->
-                ItemList
-                    .valueOf("Hatch_Dynamo_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    ItemList
+                        .valueOf("Hatch_Dynamo_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("Dynamo hatch $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getEnergyHatch(amount: Int): ItemStack =
         when (this) {
             MAX -> fail("MAX energy hatch")
             else ->
-                ItemList
-                    .valueOf("Hatch_Energy_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    ItemList
+                        .valueOf("Hatch_Energy_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("Energy hatch $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getEnergyHatch4A(amount: Int): ItemStack =
@@ -309,9 +336,13 @@ enum class Tier(
             UMV,
             UXV,
             ->
-                CustomItemList
-                    .valueOf("eM_energyMulti4_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyMulti4_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("4A energy hatch $this", e.message ?: "Unknown error")
+                }
 
             else -> fail("$this 4A energy hatch")
         }
@@ -329,9 +360,13 @@ enum class Tier(
             UMV,
             UXV,
             ->
-                CustomItemList
-                    .valueOf("eM_energyMulti16_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyMulti16_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("16A energy hatch $this", e.message ?: "Unknown error")
+                }
 
             else -> fail("$this 16A energy hatch")
         }
@@ -349,22 +384,34 @@ enum class Tier(
             UMV,
             UXV,
             ->
-                CustomItemList
-                    .valueOf("eM_energyMulti64_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyMulti64_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("64A energy hatch $this", e.message ?: "Unknown error")
+                }
 
             else -> fail("$this 64A energy hatch")
         }
 
     fun getDynamoWireless(amount: Int): ItemStack =
-        ItemList
-            .valueOf("Wireless_Dynamo_Energy_$this")
-            .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+        try {
+            ItemList
+                .valueOf("Wireless_Dynamo_Energy_$this")
+                .get(amount.toLong())
+        } catch (e: Exception) {
+            fail("Wireless Dynamo $this", e.message ?: "Unknown error")
+        }
 
     fun getEnergyWireless(amount: Int): ItemStack =
-        ItemList
-            .valueOf("Wireless_Hatch_Energy_$this")
-            .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+        try {
+            ItemList
+                .valueOf("Wireless_Hatch_Energy_$this")
+                .get(amount.toLong())
+        } catch (e: Exception) {
+            fail("Wireless Energy $this", e.message ?: "Unknown error")
+        }
 
     fun getEnergyWireless4A(amount: Int): ItemStack =
         when (this) {
@@ -375,9 +422,13 @@ enum class Tier(
             -> fail("$this 4A energy wireless")
 
             else ->
-                CustomItemList
-                    .valueOf("eM_energyWirelessMulti4_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyWirelessMulti4_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("4A energy wireless $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getEnergyWireless16A(amount: Int): ItemStack =
@@ -389,9 +440,13 @@ enum class Tier(
             -> fail("$this 16A energy wireless")
 
             else ->
-                CustomItemList
-                    .valueOf("eM_energyWirelessMulti16_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyWirelessMulti16_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("16A energy wireless $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getEnergyWireless64A(amount: Int): ItemStack =
@@ -403,9 +458,13 @@ enum class Tier(
             -> fail("$this 64A energy wireless")
 
             else ->
-                CustomItemList
-                    .valueOf("eM_energyWirelessMulti64_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyWirelessMulti64_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("64A energy wireless $this", e.message ?: "Unknown error")
+                }
         }
 
     fun getLaserTarget(
@@ -424,12 +483,16 @@ enum class Tier(
             -> fail("$this level $tier laser target")
 
             else ->
-                CustomItemList
-                    .valueOf("eM_energyTunnel${tier}_$this")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyTunnel${tier}_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("Laser target $this", e.message ?: "Unknown error")
+                }
         }
 
-    fun getLaserWireless(
+    fun getLaserEnergyWireless(
         tier:
             @Range(from = 1, to = 7)
             Int,
@@ -442,14 +505,41 @@ enum class Tier(
             HV,
             EV,
             MAX,
-            -> fail("$this level $tier laser wireless")
+            -> fail("$this level $tier laser wireless energy")
 
             UXV ->
-                CustomItemList
-                    .valueOf("eM_energyWirelessTunnel${tier}_UXV")
-                    .get(amount.toLong(), NyxItemList.TestItem01.get(1))
+                try {
+                    CustomItemList
+                        .valueOf("eM_energyWirelessTunnel${tier}_UXV")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("Laser wireless energy $this", e.message ?: "Unknown error")
+                }
 
-            else -> NyxWirelessHatchList.valueOf("ExtLaser${this}$tier").get(amount)
+            else ->
+                try {
+                    NyxWirelessEnergyList.valueOf("ExtLaser${this}$tier").get(amount)
+                } catch (e: Exception) {
+                    fail("Laser wireless energy $this", e.message ?: "Unknown error")
+                }
+        }
+
+    fun getLaserDynamoWireless(amount: Int): ItemStack =
+        when (this) {
+            ULV,
+            LV,
+            MV,
+            HV,
+            EV,
+            MAX,
+            -> fail("$this level laser wireless dynamo")
+
+            else ->
+                try {
+                    NyxWirelessDynamoList.valueOf("ExtDynamo$this").get(amount)
+                } catch (e: Exception) {
+                    fail("Laser wireless dynamo $this", e.message ?: "Unknown error")
+                }
         }
 
     companion object {

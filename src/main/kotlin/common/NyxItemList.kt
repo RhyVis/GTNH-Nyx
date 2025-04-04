@@ -13,12 +13,27 @@ import rhynia.nyx.api.util.copyAmount
 import rhynia.nyx.api.util.debugItem
 import codechicken.nei.api.API as CodeChickenAPI
 
+interface ItemList {
+    fun set(itemStack: ItemStack): Any
+
+    fun get(
+        aAmount: Long,
+        vararg aReplacements: Any?,
+    ): ItemStack
+
+    fun get(
+        aAmount: Int,
+        vararg aReplacements: Any?,
+    ): ItemStack = get(aAmount.toLong(), *aReplacements)
+}
+
 @Suppress("DEPRECATION")
 enum class NyxItemList(
     private var mHasNotBeenSet: Boolean = true,
     private var mDeprecated: Boolean = false,
     private var mWarned: Boolean = false,
-) : IItemContainer {
+) : IItemContainer,
+    ItemList {
     // Items
     ItemUltimate,
 
@@ -200,10 +215,10 @@ enum class NyxItemList(
     }
 }
 
-enum class NyxWirelessHatchList(
+enum class NyxWirelessEnergyList(
     val tier: Int = 0,
     val amp: Int = 0,
-) {
+) : ItemList {
     ExtLaserIV1(5, 256),
     ExtLaserIV2(5, 1024),
     ExtLaserIV3(5, 4096),
@@ -265,21 +280,23 @@ enum class NyxWirelessHatchList(
 
     private lateinit var mStack: ItemStack
 
-    val tierName: String
-        get() =
-            when (tier) {
-                5 -> "IV"
-                6 -> "LuV"
-                7 -> "ZPM"
-                8 -> "UV"
-                9 -> "UHV"
-                10 -> "UEV"
-                11 -> "UIV"
-                12 -> "UMV"
-                else -> "?"
-            }
+    val tierName: String =
+        when (tier) {
+            5 -> "IV"
+            6 -> "LuV"
+            7 -> "ZPM"
+            8 -> "UV"
+            9 -> "UHV"
+            10 -> "UEV"
+            11 -> "UIV"
+            12 -> "UMV"
+            else -> "?"
+        }
 
-    fun get(aAmount: Int): ItemStack =
+    override fun get(
+        aAmount: Long,
+        vararg aReplacements: Any?,
+    ): ItemStack =
         if (GTUtility.isStackInvalid(mStack)) {
             GTLog.out.let {
                 println("The ItemStack for $this is invalid!")
@@ -290,8 +307,60 @@ enum class NyxWirelessHatchList(
             mStack.copyAmount(aAmount)
         }
 
-    fun set(itemStack: ItemStack): NyxWirelessHatchList =
+    override fun set(itemStack: ItemStack): NyxWirelessEnergyList =
         apply {
-            mStack = GTUtility.copyAmount(1, itemStack)
+            mStack = itemStack.copyAmount(1)
+        }
+}
+
+enum class NyxWirelessDynamoList(
+    val tier: Int = 0,
+    val amp: Int = 0,
+) : ItemList {
+    ExtDynamoIV(5, 1048576),
+    ExtDynamoLuV(6, 1048576),
+    ExtDynamoZPM(7, 1048576),
+    ExtDynamoUV(8, 1048576),
+    ExtDynamoUHV(9, 1048576),
+    ExtDynamoUEV(10, 1048576),
+    ExtDynamoUIV(11, 1048576),
+    ExtDynamoUMV(12, 1048576),
+    ExtDynamoUXV(13, 1048576),
+
+    ;
+
+    private lateinit var mStack: ItemStack
+
+    val tierName: String =
+        when (tier) {
+            5 -> "IV"
+            6 -> "LuV"
+            7 -> "ZPM"
+            8 -> "UV"
+            9 -> "UHV"
+            10 -> "UEV"
+            11 -> "UIV"
+            12 -> "UMV"
+            13 -> "UXV"
+            else -> "?"
+        }
+
+    override fun get(
+        aAmount: Long,
+        vararg aReplacements: Any?,
+    ): ItemStack =
+        if (GTUtility.isStackInvalid(mStack)) {
+            GTLog.out.let {
+                println("The ItemStack for $this is invalid!")
+                NullPointerException().printStackTrace(it)
+                debugItem("The ItemStack for $this is invalid!").copyAmount(aAmount)
+            }
+        } else {
+            mStack.copyAmount(aAmount)
+        }
+
+    override fun set(itemStack: ItemStack): NyxWirelessDynamoList =
+        apply {
+            mStack = itemStack.copyAmount(1)
         }
 }

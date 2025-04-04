@@ -16,6 +16,7 @@ import rhynia.nyx.config.ConfigDebug
 import rhynia.nyx.init.MachineLoader
 import rhynia.nyx.init.MaterialLoader
 import rhynia.nyx.init.RecipeLoader
+import java.io.File
 
 open class CommonProxy {
     open fun preInit(event: FMLPreInitializationEvent) {
@@ -23,6 +24,7 @@ open class CommonProxy {
             "Hello Minecraft! $MOD_NAME initializing at version ${Tags.VERSION}" +
                 if (DevEnv) " (dev)" else null,
         )
+        if (DevEnv) File("GregTech.lang").delete()
         ModLogger.info("Initializing $MOD_NAME materials...")
         MaterialLoader.load()
     }

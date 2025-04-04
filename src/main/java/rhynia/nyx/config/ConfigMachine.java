@@ -13,6 +13,10 @@ public class ConfigMachine {
     @Config.DefaultInt(17800)
     public static int MTE_ID_OFFSET;
 
+    @Config.Comment("MTE Copier enable.")
+    @Config.DefaultBoolean(true)
+    public static boolean MTE_COPIER;
+
     @Config.Comment("MTE Copier tick rate, default is 100, lower value means faster.")
     @Config.DefaultInt(100)
     public static int MTE_COPIER_TICK;

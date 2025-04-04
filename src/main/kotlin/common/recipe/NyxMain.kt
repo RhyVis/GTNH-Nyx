@@ -11,11 +11,12 @@ import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.api.recipe.dsl.withRecipeMap
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.material.NyxMaterials
+import rhynia.nyx.config.ConfigMachine
 
 class NyxMainRecipes : RecipePool() {
     override fun loadRecipes() {
         withRecipeMap(RecipeMaps.assemblerRecipes) {
-            newRecipe {
+            newRecipeIf(ConfigMachine.MTE_COPIER) {
                 itemInputs(
                     Tier.MV.getHull(1),
                     Tier.MV.getCircuit(1),

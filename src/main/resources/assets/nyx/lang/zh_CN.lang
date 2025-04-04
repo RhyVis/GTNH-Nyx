@@ -53,10 +53,11 @@ nyx.ore.wireFine=%material线
 
 nyx.tooltip.press_more_info=按下 §b§fShift§r§7 查看更多信息
 
-nyx.wirelessExt.name=%s安%s无线能源仓
+nyx.wirelessExt.energy.name=%s安%s无线能源仓
+nyx.wirelessExt.dynamo.name=%s安%s无线动力仓
 nyx.wirelessExt.tooltip.0=§7将能量存储于全局网络中，上限为2^(2^31)EU.
 nyx.wirelessExt.tooltip.1=§7不连接导线，此方块可以从网络中抽取EU.
-nyx.wirelessExt.tooltip.2=§b额外能源仓系列
+nyx.wirelessExt.tooltip.2=§b额外无线设备系列
 
 nyx.common.amp=安
 nyx.common.NyxMagical=§bNyx§cCreation§7 - §a魔法揭示

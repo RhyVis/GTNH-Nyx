@@ -53,10 +53,11 @@ nyx.ore.wireFine=Fine %material Wire
 
 nyx.tooltip.press_more_info=Press §b§fShift§r§7 for more info
 
-nyx.wirelessExt.name=%s %sA Wireless Energy Hatch
+nyx.wirelessExt.energy.name=%s %sA Wireless Energy Hatch
+nyx.wirelessExt.dynamo.name=%s %sA Wireless Energy Dynamo
 nyx.wirelessExt.tooltip.0=§7Stores energy globally in a network, up to 2^(2^31) EU.
 nyx.wirelessExt.tooltip.1=§7Does not connect to wires. This block withdraws EU from the network.
-nyx.wirelessExt.tooltip.2=§bExtra Wireless Energy Series
+nyx.wirelessExt.tooltip.2=§bExtra Wireless Series
 
 nyx.common.amp=A
 nyx.common.NyxMagical=§bNyx§cCreation§7 - §aMagical Revelation
