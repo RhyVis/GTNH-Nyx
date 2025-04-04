@@ -89,7 +89,7 @@ class NyxGeneratedMetaItem(
                 if (isShiftKeyDown()) {
                     tooltips.forEach { aList.add(it) }
                 } else {
-                    aList.add(StatCollector.translateToLocal("tooltip.press_more_info"))
+                    aList.add(StatCollector.translateToLocal("nyx.tooltip.press_more_info"))
                 }
             }
         }

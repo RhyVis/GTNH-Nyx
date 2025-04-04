@@ -30,6 +30,9 @@ enum class NyxItemList(
 
     // Blocks
     TestMetaBlock01,
+
+    // Machines
+    ControllerCopier,
     ;
 
     private lateinit var mStack: ItemStack

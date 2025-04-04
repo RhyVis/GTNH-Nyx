@@ -219,6 +219,46 @@ enum class Tier(
                 )
         }
 
+    fun getCasing(amount: Int): ItemStack =
+        when (this) {
+            ULV,
+            LV,
+            MV,
+            HV,
+            EV,
+            IV,
+            LuV,
+            ZPM,
+            UV,
+            UHV,
+            UEV,
+            UIV,
+            UMV,
+            UXV,
+            MAX,
+            -> ItemList.valueOf("Casing_$this").get(amount.toLong(), fail("casing $this"))
+        }
+
+    fun getHull(amount: Int): ItemStack =
+        when (this) {
+            ULV,
+            LV,
+            MV,
+            HV,
+            EV,
+            IV,
+            LuV,
+            ZPM,
+            UV,
+            UHV,
+            UEV,
+            UIV,
+            UMV,
+            UXV,
+            MAX,
+            -> ItemList.valueOf("Hull_$this").get(amount.toLong(), fail("hull $this"))
+        }
+
     fun getHatch(
         hatch: Hatch,
         amount: Int,

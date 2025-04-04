@@ -66,6 +66,8 @@ object Nyx {
 object Config {
     var MTE_ID_OFFSET: Int = 17800
         private set
+    var MTE_COPIER_TICK: Int = 100
+        private set
 
     var RECIPE_EASY_WIRELESS = false
         private set
@@ -93,6 +95,15 @@ object Config {
                     "MTE ID Offset, using to solve conflicts with other custom mods, " +
                         "preserves OFFSET+1..OFFSET+100 range." +
                         "!!!DANGER TO CHANGE IN EXISTING SAVE!!!",
+                )
+            MTE_COPIER_TICK =
+                getInt(
+                    "MTE_COPIER_TICK",
+                    CATEGORY_MACHINE,
+                    100,
+                    1,
+                    Int.MAX_VALUE,
+                    "MTE Copier tick rate, default is 100, lower value means faster.",
                 )
 
             RECIPE_EASY_WIRELESS =

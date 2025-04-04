@@ -4,12 +4,7 @@ package rhynia.nyx.api.enums
 
 import com.gtnewhorizons.modularui.api.drawable.UITexture
 import gregtech.api.enums.GTValues
-import net.minecraft.util.EnumChatFormatting.AQUA
-import net.minecraft.util.EnumChatFormatting.BLUE
-import net.minecraft.util.EnumChatFormatting.DARK_BLUE
-import net.minecraft.util.EnumChatFormatting.GRAY
-import net.minecraft.util.EnumChatFormatting.GREEN
-import net.minecraft.util.EnumChatFormatting.RED
+import net.minecraft.util.StatCollector
 
 object RecipeValues {
     const val TICK = 1
@@ -44,14 +39,13 @@ object Texture {
     val Logo32: UITexture = UITexture.fullImage("nyx", "gui/picture/va_logo_32_t")
 }
 
-@Suppress("ktlint:standard:property-naming", "ConstPropertyName")
 object CommonString {
-    val NyxMagical = "${AQUA}Nyx${RED}Creation$GRAY - ${GREEN}Magical Reveal"
-    val NyxNuclear = "${AQUA}Nyx${RED}Creation$GRAY - ${GREEN}Thermonuclear Reaction"
-    val NyxGigaFac = "${AQUA}Nyx${RED}Creation$GRAY - ${GREEN}Giga Factory"
-    val AddByNyx = "由 ${GREEN}Nyx$GRAY 添加"
-    val BluePrintInfo = "如${BLUE}蓝${AQUA}图${GRAY}所示相对位置"
-    val BluePrintTip = "请参考${BLUE}Structure${DARK_BLUE}Lib${GRAY}全息投影，构建主体结构"
-    const val StructureTooComplex = "结构太复杂了!"
-    const val ChangeModeByScrewdriver = "使用螺丝刀切换模式."
+    val NyxMagical: String by lazy { StatCollector.translateToLocal("nyx.common.NyxMagical") }
+    val NyxNuclear: String by lazy { StatCollector.translateToLocal("nyx.common.NyxNuclear") }
+    val NyxGigaFac: String by lazy { StatCollector.translateToLocal("nyx.common.NyxGigaFac") }
+    val AddByNyx: String by lazy { StatCollector.translateToLocal("nyx.common.AddByNyx") }
+    val BluePrintInfo: String by lazy { StatCollector.translateToLocal("nyx.common.BluePrintInfo") }
+    val BluePrintTip: String by lazy { StatCollector.translateToLocal("nyx.common.BluePrintTip") }
+    val StructureTooComplex: String by lazy { StatCollector.translateToLocal("nyx.common.StructureTooComplex") }
+    val ChangeModeByScrewdriver: String by lazy { StatCollector.translateToLocal("nyx.common.ChangeModeByScrewdriver") }
 }

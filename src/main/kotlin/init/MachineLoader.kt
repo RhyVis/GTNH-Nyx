@@ -1,14 +1,18 @@
 package rhynia.nyx.init
 
 import gregtech.api.GregTechAPI
+import gregtech.api.interfaces.IItemContainer
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.util.GTUtility
 import net.minecraft.util.StatCollector
 import rhynia.nyx.Config
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.api.interfaces.Loader
+import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.NyxWirelessHatchList
-import rhynia.nyx.common.tile.base.NyxHatchWirelessMultiExtended
+import rhynia.nyx.common.mte.base.NyxHatchWirelessMultiExtended
+import rhynia.nyx.common.mte.prod.NyxCopier
 import java.io.File
 
 object MachineLoader : Loader {
@@ -39,6 +43,7 @@ object MachineLoader : Loader {
     }
 
     private fun initialiseMachineClass() {
+        NyxItemList.ControllerCopier.register(NyxCopier(offset + 1, "nyx.machine.copier"))
     }
 
     private fun initExtraWirelessLaser() {
@@ -84,5 +89,9 @@ object MachineLoader : Loader {
                 list.joinToString("\n") { "${it.first}: ${it.second}" },
             )
         }
+    }
+
+    private fun IItemContainer.register(mte: IMetaTileEntity) {
+        this.set(mte.getStackForm(1))
     }
 }

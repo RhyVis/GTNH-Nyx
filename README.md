@@ -6,20 +6,36 @@ English | [中文](README-ZH.md)
 
 Currently WIP.
 
-A random modification of the GT:NH mod-pack, initially inspired by TST (GTCM) in 2023,
-aiming to create something more strange and overpowered things for personal enjoyment.
-Lost interest in NH after reaching the Stargate in version 2.5.0.
-After a year of gap, I rebuilt this mod using Kotlin.
+A random modification of the GT:NH mod-pack, created out of the tiredness of crafting the Star Gate on my previous runs.
 
-Technical skills and balances are out of mind, as long as I enjoy playing with it.
+This is more like a **cheat mod**. Technical skills and balances are out of mind, as long as I enjoy playing with it.
 
-## Current Features
+> [!NOTE]
+> As I stated above, this mod is not meant to be balanced.
+> If you are looking for a balanced experience, please do not use this mod.
+>
+> Have fun!
+
+## Features
 
 Features may need to be enabled in the `nyx.cfg` config file.
 
-- Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. Enable in config `RECIPE_EASY_WIRELESS`
+- Some kind of simple material system, to be used in the future.
+
+- Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. **Enable in config `RECIPE_EASY_WIRELESS`**
 
 ![easy_wireless](img/easy_wireless.png)
+
+- COPIER: Copy Things in the controller
+
+> The button is used to switch mode between item and fluid.
+> The item mode can copy items in the controller, and the fluid mode refers to the cell item in the controller.
+>
+> The text field is used to set the amount of items or fluids to be copied.
+>
+> The machine works every 5 seconds, can be changed by `MTE_COPIER_TICK` in config.
+
+![copier_1](img/copier_1.png)
 
 ### Note: About ID Conflicts
 

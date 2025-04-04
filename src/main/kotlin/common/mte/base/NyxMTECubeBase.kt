@@ -1,4 +1,4 @@
-package rhynia.nyx.common.tile.base
+package rhynia.nyx.common.mte.base
 
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import com.gtnewhorizon.structurelib.structure.IStructureElement
@@ -16,6 +16,7 @@ import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.util.GTUtility
 import gregtech.api.util.HatchElementBuilder
+import gregtech.api.util.MultiblockTooltipBuilder
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
@@ -24,8 +25,7 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
     protected constructor(
         aId: Int,
         aName: String,
-        aNameRegional: String,
-    ) : super(aId, aName, aNameRegional)
+    ) : super(aId, aName)
 
     protected constructor(aName: String) : super(aName)
 
@@ -128,4 +128,6 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
                 arrayOf("C~C", "CBC", "CCC"),
                 arrayOf("CCC", "CCC", "CCC"),
             )
+
+    protected fun MultiblockTooltipBuilder.beginStructureCube(): MultiblockTooltipBuilder = this.beginStructureBlock(3, 3, 3, false)
 }

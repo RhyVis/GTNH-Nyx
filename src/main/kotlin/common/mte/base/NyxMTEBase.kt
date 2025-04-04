@@ -1,4 +1,4 @@
-package rhynia.nyx.common.tile.base
+package rhynia.nyx.common.mte.base
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.GOLD
+import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.Fluid
@@ -40,6 +41,7 @@ import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.idEqual
+import rhynia.nyx.api.util.size
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 
 @Suppress("UNUSED")
@@ -48,10 +50,13 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     IConstructable,
     ISurvivalConstructable {
     protected constructor(
-        aId: Int,
+        aID: Int,
         aName: String,
-        aNameRegional: String,
-    ) : super(aId, aName, aNameRegional)
+    ) : super(
+        aID,
+        aName,
+        StatCollector.translateToLocal("$aName.name"),
+    )
 
     protected constructor(aName: String) : super(aName)
 
@@ -238,12 +243,12 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 Textures.BlockIcons.getCasingTextureForId(sControllerCasingIndex),
                 TextureFactory
                     .builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
+                    .addIcon(sControllerIcon.first)
                     .extFacing()
                     .build(),
                 TextureFactory
                     .builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+                    .addIcon(sControllerIcon.second)
                     .extFacing()
                     .glow()
                     .build(),
@@ -317,6 +322,47 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return amount <= 0
     }
 
+    protected fun outputItem(
+        item: ItemStack?,
+        amount: Long,
+    ): Boolean {
+        if (item == null || amount <= 0) return false
+        var amount = amount
+
+        if (amount <= Int.MAX_VALUE) {
+            addOutput(item.copy() size amount.toInt())
+        } else {
+            while (amount > Int.MAX_VALUE) {
+                addOutput(item.copy() size Int.MAX_VALUE)
+                amount -= Int.MAX_VALUE
+            }
+        }
+
+        updateSlots()
+
+        return true
+    }
+
+    protected fun outputFluid(
+        fluid: FluidStack?,
+        amount: Long,
+    ): Boolean {
+        if (fluid == null || amount <= 0) return false
+        var amount = amount
+        if (amount <= Int.MAX_VALUE) {
+            addOutput(fluid.copy() size amount.toInt())
+        } else {
+            while (amount > Int.MAX_VALUE) {
+                addOutput(fluid.copy() size Int.MAX_VALUE)
+                amount -= Int.MAX_VALUE
+            }
+        }
+
+        updateSlots()
+
+        return true
+    }
+
     protected fun outputItemToAENetwork(
         item: ItemStack?,
         amount: Long,
@@ -387,6 +433,38 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     @OverrideOnly
     protected open fun getInfoDataExtra(): Array<String> = arrayOf()
 
+    protected fun MultiblockTooltipBuilder.addMachineTypeLocalized(): MultiblockTooltipBuilder =
+        this.addMachineType(
+            if (StatCollector.canTranslate("$mName.type")) {
+                StatCollector.translateToLocal("$mName.type")
+            } else {
+                StatCollector.translateToLocal("$mName.name")
+            },
+        )
+
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(key: String): MultiblockTooltipBuilder =
+        this.addInfo(StatCollector.translateToLocal(key))
+
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(index: Int): MultiblockTooltipBuilder =
+        this.addInfo(StatCollector.translateToLocal("$mName.info.$index"))
+
+    protected fun MultiblockTooltipBuilder.addInfoListLocalized(untilIndex: Int): MultiblockTooltipBuilder =
+        apply {
+            (0..untilIndex)
+                .map { StatCollector.translateToLocal("$mName.info.$it") }
+                .forEach { this.addInfo(it) }
+        }
+
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(
+        key: String,
+        vararg args: Any,
+    ): MultiblockTooltipBuilder = this.addInfo(StatCollector.translateToLocalFormatted(key, *args))
+
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(
+        index: Int,
+        vararg args: Any,
+    ): MultiblockTooltipBuilder = this.addInfo(StatCollector.translateToLocalFormatted("$mName.info.$index", *args))
+
     protected fun MultiblockTooltipBuilder.addChangeModeByScrewdriver(): MultiblockTooltipBuilder =
         this.addInfo(CommonString.ChangeModeByScrewdriver)
 
@@ -410,8 +488,8 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
 
     override fun getWailaBody(
         itemStack: ItemStack?,
-        currentTip: List<String?>?,
-        accessor: IWailaDataAccessor?,
+        currentTip: MutableList<String>,
+        accessor: IWailaDataAccessor,
         config: IWailaConfigHandler?,
     ) {
         super.getWailaBody(itemStack, currentTip, accessor, config)
@@ -420,7 +498,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     override fun getWailaNBTData(
         player: EntityPlayerMP?,
         tile: TileEntity?,
-        tag: NBTTagCompound?,
+        tag: NBTTagCompound,
         world: World?,
         x: Int,
         y: Int,
