@@ -22,6 +22,8 @@ WIP重构阶段。
 
 - 一些简单的材料系统，未来可能会用到。
 
+- Mixin修改：请参见配置文件中的`MIXIN`部分以获取更多详细信息。主要用于AE和BartWorks（现在在GT5U中）。
+
 - 添加了IV~UMV无线激光，以及所有无线能源仓的简单配方。**启用配置: `RECIPE_EASY_WIRELESS`**
 
 ![easy_wireless](img/easy_wireless.png)

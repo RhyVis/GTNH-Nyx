@@ -9,11 +9,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
 import net.minecraft.launchwrapper.Launch
-import net.minecraftforge.common.config.Configuration
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import rhynia.nyx.proxy.CommonProxy
-import java.io.File
 
 internal const val MOD_ID = "nyx"
 internal const val MOD_NAME = "Nyx"
@@ -60,75 +58,4 @@ object Nyx {
 
     @EventHandler
     fun serverStarting(event: FMLServerStartingEvent) = proxy.serverStarting(event)
-}
-
-@Suppress("ktlint:standard:property-naming")
-object Config {
-    var MTE_ID_OFFSET: Int = 17800
-        private set
-    var MTE_COPIER_TICK: Int = 100
-        private set
-
-    var RECIPE_EASY_WIRELESS = false
-        private set
-
-    var DEBUG_PRINT_MOD_LIST = false
-        private set
-    var DEBUG_PRINT_MTE_IDS = false
-        private set
-
-    private const val CATEGORY_MACHINE = "MACHINE"
-    private const val CATEGORY_RECIPE = "RECIPE"
-    private const val CATEGORY_DEBUG = "DEBUG"
-
-    private const val VERSION_FLAG = "1.0"
-
-    fun syncConfig(configFile: File) {
-        Configuration(configFile, VERSION_FLAG).run {
-            MTE_ID_OFFSET =
-                getInt(
-                    "MTE_ID_OFFSET",
-                    CATEGORY_MACHINE,
-                    17800,
-                    0,
-                    Short.MAX_VALUE.toInt(),
-                    "MTE ID Offset, using to solve conflicts with other custom mods, " +
-                        "preserves OFFSET+1..OFFSET+100 range." +
-                        "!!!DANGER TO CHANGE IN EXISTING SAVE!!!",
-                )
-            MTE_COPIER_TICK =
-                getInt(
-                    "MTE_COPIER_TICK",
-                    CATEGORY_MACHINE,
-                    100,
-                    1,
-                    Int.MAX_VALUE,
-                    "MTE Copier tick rate, default is 100, lower value means faster.",
-                )
-
-            RECIPE_EASY_WIRELESS =
-                getBoolean(
-                    "RECIPE_EASY_WIRELESS",
-                    CATEGORY_RECIPE,
-                    false,
-                    "Enable easy wireless recipes",
-                )
-
-            DEBUG_PRINT_MOD_LIST =
-                getBoolean(
-                    "DEBUG_PRINT_MOD_LIST",
-                    CATEGORY_DEBUG,
-                    false,
-                    "Print all loaded mods to the console.",
-                )
-            DEBUG_PRINT_MTE_IDS =
-                getBoolean(
-                    "DEBUG_PRINT_MTE_IDS",
-                    CATEGORY_DEBUG,
-                    false,
-                    "Print all MTE IDs to the console.",
-                )
-            if (hasChanged()) save()
-        }
-    }
 }

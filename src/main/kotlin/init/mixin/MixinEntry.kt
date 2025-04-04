@@ -1,9 +1,14 @@
 package rhynia.nyx.init.mixin
 
+import com.gtnewhorizon.gtnhlib.config.ConfigurationManager
 import gregtech.api.enums.Mods
 import gregtech.api.enums.Mods.AppliedEnergistics2
 import gregtech.api.enums.Mods.BartWorks
 import rhynia.nyx.ModLogger
+import rhynia.nyx.config.ConfigDebug
+import rhynia.nyx.config.ConfigMachine
+import rhynia.nyx.config.ConfigMixin
+import rhynia.nyx.config.ConfigRecipe
 
 /** Store all late mixins, will be loaded by MixinManager */
 @Suppress("UNUSED", "SpellCheckingInspection")
@@ -13,15 +18,18 @@ enum class MixinEntry(
     PortableCell({
         ofClasses("ae.MixinPortableCell")
         toMod(AppliedEnergistics2)
+        condition = ConfigMixin::MIXIN_AE_PORTABLE_CELL
     }),
     QuantumCell({
         ofClasses("ae.MixinQuantumCell")
         toMod(AppliedEnergistics2)
+        condition = ConfigMixin::MIXIN_AE_QUANTUM_CELL
     }),
 
     MegaMultiBase({
         ofClasses("bw.MixinMegaMultiBase")
         toMod(BartWorks)
+        condition = ConfigMixin::MIXIN_BW_MEGA_NO_AIR_CHECK
     }),
 
     // spotless:on
@@ -36,6 +44,11 @@ enum class MixinEntry(
 
     companion object {
         fun findLateMixins(loadedMods: Set<String>): List<String> {
+            ConfigurationManager.registerConfig(ConfigMachine::class.java)
+            ConfigurationManager.registerConfig(ConfigRecipe::class.java)
+            ConfigurationManager.registerConfig(ConfigMixin::class.java)
+            ConfigurationManager.registerConfig(ConfigDebug::class.java)
+
             val mixinsToLoad = mutableListOf<String>()
             val mininsNotLoad = mutableListOf<String>()
             MixinEntry.entries.forEach {

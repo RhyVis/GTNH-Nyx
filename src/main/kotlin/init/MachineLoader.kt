@@ -5,7 +5,6 @@ import gregtech.api.interfaces.IItemContainer
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.util.GTUtility
 import net.minecraft.util.StatCollector
-import rhynia.nyx.Config
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.api.interfaces.Loader
@@ -13,13 +12,16 @@ import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.NyxWirelessHatchList
 import rhynia.nyx.common.mte.base.NyxHatchWirelessMultiExtended
 import rhynia.nyx.common.mte.prod.NyxCopier
+import rhynia.nyx.config.ConfigDebug
+import rhynia.nyx.config.ConfigMachine
+import rhynia.nyx.config.ConfigRecipe
 import java.io.File
 
 object MachineLoader : Loader {
-    private val offset by lazy { Config.MTE_ID_OFFSET }
+    private val offset by lazy { ConfigMachine.MTE_ID_OFFSET }
 
     override fun load() {
-        if (Config.DEBUG_PRINT_MTE_IDS || DevEnv) printMteIds()
+        if (ConfigDebug.DEBUG_PRINT_MTE_IDS || DevEnv) printMteIds()
         checkOccupation()
         initialiseMachineClass()
         initExtraWirelessLaser()
@@ -47,8 +49,8 @@ object MachineLoader : Loader {
     }
 
     private fun initExtraWirelessLaser() {
-        if (!Config.RECIPE_EASY_WIRELESS) return
-        val initialOffset = Config.MTE_ID_OFFSET + 100 - NyxWirelessHatchList.entries.size // Keep last one id free
+        if (!ConfigRecipe.RECIPE_EASY_WIRELESS) return
+        val initialOffset = offset + 100 - NyxWirelessHatchList.entries.size // Keep last one id free
 
         val zh = StatCollector.translateToLocal("nyx.common.amp") != "A"
 
