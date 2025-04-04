@@ -7,7 +7,6 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
-import mrtjp.projectred.transmission.FWireModelGen.i
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.ModLogger

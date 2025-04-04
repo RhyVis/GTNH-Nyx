@@ -134,7 +134,6 @@ class NyxHatchWirelessDynamo :
     private val helper = TransferHelper(Amperes, mTier)
     private var ownerUUID: UUID? = null
 
-    @Suppress("SpellCheckingInspection")
     constructor(
         aID: Int,
         aName: String,
