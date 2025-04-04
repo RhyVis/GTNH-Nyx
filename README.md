@@ -22,6 +22,8 @@ Features may need to be enabled in the `nyx.cfg` config file.
 
 - Some kind of simple material system, to be used in the future.
 
+- Mixin Edits: See in config file section `MIXIN` for more details. Mainly for AE and BartWorks (now in GT5U).
+
 - Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. **Enable in config `RECIPE_EASY_WIRELESS`**
 
 ![easy_wireless](img/easy_wireless.png)

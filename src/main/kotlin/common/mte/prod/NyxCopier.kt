@@ -38,11 +38,11 @@ import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
-import rhynia.nyx.Config
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.material.NyxMaterials
 import rhynia.nyx.common.mte.base.NyxMTECubeBase
+import rhynia.nyx.config.ConfigMachine
 import java.util.UUID
 
 class NyxCopier : NyxMTECubeBase<NyxCopier> {
@@ -60,7 +60,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         set(value) {
             field = value
             if (value) {
-                mMaxProgresstime = Config.MTE_COPIER_TICK
+                mMaxProgresstime = ConfigMachine.MTE_COPIER_TICK
                 mEfficiency = 10000
                 mEfficiencyIncrease = 10000
             } else {

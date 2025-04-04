@@ -8,11 +8,11 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
 import mrtjp.projectred.transmission.FWireModelGen.i
-import rhynia.nyx.Config
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.ModLogger
 import rhynia.nyx.Tags
+import rhynia.nyx.config.ConfigDebug
 import rhynia.nyx.init.MachineLoader
 import rhynia.nyx.init.MaterialLoader
 import rhynia.nyx.init.RecipeLoader
@@ -23,8 +23,6 @@ open class CommonProxy {
             "Hello Minecraft! $MOD_NAME initializing at version ${Tags.VERSION}" +
                 if (DevEnv) " (dev)" else null,
         )
-        Config.syncConfig(event.suggestedConfigurationFile)
-
         ModLogger.info("Initializing $MOD_NAME materials...")
         MaterialLoader.load()
     }
@@ -45,7 +43,7 @@ open class CommonProxy {
         if (DevEnv) {
             StructureLib.DEBUG_MODE = true
         }
-        if (Config.DEBUG_PRINT_MOD_LIST || DevEnv) {
+        if (ConfigDebug.DEBUG_PRINT_MOD_LIST || DevEnv) {
             Loader.instance().activeModList.forEachIndexed { i, mod ->
                 ModLogger.debug("L: $i: ${mod.name} (${mod.modId})")
             }

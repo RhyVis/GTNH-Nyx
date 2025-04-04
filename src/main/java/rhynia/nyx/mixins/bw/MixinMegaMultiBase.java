@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("SpellCheckingInspection")
 @Pseudo
 @Mixin(
-    targets = "bartworks.common.tileentities.multis.mega.MegaMultiBlockBase.StructureElementAirNoHint",
+    targets = "bartworks.common.tileentities.multis.mega.MegaMultiBlockBase$StructureElementAirNoHint",
     priority = 2000,
     remap = false)
 public class MixinMegaMultiBase<T> {

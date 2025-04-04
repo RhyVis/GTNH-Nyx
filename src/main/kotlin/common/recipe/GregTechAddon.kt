@@ -2,11 +2,11 @@ package rhynia.nyx.common.recipe
 
 import gregtech.api.enums.Materials
 import gregtech.api.recipe.RecipeMaps
-import rhynia.nyx.Config
 import rhynia.nyx.api.enums.ref.Tier
 import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.api.recipe.dsl.withRecipeMap
 import rhynia.nyx.common.material.NyxMaterials
+import rhynia.nyx.config.ConfigRecipe
 
 class GTAddonRecipes : RecipePool() {
     override fun loadRecipes() {
@@ -38,7 +38,7 @@ class GTAddonRecipes : RecipePool() {
 
 class GTEasyWirelessRecipes : RecipePool() {
     override fun loadRecipes() {
-        if (!Config.RECIPE_EASY_WIRELESS) return
+        if (!ConfigRecipe.RECIPE_EASY_WIRELESS) return
         withRecipeMap(RecipeMaps.assemblerRecipes) {
             val time = 4 // seconds
             for (tier in Tier.G_COMMON) {
