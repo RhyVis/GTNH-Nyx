@@ -24,11 +24,13 @@ Features may need to be enabled in the `nyx.cfg` config file.
 
 - Mixin Edits: See in config file section `MIXIN` for more details. Mainly for AE and BartWorks (now in GT5U).
 
-- Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. **Enable in config `RECIPE_EASY_WIRELESS`**
+- Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. **Config `RECIPE_EASY_WIRELESS`**
 
 ![easy_wireless](img/easy_wireless.png)
 
 - COPIER: Copy Things in the controller
+
+  **Config: `MTE_COPIER`**
 
 > The button is used to switch mode between item and fluid.
 > The item mode can copy items in the controller, and the fluid mode refers to the cell item in the controller.
@@ -53,4 +55,3 @@ Twist Space Technology
 | [Twist-Space-Technology-Mod](https://github.com/Nxer/Twist-Space-Technology-Mod) | 0.6.14         |
 | [BoxPlusPlus](https://github.com/RealSilverMoon/BoxPlusPlus)                     | 1.9.3          |
 | [Programmable-Hatches-Mod](https://github.com/reobf/Programmable-Hatches-Mod)    | v0.1.2p28-beta |
-| [AE2Things](https://github.com/asdflj/AE2Things)                                 | 1.1.8          |

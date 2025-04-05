@@ -30,9 +30,16 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
     protected constructor(aName: String) : super(aName)
 
     protected companion object {
-        const val H_OFFSET = 1
-        const val V_OFFSET = 1
-        const val D_OFFSET = 0
+        const val OFFSET_H = 1
+        const val OFFSET_V = 1
+        const val OFFSET_D = 0
+
+        val STRUCTURE_CUBE_SHAPE =
+            arrayOf(
+                arrayOf("CCC", "CCC", "CCC"),
+                arrayOf("C~C", "CBC", "CCC"),
+                arrayOf("CCC", "CCC", "CCC"),
+            )
     }
 
     /** The block and corresponding meta used for the casing of the machine. */
@@ -76,14 +83,14 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
         aStack: ItemStack?,
     ): Boolean {
         removeMaintenance()
-        return checkPiece(STRUCTURE_PIECE_MAIN, H_OFFSET, V_OFFSET, D_OFFSET)
+        return checkPiece(STRUCTURE_PIECE_MAIN, OFFSET_H, OFFSET_V, OFFSET_D)
     }
 
     override fun construct(
         stackSize: ItemStack?,
         hintsOnly: Boolean,
     ) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, H_OFFSET, V_OFFSET, D_OFFSET)
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, OFFSET_H, OFFSET_V, OFFSET_D)
     }
 
     override fun survivalConstruct(
@@ -95,9 +102,9 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
         return survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
-            H_OFFSET,
-            V_OFFSET,
-            D_OFFSET,
+            OFFSET_H,
+            OFFSET_V,
+            OFFSET_D,
             elementBudget,
             env,
             false,
@@ -108,7 +115,7 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
     final override fun genStructureDefinition(): IStructureDefinition<T> =
         StructureDefinition
             .builder<T>()
-            .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(structureShape))
+            .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(STRUCTURE_CUBE_SHAPE))
             .addElement('B', sCoreBlockEl)
             .addElement(
                 'C',
@@ -120,14 +127,6 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
                     .casingIndex(sCasingIndex)
                     .buildAndChain(sCasingBlock.first, sCasingBlock.second),
             ).build()
-
-    protected val structureShape: Array<Array<String>>
-        get() =
-            arrayOf(
-                arrayOf("CCC", "CCC", "CCC"),
-                arrayOf("C~C", "CBC", "CCC"),
-                arrayOf("CCC", "CCC", "CCC"),
-            )
 
     protected fun MultiblockTooltipBuilder.beginStructureCube(): MultiblockTooltipBuilder = this.beginStructureBlock(3, 3, 3, false)
 }

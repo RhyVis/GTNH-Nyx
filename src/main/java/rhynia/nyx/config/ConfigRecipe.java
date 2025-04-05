@@ -10,6 +10,6 @@ import static rhynia.nyx.config.Definition.CATEGORY_RECIPE;
 @Config.RequiresMcRestart
 public class ConfigRecipe {
     @Config.Comment("Enable easy wireless recipes")
-    @Config.DefaultBoolean(false)
+    @Config.DefaultBoolean(true)
     public static boolean RECIPE_EASY_WIRELESS;
 }

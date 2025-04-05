@@ -12,13 +12,39 @@ fun withRecipeMap(
 }
 
 class RecipeMapBuilder(
-    private val backend: IRecipeMap,
+    val backend: IRecipeMap,
 ) {
-    fun newRecipe(block: GTRecipeBuilder.() -> Unit) {
+    inline fun newRecipe(block: GTRecipeBuilder.() -> Unit) {
         GTValues.RA
             .stdBuilder()
             .apply(block)
             .noOptimize()
             .addTo(backend)
+    }
+
+    inline fun newRecipeIf(
+        condition: Boolean,
+        block: GTRecipeBuilder.() -> Unit,
+    ) {
+        if (condition) {
+            GTValues.RA
+                .stdBuilder()
+                .apply(block)
+                .noOptimize()
+                .addTo(backend)
+        }
+    }
+
+    inline fun <T> newRecipeIter(
+        iter: Iterable<T>,
+        block: GTRecipeBuilder.(T) -> Unit,
+    ) {
+        for (item in iter) {
+            GTValues.RA
+                .stdBuilder()
+                .apply { block(this, item) }
+                .noOptimize()
+                .addTo(backend)
+        }
     }
 }

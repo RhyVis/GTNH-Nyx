@@ -15,9 +15,19 @@ infix fun ItemStack.size(amount: Int): ItemStack = this.apply { stackSize = amou
 fun ItemStack.copyAmount(amount: Int): ItemStack = GTUtility.copyAmount(amount, this)
 
 /**
+ * Copy the [ItemStack] with a new stack size using [copyAmount]
+ */
+fun ItemStack.copyAmount(amount: Long): ItemStack = GTUtility.copyAmount(amount.toInt(), this)
+
+/**
  * Copy the [ItemStack] with a new stack size using [copyAmountUnsafe]
  */
 fun ItemStack.copyAmountUnsafe(amount: Int): ItemStack = GTUtility.copyAmountUnsafe(amount, this)
+
+/**
+ * Copy the [ItemStack] with a new stack size using [copyAmountUnsafe]
+ */
+fun ItemStack.copyAmountUnsafe(amount: Long): ItemStack = GTUtility.copyAmountUnsafe(amount.toInt(), this)
 
 /**
  * Copy the [ItemStack] with a new stack size using [copyAmount] or [copyAmountUnsafe] depending on the amount.

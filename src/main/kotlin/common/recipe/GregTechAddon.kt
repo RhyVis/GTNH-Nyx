@@ -110,20 +110,32 @@ class GTEasyWirelessRecipes : RecipePool() {
                     durSec(time)
                 }
 
-                for (lvl in 1..7) {
-                    newRecipe {
-                        itemInputs(
-                            tier.getLaserTarget(lvl, 1),
-                            tier.getCircuit(3),
-                            tier.getComponent(Tier.Component.Emitter, 2),
-                            tier.getComponent(Tier.Component.Sensor, 2),
-                            ic(22),
-                        )
-                        fluidInputs(tier.getIngotSolder(16))
-                        itemOutputs(tier.getLaserWireless(lvl, 1))
-                        eut(tier)
-                        durSec(time)
-                    }
+                newRecipe {
+                    itemInputs(
+                        tier.getDynamoHatch(1),
+                        tier.getCircuit(3),
+                        tier.getComponent(Tier.Component.Emitter, 2),
+                        tier.getComponent(Tier.Component.Sensor, 2),
+                        ic(22),
+                    )
+                    fluidInputs(tier.getIngotSolder(16))
+                    itemOutputs(tier.getLaserDynamoWireless(1))
+                    eut(tier)
+                    durSec(time)
+                }
+
+                newRecipeIter(1..7) { lvl ->
+                    itemInputs(
+                        tier.getLaserTarget(lvl, 1),
+                        tier.getCircuit(3),
+                        tier.getComponent(Tier.Component.Emitter, 2),
+                        tier.getComponent(Tier.Component.Sensor, 2),
+                        ic(22),
+                    )
+                    fluidInputs(tier.getIngotSolder(16))
+                    itemOutputs(tier.getLaserEnergyWireless(lvl, 1))
+                    eut(tier)
+                    durSec(time)
                 }
             }
         }

@@ -1,6 +1,5 @@
 package rhynia.nyx.common.mte.base
 
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import gregtech.api.enums.Textures
@@ -43,11 +42,11 @@ import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.idEqual
 import rhynia.nyx.api.util.size
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
+import kotlin.reflect.KClass
 
 @Suppress("UNUSED")
 abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     MTEExtendedPowerMultiBlockBase<T>,
-    IConstructable,
     ISurvivalConstructable {
     protected constructor(
         aID: Int,
@@ -87,7 +86,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         /**
          * Structure Definition for the machine, set when first time calling getStructureDefinition().
          */
-        val cachedStructureDefs: MutableMap<Class<out NyxMTEBase<*>>, IStructureDefinition<*>> =
+        val cachedStructureDefs: MutableMap<KClass<out NyxMTEBase<*>>, IStructureDefinition<*>> =
             mutableMapOf()
     }
 
@@ -191,12 +190,17 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return false
     }
 
+    override fun clearHatches() {
+        super.clearHatches()
+        mExoticDynamoHatches.clear()
+    }
+
     /** Set the structure definition for the machine. */
     protected abstract fun genStructureDefinition(): IStructureDefinition<T>
 
     @Suppress("UNCHECKED_CAST")
     final override fun getStructureDefinition(): IStructureDefinition<T> =
-        cachedStructureDefs.getOrPut(this::class.java) { genStructureDefinition() }
+        cachedStructureDefs.getOrPut(this::class) { genStructureDefinition() }
             as IStructureDefinition<T>
 
     /** Controller Block and Meta, used for calculating casing texture index. */
@@ -275,12 +279,11 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         object : ProcessingLogic() {
             override fun process(): CheckRecipeResult {
                 setEuModifier(rEuModifier)
-                setMaxParallel(rMaxParallel)
                 setSpeedBonus(rDurationModifier)
                 setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
                 return super.process()
             }
-        }
+        }.setMaxParallelSupplier(::rMaxParallel)
 
     protected open val rOverclockType: OverclockType
         @OverrideOnly get() = OverclockType.Normal
@@ -516,7 +519,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     }
 
     /** Mode Container for switching between modes. */
-    protected open class ModeContainerPrimitive(
+    open class ModeContainerPrimitive(
         val size: Int,
     ) {
         /** Current index of the mode. */
@@ -557,7 +560,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
      *
      * @param T Type of the modes.
      */
-    protected class ModeContainer<T>(
+    class ModeContainer<T>(
         private val modes: Array<out T>,
     ) : ModeContainerPrimitive(modes.size) {
         companion object {

@@ -24,11 +24,13 @@ WIP重构阶段。
 
 - Mixin修改：请参见配置文件中的`MIXIN`部分以获取更多详细信息。主要用于AE和BartWorks（现在在GT5U中）。
 
-- 添加了IV~UMV无线激光，以及所有无线能源仓的简单配方。**启用配置: `RECIPE_EASY_WIRELESS`**
+- 添加了IV~UMV无线激光，以及所有无线能源仓的简单配方。**配置: `RECIPE_EASY_WIRELESS`**
 
 ![easy_wireless](img/easy_wireless.png)
 
 - COPIER：复制控制器中的物品
+
+  **配置：`MTE_COPIER`**
 
 > 按钮用于切换物品和流体的模式。
 > 物品模式可以复制控制器中的物品，流体模式则是复制单元中的流体。
@@ -51,5 +53,3 @@ WIP重构阶段。
 | [Twist-Space-Technology-Mod](https://github.com/Nxer/Twist-Space-Technology-Mod) | 0.6.14         |
 | [BoxPlusPlus](https://github.com/RealSilverMoon/BoxPlusPlus)                     | 1.9.3          |
 | [Programmable-Hatches-Mod](https://github.com/reobf/Programmable-Hatches-Mod)    | v0.1.2p28-beta |
-| [AE2Things](https://github.com/asdflj/AE2Things)                                 | 1.1.8          |
-
