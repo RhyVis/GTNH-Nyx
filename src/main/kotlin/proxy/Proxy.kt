@@ -1,6 +1,5 @@
 package rhynia.nyx.proxy
 
-import com.gtnewhorizon.structurelib.StructureLib
 import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.event.FMLInitializationEvent
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent
@@ -42,7 +41,7 @@ open class CommonProxy {
 
     open fun serverStarting(event: FMLServerStartingEvent) {
         if (DevEnv) {
-            StructureLib.DEBUG_MODE = true
+            // StructureLib.DEBUG_MODE = true
         }
         if (ConfigDebug.DEBUG_PRINT_MOD_LIST || DevEnv) {
             Loader.instance().activeModList.forEachIndexed { i, mod ->

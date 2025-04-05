@@ -60,6 +60,7 @@ nyx.wirelessExt.tooltip.1=§7Does not connect to wires. This block withdraws EU 
 nyx.wirelessExt.tooltip.2=§bExtra Wireless Series
 
 nyx.common.amp=A
+nyx.common.current=Current
 nyx.common.NyxMagical=§bNyx§cCreation§7 - §aMagical Revelation
 nyx.common.NyxNuclear=§bNyx§cCreation§7 - §aThermonuclear Reaction
 nyx.common.NyxGigaFac=§bNyx§cCreation§7 - §aGiga Factory
@@ -81,6 +82,12 @@ nyx.machine.copier.waila.2.fluid=§fCOPY Mode: §aFluid
 nyx.machine.copier.gui.t.0=Item Mode
 nyx.machine.copier.gui.t.1=Fluid Mode
 nyx.machine.copier.gui.t.2=Copy Size
+
+nyx.machine.proxy.name=PROXY
+nyx.machine.proxy.type=Functional Proxy
+nyx.machine.proxy.gui.t.0=Update Recipe
+
+nyx.machine.injector.name=INJECTOR
 
 GT5U.gui.text.importing_energy=§bImporting Energy
 GT5U.gui.text.no_selected_energy_core_set=§7No Core Set

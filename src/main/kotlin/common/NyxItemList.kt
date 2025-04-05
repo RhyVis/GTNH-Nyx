@@ -48,6 +48,10 @@ enum class NyxItemList(
 
     // Machines
     ControllerCopier,
+    ControllerProxy,
+
+    // Single Block Machines
+    MachineInjector,
     ;
 
     private lateinit var mStack: ItemStack

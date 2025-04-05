@@ -20,4 +20,12 @@ public class ConfigMachine {
     @Config.Comment("MTE Copier tick rate, default is 100, lower value means faster.")
     @Config.DefaultInt(100)
     public static int MTE_COPIER_TICK;
+
+    @Config.Comment("MTE Proxy enable.")
+    @Config.DefaultBoolean(true)
+    public static boolean MTE_PROXY;
+
+    @Config.Comment("MTE Injector enable.")
+    @Config.DefaultBoolean(true)
+    public static boolean MTE_INJECTOR;
 }

@@ -53,7 +53,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: Edge Build
-          tag_name: edge
+          tag_name: edge-build
           prerelease: true
           files: |
             ./build/libs/*.jar

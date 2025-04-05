@@ -60,6 +60,7 @@ nyx.wirelessExt.tooltip.1=§7不连接导线，此方块可以从网络中抽取
 nyx.wirelessExt.tooltip.2=§b额外无线设备系列
 
 nyx.common.amp=安
+nyx.common.current=当前
 nyx.common.NyxMagical=§bNyx§cCreation§7 - §a魔法揭示
 nyx.common.NyxNuclear=§bNyx§cCreation§7 - §a热核反应
 nyx.common.NyxGigaFac=§bNyx§cCreation§7 - §a超级工厂
@@ -81,6 +82,12 @@ nyx.machine.copier.waila.2.fluid=§f复制模式: §a流体
 nyx.machine.copier.gui.t.0=物品模式
 nyx.machine.copier.gui.t.1=流体模式
 nyx.machine.copier.gui.t.2=复制数量
+
+nyx.machine.proxy.name=PROXY
+nyx.machine.proxy.type=执行代理
+nyx.machine.proxy.gui.t.0=更新配方
+
+nyx.machine.injector.name=INJECTOR
 
 GT5U.gui.text.importing_energy=§b导入能量中
 GT5U.gui.text.no_selected_energy_core_set=§7没有能量核心
