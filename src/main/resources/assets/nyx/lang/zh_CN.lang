@@ -69,6 +69,9 @@ nyx.common.BluePrintInfo=如§9蓝§b图§7所示相对位置
 nyx.common.BluePrintTip=请参考§9结构§1库§7全息投影，构建主体结构
 nyx.common.StructureTooComplex=结构太复杂了!
 nyx.common.ChangeModeByScrewdriver=使用螺丝刀切换模式.
+nyx.common.info.maxParallel=最大并行
+nyx.common.info.timeModifier=时间乘数
+nyx.common.info.euModifier=能量消耗
 
 nyx.machine.copier.name=COPIER
 nyx.machine.copier.type=物质复制器
@@ -85,7 +88,8 @@ nyx.machine.copier.gui.t.2=复制数量
 
 nyx.machine.proxy.name=PROXY
 nyx.machine.proxy.type=执行代理
-nyx.machine.proxy.gui.t.0=更新配方
+nyx.machine.proxy.gui.t.0=切换模式
+nyx.machine.proxy.gui.t.1=更新配方
 
 nyx.machine.injector.name=INJECTOR
 

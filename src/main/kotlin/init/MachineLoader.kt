@@ -11,7 +11,6 @@ import rhynia.nyx.common.ItemList
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.NyxWirelessDynamoList
 import rhynia.nyx.common.NyxWirelessEnergyList
-import rhynia.nyx.common.mte.TestMTE
 import rhynia.nyx.common.mte.base.NyxHatchWirelessDynamo
 import rhynia.nyx.common.mte.base.NyxHatchWirelessEnergy
 import rhynia.nyx.common.mte.prod.NyxCopier
@@ -56,7 +55,6 @@ object MachineLoader : Loader {
     private fun initialiseMachineClass() {
         NyxItemList.ControllerCopier.register(NyxCopier(offset + 1, "nyx.machine.copier"), ConfigMachine.MTE_COPIER)
         NyxItemList.ControllerProxy.register(NyxProxy(offset + 2, "nyx.machine.proxy"), ConfigMachine.MTE_PROXY)
-        NyxItemList.ControllerProxy.register(TestMTE(offset + 3, "nyx.machine.proxy", "Wah"), ConfigMachine.MTE_PROXY)
 
         NyxItemList.MachineInjector.register(NyxInjector(offset + 31, "nyx.machine.injector", 14), ConfigMachine.MTE_INJECTOR)
     }

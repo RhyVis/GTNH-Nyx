@@ -137,11 +137,6 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         return CheckRecipeResultRegistry.SUCCESSFUL
     }
 
-    override fun onDisableWorking() {
-        super.onDisableWorking()
-        pRunning = false
-    }
-
     override fun supportsVoidProtection(): Boolean = false
 
     override fun supportsInputSeparation(): Boolean = false
@@ -168,8 +163,8 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
             .addInfoListLocalized(2)
             .addChangeModeByScrewdriver()
             .beginStructureCube()
-            .addInputBus(1)
-            .addOutputBus(1)
+            .addInputBus()
+            .addOutputBus()
             .toolTipFinisher(CommonString.NyxMagical)
 
     override fun addUIWidgets(

@@ -10,9 +10,9 @@ import gregtech.api.GregTechAPI
 import gregtech.api.gui.modularui.GTUITextures
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
+import gregtech.api.interfaces.tileentity.RecipeMapWorkable
 import gregtech.api.logic.ProcessingLogic
 import gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY
-import gregtech.api.metatileentity.implementations.MTEMultiBlockBase
 import gregtech.api.recipe.RecipeMap
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.recipe.check.CheckRecipeResult
@@ -21,11 +21,15 @@ import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumChatFormatting.AQUA
+import net.minecraft.util.EnumChatFormatting.DARK_RED
 import net.minecraft.util.EnumChatFormatting.WHITE
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.CommonString
+import rhynia.nyx.api.util.RefContainer
 import rhynia.nyx.api.util.localize
 import rhynia.nyx.common.mte.base.NyxMTECubeBase
+import kotlin.math.log10
+import kotlin.math.pow
 
 class NyxProxy : NyxMTECubeBase<NyxProxy> {
     constructor(
@@ -37,33 +41,46 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
 
     override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): IMetaTileEntity = NyxProxy(mName)
 
-    private var pMode: ModeContainer<RecipeMap<*>>? = null
+    private var pMode: RefContainer<RecipeMap<*>>? = null
     private var pLastControllerID: Int = -1
+    private var pControllerStackSize: Int = 0
 
-    @Suppress("SpellCheckingInspection")
-    override fun isCorrectMachinePart(aStack: ItemStack?): Boolean = aStack?.unlocalizedName?.startsWith("gt.blockmachine") == true
+    private val pValid: Boolean
+        get() = pMode != null && pLastControllerID > 0 && pControllerStackSize > 0
 
-    override fun getRecipeMap(): RecipeMap<*>? = RecipeMaps.multiblockChemicalReactorRecipes // pMode?.current
+    override val rMaxParallel: Int
+        get() = LogarithmicMapper.map(pControllerStackSize)
+
+    override fun getRecipeMap(): RecipeMap<*>? = pMode?.current
 
     override fun createProcessingLogic(): ProcessingLogic? =
         object : ProcessingLogic() {
             override fun process(): CheckRecipeResult {
-                updateRecipeContainer()
+                if (updateRecipeContainer()) {
+                    setEuModifier(rEuModifier)
+                    setSpeedBonus(rTimeModifier)
+                    setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
+                }
                 return super.process()
             }
-        }
+        }.setMaxParallelSupplier(::rMaxParallel)
 
-    // override fun checkProcessing(): CheckRecipeResult = super.checkProcessing()
+    private fun updateRecipeContainer(): Boolean {
+        val id = getMachineID(controllerSlot)
+        if (id == pLastControllerID) return true
 
-    private fun updateRecipeContainer() {
-        controllerSlot?.let { controller ->
-            pMode = getRecipeMap(controller)
-            pLastControllerID = controller.itemDamage
-            ModLogger.info("Update recipe map: ${pMode?.let { localize(it.current.unlocalizedName) }}")
-        } ?: {
+        getMachineID(controllerSlot).takeIf { it > 0 }?.let { id ->
+            pMode = getRecipeMap(id)
+            pLastControllerID = id
+            pControllerStackSize = controllerSlot!!.stackSize
+            ModLogger.debug("Update recipe map: ${pMode?.let { localize(it.current.unlocalizedName) }}")
+            return true
+        } ?: run {
             pMode = null
             pLastControllerID = -1
+            pControllerStackSize = 0
             ModLogger.info("Update recipe map: null")
+            return false
         }
     }
 
@@ -80,15 +97,15 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         screenElements: DynamicPositionedColumn,
         inventorySlot: SlotWidget?,
     ) {
-        super.drawTexts(screenElements, inventorySlot)
         screenElements.widget(
             TextWidget
                 .dynamicString {
-                    "${WHITE}${localize("nyx.common.current")}: ${AQUA}${pMode?.let {
-                        localize(it.current.unlocalizedName)
-                    } ?: "?"}"
+                    "${WHITE}${localize(
+                        "nyx.common.current",
+                    )}: ${pMode?.let { AQUA.toString() + localize(it.current.unlocalizedName) } ?: "${DARK_RED}?"}"
                 },
         )
+        super.drawTexts(screenElements, inventorySlot)
     }
 
     override fun addUIWidgets(
@@ -105,18 +122,16 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CHECKMARK)
                     .setPos(80, 91)
                     .setSize(16, 16)
-                    .dynamicTooltip {
-                        listOf(pMode?.let { localize(it.current.unlocalizedName) } ?: "?")
-                    }.setTooltipShowUpDelay(TOOLTIP_DELAY),
+                    .addTooltip(localize("nyx.machine.proxy.gui.t.0"))
+                    .setTooltipShowUpDelay(TOOLTIP_DELAY),
             ).widget(
                 ButtonWidget()
                     .setOnClick { _, _ -> updateRecipeContainer() }
                     .setPlayClickSound(true)
-                    .setUpdateTooltipEveryTick(true)
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_ARROW_GREEN_UP)
                     .setPos(174, 112)
                     .setSize(16, 16)
-                    .addTooltip(localize("nyx.machine.proxy.gui.t.0"))
+                    .addTooltip(localize("nyx.machine.proxy.gui.t.1"))
                     .setTooltipShowUpDelay(TOOLTIP_DELAY),
             )
     }
@@ -129,6 +144,31 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         pMode?.loadNBTData(aNBT, "pMode")
     }
 
+    object LogarithmicMapper {
+        private val mappingCache: IntArray by lazy { initMapping() }
+
+        private fun initMapping(): IntArray {
+            val cache = IntArray(65)
+
+            val factor = log10(Int.MAX_VALUE.toDouble()) / log10(64.0)
+
+            for (i in 0..64) {
+                if (i <= 1) {
+                    cache[i] = 1
+                } else if (i == 64) {
+                    cache[i] = Int.MAX_VALUE
+                } else {
+                    val value = i.toDouble().pow(factor).toLong()
+                    cache[i] = value.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+                }
+            }
+
+            return cache
+        }
+
+        fun map(i: Int) = mappingCache[i.coerceIn(0, 64)]
+    }
+
     override fun saveNBTData(aNBT: NBTTagCompound?) {
         super.saveNBTData(aNBT)
         if (aNBT == null) return
@@ -137,22 +177,31 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
     }
 
     companion object {
-        private val cache = mutableMapOf<Int, ModeContainer<RecipeMap<*>>>()
+        private val cache = mutableMapOf<Int, RefContainer<RecipeMap<*>>>()
 
-        fun getRecipeMap(controller: ItemStack): ModeContainer<RecipeMap<*>>? {
-            if (cache.containsKey(controller.itemDamage)) return cache[controller.itemDamage]
+        fun getMachineID(controller: ItemStack?): Int {
+            if (controller == null) return -1
+            return controller.itemDamage
+        }
 
-            val mte = GregTechAPI.METATILEENTITIES[controller.itemDamage] as? MTEMultiBlockBase ?: return null
+        fun getRecipeMap(id: Int): RefContainer<RecipeMap<*>>? {
+            if (cache.containsKey(id)) return cache[id]
+
+            val mte = GregTechAPI.METATILEENTITIES[id] ?: return null
             val recipeMaps =
-                mte.availableRecipeMaps.filter {
-                    it != RecipeMaps.assemblylineVisualRecipes
+                when (mte) {
+                    is RecipeMapWorkable ->
+                        mte.availableRecipeMaps.filter {
+                            it != RecipeMaps.assemblylineVisualRecipes
+                        }
+                    else -> return null
                 }
 
             return recipeMaps.size
                 .takeIf { it > 0 }
                 ?.let {
-                    ModeContainer(recipeMaps.toTypedArray()).also {
-                        cache[controller.itemDamage] = it
+                    RefContainer(recipeMaps).also {
+                        cache[id] = it
                     }
                 }
         }

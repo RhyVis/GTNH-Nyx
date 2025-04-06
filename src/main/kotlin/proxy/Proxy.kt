@@ -40,9 +40,6 @@ open class CommonProxy {
     }
 
     open fun serverStarting(event: FMLServerStartingEvent) {
-        if (DevEnv) {
-            // StructureLib.DEBUG_MODE = true
-        }
         if (ConfigDebug.DEBUG_PRINT_MOD_LIST || DevEnv) {
             Loader.instance().activeModList.forEachIndexed { i, mod ->
                 ModLogger.debug("L: $i: ${mod.name} (${mod.modId})")

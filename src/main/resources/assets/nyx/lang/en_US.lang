@@ -69,6 +69,9 @@ nyx.common.BluePrintInfo=Relative position as shown in §9Blue§bprint§7
 nyx.common.BluePrintTip=Please refer to §9Structure§1Lib§7 hologram to build the structure
 nyx.common.StructureTooComplex=Structure is too complex!
 nyx.common.ChangeModeByScrewdriver=Use screwdriver to change mode.
+nyx.common.info.maxParallel=Max Parallel
+nyx.common.info.timeModifier=Time Multiplier
+nyx.common.info.euModifier=EU Multiplier
 
 nyx.machine.copier.name=COPIER
 nyx.machine.copier.type=Matter Copier
@@ -85,7 +88,8 @@ nyx.machine.copier.gui.t.2=Copy Size
 
 nyx.machine.proxy.name=PROXY
 nyx.machine.proxy.type=Functional Proxy
-nyx.machine.proxy.gui.t.0=Update Recipe
+nyx.machine.proxy.gui.t.0=Next Mode
+nyx.machine.proxy.gui.t.1=Update Recipe
 
 nyx.machine.injector.name=INJECTOR
 
