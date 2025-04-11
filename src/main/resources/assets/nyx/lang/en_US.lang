@@ -53,12 +53,14 @@ nyx.ore.wireFine=Fine %material Wire
 
 nyx.tooltip.press_more_info=Press §b§fShift§r§7 for more info
 
-nyx.wirelessExt.name=%s %sA Wireless Energy Hatch
+nyx.wirelessExt.energy.name=%s %sA Wireless Energy Hatch
+nyx.wirelessExt.dynamo.name=%s %sA Wireless Energy Dynamo
 nyx.wirelessExt.tooltip.0=§7Stores energy globally in a network, up to 2^(2^31) EU.
 nyx.wirelessExt.tooltip.1=§7Does not connect to wires. This block withdraws EU from the network.
-nyx.wirelessExt.tooltip.2=§bExtra Wireless Energy Series
+nyx.wirelessExt.tooltip.2=§bExtra Wireless Series
 
 nyx.common.amp=A
+nyx.common.current=Current
 nyx.common.NyxMagical=§bNyx§cCreation§7 - §aMagical Revelation
 nyx.common.NyxNuclear=§bNyx§cCreation§7 - §aThermonuclear Reaction
 nyx.common.NyxGigaFac=§bNyx§cCreation§7 - §aGiga Factory
@@ -67,6 +69,9 @@ nyx.common.BluePrintInfo=Relative position as shown in §9Blue§bprint§7
 nyx.common.BluePrintTip=Please refer to §9Structure§1Lib§7 hologram to build the structure
 nyx.common.StructureTooComplex=Structure is too complex!
 nyx.common.ChangeModeByScrewdriver=Use screwdriver to change mode.
+nyx.common.info.maxParallel=Max Parallel
+nyx.common.info.timeModifier=Time Multiplier
+nyx.common.info.euModifier=EU Multiplier
 
 nyx.machine.copier.name=COPIER
 nyx.machine.copier.type=Matter Copier
@@ -80,6 +85,13 @@ nyx.machine.copier.waila.2.fluid=§fCOPY Mode: §aFluid
 nyx.machine.copier.gui.t.0=Item Mode
 nyx.machine.copier.gui.t.1=Fluid Mode
 nyx.machine.copier.gui.t.2=Copy Size
+
+nyx.machine.proxy.name=PROXY
+nyx.machine.proxy.type=Functional Proxy
+nyx.machine.proxy.gui.t.0=Next Mode
+nyx.machine.proxy.gui.t.1=Update Recipe
+
+nyx.machine.injector.name=INJECTOR
 
 GT5U.gui.text.importing_energy=§bImporting Energy
 GT5U.gui.text.no_selected_energy_core_set=§7No Core Set

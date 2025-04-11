@@ -1,13 +1,11 @@
 package rhynia.nyx.proxy
 
-import com.gtnewhorizon.structurelib.StructureLib
 import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.event.FMLInitializationEvent
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.event.FMLServerStartingEvent
-import mrtjp.projectred.transmission.FWireModelGen.i
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.ModLogger
@@ -16,6 +14,7 @@ import rhynia.nyx.config.ConfigDebug
 import rhynia.nyx.init.MachineLoader
 import rhynia.nyx.init.MaterialLoader
 import rhynia.nyx.init.RecipeLoader
+import java.io.File
 
 open class CommonProxy {
     open fun preInit(event: FMLPreInitializationEvent) {
@@ -23,6 +22,7 @@ open class CommonProxy {
             "Hello Minecraft! $MOD_NAME initializing at version ${Tags.VERSION}" +
                 if (DevEnv) " (dev)" else null,
         )
+        if (DevEnv) File("GregTech.lang").delete()
         ModLogger.info("Initializing $MOD_NAME materials...")
         MaterialLoader.load()
     }
@@ -40,9 +40,6 @@ open class CommonProxy {
     }
 
     open fun serverStarting(event: FMLServerStartingEvent) {
-        if (DevEnv) {
-            StructureLib.DEBUG_MODE = true
-        }
         if (ConfigDebug.DEBUG_PRINT_MOD_LIST || DevEnv) {
             Loader.instance().activeModList.forEachIndexed { i, mod ->
                 ModLogger.debug("L: $i: ${mod.name} (${mod.modId})")

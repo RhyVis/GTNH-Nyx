@@ -1,6 +1,5 @@
 package rhynia.nyx.common.mte.base
 
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import gregtech.api.enums.Textures
@@ -41,13 +40,14 @@ import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.process.OverclockType
 import rhynia.nyx.api.util.idEqual
+import rhynia.nyx.api.util.localize
 import rhynia.nyx.api.util.size
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
+import kotlin.reflect.KClass
 
 @Suppress("UNUSED")
 abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     MTEExtendedPowerMultiBlockBase<T>,
-    IConstructable,
     ISurvivalConstructable {
     protected constructor(
         aID: Int,
@@ -87,8 +87,11 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         /**
          * Structure Definition for the machine, set when first time calling getStructureDefinition().
          */
-        val cachedStructureDefs: MutableMap<Class<out NyxMTEBase<*>>, IStructureDefinition<*>> =
-            mutableMapOf()
+        val cachedStructureDefs = mutableMapOf<KClass<out NyxMTEBase<*>>, IStructureDefinition<*>>()
+
+        val infoMaxParallel by lazy { localize("nyx.common.info.maxParallel") }
+        val infoTimeModifier by lazy { localize("nyx.common.info.timeModifier") }
+        val infoEuModifier by lazy { localize("nyx.common.info.euModifier") }
     }
 
     /** Remove maintenance requirement. */
@@ -191,12 +194,17 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return false
     }
 
+    override fun clearHatches() {
+        super.clearHatches()
+        mExoticDynamoHatches.clear()
+    }
+
     /** Set the structure definition for the machine. */
     protected abstract fun genStructureDefinition(): IStructureDefinition<T>
 
     @Suppress("UNCHECKED_CAST")
     final override fun getStructureDefinition(): IStructureDefinition<T> =
-        cachedStructureDefs.getOrPut(this::class.java) { genStructureDefinition() }
+        cachedStructureDefs.getOrPut(this::class) { genStructureDefinition() }
             as IStructureDefinition<T>
 
     /** Controller Block and Meta, used for calculating casing texture index. */
@@ -259,8 +267,6 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
 
     override fun getDamageToComponent(aStack: ItemStack?): Int = 0
 
-    override fun doRandomMaintenanceDamage(): Boolean = false
-
     override fun explodesOnComponentBreak(aStack: ItemStack?): Boolean = false
 
     override fun supportsVoidProtection(): Boolean = true
@@ -275,24 +281,23 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         object : ProcessingLogic() {
             override fun process(): CheckRecipeResult {
                 setEuModifier(rEuModifier)
-                setMaxParallel(rMaxParallel)
-                setSpeedBonus(rDurationModifier)
+                setSpeedBonus(rTimeModifier)
                 setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
                 return super.process()
             }
-        }
+        }.setMaxParallelSupplier(::rMaxParallel)
 
     protected open val rOverclockType: OverclockType
-        @OverrideOnly get() = OverclockType.Normal
+        get() = OverclockType.Normal
 
     protected open val rEuModifier
-        @OverrideOnly get() = 1.0
+        get() = 1.0
 
-    protected open val rDurationModifier
-        @OverrideOnly get() = 1.0
+    protected open val rTimeModifier
+        get() = 1.0
 
     protected open val rMaxParallel
-        @OverrideOnly get() = 1
+        get() = 1
 
     protected fun consumeFluid(
         fluid: Fluid,
@@ -423,9 +428,9 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     final override fun getInfoData(): Array<String> =
         super.getInfoData() +
             arrayOf(
-                "${AQUA}最大并行: ${GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}",
-                "${AQUA}速度乘数: ${GOLD}${rDurationModifier.formatPercent()}",
-                "${AQUA}功率乘数: ${GOLD}${rEuModifier.formatPercent()}",
+                "${AQUA}$infoMaxParallel: ${GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}",
+                "${AQUA}$infoTimeModifier: ${GOLD}${rTimeModifier.formatPercent()}",
+                "${AQUA}$infoEuModifier: ${GOLD}${rEuModifier.formatPercent()}",
             ) +
             getInfoDataExtra()
 
@@ -513,75 +518,5 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
 
     override fun loadNBTData(aNBT: NBTTagCompound?) {
         super.loadNBTData(aNBT)
-    }
-
-    /** Mode Container for switching between modes. */
-    protected open class ModeContainerPrimitive(
-        val size: Int,
-    ) {
-        /** Current index of the mode. */
-        var index = 0
-            protected set
-
-        /** Get the next index, return to 0 if reached the end. */
-        fun next(): Int {
-            index = (index + 1) % size
-            return index
-        }
-
-        /** Get the previous index, return to the end if reached 0. */
-        fun prev(): Int {
-            index = (index - 1 + size) % size
-            return index
-        }
-
-        /** Save the mode index to NBT. */
-        fun saveNBTData(
-            aNBT: NBTTagCompound,
-            key: String,
-        ) {
-            aNBT.setInteger(key, index)
-        }
-
-        /** Load the mode index from NBT. */
-        fun loadNBTData(
-            aNBT: NBTTagCompound?,
-            key: String,
-        ) {
-            index = aNBT?.getInteger(key) ?: 0
-        }
-    }
-
-    /**
-     * Mode Container for switching between modes, with additional type support.
-     *
-     * @param T Type of the modes.
-     */
-    protected class ModeContainer<T>(
-        private val modes: Array<out T>,
-    ) : ModeContainerPrimitive(modes.size) {
-        companion object {
-            /** Create a ModeContainer with vararg modes. */
-            inline fun <reified T> of(vararg modes: T): ModeContainer<T> = ModeContainer(modes)
-        }
-
-        /** Current mode. */
-        val current: T
-            get() = modes[index]
-
-        val all: Collection<T>
-            get() = modes.toCollection(mutableListOf())
-
-        /** Get the next mode, return to the first mode if reached the end. */
-        fun nextMode(): T {
-            next()
-            return modes[index]
-        }
-
-        /** Get the previous mode, return to the last mode if reached the first. */
-        fun prevMode(): T {
-            prev()
-            return modes[index]
-        }
     }
 }
