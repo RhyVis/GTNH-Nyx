@@ -114,9 +114,8 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
 
     override fun onFirstTick(aBaseMetaTileEntity: IGregTechTileEntity?) {
         super.onFirstTick(aBaseMetaTileEntity)
-        pUUID = baseMetaTileEntity.ownerUuid
+        pUUID = aBaseMetaTileEntity?.ownerUuid!!
         strongCheckOrAddUser(pUUID)
-        checkNotNull(pUUID) { "UUID NULL!" }
     }
 
     override fun createProcessingLogic(): ProcessingLogic? = null
@@ -137,7 +136,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         return CheckRecipeResultRegistry.SUCCESSFUL
     }
 
-    override fun supportsVoidProtection(): Boolean = false
+    override fun supportsVoidProtection(): Boolean = true
 
     override fun supportsInputSeparation(): Boolean = false
 
@@ -275,7 +274,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         z: Int,
     ) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z)
-        if (baseMetaTileEntity != null && pRunning) {
+        if (baseMetaTileEntity?.isActive == true) {
             tag.setString("pDisplayName", pDisplayName)
             tag.setString("pAmount", GTUtility.formatNumbers(pAmount))
             tag.setInteger("pItemMode", if (pItemMode) 1 else -1)
@@ -287,7 +286,6 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         if (aNBT == null) return
 
         aNBT.setBoolean("pItemMode", pItemMode)
-        aNBT.setBoolean("pRunning", pRunning)
         aNBT.setLong("pAmount", pAmount)
     }
 
@@ -296,7 +294,6 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         if (aNBT == null) return
 
         pItemMode = aNBT.getBoolean("pItemMode")
-        pRunning = aNBT.getBoolean("pRunning")
         pAmount = aNBT.getLong("pAmount")
     }
 }

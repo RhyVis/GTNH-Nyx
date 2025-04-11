@@ -18,11 +18,12 @@ import gregtech.api.recipe.RecipeMaps
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.util.MultiblockTooltipBuilder
 import net.minecraft.block.Block
-import net.minecraft.item.ItemStack
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.DARK_RED
 import net.minecraft.util.EnumChatFormatting.WHITE
+import net.minecraftforge.common.util.ForgeDirection
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.util.RefContainer
@@ -45,13 +46,26 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
     private var pLastControllerID: Int = -1
     private var pControllerStackSize: Int = 0
 
-    private val pValid: Boolean
-        get() = pMode != null && pLastControllerID > 0 && pControllerStackSize > 0
-
     override val rMaxParallel: Int
-        get() = LogarithmicMapper.map(pControllerStackSize)
+        get() = LogarithmicMapper[pControllerStackSize]
 
     override fun getRecipeMap(): RecipeMap<*>? = pMode?.current
+
+    override fun getAvailableRecipeMaps(): Collection<RecipeMap<*>?> = emptyList()
+
+    override fun onScrewdriverRightClick(
+        side: ForgeDirection?,
+        aPlayer: EntityPlayer?,
+        aX: Float,
+        aY: Float,
+        aZ: Float,
+    ) {
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ)
+        pMode?.let { mode ->
+            mode.next()
+            ModLogger.debug("Recipe map: ${mode.currentName}")
+        }
+    }
 
     override fun createProcessingLogic(): ProcessingLogic? =
         object : ProcessingLogic() {
@@ -66,14 +80,14 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         }.setMaxParallelSupplier(::rMaxParallel)
 
     private fun updateRecipeContainer(): Boolean {
-        val id = getMachineID(controllerSlot)
+        val id = controllerSlot?.itemDamage ?: -1
         if (id == pLastControllerID) return true
 
-        getMachineID(controllerSlot).takeIf { it > 0 }?.let { id ->
+        id.takeIf { it > 0 }?.let { id ->
             pMode = getRecipeMap(id)
             pLastControllerID = id
             pControllerStackSize = controllerSlot!!.stackSize
-            ModLogger.debug("Update recipe map: ${pMode?.let { localize(it.current.unlocalizedName) }}")
+            ModLogger.debug("Update recipe map: ${pMode?.currentName}")
             return true
         } ?: run {
             pMode = null
@@ -102,7 +116,7 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
                 .dynamicString {
                     "${WHITE}${localize(
                         "nyx.common.current",
-                    )}: ${pMode?.let { AQUA.toString() + localize(it.current.unlocalizedName) } ?: "${DARK_RED}?"}"
+                    )}: ${pMode?.let { AQUA.toString() + it.currentName } ?: "${DARK_RED}?"}"
                 },
         )
         super.drawTexts(screenElements, inventorySlot)
@@ -118,7 +132,6 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
                 ButtonWidget()
                     .setOnClick { _, _ -> pMode?.next() }
                     .setPlayClickSound(true)
-                    .setUpdateTooltipEveryTick(true)
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CHECKMARK)
                     .setPos(80, 91)
                     .setSize(16, 16)
@@ -166,7 +179,7 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
             return cache
         }
 
-        fun map(i: Int) = mappingCache[i.coerceIn(0, 64)]
+        operator fun get(i: Int) = mappingCache[i.coerceIn(0, 64)]
     }
 
     override fun saveNBTData(aNBT: NBTTagCompound?) {
@@ -179,10 +192,8 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
     companion object {
         private val cache = mutableMapOf<Int, RefContainer<RecipeMap<*>>>()
 
-        fun getMachineID(controller: ItemStack?): Int {
-            if (controller == null) return -1
-            return controller.itemDamage
-        }
+        private val RefContainer<RecipeMap<*>>.currentName: String
+            get() = localize(current.unlocalizedName)
 
         fun getRecipeMap(id: Int): RefContainer<RecipeMap<*>>? {
             if (cache.containsKey(id)) return cache[id]
