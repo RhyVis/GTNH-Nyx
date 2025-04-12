@@ -86,7 +86,7 @@ nyx.machine.copier.gui.t.0=物品模式
 nyx.machine.copier.gui.t.1=流体模式
 nyx.machine.copier.gui.t.2=复制数量
 
-nyx.machine.proxy.name=PROXY
+nyx.machine.proxy.name=PROXY (WIP)
 nyx.machine.proxy.type=执行代理
 nyx.machine.proxy.gui.t.0=切换模式
 nyx.machine.proxy.gui.t.1=更新配方

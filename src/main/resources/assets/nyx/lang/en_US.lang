@@ -86,7 +86,7 @@ nyx.machine.copier.gui.t.0=Item Mode
 nyx.machine.copier.gui.t.1=Fluid Mode
 nyx.machine.copier.gui.t.2=Copy Size
 
-nyx.machine.proxy.name=PROXY
+nyx.machine.proxy.name=PROXY (WIP)
 nyx.machine.proxy.type=Functional Proxy
 nyx.machine.proxy.gui.t.0=Next Mode
 nyx.machine.proxy.gui.t.1=Update Recipe
