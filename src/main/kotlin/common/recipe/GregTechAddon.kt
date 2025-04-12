@@ -112,11 +112,11 @@ class GTEasyWirelessRecipes : RecipePool() {
 
                 newRecipe {
                     itemInputs(
-                        tier.getDynamoHatch(1),
+                        tier.getDynamoHatch4A(1),
                         tier.getCircuit(3),
                         tier.getComponent(Tier.Component.Emitter, 2),
                         tier.getComponent(Tier.Component.Sensor, 2),
-                        ic(23),
+                        ic(22),
                     )
                     fluidInputs(tier.getIngotSolder(16))
                     itemOutputs(tier.getLaserDynamoWireless(1))
