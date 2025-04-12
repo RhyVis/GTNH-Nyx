@@ -1,7 +1,7 @@
 package rhynia.nyx.common.mte.base
 
 import com.google.common.math.LongMath
-import gregtech.api.enums.GTValues
+import gregtech.api.enums.GTValues.V
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation
@@ -17,7 +17,6 @@ import net.minecraftforge.common.util.ForgeDirection
 import tectech.thing.metaTileEntity.Textures
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti
-import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessMulti
 import java.math.BigInteger
 import java.util.UUID
 import kotlin.math.min
@@ -46,13 +45,23 @@ class NyxHatchWirelessEnergy :
             StatCollector.translateToLocal("nyx.wirelessExt.tooltip.1"),
             StatCollector.translateToLocal("nyx.wirelessExt.tooltip.2"),
             "${StatCollector.translateToLocal("gt.blockmachines.hatch.energytunnel.desc.1")}: ${YELLOW}${
-                GTUtility.formatNumbers(aAmp * GTValues.V[aTier])
+                GTUtility.formatNumbers(aAmp * V[aTier])
             }${GRAY}EU/t",
         ),
         aAmp,
     )
 
+    constructor(
+        aName: String?,
+        aTier: Int,
+        aAmp: Int,
+        aDescription: Array<String?>?,
+        aTextures: Array<Array<Array<ITexture?>?>?>?,
+    ) : super(aName, aTier, aAmp, aDescription, aTextures)
+
     private val textureOverlay: Array<ITexture> by lazy { mapTextureSet(Amperes) }
+
+    private val vol: Long get() = V[mTier.toInt()]
 
     override fun getTexturesActive(aBaseTexture: ITexture?): Array<ITexture?> = arrayOf(aBaseTexture, textureOverlay[mTier.toInt()])
 
@@ -70,18 +79,18 @@ class NyxHatchWirelessEnergy :
 
     override fun isValidSlot(aIndex: Int): Boolean = false
 
-    override fun getMinimumStoredEU(): Long = Amperes * GTValues.V[mTier.toInt()]
+    override fun getMinimumStoredEU(): Long = Amperes * vol
 
-    override fun maxEUInput(): Long = GTValues.V[mTier.toInt()]
+    override fun maxEUInput(): Long = vol
 
-    override fun maxEUStore(): Long = (totalStorage(GTValues.V[mTier.toInt()]) / (2 * helper.overflowDivisor) * Amperes).toLong()
+    override fun maxEUStore(): Long = (totalStorage(vol) / (2 * helper.overflowDivisor) * Amperes).toLong()
 
     override fun maxAmperesIn(): Long = Amperes.toLong()
 
     override fun maxWorkingAmperesIn(): Long = Amperes.toLong()
 
     override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity? =
-        MTEHatchWirelessMulti(mName, mTier.toInt(), Amperes, mDescriptionArray, mTextures)
+        NyxHatchWirelessEnergy(mName, mTier.toInt(), Amperes, mDescriptionArray, mTextures)
 
     override fun allowPullStack(
         aBaseMetaTileEntity: IGregTechTileEntity?,
@@ -154,7 +163,32 @@ class NyxHatchWirelessDynamo :
         aAmp,
     )
 
+    constructor(
+        aName: String?,
+        aTier: Int,
+        aAmp: Int,
+        aDescription: Array<String?>?,
+        aTextures: Array<Array<Array<ITexture?>?>?>?,
+    ) : super(aName, aTier, aAmp, aDescription, aTextures)
+
     private val textureOverlay: Array<ITexture> by lazy { mapTextureSet(Amperes) }
+
+    private val vol: Long get() = V[mTier.toInt()]
+
+    override fun onWireCutterRightClick(
+        side: ForgeDirection?,
+        wrenchingSide: ForgeDirection?,
+        aPlayer: EntityPlayer?,
+        aX: Float,
+        aY: Float,
+        aZ: Float,
+        aTool: ItemStack?,
+    ): Boolean {
+        if (tryStoringEnergy()) {
+            GTUtility.sendChatToPlayer(aPlayer, "Instantly transferred energy to the network.")
+        }
+        return false
+    }
 
     override fun getTexturesActive(aBaseTexture: ITexture?): Array<ITexture?> = arrayOf(aBaseTexture, textureOverlay[mTier.toInt()])
 
@@ -166,24 +200,20 @@ class NyxHatchWirelessDynamo :
 
     override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean = true
 
-    override fun isEnetInput(): Boolean = false
+    override fun isEnetOutput(): Boolean = false
 
     override fun isInputFacing(side: ForgeDirection?): Boolean = side == baseMetaTileEntity.frontFacing
 
     override fun isValidSlot(aIndex: Int): Boolean = false
 
-    override fun getMinimumStoredEU(): Long = Amperes * GTValues.V[mTier.toInt()]
+    override fun getMinimumStoredEU(): Long = Amperes * vol
 
-    override fun maxEUInput(): Long = GTValues.V[mTier.toInt()]
+    override fun maxEUOutput(): Long = vol
 
-    override fun maxEUStore(): Long = (totalStorage(GTValues.V[mTier.toInt()]) / (2 * helper.overflowDivisor) * Amperes).toLong()
-
-    override fun maxAmperesIn(): Long = Amperes.toLong()
-
-    override fun maxWorkingAmperesIn(): Long = Amperes.toLong()
+    override fun maxEUStore(): Long = (totalStorage(vol) / (2 * helper.overflowDivisor) * Amperes).toLong()
 
     override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity =
-        MTEHatchWirelessMulti(mName, mTier.toInt(), Amperes, mDescriptionArray, mTextures)
+        NyxHatchWirelessDynamo(mName, mTier.toInt(), Amperes, mDescriptionArray, mTextures)
 
     override fun allowPullStack(
         aBaseMetaTileEntity: IGregTechTileEntity?,
@@ -219,9 +249,11 @@ class NyxHatchWirelessDynamo :
         }
     }
 
-    private fun tryStoringEnergy() {
-        if (!WirelessNetworkManager.addEUToGlobalEnergyMap(ownerUUID, baseMetaTileEntity.storedEU)) return
+    private fun tryStoringEnergy(): Boolean {
+        if (euVar < 0) euVar = 0
+        if (euVar == 0L || !WirelessNetworkManager.addEUToGlobalEnergyMap(ownerUUID, euVar)) return false
         euVar = 0
+        return true
     }
 }
 
@@ -231,9 +263,9 @@ private class TransferHelper(
     amp: Int,
     tier: Byte,
 ) {
-    val transferPerOpt: BigInteger =
+    private val transferPerOpt: BigInteger =
         BigInteger
-            .valueOf(amp * GTValues.V[tier.toInt()])
+            .valueOf(amp * V[tier.toInt()])
             .multiply(BigInteger.valueOf(IWirelessEnergyHatchInformation.ticks_between_energy_addition))
 
     val overflowDivisor: Double = getOverflowDivisor(transferPerOpt)
