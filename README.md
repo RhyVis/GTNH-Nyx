@@ -18,11 +18,11 @@ This is more like a **cheat mod**. Technical skills and balances are out of mind
 
 ## Features
 
-Features may need to be enabled in the `nyx.cfg` config file.
+Features may need to be enabled in the `config\Nyx\*.cfg` config file.
 
 - Some kind of simple material system, to be used in the future.
 
-- Mixin Edits: See in config file section `MIXIN` for more details. Mainly for AE and BartWorks (now in GT5U).
+- Mixin Edits: See `Nyx\MIXIN.cfg` for more details. Mainly for AE and BartWorks (now in GT5U).
 
 - Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. **Config `RECIPE_EASY_WIRELESS`**
 
@@ -44,7 +44,7 @@ Features may need to be enabled in the `nyx.cfg` config file.
 ### Note: About ID Conflicts
 
 I don't know how other self-made mods take MTE IDs, the only thing I can do is to give a config file used
-to change ID offset of this mod. If you have ID conflicts, please change the offset in `config/nyx.cfg`,
+to change ID offset of this mod. If you have ID conflicts, please change the offset in `config\Nyx\MACHINE.cfg`,
 and restart the game. The log I set will also show the ID conflicts.
 
 By the time I updated to 2.7.3, community mods below I have tested and made compatible with Nyx:
