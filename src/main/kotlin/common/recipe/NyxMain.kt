@@ -6,6 +6,7 @@ import gregtech.api.enums.Materials
 import gregtech.api.recipe.RecipeMaps
 import rhynia.nyx.api.enums.RecipeValues.INGOT
 import rhynia.nyx.api.enums.ref.SolderMaterial
+import rhynia.nyx.api.enums.ref.SuperConductorPart
 import rhynia.nyx.api.enums.ref.Tier
 import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.api.recipe.dsl.withRecipeMap
@@ -33,6 +34,24 @@ class NyxMainRecipes : RecipePool() {
                 )
                 eut(Tier.MV)
                 durSec(4)
+            }
+            newRecipeIf(ConfigMachine.MTE_PROXY) {
+                itemInputs(
+                    Tier.HV.getHull(6),
+                    Tier.HV.getCircuit(6),
+                    Tier.HV.getComponent(Tier.Component.Sensor, 6),
+                    Materials.Titanium.getPlates(6),
+                    SuperConductorPart.EV.getWire(6),
+                    ic(6),
+                )
+                fluidInputs(
+                    SolderMaterial.T1.getFluidStack(6 * INGOT),
+                )
+                itemOutputs(
+                    NyxItemList.ControllerProxy.get(1),
+                )
+                eut(Tier.HV)
+                durSec(6)
             }
         }
     }

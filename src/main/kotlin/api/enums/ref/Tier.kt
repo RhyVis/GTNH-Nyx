@@ -395,6 +395,78 @@ enum class Tier(
             else -> fail("$this 64A energy hatch")
         }
 
+    fun getDynamoHatch4A(amount: Int): ItemStack =
+        when (this) {
+            EV,
+            IV,
+            LuV,
+            ZPM,
+            UV,
+            UHV,
+            UEV,
+            UIV,
+            UMV,
+            UXV,
+            ->
+                try {
+                    CustomItemList
+                        .valueOf("eM_dynamoMulti4_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("4A dynamo hatch $this", e.message ?: "Unknown error")
+                }
+
+            else -> fail("$this 4A dynamo hatch")
+        }
+
+    fun getDynamoHatch16A(amount: Int): ItemStack =
+        when (this) {
+            EV,
+            IV,
+            LuV,
+            ZPM,
+            UV,
+            UHV,
+            UEV,
+            UIV,
+            UMV,
+            UXV,
+            ->
+                try {
+                    CustomItemList
+                        .valueOf("eM_dynamoMulti16_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("16A dynamo hatch $this", e.message ?: "Unknown error")
+                }
+
+            else -> fail("$this 16A dynamo hatch")
+        }
+
+    fun getDynamoHatch64A(amount: Int): ItemStack =
+        when (this) {
+            EV,
+            IV,
+            LuV,
+            ZPM,
+            UV,
+            UHV,
+            UEV,
+            UIV,
+            UMV,
+            UXV,
+            ->
+                try {
+                    CustomItemList
+                        .valueOf("eM_dynamoMulti64_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("64A dynamo hatch $this", e.message ?: "Unknown error")
+                }
+
+            else -> fail("$this 64A dynamo hatch")
+        }
+
     fun getDynamoWireless(amount: Int): ItemStack =
         try {
             ItemList
@@ -489,6 +561,31 @@ enum class Tier(
                         .get(amount.toLong())
                 } catch (e: Exception) {
                     fail("Laser target $this", e.message ?: "Unknown error")
+                }
+        }
+
+    fun getLaserSource(
+        tier:
+            @Range(from = 1, to = 7)
+            Int,
+        amount: Int,
+    ): ItemStack =
+        when (this) {
+            ULV,
+            LV,
+            MV,
+            HV,
+            EV,
+            MAX,
+            -> fail("$this level $tier laser source")
+
+            else ->
+                try {
+                    CustomItemList
+                        .valueOf("eM_dynamoTunnel${tier}_$this")
+                        .get(amount.toLong())
+                } catch (e: Exception) {
+                    fail("Laser source $this", e.message ?: "Unknown error")
                 }
         }
 
