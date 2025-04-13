@@ -53,6 +53,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: Edge Build
+          body: Dynamic build of 'edge' branch
           tag_name: edge-build
           prerelease: true
           files: |
