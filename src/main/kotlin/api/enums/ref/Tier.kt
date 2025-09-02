@@ -134,7 +134,7 @@ enum class Tier(
 
     private fun fail(vararg info: String): ItemStack =
         "Attempting to get $info, but it doesn't exist!".let {
-            ModLogger.error(it.toString())
+            ModLogger.error(it)
             NyxDebugItem.reportInfo(it)
         }
 

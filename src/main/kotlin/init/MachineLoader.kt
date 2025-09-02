@@ -115,7 +115,7 @@ object MachineLoader : Loader {
     }
 
     private fun printMteIds() {
-        buildList<Pair<Int, String>> {
+        buildList {
             GregTechAPI.METATILEENTITIES.forEachIndexed { i, mte ->
                 if (mte != null) add(i to "${mte.localName}(${mte.javaClass.simpleName})")
             }

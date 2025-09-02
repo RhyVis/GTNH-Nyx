@@ -95,7 +95,7 @@ class NyxGeneratedMetaItem(
         }
     }
 
-    override fun getItemStackDisplayName(stack: ItemStack): String? {
+    override fun getItemStackDisplayName(stack: ItemStack): String {
         val material = MaterialMap[stack.itemDamage.toShort()] ?: NyxMaterials.Null
         return typedName.replace("%material", material.displayName)
     }

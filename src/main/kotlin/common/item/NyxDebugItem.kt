@@ -8,7 +8,7 @@ import rhynia.nyx.api.util.RegistryUtil
 import rhynia.nyx.init.registry.ItemRecord
 
 class NyxDebugItem : AbstractMetaItem("DebugItem") {
-    override fun getItemStackDisplayName(stack: ItemStack?): String? =
+    override fun getItemStackDisplayName(stack: ItemStack?): String =
         stack?.let { "Debug Item - ${it.itemDamage}" } ?: "Debug Item - Unknown"
 
     override val iconName: String get() = "ultimate"

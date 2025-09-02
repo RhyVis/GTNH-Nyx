@@ -4,6 +4,11 @@ import gregtech.api.enums.GTValues
 import gregtech.api.interfaces.IRecipeMap
 import gregtech.api.util.GTRecipeBuilder
 
+/**
+ * Alias for standard recipe builder in [GTValues.RA].
+ */
+val RecipeBuilder: GTRecipeBuilder get() = GTValues.RA.stdBuilder()
+
 fun withRecipeMap(
     backend: IRecipeMap,
     block: RecipeMapBuilder.() -> Unit,
@@ -15,8 +20,7 @@ class RecipeMapBuilder(
     val backend: IRecipeMap,
 ) {
     inline fun newRecipe(block: GTRecipeBuilder.() -> Unit) {
-        GTValues.RA
-            .stdBuilder()
+        RecipeBuilder
             .apply(block)
             .noOptimize()
             .addTo(backend)
@@ -27,8 +31,7 @@ class RecipeMapBuilder(
         block: GTRecipeBuilder.() -> Unit,
     ) {
         if (condition) {
-            GTValues.RA
-                .stdBuilder()
+            RecipeBuilder
                 .apply(block)
                 .noOptimize()
                 .addTo(backend)
@@ -40,8 +43,7 @@ class RecipeMapBuilder(
         block: GTRecipeBuilder.(T) -> Unit,
     ) {
         for (item in iter) {
-            GTValues.RA
-                .stdBuilder()
+            RecipeBuilder
                 .apply { block(this, item) }
                 .noOptimize()
                 .addTo(backend)

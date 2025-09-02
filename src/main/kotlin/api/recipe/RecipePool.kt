@@ -1,7 +1,6 @@
 package rhynia.nyx.api.recipe
 
 import bartworks.system.material.Werkstoff
-import gregtech.api.enums.GTValues
 import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods
 import gregtech.api.enums.OrePrefixes
@@ -45,9 +44,6 @@ abstract class RecipePool {
                 NyxItemList::class.java
             }
         }
-
-        /** Alias for RA.stdBuilder() in [GTValues] */
-        val builder: GTRecipeBuilder get() = GTValues.RA.stdBuilder()
 
         /**
          * Use enum constants to get the item
