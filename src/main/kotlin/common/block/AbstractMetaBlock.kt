@@ -35,7 +35,7 @@ abstract class AbstractMetaBlock(
     protected val tooltipMap: MutableMap<Int, Array<out String>?> = mutableMapOf()
     protected val metaSet: MutableSet<Int> = mutableSetOf()
 
-    override fun getUnlocalizedName(): String = super.getUnlocalizedName()
+    // override fun getUnlocalizedName(): String = super.getUnlocalizedName()
 
     override fun damageDropped(meta: Int): Int = meta
 

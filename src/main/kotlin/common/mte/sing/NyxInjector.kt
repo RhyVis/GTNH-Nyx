@@ -216,7 +216,7 @@ class NyxInjector :
 
     override fun maxAmperesOut(): Long = (if (producing) abs(aMP.toDouble()).toInt() else 0).toLong()
 
-    override fun maxEUInput(): Long = (if (producing) 0 else Int.Companion.MAX_VALUE).toLong()
+    override fun maxEUInput(): Long = (if (producing) 0 else Int.MAX_VALUE).toLong()
 
     override fun maxEUOutput(): Long = (if (producing) abs(eUT.toDouble()).toInt() else 0).toLong()
 
@@ -245,15 +245,13 @@ class NyxInjector :
                     .setPos(43, 4),
             ).widget(
                 TextWidget
-                    .dynamicString(
-                        Supplier {
-                            "TIER: " + VN[GTUtility.getTier(abs(eUT.toDouble()).toLong()).toInt()]
-                        },
-                    ).setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .dynamicString {
+                        "TIER: " + VN[GTUtility.getTier(abs(eUT.toDouble()).toLong()).toInt()]
+                    }.setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setPos(46, 22),
             ).widget(
                 TextWidget
-                    .dynamicString(Supplier { "SUM: " + aMP.toLong() * this.eUT })
+                    .dynamicString { "SUM: " + aMP.toLong() * this.eUT }
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setPos(46, 46),
             )
@@ -264,7 +262,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_LARGE,
-            { it -> eUT -= it!! },
+            { eUT -= it!! },
             512,
             64,
             7,
@@ -273,7 +271,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_LARGE,
-            { it -> eUT /= it!! },
+            { eUT /= it!! },
             512,
             64,
             7,
@@ -282,7 +280,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_LARGE,
-            { it -> aMP -= it!! },
+            { aMP -= it!! },
             512,
             64,
             7,
@@ -291,7 +289,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_LARGE,
-            { it -> aMP /= it!! },
+            { aMP /= it!! },
             512,
             64,
             7,
@@ -301,7 +299,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_SMALL,
-            { it -> eUT -= it!! },
+            { eUT -= it!! },
             16,
             1,
             25,
@@ -310,7 +308,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_SMALL,
-            { it -> eUT /= it!! },
+            { eUT /= it!! },
             16,
             2,
             25,
@@ -319,7 +317,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_SMALL,
-            { it -> aMP -= it!! },
+            { aMP -= it!! },
             16,
             1,
             25,
@@ -328,7 +326,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_MINUS_SMALL,
-            { it -> aMP /= it!! },
+            { aMP /= it!! },
             16,
             2,
             25,
@@ -338,7 +336,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_SMALL,
-            { it -> eUT += it!! },
+            { eUT += it!! },
             16,
             1,
             133,
@@ -347,7 +345,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_SMALL,
-            { it -> eUT *= it!! },
+            { eUT *= it!! },
             16,
             2,
             133,
@@ -356,7 +354,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_SMALL,
-            { it -> aMP += it!! },
+            { aMP += it!! },
             16,
             1,
             133,
@@ -365,7 +363,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_SMALL,
-            { it -> aMP *= it!! },
+            { aMP *= it!! },
             16,
             2,
             133,
@@ -375,7 +373,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_LARGE,
-            { it -> eUT += it!! },
+            { eUT += it!! },
             512,
             64,
             151,
@@ -384,7 +382,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_LARGE,
-            { it -> eUT *= it!! },
+            { eUT *= it!! },
             512,
             64,
             151,
@@ -393,7 +391,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_LARGE,
-            { it -> aMP += it!! },
+            { aMP += it!! },
             512,
             64,
             151,
@@ -402,7 +400,7 @@ class NyxInjector :
         addChangeNumberButton(
             builder,
             GTUITextures.OVERLAY_BUTTON_PLUS_LARGE,
-            { it -> aMP *= it!! },
+            { aMP *= it!! },
             512,
             64,
             151,
@@ -450,7 +448,7 @@ class NyxInjector :
     ) {
         builder.widget(
             ButtonWidget()
-                .setOnClick { clickData, widget ->
+                .setOnClick { clickData, _ ->
                     setter.accept(if (clickData!!.shift) changeNumberShift else changeNumber)
                     producing = aMP.toLong() * this.eUT >= 0
                 }.setBackground(GTUITextures.BUTTON_STANDARD, overlay)

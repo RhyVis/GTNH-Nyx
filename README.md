@@ -1,6 +1,6 @@
 # Nyx: Balance-less GTNH Experience
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.7.3-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.7.4-blue)
 
 English | [中文](README-ZH.md)
 
@@ -18,11 +18,11 @@ This is more like a **cheat mod**. Technical skills and balances are out of mind
 
 ## Features
 
-Features may need to be enabled in the `nyx.cfg` config file.
+Features may need to be enabled in the `config\Nyx\*.cfg` config file.
 
 - Some kind of simple material system, to be used in the future.
 
-- Mixin Edits: See in config file section `MIXIN` for more details. Mainly for AE and BartWorks (now in GT5U).
+- Mixin Edits: See `Nyx\MIXIN.cfg` for more details. Mainly for AE and BartWorks (now in GT5U).
 
 - Added wireless lasers for IV~UMV, and easy recipes for all wireless energy. **Config `RECIPE_EASY_WIRELESS`**
 
@@ -41,10 +41,24 @@ Features may need to be enabled in the `nyx.cfg` config file.
 
 ![copier_1](img/copier_1.png)
 
+- PROXY: Proxy machines by using its RecipeMap.
+
+  **Config: `MTE_PROXY`**
+
+> Note: It's supposed to be used with 'simple' machines, which works without any special conditions and custom
+> processing.
+> The work process is likely some you can see in NEI.
+
+![proxy_1](img/proxy_1.png)
+
+> The parallel limit is controlled by the machine amount in the controller.
+> Calculated by `amount ^ (log10(Integer.MAX_VALUE) / log10(64))`, simplify as `amount ^ 3.98`;
+> so 1 machine = 1 parallel, 64 machines = Integer.MAX_VALUE parallel.
+
 ### Note: About ID Conflicts
 
 I don't know how other self-made mods take MTE IDs, the only thing I can do is to give a config file used
-to change ID offset of this mod. If you have ID conflicts, please change the offset in `config/nyx.cfg`,
+to change ID offset of this mod. If you have ID conflicts, please change the offset in `config\Nyx\MACHINE.cfg`,
 and restart the game. The log I set will also show the ID conflicts.
 
 By the time I updated to 2.7.3, community mods below I have tested and made compatible with Nyx:

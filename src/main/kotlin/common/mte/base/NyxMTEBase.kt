@@ -69,13 +69,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 override fun mteClasses(): List<Class<out IMetaTileEntity>> = listOf(MTEHatchDynamoMulti::class.java)
 
                 override fun adder(): IGTHatchAdder<in NyxMTEBase<*>> =
-                    object : IGTHatchAdder<NyxMTEBase<*>> {
-                        override fun apply(
-                            c: NyxMTEBase<*>,
-                            t: IGregTechTileEntity?,
-                            i: Short?,
-                        ): Boolean = c.addDynamoToMachineList(t, i!!.toInt())
-                    }
+                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addDynamoToMachineList(t, i!!.toInt()) }
 
                 override fun name(): String = "ExoticDynamo"
 

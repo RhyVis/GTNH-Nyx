@@ -6,7 +6,7 @@ import gtPlusPlus.core.material.MaterialsAlloy.INDALLOY_140
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.api.interfaces.RefHelper
 
-@Suppress("UNUSED", "SpellCheckingInspection")
+@Suppress("UNUSED")
 enum class SolderMaterial : RefHelper {
     /** [SolderingAlloy] */
     T1,

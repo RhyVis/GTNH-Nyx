@@ -83,13 +83,13 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         val id = controllerSlot?.itemDamage ?: -1
         if (id == pLastControllerID) return true
 
-        id.takeIf { it > 0 }?.let { id ->
+        if (id > 0) {
             pMode = getRecipeMap(id)
             pLastControllerID = id
             pControllerStackSize = controllerSlot!!.stackSize
             ModLogger.debug("Update recipe map: ${pMode?.currentName}")
             return true
-        } ?: run {
+        } else {
             pMode = null
             pLastControllerID = -1
             pControllerStackSize = 0

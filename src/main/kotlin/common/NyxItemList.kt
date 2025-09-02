@@ -89,7 +89,7 @@ enum class NyxItemList(
 
     override fun hasBeenSet(): Boolean = !mHasNotBeenSet
 
-    override fun isStackEqual(aStack: Any?): Boolean = isStackEqual(aStack, false, false)
+    override fun isStackEqual(aStack: Any?): Boolean = isStackEqual(aStack, aWildcard = false, aIgnoreNBT = false)
 
     override fun isStackEqual(
         aStack: Any?,

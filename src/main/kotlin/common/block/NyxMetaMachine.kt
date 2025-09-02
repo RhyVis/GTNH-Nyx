@@ -20,7 +20,7 @@ open class NyxMetaMachine(
         setResistance(5.0f)
     }
 
-    protected val wrenchLevel: Int
+    protected open val wrenchLevel: Int
         @ApiStatus.OverrideOnly get() = 1
 
     override fun onBlockAdded(

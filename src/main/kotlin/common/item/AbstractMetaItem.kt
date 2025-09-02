@@ -41,7 +41,7 @@ abstract class AbstractMetaItem(
 
     override fun getMetadata(meta: Int): Int = meta
 
-    override fun getUnlocalizedName(): String = super.getUnlocalizedName()
+    // override fun getUnlocalizedName(): String = super.getUnlocalizedName()
 
     override fun getUnlocalizedName(stack: ItemStack?): String = "${super.getUnlocalizedName()}.${stack?.itemDamage ?: 0}"
 

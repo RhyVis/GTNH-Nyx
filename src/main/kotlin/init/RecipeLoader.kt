@@ -3,7 +3,6 @@ package rhynia.nyx.init
 import rhynia.nyx.DevEnv
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.Loader
-import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.common.material.generation.NyxMaterialLoader
 import rhynia.nyx.common.material.generation.NyxMaterialRecipeLoader
 import rhynia.nyx.common.recipe.GTAddonRecipes
@@ -30,7 +29,7 @@ object RecipeLoader : Loader {
 
     private fun loadCommonRecipes() {
         ModLogger.info("Loading common recipes...")
-        arrayOf<RecipePool>(
+        arrayOf(
             GTAddonRecipes(),
             GTEasyWirelessRecipes(),
             NyxMainRecipes(),

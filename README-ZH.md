@@ -1,6 +1,6 @@
-# Nyx: 专门破坏GTNH平衡
+# Nyx: 没有人类了
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.7.3-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.7.4-blue)
 
 [English](README.md) | 中文
 
@@ -18,11 +18,11 @@ WIP重构阶段。
 
 ## 功能
 
-功能可能需要在`nyx.cfg`配置文件中启用。
+功能可能需要在`config\Nyx\*.cfg`配置文件中启用。
 
 - 一些简单的材料系统，未来可能会用到。
 
-- Mixin修改：请参见配置文件中的`MIXIN`部分以获取更多详细信息。主要用于AE和BartWorks（现在在GT5U中）。
+- Mixin修改：参见配置文件`MIXIN.cfg`以获取更多详细信息。主要用于AE和BartWorks（现在在GT5U中）。
 
 - 添加了IV~UMV无线激光，以及所有无线能源仓的简单配方。**配置: `RECIPE_EASY_WIRELESS`**
 
@@ -41,9 +41,23 @@ WIP重构阶段。
 
 ![copier_1](img/copier_1.png)
 
+- PROXY：通过使用RecipeMap代理机器
+
+  **配置：`MTE_PROXY`**
+
+> 注意：它适用于"简单"的机器，这些机器无需任何特殊条件和自定义处理即可工作。
+> 工作过程类似于你在NEI中看到的那样。
+
+![proxy_1](img/proxy_1.png)
+
+> 并行限制由控制器中的机器数量控制。
+> 计算方式为 `数量 ^ (log10(Integer.MAX_VALUE) / log10(64))`，简化为 `数量 ^ 3.98`；
+> 所以1台机器 = 1个并行，64台机器 = Integer.MAX_VALUE个并行。
+
 ### 注意：关于ID冲突
 
-我不知道别的私货是怎么占MTE的ID的，大概我只能保证和官方ID不冲突，和我常用的不冲突，你可以在冲突的时候，到`config/nyx.cfg`里调整ID偏移量，
+我不知道别的私货是怎么占MTE的ID的，大概我只能保证和官方ID不冲突，和我常用的不冲突，你可以在冲突的时候，到
+`config\Nyx\MACHINE.cfg`里调整ID偏移量，
 重启游戏。我设置的日志也会显示ID冲突的具体目标。
 
 上面表格中的Mod与对应版本在我更新2.7.3版本的时候没有冲突

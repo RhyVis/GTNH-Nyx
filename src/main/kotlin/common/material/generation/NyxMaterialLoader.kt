@@ -59,7 +59,7 @@ object NyxMaterialLoader : Loader {
         if (!material.flagFluid) return
         material.fluidStateMap.forEach { (state, info) ->
             val (name, temperature) = info
-            var fluid =
+            val fluid =
                 if (FluidRegistry.isFluidRegistered(name)) {
                     ModLogger.warn(
                         "Fluid $name is already registered! Referring it as ${material.internalName}'s fluid.",
@@ -85,7 +85,7 @@ object NyxMaterialLoader : Loader {
         MaterialSet
             .flatMap { it.getFinalOrePrefixes() }
             .toSortedSet(compareBy { it.ordinal })
-            .also { ModLogger.debug("Used ore prefixes: ${it.joinToString(", ") { it.name }}") }
+            .also { ModLogger.debug("Used ore prefixes: ${it.joinToString(", ") { p -> p.name }}") }
 
     private fun generateMetaItem() {
         getUsedOrePrefixes().forEach {

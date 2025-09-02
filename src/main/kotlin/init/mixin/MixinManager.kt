@@ -4,6 +4,7 @@ import com.gtnewhorizon.gtnhmixins.ILateMixinLoader
 import com.gtnewhorizon.gtnhmixins.LateMixin
 
 @LateMixin
+@Suppress("UNUSED")
 class MixinManager : ILateMixinLoader {
     override fun getMixinConfig(): String = "mixins.nyx.late.json"
 

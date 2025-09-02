@@ -19,7 +19,7 @@ internal const val MOD_NAME = "Nyx"
 internal val DevEnv: Boolean by lazy { Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean }
 internal val ModLogger: Logger by lazy { LogManager.getLogger(MOD_NAME) }
 
-@Suppress("SpellCheckingInspection")
+@Suppress("SpellCheckingInspection", "UNUSED")
 @Mod(
     modid = MOD_ID,
     name = MOD_NAME,

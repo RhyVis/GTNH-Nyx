@@ -89,7 +89,7 @@ class NyxHatchWirelessEnergy :
 
     override fun maxWorkingAmperesIn(): Long = Amperes.toLong()
 
-    override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity? =
+    override fun newMetaEntity(aTileEntity: IGregTechTileEntity?): MetaTileEntity =
         NyxHatchWirelessEnergy(mName, mTier.toInt(), Amperes, mDescriptionArray, mTextures)
 
     override fun allowPullStack(
