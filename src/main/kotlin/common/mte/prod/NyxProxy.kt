@@ -19,6 +19,7 @@ import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.util.MultiblockTooltipBuilder
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumChatFormatting.AQUA
 import net.minecraft.util.EnumChatFormatting.DARK_RED
@@ -59,8 +60,9 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         aX: Float,
         aY: Float,
         aZ: Float,
+        aTool: ItemStack?,
     ) {
-        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ)
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aTool)
         pMode?.let { mode ->
             mode.next()
             ModLogger.debug("Recipe map: ${mode.currentName}")

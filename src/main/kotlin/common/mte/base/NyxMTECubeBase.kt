@@ -99,7 +99,7 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
         env: ISurvivalBuildEnvironment,
     ): Int {
         if (mMachine) return -1
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             OFFSET_H,

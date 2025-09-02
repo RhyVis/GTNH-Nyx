@@ -88,10 +88,12 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         val infoEuModifier by lazy { localize("nyx.common.info.euModifier") }
     }
 
+    protected val baseMTE get() = baseMetaTileEntity!!
+
     /** Remove maintenance requirement. */
     protected fun removeMaintenance() {
         mHardHammer = true
-        mSoftHammer = true
+        mSoftMallet = true
         mScrewdriver = true
         mCrowbar = true
         mSolderingTool = true
@@ -168,13 +170,13 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             var freeCap: Long = 0
 
             GTUtility.filterValidMTEs(hatches).forEach {
-                freeCap += it.maxEUStore() - it.baseMetaTileEntity.storedEU
+                freeCap += it.maxEUStore() - it.baseMetaTileEntity!!.storedEU
                 if (freeCap > 0) {
                     if (remainingEU >= freeCap) {
                         it.euVar = it.maxEUStore()
                         remainingEU -= freeCap
                     } else {
-                        it.euVar = it.baseMetaTileEntity.storedEU + remainingEU
+                        it.euVar = it.baseMetaTileEntity!!.storedEU + remainingEU
                         return true
                     }
                 }
@@ -260,8 +262,6 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     override fun getMaxEfficiency(aStack: ItemStack?): Int = 100_00
 
     override fun getDamageToComponent(aStack: ItemStack?): Int = 0
-
-    override fun explodesOnComponentBreak(aStack: ItemStack?): Boolean = false
 
     override fun supportsVoidProtection(): Boolean = true
 
@@ -374,16 +374,16 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             ?.let {
                 it as MTEHatchOutputBusME
                 if (amount < Int.MAX_VALUE) {
-                    it.store(item.copy().apply { stackSize = amount.toInt() })
+                    it.storePartial(item.copy() size amount)
                 } else {
                     // For item stacks > Int max.
                     while (amount >= Int.MAX_VALUE) {
-                        it.store(item.copy().apply { stackSize = Int.MAX_VALUE })
+                        it.storePartial(item.copy() size Int.MAX_VALUE)
                         amount -= Int.MAX_VALUE.toLong()
                     }
 
                     if (amount > 0) {
-                        it.store(item.copy().apply { stackSize = amount.toInt() })
+                        it.storePartial(item.copy() size amount)
                     }
                 }
             }

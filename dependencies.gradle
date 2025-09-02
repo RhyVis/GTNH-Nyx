@@ -3,7 +3,7 @@ dependencies {
     implementation(elytraModpackVersion.gtnhdev("Forgelin"))
     implementation(elytraModpackVersion.gtnhdev("GT5-Unofficial"))
     implementation(elytraModpackVersion.gtnhdev("NewHorizonsCoreMod"))
-    implementation(elytraModpackVersion.gtnhdev("GTNH-Intergalactic"))
+    implementation(elytraModpackVersion.gtnhdev("Galaxy-Space-GTNH"))
     implementation(elytraModpackVersion.gtnhdev("Avaritia"))
     implementation(elytraModpackVersion.gtnhdev("Avaritiaddons"))
     implementation(elytraModpackVersion.gtnhdev("Universal-Singularities"))

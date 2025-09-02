@@ -250,10 +250,6 @@ class NyxMaterial(
         vararg prefixes: OrePrefixes =
             arrayOf(
                 OrePrefixes.ingot,
-                OrePrefixes.ingotDouble,
-                OrePrefixes.ingotTriple,
-                OrePrefixes.ingotQuadruple,
-                OrePrefixes.ingotQuintuple,
                 OrePrefixes.ingotHot,
                 OrePrefixes.nugget,
             ),

@@ -10,6 +10,11 @@ import rhynia.nyx.common.item.NyxDebugItem
 infix fun ItemStack.size(amount: Int): ItemStack = this.apply { stackSize = amount }
 
 /**
+ * Set the stack size of an [ItemStack] but not copy it.
+ */
+infix fun ItemStack.size(amount: Long): ItemStack = this.apply { stackSize = amount.toInt() }
+
+/**
  * Copy the [ItemStack] with a new stack size using [copyAmount]
  */
 fun ItemStack.copyAmount(amount: Int): ItemStack = GTUtility.copyAmount(amount, this)

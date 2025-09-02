@@ -106,8 +106,9 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         aX: Float,
         aY: Float,
         aZ: Float,
+        aTool: ItemStack?,
     ) {
-        if (!baseMetaTileEntity.isServerSide) return
+        if (!baseMTE.isServerSide) return
         pItemMode = !pItemMode
         GTUtility.sendChatToPlayer(aPlayer, "COPIER Mode: ${if (pItemMode) "Item" else "Fluid"}")
     }
@@ -215,7 +216,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                         StatCollector.translateToLocalFormatted("nyx.machine.copier.waila.0", pDisplayName)
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
-                    .setEnabled { baseMetaTileEntity.isActive },
+                    .setEnabled { baseMTE.isActive },
             ).widget(
                 TextWidget
                     .dynamicString {
@@ -225,7 +226,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                         )
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
-                    .setEnabled { baseMetaTileEntity.isActive },
+                    .setEnabled { baseMTE.isActive },
             ).widget(
                 TextWidget
                     .dynamicString {
@@ -236,7 +237,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                         }
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
-                    .setEnabled { baseMetaTileEntity.isActive },
+                    .setEnabled { baseMTE.isActive },
             )
     }
 

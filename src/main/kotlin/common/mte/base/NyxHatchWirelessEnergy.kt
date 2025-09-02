@@ -1,13 +1,15 @@
+@file:Suppress("DEPRECATION")
+
 package rhynia.nyx.common.mte.base
 
 import com.google.common.math.LongMath
 import gregtech.api.enums.GTValues.V
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation
 import gregtech.api.metatileentity.MetaTileEntity
 import gregtech.api.util.GTUtility
 import gregtech.common.misc.WirelessNetworkManager
+import gregtech.common.misc.WirelessNetworkManager.totalStorage
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting.GRAY
@@ -21,9 +23,7 @@ import java.math.BigInteger
 import java.util.UUID
 import kotlin.math.min
 
-class NyxHatchWirelessEnergy :
-    MTEHatchEnergyMulti,
-    IWirelessEnergyHatchInformation {
+class NyxHatchWirelessEnergy : MTEHatchEnergyMulti {
     private val helper = TransferHelper(Amperes, mTier)
     private var ownerUUID: UUID? = null
 
@@ -67,15 +67,13 @@ class NyxHatchWirelessEnergy :
 
     override fun getTexturesInactive(aBaseTexture: ITexture?): Array<ITexture?> = arrayOf(aBaseTexture, textureOverlay[mTier.toInt()])
 
-    override fun isSimpleMachine(): Boolean = true
-
     override fun isFacingValid(facing: ForgeDirection?): Boolean = true
 
     override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean = true
 
     override fun isEnetInput(): Boolean = false
 
-    override fun isInputFacing(side: ForgeDirection?): Boolean = side == baseMetaTileEntity.frontFacing
+    override fun isInputFacing(side: ForgeDirection?): Boolean = side == baseMetaTileEntity!!.frontFacing
 
     override fun isValidSlot(aIndex: Int): Boolean = false
 
@@ -127,7 +125,7 @@ class NyxHatchWirelessEnergy :
     }
 
     private fun tryFetchingEnergy() {
-        val currentEU = baseMetaTileEntity.storedEU
+        val currentEU = baseMetaTileEntity!!.storedEU
         val maxEU = maxEUStore()
         val euToTransfer = min(maxEU - currentEU, helper.transferPerOptLong)
         if (euToTransfer <= 0) return // nothing to transfer
@@ -137,9 +135,7 @@ class NyxHatchWirelessEnergy :
     }
 }
 
-class NyxHatchWirelessDynamo :
-    MTEHatchDynamoMulti,
-    IWirelessEnergyHatchInformation {
+class NyxHatchWirelessDynamo : MTEHatchDynamoMulti {
     private val helper = TransferHelper(Amperes, mTier)
     private var ownerUUID: UUID? = null
 
@@ -194,15 +190,13 @@ class NyxHatchWirelessDynamo :
 
     override fun getTexturesInactive(aBaseTexture: ITexture?): Array<ITexture?> = arrayOf(aBaseTexture, textureOverlay[mTier.toInt()])
 
-    override fun isSimpleMachine(): Boolean = true
-
     override fun isFacingValid(facing: ForgeDirection?): Boolean = true
 
     override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean = true
 
     override fun isEnetOutput(): Boolean = false
 
-    override fun isInputFacing(side: ForgeDirection?): Boolean = side == baseMetaTileEntity.frontFacing
+    override fun isInputFacing(side: ForgeDirection?): Boolean = side == baseMetaTileEntity!!.frontFacing
 
     override fun isValidSlot(aIndex: Int): Boolean = false
 
@@ -266,7 +260,7 @@ private class TransferHelper(
     private val transferPerOpt: BigInteger =
         BigInteger
             .valueOf(amp * V[tier.toInt()])
-            .multiply(BigInteger.valueOf(IWirelessEnergyHatchInformation.ticks_between_energy_addition))
+            .multiply(BigInteger.valueOf(WirelessNetworkManager.ticks_between_energy_addition))
 
     val overflowDivisor: Double = getOverflowDivisor(transferPerOpt)
 
@@ -282,10 +276,10 @@ private class TransferHelper(
 
     val actualTicksBetweenEnergyAddition =
         if (overflowDivisor > 1) {
-            (IWirelessEnergyHatchInformation.ticks_between_energy_addition / (overflowDivisor * 2))
+            (WirelessNetworkManager.ticks_between_energy_addition / (overflowDivisor * 2))
                 .toLong()
         } else {
-            IWirelessEnergyHatchInformation.ticks_between_energy_addition
+            WirelessNetworkManager.ticks_between_energy_addition
         }
 }
 

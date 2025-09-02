@@ -22,7 +22,6 @@ class RecipeMapBuilder(
     inline fun newRecipe(block: GTRecipeBuilder.() -> Unit) {
         RecipeBuilder
             .apply(block)
-            .noOptimize()
             .addTo(backend)
     }
 
@@ -33,7 +32,6 @@ class RecipeMapBuilder(
         if (condition) {
             RecipeBuilder
                 .apply(block)
-                .noOptimize()
                 .addTo(backend)
         }
     }
@@ -45,7 +43,6 @@ class RecipeMapBuilder(
         for (item in iter) {
             RecipeBuilder
                 .apply { block(this, item) }
-                .noOptimize()
                 .addTo(backend)
         }
     }

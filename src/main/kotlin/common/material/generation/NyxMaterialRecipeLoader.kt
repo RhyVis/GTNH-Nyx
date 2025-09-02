@@ -3,7 +3,6 @@ package rhynia.nyx.common.material.generation
 import bartworks.client.textures.PrefixTextureLinker
 import bartworks.util.BWColorUtil.getDyeFromColor
 import cpw.mods.fml.common.FMLCommonHandler
-import gregtech.api.GregTechAPI
 import gregtech.api.enums.FluidState
 import gregtech.api.enums.ItemList
 import gregtech.api.enums.Materials
@@ -43,8 +42,6 @@ import gregtech.api.recipe.RecipeMaps.packagerRecipes
 import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTModHandler
 import gregtech.api.util.GTUtility
-import gregtech.common.GTProxy
-import gregtech.common.covers.CoverLens
 import net.minecraftforge.fluids.FluidContainerRegistry
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
@@ -229,7 +226,7 @@ class NyxMaterialRecipeLoader(
                 .of(
                     Textures.BlockIcons.MACHINE_CASINGS[2][0],
                     TextureFactory.of(Textures.BlockIcons.OVERLAY_LENS, mat.color, false),
-                ).let { GregTechAPI.registerCover(mat.get(lens), it, CoverLens(dye.mIndex, it)) }
+                ) // .let { GregTechAPI.registerCover(mat.get(lens), it, CoverLens(dye.mIndex, it)) }
 
             OreDictionary.getOres("craftingLens${dye.name.replace("\\s".toRegex(), "")}}").forEach {
                 it.stackSize = 0
@@ -285,12 +282,12 @@ class NyxMaterialRecipeLoader(
 
             GTModHandler.addCraftingRecipe(
                 mat.get(stick, 2),
-                GTProxy.tBits,
+                GTModHandler.RecipeBits.BITS_STD,
                 arrayOf("s", "X", 'X', mat.get(stickLong)),
             )
             GTModHandler.addCraftingRecipe(
                 mat.get(stick),
-                GTProxy.tBits,
+                GTModHandler.RecipeBits.BITS_STD,
                 arrayOf("f ", " X", 'X', mat.get(gem)),
             )
 
@@ -309,7 +306,7 @@ class NyxMaterialRecipeLoader(
                     } else {
                         TextureFactory.of(set.mTextures[block.mTextureIndex.toInt()], mat.color, false)
                     }
-                ).let { GregTechAPI.registerCover(mat.getPlate(), it, null) }
+                ) // .let { GregTechAPI.registerCover(mat.getPlate(), it, null) }
             }
         }
 
@@ -317,12 +314,12 @@ class NyxMaterialRecipeLoader(
             if (mat.flagMisc) {
                 GTModHandler.addCraftingRecipe(
                     mat.get(stick, 2),
-                    GTProxy.tBits,
+                    GTModHandler.RecipeBits.BITS_STD,
                     arrayOf("s", "X", 'X', mat.get(stickLong)),
                 )
                 GTModHandler.addCraftingRecipe(
                     mat.get(stick),
-                    GTProxy.tBits,
+                    GTModHandler.RecipeBits.BITS_STD,
                     arrayOf("f ", " X", 'X', mat.get(ingot)),
                 )
 
@@ -350,12 +347,12 @@ class NyxMaterialRecipeLoader(
             }
             GTModHandler.addCraftingRecipe(
                 mat.get(plate),
-                GTProxy.tBits,
+                GTModHandler.RecipeBits.BITS_STD,
                 arrayOf("h", "X", "X", 'X', mat.get(ingot)),
             )
             GTModHandler.addCraftingRecipe(
                 mat.get(foil, 2),
-                GTProxy.tBits,
+                GTModHandler.RecipeBits.BITS_STD,
                 arrayOf("hX", 'X', mat.get(plate)),
             )
 
@@ -398,11 +395,11 @@ class NyxMaterialRecipeLoader(
             .duration(max(1, mat.mass * 2))
             .eut(60)
             .addTo(hammerRecipes)
-        GregTechAPI.registerCover(
-            mat.get(plateDouble),
-            TextureFactory.of(mat.textureSet.mTextures[72], mat.color, false),
-            null,
-        )
+//        GregTechAPI.registerCover(
+//            mat.get(plateDouble),
+//            TextureFactory.of(mat.textureSet.mTextures[72], mat.color, false),
+//            null,
+//        )
     }
 
     private fun loadMiscRecipes() {
@@ -428,7 +425,7 @@ class NyxMaterialRecipeLoader(
         // Screw
         GTModHandler.addCraftingRecipe(
             mat.get(screw),
-            GTProxy.tBits,
+            GTModHandler.RecipeBits.BITS_STD,
             arrayOf("fX", "X ", 'X', mat.get(bolt)),
         )
         RecipeBuilder
@@ -443,7 +440,7 @@ class NyxMaterialRecipeLoader(
         // Ring
         GTModHandler.addCraftingRecipe(
             mat.get(ring),
-            GTProxy.tBits,
+            GTModHandler.RecipeBits.BITS_STD,
             arrayOf("h ", "fX", 'X', mat.get(stick)),
         )
         RecipeBuilder
@@ -456,7 +453,7 @@ class NyxMaterialRecipeLoader(
         // Gear
         GTModHandler.addCraftingRecipe(
             mat.get(gearGt),
-            GTProxy.tBits,
+            GTModHandler.RecipeBits.BITS_STD,
             arrayOf("SPS", "PwP", "SPS", 'P', mat.get(plate), 'S', mat.get(stick)),
         )
         RecipeBuilder
@@ -469,7 +466,7 @@ class NyxMaterialRecipeLoader(
         // Small Gear
         GTModHandler.addCraftingRecipe(
             mat.get(OrePrefixes.gearGtSmall),
-            GTProxy.tBits,
+            GTModHandler.RecipeBits.BITS_STD,
             arrayOf(" S ", "hPx", " S ", 'S', mat.get(stick), 'P', mat.get(plate)),
         )
         RecipeBuilder
