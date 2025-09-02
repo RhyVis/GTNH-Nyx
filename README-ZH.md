@@ -1,6 +1,6 @@
-# Nyx: 专门破坏GTNH平衡
+# Nyx: 没有人类了
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.7.3-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.7.4-blue)
 
 [English](README.md) | 中文
 
@@ -40,6 +40,19 @@ WIP重构阶段。
 > 每5秒工作一次，可以在配置中通过`MTE_COPIER_TICK`进行更改。
 
 ![copier_1](img/copier_1.png)
+
+- PROXY：通过使用RecipeMap代理机器
+
+  **配置：`MTE_PROXY`**
+
+> 注意：它适用于"简单"的机器，这些机器无需任何特殊条件和自定义处理即可工作。
+> 工作过程类似于你在NEI中看到的那样。
+
+![proxy_1](img/proxy_1.png)
+
+> 并行限制由控制器中的机器数量控制。
+> 计算方式为 `数量 ^ (log10(Integer.MAX_VALUE) / log10(64))`，简化为 `数量 ^ 3.98`；
+> 所以1台机器 = 1个并行，64台机器 = Integer.MAX_VALUE个并行。
 
 ### 注意：关于ID冲突
 
