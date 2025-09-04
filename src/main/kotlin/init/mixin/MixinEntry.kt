@@ -31,8 +31,6 @@ enum class MixinEntry(
         toMod(BartWorks)
         condition = ConfigMixin::MIXIN_BW_MEGA_NO_AIR_CHECK
     }),
-
-    // spotless:on
     ;
 
     private val builder = MixinBuilder().apply(actions)

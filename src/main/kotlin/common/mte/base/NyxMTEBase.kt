@@ -69,7 +69,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 override fun mteClasses(): List<Class<out IMetaTileEntity>> = listOf(MTEHatchDynamoMulti::class.java)
 
                 override fun adder(): IGTHatchAdder<in NyxMTEBase<*>> =
-                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addDynamoToMachineList(t, i!!.toInt()) }
+                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addDynamoToMachineList(t, i.toInt()) }
 
                 override fun name(): String = "ExoticDynamo"
 
@@ -105,7 +105,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     private val mExoticDynamoHatches: MutableList<MTEHatchDynamoMulti> = mutableListOf()
 
     /** Universal Hatch Adder */
-    override fun addToMachineList(
+    final override fun addToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean =
@@ -118,14 +118,14 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         aBaseCasingIndex: Short,
     ): Boolean = super.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
 
-    override fun addEnergyInputToMachineList(
+    final override fun addEnergyInputToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean =
         super.addEnergyInputToMachineList(aTileEntity, aBaseCasingIndex) ||
             addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex)
 
-    override fun addDynamoToMachineList(
+    final override fun addDynamoToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean {
@@ -155,7 +155,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return false
     }
 
-    override fun addEnergyOutputMultipleDynamos(
+    final override fun addEnergyOutputMultipleDynamos(
         aEU: Long,
         aAllowMixedVoltageDynamos: Boolean,
     ): Boolean {
@@ -190,7 +190,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return false
     }
 
-    override fun clearHatches() {
+    final override fun clearHatches() {
         super.clearHatches()
         mExoticDynamoHatches.clear()
     }
