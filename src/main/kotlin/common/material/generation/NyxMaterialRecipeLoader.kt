@@ -52,7 +52,7 @@ import rhynia.nyx.api.enums.RecipeValues.RECIPE_MV
 import rhynia.nyx.api.enums.RecipeValues.SECOND
 import rhynia.nyx.api.enums.RecipeValues.TICK
 import rhynia.nyx.api.recipe.RecipePool
-import rhynia.nyx.api.recipe.dsl.RecipeBuilder
+import rhynia.nyx.api.recipe.dsl.GRecipeBuilder
 import rhynia.nyx.api.recipe.dsl.shapedRecipe
 import rhynia.nyx.api.recipe.dsl.withRecipeMap
 import rhynia.nyx.common.material.generation.NyxMaterial.Companion.shouldHasCell
@@ -157,14 +157,14 @@ class NyxMaterialRecipeLoader(
             if (mat.flagDust && state in setOf(FluidState.LIQUID, FluidState.MOLTEN)) {
                 val amount = if (state == FluidState.LIQUID) 1000 else 144
                 val eu = if (mat.mass > 128) 64 else 30
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.getDust())
                     .fluidOutputs(mat.getFluidStack(state, amount))
                     .duration(30)
                     .eut(mat.mass)
                     .recipeCategory(RecipeCategories.fluidExtractorRecycling)
                     .addTo(fluidExtractionRecipes)
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(GTUtility.getIntegratedCircuit(1))
                     .itemOutputs(mat.getDust())
                     .fluidInputs(mat.getFluidStack(state, amount))
@@ -188,7 +188,7 @@ class NyxMaterialRecipeLoader(
                 shape("h  ", "W  ")
                 def('W', mat.get(from))
             }
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(from))
                 .itemOutputs(mat.get(result, 2))
                 .duration(3 * SECOND + 4 * TICK)
@@ -197,7 +197,7 @@ class NyxMaterialRecipeLoader(
         }
 
         if (mat.isTypeValid(dustTiny)) {
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(gemChipped))
                 .itemOutputs(mat.get(dustTiny))
                 .duration(3 * SECOND + 4 * TICK)
@@ -207,14 +207,14 @@ class NyxMaterialRecipeLoader(
 
         if (mat.isTypeValid(lens)) {
             if (mat.isTypeValid(plate)) {
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(plate))
                     .itemOutputs(mat.get(lens))
                     .durMin(1)
                     .eut(RECIPE_MV)
                     .addTo(cutterRecipes)
             }
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(gemExquisite))
                 .itemOutputs(mat.get(lens), mat.get(dust, 2))
                 .durMin(2)
@@ -231,28 +231,28 @@ class NyxMaterialRecipeLoader(
             OreDictionary.getOres("craftingLens${dye.name.replace("\\s".toRegex(), "")}}").forEach {
                 it.stackSize = 0
 
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(gemChipped, 3), it)
                     .itemOutputs(mat.get(gemFlawed, 1))
                     .durSec(30)
                     .eut(RECIPE_LV)
                     .addTo(laserEngraverRecipes)
 
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(gemFlawed, 3), it)
                     .itemOutputs(mat.get(gem, 1))
                     .durSec(30)
                     .eut(RECIPE_MV)
                     .addTo(laserEngraverRecipes)
 
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(gem, 3), it)
                     .itemOutputs(mat.get(gemFlawless, 1))
                     .durMin(1)
                     .eut(RECIPE_HV)
                     .addTo(laserEngraverRecipes)
 
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(gemFlawless, 3), it)
                     .itemOutputs(mat.get(gemExquisite, 1))
                     .durMin(2)
@@ -266,14 +266,14 @@ class NyxMaterialRecipeLoader(
         if (!mat.flagPlate) return
 
         if (mat.flagGem && mat.flagMisc && mat.flagDust) {
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.getGem())
                 .itemOutputs(mat.get(stick), mat.get(dustSmall, 2))
                 .duration(max(1, mat.mass * 5))
                 .eut(16)
                 .addTo(latheRecipes)
 
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(stick, 2))
                 .itemOutputs(mat.get(stickLong))
                 .duration(max(1, mat.mass))
@@ -324,7 +324,7 @@ class NyxMaterialRecipeLoader(
                 )
 
                 if (mat.flagDust) {
-                    RecipeBuilder
+                    GRecipeBuilder
                         .itemInputs(mat.get(ingot))
                         .itemOutputs(mat.get(stick), mat.get(dustSmall, 2))
                         .duration(max(1, mat.mass * 5))
@@ -332,13 +332,13 @@ class NyxMaterialRecipeLoader(
                         .addTo(latheRecipes)
                 }
 
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(stick, 2))
                     .itemOutputs(mat.get(stickLong))
                     .duration(max(1, mat.mass))
                     .eut(16)
                     .addTo(hammerRecipes)
-                RecipeBuilder
+                GRecipeBuilder
                     .itemInputs(mat.get(ingot), ItemList.Shape_Extruder_Rod.get(0))
                     .itemOutputs(mat.get(stick, 2))
                     .duration(max(1, mat.mass * 2))
@@ -356,25 +356,25 @@ class NyxMaterialRecipeLoader(
                 arrayOf("hX", 'X', mat.get(plate)),
             )
 
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(ingot), GTUtility.getIntegratedCircuit(1))
                 .itemOutputs(mat.get(plate))
                 .duration(max(1, mat.mass))
                 .eut(24)
                 .addTo(benderRecipes)
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(ingot), GTUtility.getIntegratedCircuit(10))
                 .itemOutputs(mat.get(foil, 4))
                 .duration(max(1, mat.mass * 2))
                 .eut(24)
                 .addTo(benderRecipes)
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(ingot, 3))
                 .itemOutputs(mat.get(plate, 2))
                 .duration(max(1, mat.mass))
                 .eut(16)
                 .addTo(hammerRecipes)
-            RecipeBuilder
+            GRecipeBuilder
                 .itemInputs(mat.get(ingot), ItemList.Shape_Extruder_Plate.get(0))
                 .itemOutputs(mat.get(plate))
                 .duration(max(1, mat.mass * 2))
@@ -382,14 +382,14 @@ class NyxMaterialRecipeLoader(
                 .addTo(extruderRecipes)
         }
 
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(plate), GTUtility.getIntegratedCircuit(1))
             .itemOutputs(mat.get(foil, 4))
             .duration(max(1, mat.mass))
             .eut(24)
             .addTo(benderRecipes)
 
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(ingot, 2), GTUtility.getIntegratedCircuit(2))
             .itemOutputs(mat.get(plateDouble))
             .duration(max(1, mat.mass * 2))
@@ -407,7 +407,7 @@ class NyxMaterialRecipeLoader(
         val volMultiply = 30
 
         // Bolt
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(
                 if (mat.flagGem) mat.get(gem) else mat.get(ingot),
                 ItemList.Shape_Extruder_Bolt.get(0L),
@@ -415,7 +415,7 @@ class NyxMaterialRecipeLoader(
             .duration(max(1, mat.mass * 2))
             .eut(8 * volMultiply)
             .addTo(extruderRecipes)
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(stick))
             .itemOutputs(mat.get(bolt, 4))
             .duration(max(1, mat.mass * 2))
@@ -428,7 +428,7 @@ class NyxMaterialRecipeLoader(
             GTModHandler.RecipeBits.BITS_STD,
             arrayOf("fX", "X ", 'X', mat.get(bolt)),
         )
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(bolt))
             .itemOutputs(mat.get(screw))
             .duration(max(1, mat.mass / 8))
@@ -443,7 +443,7 @@ class NyxMaterialRecipeLoader(
             GTModHandler.RecipeBits.BITS_STD,
             arrayOf("h ", "fX", 'X', mat.get(stick)),
         )
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(ingot), ItemList.Shape_Extruder_Ring.get(0))
             .itemOutputs(mat.get(ring, 4))
             .duration(max(1, mat.mass * 2))
@@ -456,7 +456,7 @@ class NyxMaterialRecipeLoader(
             GTModHandler.RecipeBits.BITS_STD,
             arrayOf("SPS", "PwP", "SPS", 'P', mat.get(plate), 'S', mat.get(stick)),
         )
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(ingot, 4), ItemList.Shape_Extruder_Gear.get(0))
             .itemOutputs(mat.get(gearGt))
             .duration(max(1, mat.mass * 5))
@@ -469,7 +469,7 @@ class NyxMaterialRecipeLoader(
             GTModHandler.RecipeBits.BITS_STD,
             arrayOf(" S ", "hPx", " S ", 'S', mat.get(stick), 'P', mat.get(plate)),
         )
-        RecipeBuilder
+        GRecipeBuilder
             .itemInputs(mat.get(ingot), ItemList.Shape_Extruder_Small_Gear.get(0))
             .itemOutputs(mat.get(OrePrefixes.gearGtSmall))
             .duration(mat.mass)
