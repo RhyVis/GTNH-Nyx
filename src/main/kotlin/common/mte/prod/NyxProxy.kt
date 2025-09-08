@@ -2,6 +2,7 @@ package rhynia.nyx.common.mte.prod
 
 import com.gtnewhorizons.modularui.api.screen.ModularWindow
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext
+import com.gtnewhorizons.modularui.api.widget.Widget
 import com.gtnewhorizons.modularui.common.widget.ButtonWidget
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn
 import com.gtnewhorizons.modularui.common.widget.SlotWidget
@@ -132,32 +133,23 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         super.drawTexts(screenElements, inventorySlot)
     }
 
-    override fun addUIWidgets(
-        builder: ModularWindow.Builder,
-        buildContext: UIBuildContext?,
-    ) {
-        super.addUIWidgets(builder, buildContext)
-        builder
-            .widget(
-                ButtonWidget()
-                    .setOnClick { _, _ -> pMode?.next() }
-                    .setPlayClickSound(true)
-                    .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CHECKMARK)
-                    .setPos(80, 91)
-                    .setSize(16, 16)
-                    .addTooltip(localize("nyx.machine.proxy.gui.t.0"))
-                    .setTooltipShowUpDelay(TOOLTIP_DELAY),
-            ).widget(
-                ButtonWidget()
-                    .setOnClick { _, _ -> updateRecipeContainer() }
-                    .setPlayClickSound(true)
-                    .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_ARROW_GREEN_UP)
-                    .setPos(174, 112)
-                    .setSize(16, 16)
-                    .addTooltip(localize("nyx.machine.proxy.gui.t.1"))
-                    .setTooltipShowUpDelay(TOOLTIP_DELAY),
-            )
-    }
+    override fun addRowUIWidgets(): List<Widget> =
+        listOf(
+            ButtonWidget()
+                .setOnClick { _, _ -> updateRecipeContainer() }
+                .setPlayClickSound(true)
+                .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_ARROW_GREEN_UP)
+                .setSize(16, 16)
+                .addTooltip(localize("nyx.machine.proxy.gui.t.1"))
+                .setTooltipShowUpDelay(TOOLTIP_DELAY),
+            ButtonWidget()
+                .setOnClick { _, _ -> pMode?.next() }
+                .setPlayClickSound(true)
+                .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CHECKMARK)
+                .setSize(16, 16)
+                .addTooltip(localize("nyx.machine.proxy.gui.t.0"))
+                .setTooltipShowUpDelay(TOOLTIP_DELAY),
+        )
 
     override fun loadNBTData(aNBT: NBTTagCompound?) {
         super.loadNBTData(aNBT)

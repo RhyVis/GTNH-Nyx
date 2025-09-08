@@ -1,6 +1,6 @@
 # Nyx: 没有人类了
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.7.4-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.8.0_Beta4-blue)
 
 [English](README.md) | 中文
 

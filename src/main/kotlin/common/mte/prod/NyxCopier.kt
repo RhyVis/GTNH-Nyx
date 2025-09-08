@@ -167,13 +167,12 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
             .addOutputBus()
             .toolTipFinisher(CommonString.NyxMagical)
 
-    override fun addUIWidgets(
+    override fun addCustomUIWidgets(
         builder: ModularWindow.Builder,
         buildContext: UIBuildContext?,
     ) {
-        super.addUIWidgets(builder, buildContext)
-        builder
-            .widget(
+        builder.apply {
+            widget(
                 CycleButtonWidget()
                     .setToggle({ pItemMode }, { pItemMode = it })
                     .setTextureGetter {
@@ -190,7 +189,8 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                     .dynamicTooltip {
                         listOf(StatCollector.translateToLocal("nyx.machine.copier.gui.t.${if (pItemMode) 0 else 1}"))
                     }.setTooltipShowUpDelay(BaseTileEntity.TOOLTIP_DELAY),
-            ).widget(
+            )
+            widget(
                 TextFieldWidget()
                     .setGetterLong { pAmount }
                     .setSetterLong { pAmount = it }
@@ -202,6 +202,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                     .setPos(98, 91)
                     .setSize(96, 16),
             )
+        }
     }
 
     override fun drawTexts(
