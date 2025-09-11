@@ -200,7 +200,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                     .addTooltip(StatCollector.translateToLocal("nyx.machine.copier.gui.t.2"))
                     .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD)
                     .setPos(98, 91)
-                    .setSize(96, 16),
+                    .setSize(70, 16),
             )
         }
     }
