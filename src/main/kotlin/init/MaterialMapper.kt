@@ -55,12 +55,12 @@ object MaterialMapper {
     /**
      * Looks up the material data and ore prefix for the given [ItemStack].
      */
-    operator fun get(itemStack: ItemStack): Pair<MaterialData, OrePrefixes>? = reversedIndex[itemStack.asToken()]
+    fun lookup(itemStack: ItemStack): Pair<MaterialData, OrePrefixes>? = reversedIndex[itemStack.asToken()]
 
     /**
      * Looks up the material data and ore prefix for the given [MetaItemToken].
      */
-    operator fun get(token: MetaItemToken): Pair<MaterialData, OrePrefixes>? = reversedIndex[token]
+    fun lookup(token: MetaItemToken): Pair<MaterialData, OrePrefixes>? = reversedIndex[token]
 
     /**
      * Looks up the material data for the given [ItemStack].

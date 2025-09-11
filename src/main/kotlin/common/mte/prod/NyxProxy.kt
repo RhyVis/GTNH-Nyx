@@ -33,6 +33,7 @@ import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
 import rhynia.nyx.api.util.RefContainer
+import rhynia.nyx.api.util.intObjMapOf
 import rhynia.nyx.api.util.localize
 import rhynia.nyx.api.util.localized
 import rhynia.nyx.common.mte.base.NyxMTECubeBase
@@ -192,7 +193,7 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
     }
 
     object RecipeMapper {
-        private val gtMteCache = mutableMapOf<Int, RefContainer<RecipeMap<*>>?>()
+        private val gtMteCache = intObjMapOf<RefContainer<RecipeMap<*>>?>()
 
         fun getRecipeMap(token: MetaItemToken): RefContainer<RecipeMap<*>>? {
             when (token.item) {
