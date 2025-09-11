@@ -5,13 +5,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureElement
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment
 import com.gtnewhorizon.structurelib.structure.StructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureUtility
-import gregtech.api.enums.HatchElement.Dynamo
-import gregtech.api.enums.HatchElement.Energy
-import gregtech.api.enums.HatchElement.ExoticEnergy
-import gregtech.api.enums.HatchElement.InputBus
-import gregtech.api.enums.HatchElement.InputHatch
-import gregtech.api.enums.HatchElement.OutputBus
-import gregtech.api.enums.HatchElement.OutputHatch
+import gregtech.api.enums.HatchElement
 import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.util.GTUtility
@@ -21,7 +15,7 @@ import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
 
-abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
+abstract class NyxMTECubeWirelessBase<T : NyxMTEWirelessBase<T>> : NyxMTEWirelessBase<T> {
     protected constructor(
         aId: Int,
         aName: String,
@@ -67,12 +61,12 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
     protected open val sCasingHatch: Array<IHatchElement<in T>>
         get() =
             arrayOf(
-                InputBus,
-                InputHatch,
-                OutputBus,
-                OutputHatch,
-                Energy.or(ExoticEnergy),
-                Dynamo.or(ExoticDynamo),
+                HatchElement.InputBus,
+                HatchElement.InputHatch,
+                HatchElement.OutputBus,
+                HatchElement.OutputHatch,
+                HatchElement.Energy.or(HatchElement.ExoticEnergy),
+                HatchElement.Dynamo.or(ExoticDynamo),
             )
 
     final override val sControllerBlock: Pair<Block, Int>

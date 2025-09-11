@@ -5,8 +5,6 @@ import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods
 import gregtech.api.enums.OrePrefixes
 import gregtech.api.interfaces.IItemContainer
-import gregtech.api.recipe.RecipeMap
-import gregtech.api.util.GTRecipe
 import gregtech.api.util.GTRecipeBuilder
 import gregtech.api.util.GTUtility
 import net.minecraft.item.ItemStack
@@ -120,66 +118,4 @@ abstract class RecipePool {
     protected fun NyxMaterial.getBucketMolten(amount: Int): FluidStack = this.getMolten((amount * BUCKET).toInt())
 
     protected fun IItemContainer.getAmountUnsafe(amount: Int): ItemStack = this.get(1).copyAmountUnsafe(amount)
-
-    internal class NyxRecipeBuilder {
-        private var inputItems: Array<ItemStack> = arrayOf()
-        private var outputItems: Array<ItemStack> = arrayOf()
-        private var inputFluids: Array<FluidStack> = arrayOf()
-        private var outputFluids: Array<FluidStack> = arrayOf()
-        private var outputChance: IntArray = IntArray(0)
-        private var eut = 0
-        private var duration = 0
-        private var specialValue = 0
-
-        fun itemInputs(vararg inputItems: ItemStack): NyxRecipeBuilder {
-            if (inputItems.isNotEmpty()) this.inputItems += inputItems
-            return this
-        }
-
-        fun itemOutputs(vararg outputItems: ItemStack): NyxRecipeBuilder {
-            if (outputItems.isNotEmpty()) this.outputItems += outputItems
-            return this
-        }
-
-        fun fluidInputs(vararg inputFluids: FluidStack): NyxRecipeBuilder {
-            if (inputFluids.isNotEmpty()) this.inputFluids += inputFluids
-            return this
-        }
-
-        fun fluidOutputs(vararg outputFluids: FluidStack): NyxRecipeBuilder {
-            if (outputFluids.isNotEmpty()) this.outputFluids += outputFluids
-            return this
-        }
-
-        fun outputChances(vararg outputChance: Int): NyxRecipeBuilder = this.also { this.outputChance = outputChance }
-
-        fun eut(eut: Int): NyxRecipeBuilder = this.also { this.eut = eut }
-
-        fun eut(eut: Long): NyxRecipeBuilder = this.also { this.eut = eut.toInt() }
-
-        fun duration(duration: Int): NyxRecipeBuilder = this.also { this.duration = duration }
-
-        fun durSec(seconds: Int): NyxRecipeBuilder = this.also { this.duration = seconds * SECOND }
-
-        fun specialValue(specialValue: Int): NyxRecipeBuilder = this.also { this.specialValue = specialValue }
-
-        /** Renamed inject method to avoid misuse in lambda calls */
-        internal fun inject(recipeMap: RecipeMap<*>) {
-            GTRecipe(
-                false,
-                inputItems,
-                outputItems,
-                null,
-                outputChance,
-                inputFluids,
-                outputFluids,
-                duration,
-                eut,
-                specialValue,
-            ).apply {
-                mInputs = inputItems.clone()
-                mOutputs = outputItems.clone()
-            }.let { recipeMap.add(it) }
-        }
-    }
 }

@@ -15,3 +15,8 @@ fun localize(
     key: String,
     vararg args: Any,
 ): String = translateToLocalFormatted(key, args)
+
+/**
+ * Shorthand for [translateToLocal]
+ */
+fun String.localized(): String = translateToLocal(this)

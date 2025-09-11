@@ -6,5 +6,6 @@ plugins {
 configurations.configureEach {
     resolutionStrategy {
         exclude(group = "com.github.GTNewHorizons", module = "CodeChickenLib")
+        exclude(group = "net.glease", module = "tc4recipelib")
     }
 }

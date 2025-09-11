@@ -1,6 +1,6 @@
 # Nyx: Balance-less GTNH Experience
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.7.4-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.8.0_Beta4-blue)
 
 English | [中文](README-ZH.md)
 
@@ -54,6 +54,24 @@ Features may need to be enabled in the `config\Nyx\*.cfg` config file.
 > The parallel limit is controlled by the machine amount in the controller.
 > Calculated by `amount ^ (log10(Integer.MAX_VALUE) / log10(64))`, simplify as `amount ^ 3.98`;
 > so 1 machine = 1 parallel, 64 machines = Integer.MAX_VALUE parallel.
+
+- CONVERTER: Convert materials between different OreDicts (e.g. ingotCopper <-> plateCopper).
+
+  **Config: `MTE_CONVERTER`**
+
+<table>
+  <tr>
+    <td><img src="img/converter_1.png" alt="converter_1" width="400"></td>
+    <td><img src="img/converter_2.png" alt="converter_2" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="img/converter_3.png" alt="converter_3" width="400"></td>
+    <td><img src="img/converter_4.png" alt="converter_4" width="400"></td>
+  </tr>
+</table>
+
+> Place the item that represents the OreDict you want to convert to in the controller.
+> Then just input the item you want to convert, and it will output the converted item.
 
 ### Note: About ID Conflicts
 

@@ -1,6 +1,6 @@
 # Nyx: 没有人类了
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.7.4-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.8.0_Beta4-blue)
 
 [English](README.md) | 中文
 
@@ -28,7 +28,7 @@ WIP重构阶段。
 
 ![easy_wireless](img/easy_wireless.png)
 
-- COPIER：复制控制器中的物品
+- 物质定增：复制控制器中的物品
 
   **配置：`MTE_COPIER`**
 
@@ -41,7 +41,7 @@ WIP重构阶段。
 
 ![copier_1](img/copier_1.png)
 
-- PROXY：通过使用RecipeMap代理机器
+- 代理执行：通过使用RecipeMap代理机器
 
   **配置：`MTE_PROXY`**
 
@@ -53,6 +53,24 @@ WIP重构阶段。
 > 并行限制由控制器中的机器数量控制。
 > 计算方式为 `数量 ^ (log10(Integer.MAX_VALUE) / log10(64))`，简化为 `数量 ^ 3.98`；
 > 所以1台机器 = 1个并行，64台机器 = Integer.MAX_VALUE个并行。
+
+- 矿典同步: 将物品在不同矿典之间转换 (e.g. 铜锭 <-> 铜板).
+
+  **Config: `MTE_CONVERTER`**
+
+<table>
+  <tr>
+    <td><img src="img/converter_1.png" alt="converter_1" width="400"></td>
+    <td><img src="img/converter_2.png" alt="converter_2" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="img/converter_3.png" alt="converter_3" width="400"></td>
+    <td><img src="img/converter_4.png" alt="converter_4" width="400"></td>
+  </tr>
+</table>
+
+> 在控制器中放置代表目标矿辞的物品。
+> 输入你想要转换的物品，它将输出转换后的物品。
 
 ### 注意：关于ID冲突
 

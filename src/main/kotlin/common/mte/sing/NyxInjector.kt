@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package rhynia.nyx.common.mte.sing
 
 import com.gtnewhorizons.modularui.api.drawable.IDrawable
@@ -11,7 +13,6 @@ import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
 import gregtech.api.enums.GTValues.VN
 import gregtech.api.enums.Textures
-import gregtech.api.gui.modularui.GTUIInfos
 import gregtech.api.gui.modularui.GTUITextures
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.modularui.IAddGregtechLogo
@@ -164,10 +165,9 @@ class NyxInjector :
         this.aMP = aNBT.getInteger("eAMP")
         wireless = aNBT.getBoolean("eWireless")
         producing = aMP.toLong() * this.eUT >= 0
-        baseMetaTileEntity.isActive = producing
-    }
 
-    override fun isSimpleMachine(): Boolean = false
+        baseMetaTileEntity?.isActive = producing
+    }
 
     override fun onPostTick(
         aBaseMetaTileEntity: IGregTechTileEntity,
@@ -194,7 +194,7 @@ class NyxInjector :
         aBaseMetaTileEntity: IGregTechTileEntity?,
         aPlayer: EntityPlayer?,
     ): Boolean {
-        GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer)
+        openGui(aPlayer)
         return true
     }
 
@@ -208,9 +208,9 @@ class NyxInjector :
 
     override fun isEnetInput(): Boolean = !wireless
 
-    override fun isInputFacing(side: ForgeDirection?): Boolean = !producing && side != baseMetaTileEntity.frontFacing
+    override fun isInputFacing(side: ForgeDirection?): Boolean = !producing && side != baseMetaTileEntity!!.frontFacing
 
-    override fun isOutputFacing(side: ForgeDirection?): Boolean = producing && side != baseMetaTileEntity.frontFacing
+    override fun isOutputFacing(side: ForgeDirection?): Boolean = producing && side != baseMetaTileEntity!!.frontFacing
 
     override fun maxAmperesIn(): Long = (if (producing) 0 else abs(aMP.toDouble()).toInt()).toLong()
 
@@ -227,7 +227,7 @@ class NyxInjector :
             (abs((eUT.toLong() * this.aMP).toDouble()).toInt() shl 2).toLong()
         }
 
-    override fun maxProgresstime(): Int = baseMetaTileEntity.universalEnergyCapacity.toInt()
+    override fun maxProgresstime(): Int = baseMetaTileEntity!!.universalEnergyCapacity.toInt()
 
     override fun addGregTechLogo(builder: ModularWindow.Builder) {
         builder.widget(DrawableWidget().setDrawable(Logo32).setSize(17, 17).setPos(113, 56))

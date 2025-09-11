@@ -73,9 +73,9 @@ nyx.common.info.maxParallel=最大并行
 nyx.common.info.timeModifier=时间乘数
 nyx.common.info.euModifier=能量消耗
 
-nyx.machine.copier.name=COPIER
+nyx.machine.copier.name=物质定增
 nyx.machine.copier.type=物质复制器
-nyx.machine.copier.info.0=COPIER的控制器
+nyx.machine.copier.info.0=物质定增的控制器
 nyx.machine.copier.info.1=复制控制器槽位中的物品, 并输出到AE网络.
 nyx.machine.copier.info.2=在控制器输入每次复制的数量.
 nyx.machine.copier.waila.0=§f复制原型: §b%s
@@ -86,10 +86,17 @@ nyx.machine.copier.gui.t.0=物品模式
 nyx.machine.copier.gui.t.1=流体模式
 nyx.machine.copier.gui.t.2=复制数量
 
-nyx.machine.proxy.name=PROXY (WIP)
-nyx.machine.proxy.type=执行代理
+nyx.machine.proxy.name=代理执行 (WIP)
+nyx.machine.proxy.type=处理阵列
 nyx.machine.proxy.gui.t.0=切换模式
 nyx.machine.proxy.gui.t.1=更新配方
+
+nyx.machine.converter.name=矿典同步
+nyx.machine.converter.type=矿辞转换器
+nyx.machine.converter.info.0=矿典同步的控制器
+nyx.machine.converter.info.1=将输入物品转换为指定矿辞的物品.
+nyx.machine.converter.info.2=在控制器槽位放入一个物品作为转换目标.
+nyx.machine.converter.gui.t.0=目标矿辞
 
 nyx.machine.injector.name=INJECTOR
 

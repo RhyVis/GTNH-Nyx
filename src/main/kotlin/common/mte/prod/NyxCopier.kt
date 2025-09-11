@@ -106,8 +106,9 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         aX: Float,
         aY: Float,
         aZ: Float,
+        aTool: ItemStack?,
     ) {
-        if (!baseMetaTileEntity.isServerSide) return
+        if (!baseMTE.isServerSide) return
         pItemMode = !pItemMode
         GTUtility.sendChatToPlayer(aPlayer, "COPIER Mode: ${if (pItemMode) "Item" else "Fluid"}")
     }
@@ -166,13 +167,12 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
             .addOutputBus()
             .toolTipFinisher(CommonString.NyxMagical)
 
-    override fun addUIWidgets(
+    override fun addCustomUIWidgets(
         builder: ModularWindow.Builder,
         buildContext: UIBuildContext?,
     ) {
-        super.addUIWidgets(builder, buildContext)
-        builder
-            .widget(
+        builder.apply {
+            widget(
                 CycleButtonWidget()
                     .setToggle({ pItemMode }, { pItemMode = it })
                     .setTextureGetter {
@@ -189,7 +189,8 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                     .dynamicTooltip {
                         listOf(StatCollector.translateToLocal("nyx.machine.copier.gui.t.${if (pItemMode) 0 else 1}"))
                     }.setTooltipShowUpDelay(BaseTileEntity.TOOLTIP_DELAY),
-            ).widget(
+            )
+            widget(
                 TextFieldWidget()
                     .setGetterLong { pAmount }
                     .setSetterLong { pAmount = it }
@@ -199,8 +200,9 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                     .addTooltip(StatCollector.translateToLocal("nyx.machine.copier.gui.t.2"))
                     .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD)
                     .setPos(98, 91)
-                    .setSize(96, 16),
+                    .setSize(70, 16),
             )
+        }
     }
 
     override fun drawTexts(
@@ -215,7 +217,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                         StatCollector.translateToLocalFormatted("nyx.machine.copier.waila.0", pDisplayName)
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
-                    .setEnabled { baseMetaTileEntity.isActive },
+                    .setEnabled { baseMTE.isActive },
             ).widget(
                 TextWidget
                     .dynamicString {
@@ -225,7 +227,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                         )
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
-                    .setEnabled { baseMetaTileEntity.isActive },
+                    .setEnabled { baseMTE.isActive },
             ).widget(
                 TextWidget
                     .dynamicString {
@@ -236,7 +238,7 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                         }
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
-                    .setEnabled { baseMetaTileEntity.isActive },
+                    .setEnabled { baseMTE.isActive },
             )
     }
 

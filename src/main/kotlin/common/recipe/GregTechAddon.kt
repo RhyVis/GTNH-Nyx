@@ -12,23 +12,23 @@ class GTAddonRecipes : RecipePool() {
     override fun loadRecipes() {
         withRecipeMap(RecipeMaps.electrolyzerRecipes) {
             newRecipe {
-                itemInputs(
-                    Materials.Redstone.getDust(32),
-                )
-                itemOutputs(
-                    NyxMaterials.Restone.getDust(24),
-                )
+                input {
+                    +Materials.Redstone.getDust(32)
+                }
+                output {
+                    +NyxMaterials.Restone.getDust(24)
+                }
                 durSec(4)
                 eut(Tier.LV)
             }
             newRecipe {
-                itemInputs(
-                    Materials.Redstone.getBlocks(16),
-                )
-                itemOutputs(
-                    NyxMaterials.Restone.getDust(64),
-                    NyxMaterials.Restone.getDust(64),
-                )
+                input {
+                    +Materials.Redstone.getBlocks(16)
+                }
+                output {
+                    +NyxMaterials.Restone.getDust(64)
+                    +NyxMaterials.Restone.getDust(64)
+                }
                 durSec(8)
                 eut(Tier.MV)
             }

@@ -2,6 +2,9 @@ package rhynia.nyx.common.mte.base
 
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
+import com.gtnewhorizons.modularui.api.screen.ModularWindow
+import com.gtnewhorizons.modularui.api.screen.UIBuildContext
+import com.gtnewhorizons.modularui.api.widget.Widget
 import gregtech.api.enums.Textures
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE
@@ -55,7 +58,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     ) : super(
         aID,
         aName,
-        StatCollector.translateToLocal("$aName.name"),
+        localize("$aName.name"),
     )
 
     protected constructor(aName: String) : super(aName)
@@ -69,7 +72,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 override fun mteClasses(): List<Class<out IMetaTileEntity>> = listOf(MTEHatchDynamoMulti::class.java)
 
                 override fun adder(): IGTHatchAdder<in NyxMTEBase<*>> =
-                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addDynamoToMachineList(t, i!!.toInt()) }
+                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addDynamoToMachineList(t, i.toInt()) }
 
                 override fun name(): String = "ExoticDynamo"
 
@@ -88,10 +91,12 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         val infoEuModifier by lazy { localize("nyx.common.info.euModifier") }
     }
 
+    protected val baseMTE get() = baseMetaTileEntity!!
+
     /** Remove maintenance requirement. */
     protected fun removeMaintenance() {
         mHardHammer = true
-        mSoftHammer = true
+        mSoftMallet = true
         mScrewdriver = true
         mCrowbar = true
         mSolderingTool = true
@@ -103,7 +108,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     private val mExoticDynamoHatches: MutableList<MTEHatchDynamoMulti> = mutableListOf()
 
     /** Universal Hatch Adder */
-    override fun addToMachineList(
+    final override fun addToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean =
@@ -116,14 +121,14 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         aBaseCasingIndex: Short,
     ): Boolean = super.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
 
-    override fun addEnergyInputToMachineList(
+    final override fun addEnergyInputToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean =
         super.addEnergyInputToMachineList(aTileEntity, aBaseCasingIndex) ||
             addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex)
 
-    override fun addDynamoToMachineList(
+    final override fun addDynamoToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean {
@@ -153,7 +158,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return false
     }
 
-    override fun addEnergyOutputMultipleDynamos(
+    final override fun addEnergyOutputMultipleDynamos(
         aEU: Long,
         aAllowMixedVoltageDynamos: Boolean,
     ): Boolean {
@@ -168,13 +173,13 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             var freeCap: Long = 0
 
             GTUtility.filterValidMTEs(hatches).forEach {
-                freeCap += it.maxEUStore() - it.baseMetaTileEntity.storedEU
+                freeCap += it.maxEUStore() - it.baseMetaTileEntity!!.storedEU
                 if (freeCap > 0) {
                     if (remainingEU >= freeCap) {
                         it.euVar = it.maxEUStore()
                         remainingEU -= freeCap
                     } else {
-                        it.euVar = it.baseMetaTileEntity.storedEU + remainingEU
+                        it.euVar = it.baseMetaTileEntity!!.storedEU + remainingEU
                         return true
                     }
                 }
@@ -188,7 +193,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         return false
     }
 
-    override fun clearHatches() {
+    final override fun clearHatches() {
         super.clearHatches()
         mExoticDynamoHatches.clear()
     }
@@ -260,8 +265,6 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     override fun getMaxEfficiency(aStack: ItemStack?): Int = 100_00
 
     override fun getDamageToComponent(aStack: ItemStack?): Int = 0
-
-    override fun explodesOnComponentBreak(aStack: ItemStack?): Boolean = false
 
     override fun supportsVoidProtection(): Boolean = true
 
@@ -374,16 +377,16 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             ?.let {
                 it as MTEHatchOutputBusME
                 if (amount < Int.MAX_VALUE) {
-                    it.store(item.copy().apply { stackSize = amount.toInt() })
+                    it.storePartial(item.copy() size amount)
                 } else {
                     // For item stacks > Int max.
                     while (amount >= Int.MAX_VALUE) {
-                        it.store(item.copy().apply { stackSize = Int.MAX_VALUE })
+                        it.storePartial(item.copy() size Int.MAX_VALUE)
                         amount -= Int.MAX_VALUE.toLong()
                     }
 
                     if (amount > 0) {
-                        it.store(item.copy().apply { stackSize = amount.toInt() })
+                        it.storePartial(item.copy() size amount)
                     }
                 }
             }
@@ -513,4 +516,43 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     override fun loadNBTData(aNBT: NBTTagCompound?) {
         super.loadNBTData(aNBT)
     }
+
+    final override fun addUIWidgets(
+        builder: ModularWindow.Builder,
+        buildContext: UIBuildContext?,
+    ) {
+        super.addUIWidgets(builder, buildContext)
+        addRowUIWidgets()?.let {
+            var startingX = 80
+            it.forEach { w ->
+                w.setPos(startingX, 91)
+                builder.widget(w)
+                startingX += 18
+            }
+        }
+        addCustomUIWidgets(builder, buildContext)
+    }
+
+    /**
+     * Add a row of custom UI widgets to the machine UI.
+     * The widgets will be placed starting from (80, 91) with a gap of 18 pixels.
+     *
+     * Widgets added here don't need to set their position.
+     *
+     * Return null if no widgets are to be added.
+     */
+    open fun addRowUIWidgets(): List<Widget>? = null
+
+    /**
+     * Add custom UI widgets to the machine UI.
+     */
+    open fun addCustomUIWidgets(
+        builder: ModularWindow.Builder,
+        buildContext: UIBuildContext?,
+    ) { }
+
+    /**
+     * Get a localization key prefixed with the machine name.
+     */
+    protected fun locPrefixed(key: String): String = "$mName.$key"
 }

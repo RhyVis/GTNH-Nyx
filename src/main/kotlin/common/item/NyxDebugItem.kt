@@ -26,14 +26,20 @@ class NyxDebugItem : AbstractMetaItem("DebugItem") {
     companion object {
         private var cursor = 0
         private val nextCursor get() = cursor++
+        private val debugItems = mutableMapOf<String, ItemStack>()
 
-        private val noInfo = arrayOf("No info provided.")
+        private const val NO_INFO_STR = "No info provided."
+        private val noInfo = arrayOf(NO_INFO_STR)
 
         fun reportInfo(vararg info: String): ItemStack {
-            val cur = nextCursor
-            val info = info.takeIf { it.isNotEmpty() } ?: noInfo
-            ModLogger.warn("Debug item $cur info: ${info.joinToString(", ")}")
-            return RegistryUtil.registerMetaItem(ItemRecord.DebugItem, cur, info.takeIf { it.isNotEmpty() } ?: noInfo)
+            val infoKey = info.takeIf { it.isNotEmpty() }?.joinToString("_") ?: NO_INFO_STR
+            return debugItems
+                .getOrPut(infoKey) {
+                    val cur = nextCursor
+                    val info = info.takeIf { it.isNotEmpty() } ?: noInfo
+                    ModLogger.warn("Debug item $cur info: ${info.joinToString(", ")}")
+                    RegistryUtil.registerMetaItem(ItemRecord.DebugItem, cur, info)
+                }.copy()
         }
     }
 }

@@ -25,6 +25,10 @@ public class ConfigMachine {
     @Config.DefaultBoolean(true)
     public static boolean MTE_PROXY;
 
+    @Config.Comment("MTE Converter enable.")
+    @Config.DefaultBoolean(true)
+    public static boolean MTE_CONVERTER;
+
     @Config.Comment("MTE Injector enable.")
     @Config.DefaultBoolean(true)
     public static boolean MTE_INJECTOR;

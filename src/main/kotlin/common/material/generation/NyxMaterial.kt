@@ -15,6 +15,7 @@ import net.minecraft.util.StatCollector
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.ModLogger
+import rhynia.nyx.api.util.debugItem
 import rhynia.nyx.common.NyxItemList
 import rhynia.nyx.common.material.MaterialColors
 
@@ -176,20 +177,13 @@ class NyxMaterial(
         amount: Int = 1,
     ): ItemStack =
         NyxMaterialLoader.ItemMap[orePrefix]?.let {
-            if (!isTypeValid(orePrefix)) {
-                return let {
-                    ModLogger.error(
-                        "Material $internalName does not have a valid item for ore prefix $orePrefix",
-                    )
-                    NyxItemList.TestItem01.get(0)
-                }
+            if (isTypeValid(orePrefix)) {
+                ItemStack(it, amount, id.toInt())
+            } else {
+                debugItem("Material $internalName does not have a valid item for ore prefix $orePrefix")
             }
-            ItemStack(it, amount, id.toInt())
         }
-            ?: let {
-                ModLogger.error("OrePrefix $orePrefix is not registered by any material")
-                NyxItemList.TestItem01.get(0)
-            }
+            ?: debugItem("OrePrefix $orePrefix is not registered by any material")
 
     // endregion
 
@@ -250,10 +244,6 @@ class NyxMaterial(
         vararg prefixes: OrePrefixes =
             arrayOf(
                 OrePrefixes.ingot,
-                OrePrefixes.ingotDouble,
-                OrePrefixes.ingotTriple,
-                OrePrefixes.ingotQuadruple,
-                OrePrefixes.ingotQuintuple,
                 OrePrefixes.ingotHot,
                 OrePrefixes.nugget,
             ),

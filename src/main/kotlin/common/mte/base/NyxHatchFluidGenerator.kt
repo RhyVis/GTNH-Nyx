@@ -64,8 +64,6 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
     override fun getTexturesInactive(aBaseTexture: ITexture?): Array<ITexture?> =
         arrayOf(aBaseTexture, TextureFactory.of(Textures.BlockIcons.OVERLAY_FUSION1))
 
-    override fun isSimpleMachine(): Boolean = true
-
     override fun isFacingValid(facing: ForgeDirection?): Boolean = true
 
     override fun isAccessAllowed(aPlayer: EntityPlayer?): Boolean = true
@@ -116,8 +114,6 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
         return mMaxProgresstime - mProgresstime
     }
 
-    override fun getTankPressure(): Int = 100
-
     override fun getCapacity(): Int = 2_000_000_000
 
     override fun canTankBeEmptied(): Boolean = true
@@ -134,7 +130,8 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
         aFluid: FluidStack?,
         doFill: Boolean,
     ): Int {
-        if (aFluid == null ||
+        if (baseMetaTileEntity == null ||
+            aFluid == null ||
             aFluid.getFluid().id <= 0 ||
             aFluid.amount <= 0 ||
             aFluid.getFluid() != fluidToGenerate ||
@@ -147,14 +144,14 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
             if (aFluid.amount <= getCapacity()) {
                 if (doFill) {
                     setFillableStack(aFluid.copy())
-                    baseMetaTileEntity.markDirty()
+                    baseMetaTileEntity!!.markDirty()
                 }
                 return aFluid.amount
             }
             if (doFill) {
                 setFillableStack(aFluid.copy())
                 fillableStack.amount = getCapacity()
-                baseMetaTileEntity.markDirty()
+                baseMetaTileEntity!!.markDirty()
             }
             return getCapacity()
         }
@@ -165,7 +162,7 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
         if (aFluid.amount <= space) {
             if (doFill) {
                 fillableStack.amount += aFluid.amount
-                baseMetaTileEntity.markDirty()
+                baseMetaTileEntity!!.markDirty()
             }
             return aFluid.amount
         }
@@ -182,12 +179,6 @@ abstract class NyxHatchFluidGenerator : MTEHatchInput {
         arg0: ForgeDirection?,
         arg1: FluidStack?,
         arg2: Boolean,
-    ): Int = 0
-
-    override fun fill_default(
-        aSide: ForgeDirection?,
-        aFluid: FluidStack?,
-        doFill: Boolean,
     ): Int = 0
 
     override fun saveNBTData(aNBT: NBTTagCompound) {

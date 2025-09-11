@@ -11,6 +11,15 @@ fun NBTTagCompound.getItem(key: String): ItemStack =
         "ItemStack not found in NBT: $key",
     )
 
+fun NBTTagCompound.getItemOrNull(key: String): ItemStack? = GTUtility.loadItem(this, key)
+
+fun NBTTagCompound.setItem(
+    key: String,
+    itemStack: ItemStack,
+) {
+    GTUtility.saveItem(this, key, itemStack)
+}
+
 fun NBTTagCompound.getFluid(key: String): FluidStack = GTUtility.loadFluid(this, key) ?: NyxMaterials.Null.getFluid(1)
 
 fun NBTTagCompound.setFluid(

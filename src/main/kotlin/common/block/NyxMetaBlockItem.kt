@@ -2,12 +2,12 @@ package rhynia.nyx.common.block
 
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
-import gregtech.api.util.GTLanguageManager
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import rhynia.nyx.api.interfaces.block.GregTechTileInfo
+import rhynia.nyx.api.util.localize
 import rhynia.nyx.client.NyxTab
 
 @Suppress("SpellCheckingInspection")
@@ -42,7 +42,7 @@ class NyxMetaBlockItem(
     }
 
     companion object {
-        private val mNoMobsToolTip: String by lazy { GTLanguageManager.getTranslation("gt.nomobspawnsonthisblock") }
-        private val mNoTileEntityToolTip: String by lazy { GTLanguageManager.getTranslation("gt.notileentityinthisblock") }
+        private val mNoMobsToolTip: String by lazy { localize("gt.nomobspawnsonthisblock") }
+        private val mNoTileEntityToolTip: String by lazy { localize("gt.notileentityinthisblock") }
     }
 }
