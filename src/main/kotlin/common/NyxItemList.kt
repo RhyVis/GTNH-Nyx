@@ -49,6 +49,7 @@ enum class NyxItemList(
     // Machines
     ControllerCopier,
     ControllerProxy,
+    ControllerConverter,
 
     // Single Block Machines
     MachineInjector,

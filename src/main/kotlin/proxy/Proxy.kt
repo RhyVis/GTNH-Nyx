@@ -13,6 +13,7 @@ import rhynia.nyx.Tags
 import rhynia.nyx.config.ConfigDebug
 import rhynia.nyx.init.MachineLoader
 import rhynia.nyx.init.MaterialLoader
+import rhynia.nyx.init.MaterialMapper
 import rhynia.nyx.init.RecipeLoader
 import java.io.File
 
@@ -37,6 +38,7 @@ open class CommonProxy {
     open fun completeInit(event: FMLLoadCompleteEvent) {
         ModLogger.info("Initializing $MOD_NAME recipes...")
         RecipeLoader.load()
+        MaterialMapper.init()
     }
 
     open fun serverStarting(event: FMLServerStartingEvent) {

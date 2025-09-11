@@ -91,6 +91,13 @@ nyx.machine.proxy.type=Functional Proxy
 nyx.machine.proxy.gui.t.0=Next Mode
 nyx.machine.proxy.gui.t.1=Update Recipe
 
+nyx.machine.converter.name=CONVERTER
+nyx.machine.converter.type=OreDict Converter
+nyx.machine.converter.info.0=Controller of the CONVERTER
+nyx.machine.converter.info.1=Convert material into specific OreDict.
+nyx.machine.converter.info.2=Decides target OreDict by item in controller slot.
+nyx.machine.converter.gui.t.0=Target OreDict
+
 nyx.machine.injector.name=INJECTOR
 
 GT5U.gui.text.importing_energy=§bImporting Energy

@@ -91,6 +91,12 @@ nyx.machine.proxy.type=执行代理
 nyx.machine.proxy.gui.t.0=切换模式
 nyx.machine.proxy.gui.t.1=更新配方
 
+nyx.machine.converter.name=CONVERTER
+nyx.machine.converter.type=矿辞转换器
+nyx.machine.converter.info.0=CONVERTER的控制器
+nyx.machine.converter.info.1=将输入物品转换为指定矿辞的物品.
+nyx.machine.converter.info.2=在控制器槽位放入一个物品作为转换目标.
+
 nyx.machine.injector.name=INJECTOR
 
 GT5U.gui.text.importing_energy=§b导入能量中

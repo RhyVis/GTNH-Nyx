@@ -5,8 +5,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import com.gtnewhorizons.modularui.api.screen.ModularWindow
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext
 import com.gtnewhorizons.modularui.api.widget.Widget
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn
-import com.gtnewhorizons.modularui.common.widget.SlotWidget
 import gregtech.api.enums.Textures
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE
@@ -60,7 +58,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     ) : super(
         aID,
         aName,
-        StatCollector.translateToLocal("$aName.name"),
+        localize("$aName.name"),
     )
 
     protected constructor(aName: String) : super(aName)
@@ -552,4 +550,9 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         builder: ModularWindow.Builder,
         buildContext: UIBuildContext?,
     ) { }
+
+    /**
+     * Get a localization key prefixed with the machine name.
+     */
+    protected fun locPrefixed(key: String): String = "$mName.$key"
 }
