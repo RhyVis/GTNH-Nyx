@@ -19,6 +19,8 @@ class MetaItemToken(
 
     fun isEmpty(): Boolean = this == EMPTY
 
+    fun createStack(size: Int = 1): ItemStack = ItemStack(item, size, meta)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is MetaItemToken) return false

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
-import rhynia.nyx.api.util.copyAmountUnsafe
+import rhynia.nyx.api.util.size
 import rhynia.nyx.mixins.gt.AccessorGTMaterial
 import kotlin.time.measureTime
 
@@ -19,6 +19,7 @@ import kotlin.time.measureTime
  *
  * Provides methods to query materials by their ore prefixes and retrieve corresponding ItemStacks.
  */
+@Suppress("UNUSED")
 object MaterialMapper {
     private val mapGT = AccessorGTMaterial.getMaterialMap()
     private val mapBW = Werkstoff.werkstoffNameHashMap
@@ -61,6 +62,26 @@ object MaterialMapper {
      */
     operator fun get(token: MetaItemToken): Pair<MaterialData, OrePrefixes>? = reversedIndex[token]
 
+    /**
+     * Looks up the material data for the given [ItemStack].
+     */
+    fun lookupMaterial(itemStack: ItemStack): MaterialData? = reversedIndex[itemStack.asToken()]?.first
+
+    /**
+     * Looks up the material data for the given [MetaItemToken].
+     */
+    fun lookupMaterial(token: MetaItemToken): MaterialData? = reversedIndex[token]?.first
+
+    /**
+     * Looks up the ore prefix for the given [ItemStack].
+     */
+    fun lookupOrePrefix(itemStack: ItemStack): OrePrefixes? = reversedIndex[itemStack.asToken()]?.second
+
+    /**
+     * Looks up the ore prefix for the given [MetaItemToken].
+     */
+    fun lookupOrePrefix(token: MetaItemToken): OrePrefixes? = reversedIndex[token]?.second
+
     private fun buildReserveIndex() {
         data.values.forEach { materialData ->
             materialData.validOrePrefixes.forEach { prefix ->
@@ -77,7 +98,7 @@ object MaterialMapper {
      */
     interface MaterialData {
         val name: String
-        val validOrePrefixes: List<OrePrefixes>
+        val validOrePrefixes: Set<OrePrefixes>
 
         val anyStack: ItemStack? get() =
             validOrePrefixes.firstOrNull()?.let {
@@ -105,7 +126,7 @@ object MaterialMapper {
         fun getByOrePrefixUnsafe(
             prefix: OrePrefixes,
             count: Int,
-        ): ItemStack? = getByOrePrefix(prefix, 1)?.copyAmountUnsafe(count)
+        ): ItemStack? = getByOrePrefix(prefix, 1)?.size(count)
 
         companion object {
             fun see(obj: Any): MaterialData =
@@ -121,10 +142,11 @@ object MaterialMapper {
             private val material: Materials,
         ) : MaterialData {
             override val name: String = material.mName
-            override val validOrePrefixes: List<OrePrefixes> =
-                OrePrefixes.entries.filter { prefix ->
-                    GTOreDictUnificator.get(prefix, material, 1) != null
-                }
+            override val validOrePrefixes: Set<OrePrefixes> =
+                OrePrefixes.entries
+                    .filter { prefix ->
+                        GTOreDictUnificator.get(prefix, material, 1) != null
+                    }.toSet()
 
             override fun getByOrePrefix(
                 prefix: OrePrefixes,
@@ -141,10 +163,11 @@ object MaterialMapper {
             private val werkstoff: Werkstoff,
         ) : MaterialData {
             override val name: String = werkstoff.defaultName
-            override val validOrePrefixes: List<OrePrefixes> =
-                OrePrefixes.entries.filter { prefix ->
-                    WerkstoffLoader.getCorrespondingItemStackUnsafe(prefix, werkstoff, 1) != null
-                }
+            override val validOrePrefixes: Set<OrePrefixes> =
+                OrePrefixes.entries
+                    .filter { prefix ->
+                        WerkstoffLoader.getCorrespondingItemStackUnsafe(prefix, werkstoff, 1) != null
+                    }.toSet()
 
             override fun getByOrePrefix(
                 prefix: OrePrefixes,
@@ -161,10 +184,11 @@ object MaterialMapper {
             private val material: Material,
         ) : MaterialData {
             override val name: String = material.unlocalizedName
-            override val validOrePrefixes: List<OrePrefixes> =
-                OrePrefixes.entries.filter { prefix ->
-                    material.getComponentByPrefix(prefix, 1) != null
-                }
+            override val validOrePrefixes: Set<OrePrefixes> =
+                OrePrefixes.entries
+                    .filter { prefix ->
+                        material.getComponentByPrefix(prefix, 1) != null
+                    }.toSet()
 
             override fun getByOrePrefix(
                 prefix: OrePrefixes,

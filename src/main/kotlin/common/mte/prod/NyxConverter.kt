@@ -19,11 +19,14 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry
 import gregtech.api.util.MultiblockTooltipBuilder
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumChatFormatting
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
+import rhynia.nyx.api.util.getItemOrNull
 import rhynia.nyx.api.util.localize
+import rhynia.nyx.api.util.setItem
 import rhynia.nyx.common.mte.base.NyxMTECubeBase
 import rhynia.nyx.init.MaterialMapper
 
@@ -42,40 +45,110 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
 
     override fun checkProcessing(): CheckRecipeResult {
         val controllerStack = controllerSlot
-        pControllerToken = controllerStack?.asToken() ?: return cleanup(true)
-        if (pControllerToken.isEmpty()) return cleanup(true)
-        val (_, prefix) = MaterialMapper[pControllerToken] ?: return cleanup(true)
 
-        pOrePrefix = prefix
+        if (isRecipeLockingEnabled) {
+            if (pControllerToken.isEmpty() || pOrePrefix == null) {
+                return pStop(true)
+            }
+            val currentToken = controllerStack?.asToken() ?: return pStop(true)
+            if (currentToken != pControllerToken) {
+                return pStop(true)
+            }
+        } else {
+            pControllerToken = controllerStack?.asToken() ?: return pStop(true)
+            if (pControllerToken.isEmpty()) return pStop(true)
+            pOrePrefix = MaterialMapper.lookupOrePrefix(pControllerToken) ?: return pStop(true)
+        }
+
+        val targetPrefix = pOrePrefix!!
+        val targetMaterialAmount = targetPrefix.mMaterialAmount.takeIf { it > 0 } ?: return pStop(true)
 
         val inputItem = storedInputs.also { it.remove(controllerStack) }
-        if (inputItem.isEmpty()) return cleanup()
+        if (inputItem.isEmpty()) return pStop()
 
-        val out = mutableListOf<ItemStack>()
+        // merge input items by material
+        val materialAmountMap = mutableMapOf<MaterialMapper.MaterialData, Long>()
+        val consumedStacks = mutableListOf<ItemStack>()
+
         for (itemStack in inputItem) {
-            val (material, _) = MaterialMapper[itemStack] ?: continue
-            if (!material.hasOrePrefix(prefix)) continue
-            val outStack = material.getByOrePrefix(prefix, itemStack.stackSize) ?: continue
-            out.add(outStack)
-            itemStack.stackSize = 0
+            val (material, prefix) = MaterialMapper[itemStack] ?: continue
+            if (!material.hasOrePrefix(targetPrefix)) continue
+
+            val sourceMaterialAmount = prefix.mMaterialAmount.takeIf { it > 0 } ?: continue
+            val totalMaterialAmount = sourceMaterialAmount * itemStack.stackSize
+
+            materialAmountMap[material] = (materialAmountMap[material] ?: 0) + totalMaterialAmount
+            consumedStacks.add(itemStack)
         }
-        if (out.isEmpty()) return cleanup()
 
-        mOutputItems = out.toTypedArray()
+        if (materialAmountMap.isEmpty()) return pStop()
 
-        mEfficiency = 10000
-        mEfficiencyIncrease = 10000
-        mMaxProgresstime = 80
+        // calculate output counts and total consumed amount
+        val outputData = mutableMapOf<MaterialMapper.MaterialData, Long>()
+        var totalConsumedAmount = 0L
 
-        return CheckRecipeResultRegistry.SUCCESSFUL
+        for ((material, totalAmount) in materialAmountMap) {
+            val outputCount = totalAmount / targetMaterialAmount
+            if (outputCount > 0) {
+                outputData[material] = outputCount
+                totalConsumedAmount += outputCount * targetMaterialAmount
+            }
+        }
+
+        if (outputData.isEmpty()) return pStop()
+
+        // only consume the needed amount
+        for (itemStack in consumedStacks) {
+            val material = MaterialMapper.lookupMaterial(itemStack) ?: continue
+            val outputCount = outputData[material] ?: continue
+
+            // calculate how much to consume from this stack
+            val neededAmount = outputCount * targetMaterialAmount
+
+            // consume ratio capped to 1.0 to avoid over-consumption due to rounding
+            val consumeRatio = minOf(1.0, neededAmount.toDouble() / (materialAmountMap[material] ?: 1))
+            val consumeCount = (itemStack.stackSize * consumeRatio).toInt()
+
+            itemStack.stackSize = maxOf(0, itemStack.stackSize - consumeCount)
+        }
+
+        // output generation
+        mOutputItems =
+            outputData
+                .flatMap { (material, count) ->
+                    val stacks = mutableListOf<ItemStack>()
+                    var remaining = count
+
+                    while (remaining > 0) {
+                        val currentAmount = minOf(remaining, Int.MAX_VALUE.toLong()).toInt()
+                        material.getByOrePrefixUnsafe(targetPrefix, currentAmount)?.let {
+                            stacks.add(it)
+                        }
+                        remaining -= currentAmount
+                    }
+
+                    stacks
+                }.toTypedArray()
+
+        return pStart(outputData.size * 20)
     }
 
-    private fun cleanup(clearOrePrefix: Boolean = false): CheckRecipeResult {
+    private fun pStop(clearOrePrefix: Boolean = false): CheckRecipeResult {
         if (clearOrePrefix) pOrePrefix = null
         mEfficiency = 0
         mEfficiencyIncrease = 0
         mMaxProgresstime = 0
+        mProgresstime = 0
+
         return CheckRecipeResultRegistry.NO_RECIPE
+    }
+
+    private fun pStart(processTime: Int): CheckRecipeResult {
+        mEfficiency = 10000
+        mEfficiencyIncrease = 10000
+        mMaxProgresstime = processTime
+
+        return CheckRecipeResultRegistry.SUCCESSFUL
     }
 
     override fun drawTexts(
@@ -97,6 +170,10 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
         }
     }
 
+    override fun supportsInputSeparation(): Boolean = false
+
+    override fun supportsBatchMode(): Boolean = false
+
     override val sCasingBlock: Pair<Block, Int>
         get() = GregTechAPI.sBlockCasings2 to 0
 
@@ -117,5 +194,24 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
             .beginStructureCube()
             .addInputBus()
             .addOutputBus()
-            .toolTipFinisher(CommonString.NyxMagical)
+            .toolTipFinisher(CommonString.NyxGigaFac)
+
+    override fun loadNBTData(aNBT: NBTTagCompound?) {
+        super.loadNBTData(aNBT)
+        if (aNBT == null) return
+
+        pControllerToken = aNBT.getItemOrNull("pControllerToken")?.asToken() ?: MetaItemToken.EMPTY
+        pOrePrefix =
+            aNBT.getString("pOrePrefix").let {
+                if (it.isEmpty()) null else OrePrefixes.valueOf(it)
+            }
+    }
+
+    override fun saveNBTData(aNBT: NBTTagCompound?) {
+        super.saveNBTData(aNBT)
+        if (aNBT == null) return
+
+        aNBT.setItem("pControllerToken", pControllerToken.createStack())
+        aNBT.setString("pOrePrefix", pOrePrefix?.name ?: "")
+    }
 }

@@ -55,6 +55,24 @@ Features may need to be enabled in the `config\Nyx\*.cfg` config file.
 > Calculated by `amount ^ (log10(Integer.MAX_VALUE) / log10(64))`, simplify as `amount ^ 3.98`;
 > so 1 machine = 1 parallel, 64 machines = Integer.MAX_VALUE parallel.
 
+- CONVERTER: Convert materials between different OreDicts (e.g. ingotCopper <-> plateCopper).
+
+  **Config: `MTE_CONVERTER`**
+
+<table>
+  <tr>
+    <td><img src="img/converter_1.png" alt="converter_1" width="400"></td>
+    <td><img src="img/converter_2.png" alt="converter_2" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="img/converter_3.png" alt="converter_3" width="400"></td>
+    <td><img src="img/converter_4.png" alt="converter_4" width="400"></td>
+  </tr>
+</table>
+
+> Place the item that represents the OreDict you want to convert to in the controller.
+> Then just input the item you want to convert, and it will output the converted item.
+
 ### Note: About ID Conflicts
 
 I don't know how other self-made mods take MTE IDs, the only thing I can do is to give a config file used
