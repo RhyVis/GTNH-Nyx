@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED", "NOTHING_TO_INLINE")
+
 package rhynia.nyx.api.item
 
 import net.minecraft.item.Item
@@ -52,9 +54,9 @@ class MetaItemToken(
 /**
  * Creates a [MetaItemToken] from this [ItemStack].
  */
-fun ItemStack.asToken(): MetaItemToken = MetaItemToken(this)
+inline fun ItemStack.asToken(): MetaItemToken = MetaItemToken(this)
 
 /**
  * Checks if this [ItemStack] matches the given [MetaItemToken].
  */
-infix fun ItemStack?.matches(t: MetaItemToken): Boolean = this != null && MetaItemToken.matches(this, t)
+inline infix fun ItemStack?.matches(t: MetaItemToken): Boolean = this != null && MetaItemToken.matches(this, t)

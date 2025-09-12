@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED", "NOTHING_TO_INLINE")
+
 package rhynia.nyx.api.util
 
 import gregtech.api.util.GTUtility
@@ -6,23 +8,23 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidStack
 import rhynia.nyx.common.material.NyxMaterials
 
-fun NBTTagCompound.getItem(key: String): ItemStack =
+inline fun NBTTagCompound.getItem(key: String): ItemStack =
     GTUtility.loadItem(this, key) ?: debugItem(
         "ItemStack not found in NBT: $key",
     )
 
-fun NBTTagCompound.getItemOrNull(key: String): ItemStack? = GTUtility.loadItem(this, key)
+inline fun NBTTagCompound.getItemOrNull(key: String): ItemStack? = GTUtility.loadItem(this, key)
 
-fun NBTTagCompound.setItem(
+inline fun NBTTagCompound.setItem(
     key: String,
     itemStack: ItemStack,
 ) {
     GTUtility.saveItem(this, key, itemStack)
 }
 
-fun NBTTagCompound.getFluid(key: String): FluidStack = GTUtility.loadFluid(this, key) ?: NyxMaterials.Null.getFluid(1)
+inline fun NBTTagCompound.getFluid(key: String): FluidStack = GTUtility.loadFluid(this, key) ?: NyxMaterials.Null.getFluid(1)
 
-fun NBTTagCompound.setFluid(
+inline fun NBTTagCompound.setFluid(
     key: String,
     fluidStack: FluidStack,
 ) {

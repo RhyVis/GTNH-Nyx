@@ -67,50 +67,58 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
         val inputItem = storedInputs.also { it.remove(controllerStack) }
         if (inputItem.isEmpty()) return pStop()
 
+        data class InputData(
+            val stack: ItemStack,
+            val material: MaterialMapper.MaterialData,
+            val prefix: OrePrefixes,
+            val materialAmount: Long,
+        )
+
+        // map input items to InputData to avoid multiple lookups
+        val inputDataList =
+            inputItem.mapNotNull {
+                val (material, prefix) = MaterialMapper.lookup(it) ?: return@mapNotNull null
+                if (!material.hasOrePrefix(targetPrefix)) return@mapNotNull null
+                val sourceMaterialAmount = prefix.mMaterialAmount.takeIf { i -> i > 0 } ?: return@mapNotNull null
+                InputData(it, material, prefix, sourceMaterialAmount)
+            }
+
+        if (inputDataList.isEmpty()) return pStop()
+
         // merge input items by material
         val materialAmountMap = objLongMapOf<MaterialMapper.MaterialData>()
-        val consumedStacks = mutableListOf<ItemStack>()
-
-        for (itemStack in inputItem) {
-            val (material, prefix) = MaterialMapper.lookup(itemStack) ?: continue
-            if (!material.hasOrePrefix(targetPrefix)) continue
-
-            val sourceMaterialAmount = prefix.mMaterialAmount.takeIf { it > 0 } ?: continue
-            val totalMaterialAmount = sourceMaterialAmount * itemStack.stackSize
-
-            materialAmountMap[material] = materialAmountMap.getLong(material) + totalMaterialAmount
-            consumedStacks.add(itemStack)
+        inputDataList.forEach {
+            val totalMaterialAmount = it.materialAmount * it.stack.stackSize
+            materialAmountMap[it.material] = materialAmountMap.getLong(it.material) + totalMaterialAmount
         }
 
-        if (materialAmountMap.isEmpty()) return pStop()
-
-        // calculate output counts and total consumed amount
+        // calculate output counts
         val outputData = objLongMapOf<MaterialMapper.MaterialData>()
-        var totalConsumedAmount = 0L
-
         for ((material, totalAmount) in materialAmountMap) {
             val outputCount = totalAmount / targetMaterialAmount
             if (outputCount > 0) {
                 outputData[material] = outputCount
-                totalConsumedAmount += outputCount * targetMaterialAmount
             }
         }
 
         if (outputData.isEmpty()) return pStop()
 
         // only consume the needed amount
-        for (itemStack in consumedStacks) {
-            val material = MaterialMapper.lookupMaterial(itemStack) ?: continue
-            val outputCount = outputData.getLong(material).takeIf { it > 0 } ?: continue
+        for (inputData in inputDataList) {
+            val outputCount = outputData.getLong(inputData.material).takeIf { it > 0 } ?: continue
 
             // calculate how much to consume from this stack
             val neededAmount = outputCount * targetMaterialAmount
 
             // consume ratio capped to 1.0 to avoid over-consumption due to rounding
-            val consumeRatio = minOf(1.0, neededAmount.toDouble() / (materialAmountMap.getLong(material).takeIf { it > 0 } ?: 1))
-            val consumeCount = (itemStack.stackSize * consumeRatio).toInt()
+            val consumeRatio =
+                minOf(
+                    1.0,
+                    neededAmount.toDouble() / (materialAmountMap.getLong(inputData.material).takeIf { it > 0 } ?: 1),
+                )
+            val consumeCount = (inputData.stack.stackSize * consumeRatio).toInt()
 
-            itemStack.stackSize = maxOf(0, itemStack.stackSize - consumeCount)
+            inputData.stack.stackSize = maxOf(0, inputData.stack.stackSize - consumeCount)
         }
 
         // output generation

@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED")
+
 package rhynia.nyx.api.util
 
 import net.minecraft.nbt.NBTTagCompound

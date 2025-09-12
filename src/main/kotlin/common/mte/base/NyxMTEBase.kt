@@ -48,7 +48,7 @@ import rhynia.nyx.api.util.size
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 import kotlin.reflect.KClass
 
-@Suppress("UNUSED")
+@Suppress("UNUSED", "NOTHING_TO_INLINE")
 abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     MTEExtendedPowerMultiBlockBase<T>,
     ISurvivalConstructable {
@@ -91,7 +91,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         val infoEuModifier by lazy { localize("nyx.common.info.euModifier") }
     }
 
-    protected val baseMTE get() = baseMetaTileEntity!!
+    protected inline val baseMTE get() = baseMetaTileEntity!!
 
     /** Remove maintenance requirement. */
     protected fun removeMaintenance() {
@@ -420,7 +420,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     }
 
     /** Format Double number as % */
-    protected fun Double.formatPercent() = "%.3f%%".format(this * 100)
+    protected inline fun Double.formatPercent() = "%.3f%%".format(this * 100)
 
     final override fun getInfoData(): Array<String> =
         super.getInfoData() +
@@ -438,34 +438,32 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     protected fun MultiblockTooltipBuilder.addMachineTypeLocalized(): MultiblockTooltipBuilder =
         this.addMachineType(
             if (StatCollector.canTranslate("$mName.type")) {
-                StatCollector.translateToLocal("$mName.type")
+                localize("$mName.type")
             } else {
-                StatCollector.translateToLocal("$mName.name")
+                localize("$mName.name")
             },
         )
 
-    protected fun MultiblockTooltipBuilder.addInfoLocalized(key: String): MultiblockTooltipBuilder =
-        this.addInfo(StatCollector.translateToLocal(key))
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(key: String): MultiblockTooltipBuilder = addInfo(localize(key))
 
-    protected fun MultiblockTooltipBuilder.addInfoLocalized(index: Int): MultiblockTooltipBuilder =
-        this.addInfo(StatCollector.translateToLocal("$mName.info.$index"))
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(index: Int): MultiblockTooltipBuilder = addInfo(localize("$mName.info.$index"))
 
     protected fun MultiblockTooltipBuilder.addInfoListLocalized(untilIndex: Int): MultiblockTooltipBuilder =
         apply {
             (0..untilIndex)
-                .map { StatCollector.translateToLocal("$mName.info.$it") }
-                .forEach { this.addInfo(it) }
+                .map { localize("$mName.info.$it") }
+                .forEach { addInfo(it) }
         }
 
     protected fun MultiblockTooltipBuilder.addInfoLocalized(
         key: String,
         vararg args: Any,
-    ): MultiblockTooltipBuilder = this.addInfo(StatCollector.translateToLocalFormatted(key, *args))
+    ): MultiblockTooltipBuilder = this.addInfo(localize(key, *args))
 
     protected fun MultiblockTooltipBuilder.addInfoLocalized(
         index: Int,
         vararg args: Any,
-    ): MultiblockTooltipBuilder = this.addInfo(StatCollector.translateToLocalFormatted("$mName.info.$index", *args))
+    ): MultiblockTooltipBuilder = this.addInfo(localize("$mName.info.$index", *args))
 
     protected fun MultiblockTooltipBuilder.addChangeModeByScrewdriver(): MultiblockTooltipBuilder =
         this.addInfo(CommonString.ChangeModeByScrewdriver)
@@ -554,5 +552,5 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     /**
      * Get a localization key prefixed with the machine name.
      */
-    protected fun locPrefixed(key: String): String = "$mName.$key"
+    protected inline fun locPrefixed(key: String): String = "$mName.$key"
 }

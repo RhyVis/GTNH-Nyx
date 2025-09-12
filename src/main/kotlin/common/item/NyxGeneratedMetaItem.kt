@@ -16,6 +16,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.util.StatCollector
 import rhynia.nyx.api.util.firstCharUpperCase
+import rhynia.nyx.api.util.hasLocalization
+import rhynia.nyx.api.util.localized
+import rhynia.nyx.api.util.shortObjMapOf
 import rhynia.nyx.client.NyxTab
 import rhynia.nyx.common.material.NyxMaterials
 import rhynia.nyx.common.material.generation.NyxMaterialLoader.MaterialMap
@@ -38,14 +41,14 @@ class NyxGeneratedMetaItem(
     companion object {
         private fun getLocalizedTypeName(prefix: OrePrefixes): String =
             "nyx.ore.${prefix.name}".let {
-                if (StatCollector.canTranslate(it)) {
-                    StatCollector.translateToLocal(it)
+                if (hasLocalization(it)) {
+                    it.localized()
                 } else {
                     "${prefix.mLocalizedMaterialPre}%material${prefix.mLocalizedMaterialPost}"
                 }
             }
 
-        private val tooltipCache = mutableMapOf<Short, List<String>>()
+        private val tooltipCache = shortObjMapOf<List<String>>()
 
         private fun getLocalizedTooltips(id: Short): List<String> =
             tooltipCache.getOrPut(id) {
@@ -56,8 +59,8 @@ class NyxGeneratedMetaItem(
                 var index = 0
                 while (true) {
                     val key = "$baseKey.$index"
-                    if (StatCollector.canTranslate(key)) {
-                        tooltips.add(StatCollector.translateToLocal(key))
+                    if (hasLocalization(key)) {
+                        tooltips.add(key.localized())
                         index++
                     } else {
                         break
@@ -81,9 +84,9 @@ class NyxGeneratedMetaItem(
         aStack: ItemStack?,
         aPlayer: EntityPlayer?,
     ) {
-        val material = MaterialMap[aStack?.itemDamage?.toShort()] ?: return
+        val material = MaterialMap.get(aStack?.itemDamage?.toShort() ?: return) ?: return
         material.elementTooltip.forEach { aList.add(it) }
-        aStack?.let { stack ->
+        aStack.let { stack ->
             val tooltips = getLocalizedTooltips(stack.itemDamage.toShort())
             if (tooltips.isNotEmpty()) {
                 if (isShiftKeyDown()) {
@@ -127,7 +130,9 @@ class NyxGeneratedMetaItem(
         }
     }
 
-    override fun getRGBa(aStack: ItemStack?): ShortArray = MaterialMap[aStack?.itemDamage?.toShort()]?.color ?: shortArrayOf(0, 0, 0, 255)
+    override fun getRGBa(aStack: ItemStack?): ShortArray =
+        aStack?.itemDamage?.toShort()?.let { MaterialMap[it]?.color }
+            ?: shortArrayOf(0, 0, 0, 255)
 
     override fun getIconFromDamage(aMetaData: Int): IIcon? =
         if (aMetaData < 0 || aMetaData >= MaterialSet.size || MaterialMap[aMetaData.toShort()] == null) {

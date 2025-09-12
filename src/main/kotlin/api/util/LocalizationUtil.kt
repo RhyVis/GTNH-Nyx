@@ -1,17 +1,25 @@
+@file:Suppress("UNUSED", "NOTHING_TO_INLINE")
+
 package rhynia.nyx.api.util
 
+import net.minecraft.util.StatCollector.canTranslate
 import net.minecraft.util.StatCollector.translateToLocal
 import net.minecraft.util.StatCollector.translateToLocalFormatted
 
 /**
+ * Shorthand for [canTranslate]
+ */
+inline fun hasLocalization(key: String): Boolean = canTranslate(key)
+
+/**
  * Shorthand for [translateToLocal]
  */
-fun localize(key: String): String = translateToLocal(key)
+inline fun localize(key: String): String = translateToLocal(key)
 
 /**
  * Shorthand for [translateToLocalFormatted]
  */
-fun localize(
+inline fun localize(
     key: String,
     vararg args: Any,
 ): String = translateToLocalFormatted(key, args)
@@ -19,4 +27,4 @@ fun localize(
 /**
  * Shorthand for [translateToLocal]
  */
-fun String.localized(): String = translateToLocal(this)
+inline fun String.localized(): String = translateToLocal(this)
