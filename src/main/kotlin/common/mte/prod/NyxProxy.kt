@@ -1,7 +1,5 @@
 package rhynia.nyx.common.mte.prod
 
-import com.gtnewhorizons.modularui.api.screen.ModularWindow
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext
 import com.gtnewhorizons.modularui.api.widget.Widget
 import com.gtnewhorizons.modularui.common.widget.ButtonWidget
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn
@@ -32,6 +30,7 @@ import rhynia.nyx.api.enums.CheckRecipeResultRef
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
+import rhynia.nyx.api.process.NyxProcessingLogic
 import rhynia.nyx.api.util.RefContainer
 import rhynia.nyx.api.util.intObjMapOf
 import rhynia.nyx.api.util.localize
@@ -76,19 +75,23 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
         }
     }
 
-    override fun createProcessingLogic(): ProcessingLogic? =
-        object : ProcessingLogic() {
+    override fun createProcessingLogic(): ProcessingLogic =
+        object : NyxProcessingLogic() {
             override fun process(): CheckRecipeResult {
                 if (updateRecipeContainer()) {
                     setEuModifier(rEuModifier)
                     setSpeedBonus(rTimeModifier)
-                    setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
+                    setOverclock(rOverclockType)
                     return super.process()
                 } else {
                     return CheckRecipeResultRef.NO_RECIPE_MAP_SET
                 }
             }
-        }.setMaxParallelSupplier(::rMaxParallel)
+
+            init {
+                setMaxParallelSupplier(::rMaxParallel)
+            }
+        }
 
     private fun updateRecipeContainer(): Boolean {
         val controllerItem = controllerSlot ?: return false
@@ -152,18 +155,14 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
                 .setTooltipShowUpDelay(TOOLTIP_DELAY),
         )
 
-    override fun loadNBTData(aNBT: NBTTagCompound?) {
+    override fun loadNBTData(aNBT: NBTTagCompound) {
         super.loadNBTData(aNBT)
-        if (aNBT == null) return
-
         if (pMode == null) updateRecipeContainer()
         pMode?.loadNBTData(aNBT, "pMode")
     }
 
-    override fun saveNBTData(aNBT: NBTTagCompound?) {
+    override fun saveNBTData(aNBT: NBTTagCompound) {
         super.saveNBTData(aNBT)
-        if (aNBT == null) return
-
         pMode?.saveNBTData(aNBT, "pMode")
     }
 

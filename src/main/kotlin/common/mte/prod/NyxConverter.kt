@@ -14,6 +14,7 @@ import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
+import gregtech.api.logic.ProcessingLogic
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.recipe.check.CheckRecipeResultRegistry
 import gregtech.api.util.MultiblockTooltipBuilder
@@ -43,6 +44,8 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
 
     private var pControllerToken: MetaItemToken = MetaItemToken.EMPTY
     private var pOrePrefix: OrePrefixes? = null
+
+    override fun createProcessingLogic(): ProcessingLogic? = null
 
     override fun checkProcessing(): CheckRecipeResult {
         val controllerStack = controllerSlot
@@ -205,10 +208,8 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
             .addOutputBus()
             .toolTipFinisher(CommonString.NyxGigaFac)
 
-    override fun loadNBTData(aNBT: NBTTagCompound?) {
+    override fun loadNBTData(aNBT: NBTTagCompound) {
         super.loadNBTData(aNBT)
-        if (aNBT == null) return
-
         pControllerToken = aNBT.getItemOrNull("pControllerToken")?.asToken() ?: MetaItemToken.EMPTY
         pOrePrefix =
             aNBT.getString("pOrePrefix").let {
@@ -216,10 +217,8 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
             }
     }
 
-    override fun saveNBTData(aNBT: NBTTagCompound?) {
+    override fun saveNBTData(aNBT: NBTTagCompound) {
         super.saveNBTData(aNBT)
-        if (aNBT == null) return
-
         aNBT.setItem("pControllerToken", pControllerToken.createStack())
         aNBT.setString("pOrePrefix", pOrePrefix?.name ?: "")
     }

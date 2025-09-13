@@ -3,10 +3,28 @@
 package rhynia.nyx.api.util
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.shorts.ShortOpenHashSet
+
+/**
+ * Kotlin style helper to create an [IntOpenHashSet].
+ */
+inline fun shortSetOf() = ShortOpenHashSet()
+
+/**
+ * Kotlin style helper to create an [IntOpenHashSet].
+ */
+inline fun intSetOf() = IntOpenHashSet()
+
+/**
+ * Kotlin style helper to create a [LongOpenHashSet].
+ */
+inline fun longSetOf() = LongOpenHashSet()
 
 /**
  * Kotlin style helper to create an [Object2IntOpenHashMap].

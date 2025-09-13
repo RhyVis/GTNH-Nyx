@@ -16,7 +16,7 @@ import rhynia.nyx.proxy.CommonProxy
 internal const val MOD_ID = "nyx"
 internal const val MOD_NAME = "Nyx"
 
-internal val DevEnv: Boolean by lazy { Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean }
+internal val DevEnv: Boolean by lazy { Launch.blackboard["fml.deobfuscatedEnvironment"]?.let { it as? Boolean } ?: false }
 internal val ModLogger: Logger by lazy { LogManager.getLogger(MOD_NAME) }
 
 @Suppress("SpellCheckingInspection", "UNUSED")
@@ -37,11 +37,11 @@ internal val ModLogger: Logger by lazy { LogManager.getLogger(MOD_NAME) }
     acceptedMinecraftVersions = "[1.7.10]",
 )
 object Nyx {
-    @JvmStatic
     @SidedProxy(
         clientSide = "rhynia.nyx.proxy.ClientProxy",
         serverSide = "rhynia.nyx.proxy.CommonProxy",
     )
+    @JvmStatic
     lateinit var proxy: CommonProxy
 
     @EventHandler

@@ -283,18 +283,14 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         }
     }
 
-    override fun saveNBTData(aNBT: NBTTagCompound?) {
+    override fun saveNBTData(aNBT: NBTTagCompound) {
         super.saveNBTData(aNBT)
-        if (aNBT == null) return
-
         aNBT.setBoolean("pItemMode", pItemMode)
         aNBT.setLong("pAmount", pAmount)
     }
 
-    override fun loadNBTData(aNBT: NBTTagCompound?) {
+    override fun loadNBTData(aNBT: NBTTagCompound) {
         super.loadNBTData(aNBT)
-        if (aNBT == null) return
-
         pItemMode = aNBT.getBoolean("pItemMode")
         pAmount = aNBT.getLong("pAmount")
     }

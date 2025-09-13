@@ -11,6 +11,8 @@ import net.minecraft.util.IIcon
 import rhynia.nyx.MOD_ID
 import rhynia.nyx.api.interfaces.item.MetaTooltip
 import rhynia.nyx.api.interfaces.item.MetaVariant
+import rhynia.nyx.api.util.intObjMapOf
+import rhynia.nyx.api.util.intSetOf
 import rhynia.nyx.client.NyxTab
 
 /** Abstract class for items using meta as variant. */
@@ -19,10 +21,10 @@ abstract class AbstractMetaItem(
 ) : Item(),
     MetaVariant,
     MetaTooltip {
-    var iconMap: Map<Int, IIcon> = mutableMapOf()
+    var iconMap: Map<Int, IIcon?> = intObjMapOf<IIcon>()
         private set
-    val tooltipMap: MutableMap<Int, Array<out String>?> = mutableMapOf()
-    val metaSet: MutableSet<Int> = mutableSetOf()
+    val tooltipMap = intObjMapOf<Array<out String>?>()
+    val metaSet = intSetOf()
 
     /**
      * Override this to set the alternate texture name, if null defaults to
@@ -56,9 +58,11 @@ abstract class AbstractMetaItem(
             throw IllegalArgumentException("Invalid meta value: $meta")
         }
 
-    override fun getVariants(): Array<ItemStack> = metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
+    override val allVariants: Array<ItemStack>
+        get() = metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
 
-    override fun getVariantIds(): Set<Int> = metaSet.toSet()
+    override val allVariantIds: Set<Int>
+        get() = metaSet
 
     override fun registerVariant(meta: Int): ItemStack {
         if (metaSet.contains(meta)) {
@@ -100,7 +104,7 @@ abstract class AbstractMetaItem(
         aCreativeTabs: CreativeTabs?,
         aList: MutableList<ItemStack?>,
     ) {
-        aList.addAll(getVariants())
+        aList.addAll(allVariants)
     }
 
     @SideOnly(Side.CLIENT)

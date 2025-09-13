@@ -55,9 +55,11 @@ abstract class AbstractMetaBlock(
             throw IllegalArgumentException("Invalid meta value: $meta")
         }
 
-    override fun getVariants(): Array<ItemStack> = metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
+    override val allVariants: Array<ItemStack>
+        get() = metaSet.map { ItemStack(this, 1, it) }.toTypedArray()
 
-    override fun getVariantIds(): Set<Int> = metaSet.toSet()
+    override val allVariantIds: Set<Int>
+        get() = metaSet
 
     override fun registerVariant(meta: Int): ItemStack {
         if (metaSet.contains(meta)) {
@@ -105,6 +107,6 @@ abstract class AbstractMetaBlock(
         aCreativeTabs: CreativeTabs?,
         list: MutableList<ItemStack?>,
     ) {
-        list.addAll(getVariants())
+        list.addAll(allVariants)
     }
 }
