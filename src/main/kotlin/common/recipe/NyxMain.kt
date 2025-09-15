@@ -50,6 +50,24 @@ class NyxMainRecipes : RecipePool() {
                 eut(Tier.HV)
                 durSec(6)
             }
+            newRecipeIf(ConfigMachine.MTE_CONVERTER) {
+                input {
+                    +Tier.HV.getHull(4)
+                    +Tier.HV.getCircuit(24)
+                    +Tier.HV.getComponent(Tier.Component.ElectricPiston, 8)
+                    +Materials.Steel.getBlocks(24)
+                    +Materials.Steel.getPlates(24)
+                    +Materials.Steel.getIngots(24)
+                    +Materials.Steel.getDust(24)
+                    +ic(6)
+                    +SolderMaterial.T1.getFluidStack(6 * INGOT)
+                }
+                output {
+                    +NyxItemList.ControllerConverter.get(1)
+                }
+                eut(Tier.HV)
+                durSec(24)
+            }
         }
     }
 }

@@ -46,8 +46,8 @@ object RecipeLoader : Loader {
     private fun loadMaterialRecipes() {
         ModLogger.info("Loading Material recipes...")
         NyxMaterialLoader.MaterialSet.forEach { materialRecipePool ->
+            if (materialRecipePool.skipRecipeGeneration) return@forEach
             try {
-                if (materialRecipePool.skipRecipeGeneration) return@forEach
                 NyxMaterialRecipeLoader(materialRecipePool).loadRecipes()
             } catch (e: Exception) {
                 ModLogger.error(

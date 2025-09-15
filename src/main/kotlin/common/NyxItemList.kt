@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.util.copyAmount
 import rhynia.nyx.api.util.debugItem
+import rhynia.nyx.api.util.size
 import codechicken.nei.api.API as CodeChickenAPI
 
 interface ItemList {
@@ -208,7 +209,7 @@ enum class NyxItemList(
 
     private fun safetyCheck() {
         if (mHasNotBeenSet) {
-            throw IllegalAccessError("The Enum '$name' has not been set to an Item at this time!")
+            throw IllegalAccessError("The enum entry '$name' has not been set to an Item at this time!")
         }
         if (mDeprecated && !mWarned) {
             Exception("$this is now deprecated").let {
@@ -303,11 +304,9 @@ enum class NyxWirelessEnergyList(
         vararg aReplacements: Any?,
     ): ItemStack =
         if (GTUtility.isStackInvalid(mStack)) {
-            GTLog.out.let {
-                println("The ItemStack for $this is invalid!")
-                NullPointerException().printStackTrace(it)
-                debugItem("The ItemStack for $this is invalid!").copyAmount(aAmount)
-            }
+            NullPointerException().printStackTrace(GTLog.out)
+            ModLogger.error("The ItemStack for $this is invalid!")
+            debugItem("The ItemStack for $this is invalid!") size aAmount
         } else {
             mStack.copyAmount(aAmount)
         }
@@ -355,11 +354,9 @@ enum class NyxWirelessDynamoList(
         vararg aReplacements: Any?,
     ): ItemStack =
         if (GTUtility.isStackInvalid(mStack)) {
-            GTLog.out.let {
-                println("The ItemStack for $this is invalid!")
-                NullPointerException().printStackTrace(it)
-                debugItem("The ItemStack for $this is invalid!").copyAmount(aAmount)
-            }
+            NullPointerException().printStackTrace(GTLog.out)
+            ModLogger.warn("The ItemStack for $this is invalid!")
+            debugItem("The ItemStack for $this is invalid!") size aAmount
         } else {
             mStack.copyAmount(aAmount)
         }

@@ -16,11 +16,11 @@ object NyxMaterialLoader : Loader {
     override fun load() {
         ModLogger.info("Registering materials...")
         measureTime {
-            MaterialSet.forEach {
-                ModLogger.debug("Loading material: ${it.id}: ${it.internalName}")
-                generateFluid(it)
-                MaterialMap[it.id] = it
-                it.hasInitialiated = true
+            MaterialSet.forEach { material ->
+                ModLogger.debug("Loading material: ${material.id}: ${material.internalName}")
+                generateFluid(material)
+                MaterialMap[material.id] = material
+                material.hasInitialiated = true
             }
             generateMetaItem()
         }.also {

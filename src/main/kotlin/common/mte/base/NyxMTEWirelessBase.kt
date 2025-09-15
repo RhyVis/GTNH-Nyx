@@ -113,17 +113,13 @@ abstract class NyxMTEWirelessBase<T : NyxMTEWirelessBase<T>> : NyxMTEBase<T> {
         pRecipeProcessing = false
     }
 
-    override fun saveNBTData(aNBT: NBTTagCompound?) {
+    override fun saveNBTData(aNBT: NBTTagCompound) {
         super.saveNBTData(aNBT)
-        if (aNBT == null) return
-
         aNBT.setBoolean("pWireless", pWireless)
     }
 
-    override fun loadNBTData(aNBT: NBTTagCompound?) {
+    override fun loadNBTData(aNBT: NBTTagCompound) {
         super.loadNBTData(aNBT)
-        if (aNBT == null) return
-
         pWireless = aNBT.getBoolean("pWireless")
     }
 }

@@ -56,7 +56,7 @@ object MachineLoader : Loader {
     private fun initialiseMachineClass() {
         NyxItemList.ControllerCopier.register(NyxCopier(offset + 1, "nyx.machine.copier"), ConfigMachine.MTE_COPIER)
         NyxItemList.ControllerProxy.register(NyxProxy(offset + 2, "nyx.machine.proxy"), ConfigMachine.MTE_PROXY)
-        NyxItemList.ControllerCopier.register(NyxConverter(offset + 3, "nyx.machine.converter"), ConfigMachine.MTE_CONVERTER)
+        NyxItemList.ControllerConverter.register(NyxConverter(offset + 3, "nyx.machine.converter"), ConfigMachine.MTE_CONVERTER)
 
         NyxItemList.MachineInjector.register(NyxInjector(offset + 31, "nyx.machine.injector", 14), ConfigMachine.MTE_INJECTOR)
     }
@@ -119,12 +119,13 @@ object MachineLoader : Loader {
     private fun printMteIds() {
         buildList {
             GregTechAPI.METATILEENTITIES.forEachIndexed { i, mte ->
-                if (mte != null) add(i to "${mte.localName}(${mte.javaClass.simpleName})")
+                if (mte != null) add(i to "${mte.localName},${mte.javaClass.name}")
             }
             sortBy { it.first }
         }.let { list ->
-            File("loaded_mte_ids.txt").writeText(
-                list.joinToString("\n") { "${it.first}: ${it.second}" },
+            File("loaded_mte_ids.csv").writeText(
+                "id,localName,className" +
+                    list.joinToString("\n") { "${it.first},${it.second}" },
             )
         }
     }
