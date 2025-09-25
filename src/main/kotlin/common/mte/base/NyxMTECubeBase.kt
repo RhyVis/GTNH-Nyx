@@ -73,6 +73,7 @@ abstract class NyxMTECubeBase<T : NyxMTEBase<T>> : NyxMTEBase<T> {
                 OutputHatch,
                 Energy.or(ExoticEnergy),
                 Dynamo.or(ExoticDynamo),
+                AdditionHatch,
             )
 
     final override val sControllerBlock: Pair<Block, Int>

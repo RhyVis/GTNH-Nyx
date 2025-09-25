@@ -46,6 +46,7 @@ import rhynia.nyx.api.process.NyxAutoProcessingLogic
 import rhynia.nyx.api.util.idEqual
 import rhynia.nyx.api.util.localize
 import rhynia.nyx.api.util.size
+import rhynia.nyx.common.mte.hatch.MTEHatchAddition
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 import kotlin.reflect.KClass
 
@@ -83,6 +84,20 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 }
             }
 
+        val AdditionHatch =
+            object : IHatchElement<NyxMTEBase<*>> {
+                override fun mteClasses(): List<Class<out IMetaTileEntity>> = listOf(MTEHatchAddition::class.java)
+
+                override fun adder(): IGTHatchAdder<in NyxMTEBase<*>> =
+                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addAdditionHatchToMachineList(t, i.toInt()) }
+
+                override fun name(): String = "AdditionHatch"
+
+                override fun count(t: NyxMTEBase<*>?): Long {
+                    return (t ?: return 0).mAdditionHatches.size.toLong()
+                }
+            }
+
         /**
          * Structure Definition for the machine, set when first time calling getStructureDefinition().
          */
@@ -105,7 +120,9 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         mWrench = true
     }
 
-    private val mExoticDynamoHatches: MutableList<MTEHatchDynamoMulti> = mutableListOf()
+    protected val mExoticDynamoHatches: MutableList<MTEHatchDynamoMulti> = mutableListOf()
+
+    protected val mAdditionHatches: MutableList<MTEHatchAddition> = mutableListOf()
 
     /**
      * Universal Hatch Adder for both normal and exotic energy and dynamo hatches.
@@ -116,12 +133,13 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     ): Boolean =
         super.addToMachineList(aTileEntity, aBaseCasingIndex) ||
             addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex) ||
-            addExoticDynamoToMachineList(aTileEntity, aBaseCasingIndex)
+            addExoticDynamoToMachineList(aTileEntity, aBaseCasingIndex) ||
+            addAdditionHatchToMachineList(aTileEntity, aBaseCasingIndex)
 
     fun addToMachineListCompatible(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Short,
-    ): Boolean = super.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
+    ): Boolean = addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
 
     final override fun addEnergyInputToMachineList(
         aTileEntity: IGregTechTileEntity?,
@@ -161,6 +179,23 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 mte.updateCraftingIcon(machineCraftingIcon)
                 return mExoticDynamoHatches.add(mte)
             }
+
+            else -> return false
+        }
+    }
+
+    fun addAdditionHatchToMachineList(
+        aTileEntity: IGregTechTileEntity?,
+        aBaseCasingIndex: Int,
+    ): Boolean {
+        val mte = aTileEntity?.metaTileEntity ?: return false
+        when (mte) {
+            is MTEHatchAddition -> {
+                mte.updateTexture(aBaseCasingIndex)
+                mte.updateCraftingIcon(machineCraftingIcon)
+                return mAdditionHatches.add(mte)
+            }
+
             else -> return false
         }
     }
