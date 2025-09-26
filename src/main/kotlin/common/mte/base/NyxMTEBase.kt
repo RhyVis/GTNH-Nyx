@@ -18,9 +18,9 @@ import gregtech.api.logic.ProcessingLogic
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase
 import gregtech.api.metatileentity.implementations.MTEHatch
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo
-import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.render.TextureFactory
 import gregtech.api.util.GTUtility
+import gregtech.api.util.GTUtility.filterValidMTEs
 import gregtech.api.util.IGTHatchAdder
 import gregtech.api.util.MultiblockTooltipBuilder
 import gregtech.common.tileentities.machines.MTEHatchOutputBusME
@@ -41,17 +41,20 @@ import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import rhynia.nyx.api.enums.CommonString
-import rhynia.nyx.api.process.OverclockType
+import rhynia.nyx.api.interfaces.mte.ProcessInfo
+import rhynia.nyx.api.process.NyxAutoProcessingLogic
 import rhynia.nyx.api.util.idEqual
 import rhynia.nyx.api.util.localize
 import rhynia.nyx.api.util.size
+import rhynia.nyx.common.mte.hatch.MTEHatchAddition
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti
 import kotlin.reflect.KClass
 
-@Suppress("UNUSED")
+@Suppress("UNUSED", "NOTHING_TO_INLINE")
 abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     MTEExtendedPowerMultiBlockBase<T>,
-    ISurvivalConstructable {
+    ISurvivalConstructable,
+    ProcessInfo {
     protected constructor(
         aID: Int,
         aName: String,
@@ -81,6 +84,20 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
                 }
             }
 
+        val AdditionHatch =
+            object : IHatchElement<NyxMTEBase<*>> {
+                override fun mteClasses(): List<Class<out IMetaTileEntity>> = listOf(MTEHatchAddition::class.java)
+
+                override fun adder(): IGTHatchAdder<in NyxMTEBase<*>> =
+                    IGTHatchAdder<NyxMTEBase<*>> { c, t, i -> c.addAdditionHatchToMachineList(t, i.toInt()) }
+
+                override fun name(): String = "AdditionHatch"
+
+                override fun count(t: NyxMTEBase<*>?): Long {
+                    return (t ?: return 0).mAdditionHatches.size.toLong()
+                }
+            }
+
         /**
          * Structure Definition for the machine, set when first time calling getStructureDefinition().
          */
@@ -91,7 +108,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         val infoEuModifier by lazy { localize("nyx.common.info.euModifier") }
     }
 
-    protected val baseMTE get() = baseMetaTileEntity!!
+    protected inline val baseMTE get() = baseMetaTileEntity!!
 
     /** Remove maintenance requirement. */
     protected fun removeMaintenance() {
@@ -103,23 +120,26 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         mWrench = true
     }
 
-    override fun isCorrectMachinePart(aStack: ItemStack?): Boolean = true
+    protected val mExoticDynamoHatches: MutableList<MTEHatchDynamoMulti> = mutableListOf()
 
-    private val mExoticDynamoHatches: MutableList<MTEHatchDynamoMulti> = mutableListOf()
+    protected val mAdditionHatches: MutableList<MTEHatchAddition> = mutableListOf()
 
-    /** Universal Hatch Adder */
+    /**
+     * Universal Hatch Adder for both normal and exotic energy and dynamo hatches.
+     */
     final override fun addToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean =
         super.addToMachineList(aTileEntity, aBaseCasingIndex) ||
             addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex) ||
-            addExoticDynamoToMachineList(aTileEntity, aBaseCasingIndex)
+            addExoticDynamoToMachineList(aTileEntity, aBaseCasingIndex) ||
+            addAdditionHatchToMachineList(aTileEntity, aBaseCasingIndex)
 
     fun addToMachineListCompatible(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Short,
-    ): Boolean = super.addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
+    ): Boolean = addToMachineList(aTileEntity, aBaseCasingIndex.toInt())
 
     final override fun addEnergyInputToMachineList(
         aTileEntity: IGregTechTileEntity?,
@@ -133,16 +153,19 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         aBaseCasingIndex: Int,
     ): Boolean {
         val mte = aTileEntity?.metaTileEntity ?: return false
-        if (mte is MTEHatchDynamo) {
-            mte.updateTexture(aBaseCasingIndex)
-            mte.updateCraftingIcon(machineCraftingIcon)
-            return mDynamoHatches.add(mte)
-        } else if (mte is MTEHatchDynamoMulti) {
-            mte.updateTexture(aBaseCasingIndex)
-            mte.updateCraftingIcon(machineCraftingIcon)
-            return mExoticDynamoHatches.add(mte)
+        when (mte) {
+            is MTEHatchDynamo -> {
+                mte.updateTexture(aBaseCasingIndex)
+                mte.updateCraftingIcon(machineCraftingIcon)
+                return mDynamoHatches.add(mte)
+            }
+            is MTEHatchDynamoMulti -> {
+                mte.updateTexture(aBaseCasingIndex)
+                mte.updateCraftingIcon(machineCraftingIcon)
+                return mExoticDynamoHatches.add(mte)
+            }
+            else -> return false
         }
-        return false
     }
 
     fun addExoticDynamoToMachineList(
@@ -150,12 +173,31 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         aBaseCasingIndex: Int,
     ): Boolean {
         val mte = aTileEntity?.metaTileEntity ?: return false
-        if (mte is MTEHatchDynamoMulti) {
-            mte.updateTexture(aBaseCasingIndex)
-            mte.updateCraftingIcon(machineCraftingIcon)
-            return mExoticDynamoHatches.add(mte)
+        when (mte) {
+            is MTEHatchDynamoMulti -> {
+                mte.updateTexture(aBaseCasingIndex)
+                mte.updateCraftingIcon(machineCraftingIcon)
+                return mExoticDynamoHatches.add(mte)
+            }
+
+            else -> return false
         }
-        return false
+    }
+
+    fun addAdditionHatchToMachineList(
+        aTileEntity: IGregTechTileEntity?,
+        aBaseCasingIndex: Int,
+    ): Boolean {
+        val mte = aTileEntity?.metaTileEntity ?: return false
+        when (mte) {
+            is MTEHatchAddition -> {
+                mte.updateTexture(aBaseCasingIndex)
+                mte.updateCraftingIcon(machineCraftingIcon)
+                return mAdditionHatches.add(mte)
+            }
+
+            else -> return false
+        }
     }
 
     final override fun addEnergyOutputMultipleDynamos(
@@ -170,9 +212,9 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             tEU: Long,
         ): Boolean {
             var remainingEU = tEU
-            var freeCap: Long = 0
+            var freeCap = 0L
 
-            GTUtility.filterValidMTEs(hatches).forEach {
+            filterValidMTEs(hatches).forEach {
                 freeCap += it.maxEUStore() - it.baseMetaTileEntity!!.storedEU
                 if (freeCap > 0) {
                     if (remainingEU >= freeCap) {
@@ -274,27 +316,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
 
     override fun supportsSingleRecipeLocking(): Boolean = true
 
-    override fun createProcessingLogic(): ProcessingLogic? =
-        object : ProcessingLogic() {
-            override fun process(): CheckRecipeResult {
-                setEuModifier(rEuModifier)
-                setSpeedBonus(rTimeModifier)
-                setOverclock(rOverclockType.timeDec, rOverclockType.powerInc)
-                return super.process()
-            }
-        }.setMaxParallelSupplier(::rMaxParallel)
-
-    protected open val rOverclockType: OverclockType
-        get() = OverclockType.Normal
-
-    protected open val rEuModifier
-        get() = 1.0
-
-    protected open val rTimeModifier
-        get() = 1.0
-
-    protected open val rMaxParallel
-        get() = 1
+    override fun createProcessingLogic(): ProcessingLogic? = NyxAutoProcessingLogic(this)
 
     protected fun consumeFluid(
         fluid: Fluid,
@@ -420,7 +442,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     }
 
     /** Format Double number as % */
-    protected fun Double.formatPercent() = "%.3f%%".format(this * 100)
+    protected inline fun Double.formatPercent() = "%.3f%%".format(this * 100)
 
     final override fun getInfoData(): Array<String> =
         super.getInfoData() +
@@ -438,55 +460,53 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     protected fun MultiblockTooltipBuilder.addMachineTypeLocalized(): MultiblockTooltipBuilder =
         this.addMachineType(
             if (StatCollector.canTranslate("$mName.type")) {
-                StatCollector.translateToLocal("$mName.type")
+                localize("$mName.type")
             } else {
-                StatCollector.translateToLocal("$mName.name")
+                localize("$mName.name")
             },
         )
 
-    protected fun MultiblockTooltipBuilder.addInfoLocalized(key: String): MultiblockTooltipBuilder =
-        this.addInfo(StatCollector.translateToLocal(key))
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(key: String): MultiblockTooltipBuilder = addInfo(localize(key))
 
-    protected fun MultiblockTooltipBuilder.addInfoLocalized(index: Int): MultiblockTooltipBuilder =
-        this.addInfo(StatCollector.translateToLocal("$mName.info.$index"))
+    protected fun MultiblockTooltipBuilder.addInfoLocalized(index: Int): MultiblockTooltipBuilder = addInfo(localize("$mName.info.$index"))
 
     protected fun MultiblockTooltipBuilder.addInfoListLocalized(untilIndex: Int): MultiblockTooltipBuilder =
         apply {
             (0..untilIndex)
-                .map { StatCollector.translateToLocal("$mName.info.$it") }
-                .forEach { this.addInfo(it) }
+                .map { localize("$mName.info.$it") }
+                .forEach { addInfo(it) }
         }
 
     protected fun MultiblockTooltipBuilder.addInfoLocalized(
         key: String,
         vararg args: Any,
-    ): MultiblockTooltipBuilder = this.addInfo(StatCollector.translateToLocalFormatted(key, *args))
+    ): MultiblockTooltipBuilder = addInfo(localize(key, *args))
 
     protected fun MultiblockTooltipBuilder.addInfoLocalized(
         index: Int,
         vararg args: Any,
-    ): MultiblockTooltipBuilder = this.addInfo(StatCollector.translateToLocalFormatted("$mName.info.$index", *args))
+    ): MultiblockTooltipBuilder = addInfo(localize("$mName.info.$index", *args))
 
     protected fun MultiblockTooltipBuilder.addChangeModeByScrewdriver(): MultiblockTooltipBuilder =
-        this.addInfo(CommonString.ChangeModeByScrewdriver)
+        addInfo(CommonString.ChangeModeByScrewdriver)
 
     protected fun MultiblockTooltipBuilder.addInputBus(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addInputBus(CommonString.BluePrintInfo, aDot)
+        addInputBus(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addInputHatch(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addInputHatch(CommonString.BluePrintInfo, aDot)
+        addInputHatch(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addOutputBus(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addOutputBus(CommonString.BluePrintInfo, aDot)
+        addOutputBus(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addOutputHatch(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addOutputHatch(CommonString.BluePrintInfo, aDot)
+        addOutputHatch(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addEnergyHatch(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addEnergyHatch(CommonString.BluePrintInfo, aDot)
+        addEnergyHatch(CommonString.BluePrintInfo, aDot)
 
     protected fun MultiblockTooltipBuilder.addDynamo(aDot: Int = 1): MultiblockTooltipBuilder =
-        this.addDynamoHatch(CommonString.BluePrintInfo, aDot)
+        addDynamoHatch(CommonString.BluePrintInfo, aDot)
 
     override fun getWailaBody(
         itemStack: ItemStack?,
@@ -509,11 +529,11 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         super.getWailaNBTData(player, tile, tag, world, x, y, z)
     }
 
-    override fun saveNBTData(aNBT: NBTTagCompound?) {
+    override fun saveNBTData(aNBT: NBTTagCompound) {
         super.saveNBTData(aNBT)
     }
 
-    override fun loadNBTData(aNBT: NBTTagCompound?) {
+    override fun loadNBTData(aNBT: NBTTagCompound) {
         super.loadNBTData(aNBT)
     }
 
@@ -554,5 +574,5 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     /**
      * Get a localization key prefixed with the machine name.
      */
-    protected fun locPrefixed(key: String): String = "$mName.$key"
+    protected inline fun locPrefixed(key: String): String = "$mName.$key"
 }

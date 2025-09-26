@@ -16,11 +16,9 @@ interface MetaVariant {
     fun getVariant(meta: Int): ItemStack
 
     /**
-     * Create an array of copies of this with different meta values.
-     *
-     * @return the copies of this with different meta values
+     * Get an array of copies of this with different meta values.
      */
-    fun getVariants(): Array<ItemStack>
+    val allVariants: Array<ItemStack>
 
     /**
      * Register a variant of this with given meta value, and return the instance of registered variant
@@ -34,11 +32,9 @@ interface MetaVariant {
     fun registerVariant(meta: Int): ItemStack
 
     /**
-     * Create a copy of allowed meta IDs.
-     *
-     * @return a copy of allowed meta IDs.
+     * Get a set of allowed meta IDs.
      */
-    fun getVariantIds(): Set<Int>
+    val allVariantIds: Set<Int>
 
     /**
      * Check if the meta is a valid variant.
@@ -46,7 +42,7 @@ interface MetaVariant {
      * @param meta the meta value
      * @return `true` if valid
      */
-    fun isValidVariant(meta: Int): Boolean = getVariantIds().contains(meta)
+    fun isValidVariant(meta: Int): Boolean = allVariantIds.contains(meta)
 
     /**
      * Register the icons of all variants.
@@ -57,5 +53,5 @@ interface MetaVariant {
     fun MetaVariant.registerVariantIcon(
         register: IIconRegister,
         iconFunc: (Int) -> String,
-    ) = this.getVariantIds().associate { it to register.registerIcon(iconFunc(it)) }
+    ) = allVariantIds.associateWith { register.registerIcon(iconFunc(it)) }
 }

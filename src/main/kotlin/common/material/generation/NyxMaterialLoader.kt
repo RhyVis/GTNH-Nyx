@@ -7,6 +7,7 @@ import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidRegistry
 import rhynia.nyx.ModLogger
 import rhynia.nyx.api.interfaces.Loader
+import rhynia.nyx.api.util.shortObjMapOf
 import rhynia.nyx.common.item.NyxGeneratedMetaItem
 import rhynia.nyx.common.material.generation.NyxMaterialLoader.MaterialSet
 import kotlin.time.measureTime
@@ -15,11 +16,11 @@ object NyxMaterialLoader : Loader {
     override fun load() {
         ModLogger.info("Registering materials...")
         measureTime {
-            MaterialSet.forEach {
-                ModLogger.debug("Loading material: ${it.id}: ${it.internalName}")
-                generateFluid(it)
-                MaterialMap[it.id] = it
-                it.hasInitialiated = true
+            MaterialSet.forEach { material ->
+                ModLogger.debug("Loading material: ${material.id}: ${material.internalName}")
+                generateFluid(material)
+                MaterialMap[material.id] = material
+                material.hasInitialiated = true
             }
             generateMetaItem()
         }.also {
@@ -42,7 +43,7 @@ object NyxMaterialLoader : Loader {
      *
      * The instance of the [MaterialSet] will be added to this map after the fluid generation process.
      */
-    val MaterialMap = mutableMapOf<Short, NyxMaterial>()
+    val MaterialMap = shortObjMapOf<NyxMaterial>()
 
     /**
      * All needed item instances by all the materials, the key is the [OrePrefixes] and the value is
@@ -53,7 +54,7 @@ object NyxMaterialLoader : Loader {
     /**
      * Fluid map, the key is the material id and the value is another map of [FluidState] to [Fluid].
      */
-    val FluidMap = mutableMapOf<Short, MutableMap<FluidState, Fluid>>()
+    val FluidMap = shortObjMapOf<MutableMap<FluidState, Fluid>>()
 
     private fun generateFluid(material: NyxMaterial) {
         if (!material.flagFluid) return

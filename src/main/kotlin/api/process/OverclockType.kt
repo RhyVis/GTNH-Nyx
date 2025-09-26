@@ -1,5 +1,6 @@
 package rhynia.nyx.api.process
 
+@Suppress("UNUSED")
 enum class OverclockType(
     val timeDec: Double,
     val powerInc: Double,

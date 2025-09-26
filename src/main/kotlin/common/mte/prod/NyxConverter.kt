@@ -14,6 +14,7 @@ import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.interfaces.IHatchElement
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
+import gregtech.api.logic.ProcessingLogic
 import gregtech.api.recipe.check.CheckRecipeResult
 import gregtech.api.recipe.check.CheckRecipeResultRegistry
 import gregtech.api.util.MultiblockTooltipBuilder
@@ -26,6 +27,7 @@ import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
 import rhynia.nyx.api.util.getItemOrNull
 import rhynia.nyx.api.util.localize
+import rhynia.nyx.api.util.objLongMapOf
 import rhynia.nyx.api.util.setItem
 import rhynia.nyx.common.mte.base.NyxMTECubeBase
 import rhynia.nyx.init.MaterialMapper
@@ -42,6 +44,8 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
 
     private var pControllerToken: MetaItemToken = MetaItemToken.EMPTY
     private var pOrePrefix: OrePrefixes? = null
+
+    override fun createProcessingLogic(): ProcessingLogic? = null
 
     override fun checkProcessing(): CheckRecipeResult {
         val controllerStack = controllerSlot
@@ -66,50 +70,58 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
         val inputItem = storedInputs.also { it.remove(controllerStack) }
         if (inputItem.isEmpty()) return pStop()
 
+        data class InputData(
+            val stack: ItemStack,
+            val material: MaterialMapper.MaterialData,
+            val prefix: OrePrefixes,
+            val materialAmount: Long,
+        )
+
+        // map input items to InputData to avoid multiple lookups
+        val inputDataList =
+            inputItem.mapNotNull {
+                val (material, prefix) = MaterialMapper.lookup(it) ?: return@mapNotNull null
+                if (!material.hasOrePrefix(targetPrefix)) return@mapNotNull null
+                val sourceMaterialAmount = prefix.mMaterialAmount.takeIf { i -> i > 0 } ?: return@mapNotNull null
+                InputData(it, material, prefix, sourceMaterialAmount)
+            }
+
+        if (inputDataList.isEmpty()) return pStop()
+
         // merge input items by material
-        val materialAmountMap = mutableMapOf<MaterialMapper.MaterialData, Long>()
-        val consumedStacks = mutableListOf<ItemStack>()
-
-        for (itemStack in inputItem) {
-            val (material, prefix) = MaterialMapper[itemStack] ?: continue
-            if (!material.hasOrePrefix(targetPrefix)) continue
-
-            val sourceMaterialAmount = prefix.mMaterialAmount.takeIf { it > 0 } ?: continue
-            val totalMaterialAmount = sourceMaterialAmount * itemStack.stackSize
-
-            materialAmountMap[material] = (materialAmountMap[material] ?: 0) + totalMaterialAmount
-            consumedStacks.add(itemStack)
+        val materialAmountMap = objLongMapOf<MaterialMapper.MaterialData>()
+        inputDataList.forEach {
+            val totalMaterialAmount = it.materialAmount * it.stack.stackSize
+            materialAmountMap[it.material] = materialAmountMap.getLong(it.material) + totalMaterialAmount
         }
 
-        if (materialAmountMap.isEmpty()) return pStop()
-
-        // calculate output counts and total consumed amount
-        val outputData = mutableMapOf<MaterialMapper.MaterialData, Long>()
-        var totalConsumedAmount = 0L
-
+        // calculate output counts
+        val outputData = objLongMapOf<MaterialMapper.MaterialData>()
         for ((material, totalAmount) in materialAmountMap) {
             val outputCount = totalAmount / targetMaterialAmount
             if (outputCount > 0) {
                 outputData[material] = outputCount
-                totalConsumedAmount += outputCount * targetMaterialAmount
             }
         }
 
         if (outputData.isEmpty()) return pStop()
 
         // only consume the needed amount
-        for (itemStack in consumedStacks) {
-            val material = MaterialMapper.lookupMaterial(itemStack) ?: continue
-            val outputCount = outputData[material] ?: continue
+        for (inputData in inputDataList) {
+            val outputCount = outputData.getLong(inputData.material).takeIf { it > 0 } ?: continue
 
             // calculate how much to consume from this stack
             val neededAmount = outputCount * targetMaterialAmount
 
             // consume ratio capped to 1.0 to avoid over-consumption due to rounding
-            val consumeRatio = minOf(1.0, neededAmount.toDouble() / (materialAmountMap[material] ?: 1))
-            val consumeCount = (itemStack.stackSize * consumeRatio).toInt()
+            val consumeRatio =
+                minOf(
+                    1.0,
+                    neededAmount.toDouble() / (materialAmountMap.getLong(inputData.material).takeIf { it > 0 } ?: 1),
+                )
+            val consumeCount = (inputData.stack.stackSize * consumeRatio).toInt()
 
-            itemStack.stackSize = maxOf(0, itemStack.stackSize - consumeCount)
+            inputData.stack.stackSize = maxOf(0, inputData.stack.stackSize - consumeCount)
         }
 
         // output generation
@@ -196,10 +208,8 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
             .addOutputBus()
             .toolTipFinisher(CommonString.NyxGigaFac)
 
-    override fun loadNBTData(aNBT: NBTTagCompound?) {
+    override fun loadNBTData(aNBT: NBTTagCompound) {
         super.loadNBTData(aNBT)
-        if (aNBT == null) return
-
         pControllerToken = aNBT.getItemOrNull("pControllerToken")?.asToken() ?: MetaItemToken.EMPTY
         pOrePrefix =
             aNBT.getString("pOrePrefix").let {
@@ -207,10 +217,8 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
             }
     }
 
-    override fun saveNBTData(aNBT: NBTTagCompound?) {
+    override fun saveNBTData(aNBT: NBTTagCompound) {
         super.saveNBTData(aNBT)
-        if (aNBT == null) return
-
         aNBT.setItem("pControllerToken", pControllerToken.createStack())
         aNBT.setString("pOrePrefix", pOrePrefix?.name ?: "")
     }

@@ -67,6 +67,7 @@ abstract class NyxMTECubeWirelessBase<T : NyxMTEWirelessBase<T>> : NyxMTEWireles
                 HatchElement.OutputHatch,
                 HatchElement.Energy.or(HatchElement.ExoticEnergy),
                 HatchElement.Dynamo.or(ExoticDynamo),
+                AdditionHatch,
             )
 
     final override val sControllerBlock: Pair<Block, Int>

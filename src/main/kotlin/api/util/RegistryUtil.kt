@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack
 import rhynia.nyx.common.block.AbstractMetaBlock
 import rhynia.nyx.common.item.AbstractMetaItem
 
+@Suppress("UNUSED")
 object RegistryUtil {
     fun registerMetaItem(
         item: AbstractMetaItem,

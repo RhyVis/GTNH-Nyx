@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED")
+
 package rhynia.nyx.api.util
 
 import gregtech.api.enums.Mods

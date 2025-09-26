@@ -39,7 +39,6 @@ object ItemRegister {
                     item = it,
                     meta = 0,
                     "我相信它没什么用",
-                    "如果在配方中发现了它，代表又一个Null被按下不表",
                 )
         }
 
