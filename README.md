@@ -1,6 +1,6 @@
 # Nyx: Balance-less GTNH Experience
 
-![Version](https://img.shields.io/badge/GTNH_Version-2.8.0_RC2-blue)
+![Version](https://img.shields.io/badge/GTNH_Version-2.8.0-blue)
 
 English | [中文](README-ZH.md)
 
