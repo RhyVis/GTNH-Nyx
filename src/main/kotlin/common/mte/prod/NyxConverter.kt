@@ -8,10 +8,10 @@ import gregtech.api.GregTechAPI
 import gregtech.api.enums.HatchElement.OutputBus
 import gregtech.api.enums.HatchElement.OutputHatch
 import gregtech.api.enums.OrePrefixes
-import gregtech.api.enums.Textures
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON
 import gregtech.api.interfaces.IHatchElement
+import gregtech.api.interfaces.IIconContainer
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
 import gregtech.api.logic.ProcessingLogic
@@ -65,7 +65,7 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
         }
 
         val targetPrefix = pOrePrefix!!
-        val targetMaterialAmount = targetPrefix.mMaterialAmount.takeIf { it > 0 } ?: return pStop(true)
+        val targetMaterialAmount = targetPrefix.materialAmount.takeIf { it > 0 } ?: return pStop(true)
 
         val inputItem = storedInputs.also { it.remove(controllerStack) }
         if (inputItem.isEmpty()) return pStop()
@@ -82,7 +82,7 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
             inputItem.mapNotNull {
                 val (material, prefix) = MaterialMapper.lookup(it) ?: return@mapNotNull null
                 if (!material.hasOrePrefix(targetPrefix)) return@mapNotNull null
-                val sourceMaterialAmount = prefix.mMaterialAmount.takeIf { i -> i > 0 } ?: return@mapNotNull null
+                val sourceMaterialAmount = prefix.materialAmount.takeIf { i -> i > 0 } ?: return@mapNotNull null
                 InputData(it, material, prefix, sourceMaterialAmount)
             }
 
@@ -173,7 +173,7 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
                 TextWidget
                     .dynamicString {
                         "${localize(locPrefixed("gui.t.0"))}: ${EnumChatFormatting.AQUA}${
-                            pOrePrefix?.mRegularLocalName ?: "EMPTY"
+                            pOrePrefix?.defaultLocalName ?: "EMPTY"
                         }"
                     }.setSynced(true)
                     .setTextAlignment(Alignment.CenterLeft)
@@ -192,10 +192,10 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
     override val sCasingHatch: Array<IHatchElement<in NyxConverter>>
         get() = arrayOf(OutputBus, OutputHatch)
 
-    override val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    override val sControllerIcon: Pair<IIconContainer, IIconContainer>
         get() = OVERLAY_DTPF_OFF to OVERLAY_DTPF_OFF
 
-    override val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    override val sControllerIconActive: Pair<IIconContainer, IIconContainer>
         get() = OVERLAY_DTPF_ON to OVERLAY_DTPF_ON
 
     override fun createTooltip(): MultiblockTooltipBuilder? =
@@ -213,7 +213,7 @@ class NyxConverter : NyxMTECubeBase<NyxConverter> {
         pControllerToken = aNBT.getItemOrNull("pControllerToken")?.asToken() ?: MetaItemToken.EMPTY
         pOrePrefix =
             aNBT.getString("pOrePrefix").let {
-                if (it.isEmpty()) null else OrePrefixes.valueOf(it)
+                if (it.isEmpty()) null else OrePrefixes.getPrefix(it)
             }
     }
 

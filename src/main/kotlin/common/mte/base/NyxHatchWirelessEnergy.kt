@@ -1,6 +1,8 @@
 package rhynia.nyx.common.mte.base
 
+/*
 import com.google.common.math.LongMath
+import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil
 import gregtech.api.enums.GTValues.V
 import gregtech.api.enums.Textures
 import gregtech.api.interfaces.ITexture
@@ -43,7 +45,7 @@ class NyxHatchWirelessEnergy : MTEHatchEnergyMulti {
             StatCollector.translateToLocal("nyx.wirelessExt.tooltip.1"),
             StatCollector.translateToLocal("nyx.wirelessExt.tooltip.2"),
             "${StatCollector.translateToLocal("gt.blockmachines.hatch.energytunnel.desc.1")}: ${YELLOW}${
-                GTUtility.formatNumbers(aAmp * V[aTier])
+                NumberFormatUtil.formatNumber(aAmp * V[aTier])
             }${GRAY}EU/t",
         ),
         aAmp,
@@ -305,3 +307,4 @@ private fun getOverflowDivisor(transferPerOpt: BigInteger): Double =
     } else {
         1.0
     }
+*/

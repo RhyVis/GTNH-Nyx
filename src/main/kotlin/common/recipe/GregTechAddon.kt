@@ -6,7 +6,7 @@ import rhynia.nyx.api.enums.ref.Tier
 import rhynia.nyx.api.recipe.RecipePool
 import rhynia.nyx.api.recipe.dsl.withRecipeMap
 import rhynia.nyx.common.material.NyxMaterials
-import rhynia.nyx.config.ConfigRecipe
+// import rhynia.nyx.config.ConfigRecipe
 
 class GTAddonRecipes : RecipePool() {
     override fun loadRecipes() {
@@ -36,6 +36,7 @@ class GTAddonRecipes : RecipePool() {
     }
 }
 
+/*
 class GTEasyWirelessRecipes : RecipePool() {
     override fun loadRecipes() {
         if (!ConfigRecipe.RECIPE_EASY_WIRELESS) return
@@ -141,3 +142,4 @@ class GTEasyWirelessRecipes : RecipePool() {
         }
     }
 }
+*/

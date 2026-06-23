@@ -1,5 +1,6 @@
 package rhynia.nyx.common.mte.base
 
+import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition
 import com.gtnewhorizons.modularui.api.screen.ModularWindow
@@ -11,6 +12,7 @@ import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW
 import gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW
 import gregtech.api.interfaces.IHatchElement
+import gregtech.api.interfaces.IIconContainer
 import gregtech.api.interfaces.ITexture
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity
@@ -23,8 +25,8 @@ import gregtech.api.util.GTUtility
 import gregtech.api.util.GTUtility.filterValidMTEs
 import gregtech.api.util.IGTHatchAdder
 import gregtech.api.util.MultiblockTooltipBuilder
-import gregtech.common.tileentities.machines.MTEHatchOutputBusME
-import gregtech.common.tileentities.machines.MTEHatchOutputME
+import gregtech.common.tileentities.machines.outputme.MTEHatchOutputBusME
+import gregtech.common.tileentities.machines.outputme.MTEHatchOutputME
 import mcp.mobius.waila.api.IWailaConfigHandler
 import mcp.mobius.waila.api.IWailaDataAccessor
 import net.minecraft.block.Block
@@ -168,7 +170,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         }
     }
 
-    fun addExoticDynamoToMachineList(
+    override fun addExoticDynamoToMachineList(
         aTileEntity: IGregTechTileEntity?,
         aBaseCasingIndex: Int,
     ): Boolean {
@@ -255,11 +257,11 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         get() = GTUtility.getCasingTextureIndex(sControllerBlock.first, sControllerBlock.second)
 
     /** Controller Icon for active state, left is normal, right is glow. */
-    protected open val sControllerIconActive: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    protected open val sControllerIconActive: Pair<IIconContainer, IIconContainer>
         get() = OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE to OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW
 
     /** Controller Icon for inactive state, left is normal, right is glow. */
-    protected open val sControllerIcon: Pair<Textures.BlockIcons, Textures.BlockIcons>
+    protected open val sControllerIcon: Pair<IIconContainer, IIconContainer>
         get() = OVERLAY_FRONT_ASSEMBLY_LINE to OVERLAY_FRONT_ASSEMBLY_LINE_GLOW
 
     override fun getTexture(
@@ -354,10 +356,10 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
         var amount = amount
 
         if (amount <= Int.MAX_VALUE) {
-            addOutput(item.copy() size amount.toInt())
+            addOutputAtomic(item.copy() size amount.toInt())
         } else {
             while (amount > Int.MAX_VALUE) {
-                addOutput(item.copy() size Int.MAX_VALUE)
+                addOutputAtomic(item.copy() size Int.MAX_VALUE)
                 amount -= Int.MAX_VALUE
             }
         }
@@ -399,16 +401,16 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             ?.let {
                 it as MTEHatchOutputBusME
                 if (amount < Int.MAX_VALUE) {
-                    it.storePartial(item.copy() size amount)
+                    it.storePartial(item.copy() size amount, false)
                 } else {
                     // For item stacks > Int max.
                     while (amount >= Int.MAX_VALUE) {
-                        it.storePartial(item.copy() size Int.MAX_VALUE)
+                        it.storePartial(item.copy() size Int.MAX_VALUE, false)
                         amount -= Int.MAX_VALUE.toLong()
                     }
 
                     if (amount > 0) {
-                        it.storePartial(item.copy() size amount)
+                        it.storePartial(item.copy() size amount, false)
                     }
                 }
             }
@@ -426,16 +428,16 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
             ?.let {
                 it as MTEHatchOutputME
                 if (amount < Int.MAX_VALUE) {
-                    it.tryFillAE(fluid.copy().apply { this.amount = amount.toInt() })
+                    it.fill(fluid.copy().apply { this.amount = amount.toInt() }, true)
                 } else {
                     // For fluidStacks > Int max.
                     while (amount >= Int.MAX_VALUE) {
-                        it.tryFillAE(fluid.copy().apply { this.amount = Int.MAX_VALUE })
+                        it.fill(fluid.copy().apply { this.amount = Int.MAX_VALUE }, true)
                         amount -= Int.MAX_VALUE.toLong()
                     }
 
                     if (amount > 0) {
-                        it.tryFillAE(fluid.copy().apply { this.amount = amount.toInt() })
+                        it.fill(fluid.copy().apply { this.amount = amount.toInt() }, true)
                     }
                 }
             }
@@ -447,7 +449,7 @@ abstract class NyxMTEBase<T : MTEExtendedPowerMultiBlockBase<T>> :
     final override fun getInfoData(): Array<String> =
         super.getInfoData() +
             arrayOf(
-                "${AQUA}$infoMaxParallel: ${GOLD}${GTUtility.formatNumbers(rMaxParallel.toLong())}",
+                "${AQUA}$infoMaxParallel: ${GOLD}${NumberFormatUtil.formatNumber(rMaxParallel.toLong())}",
                 "${AQUA}$infoTimeModifier: ${GOLD}${rTimeModifier.formatPercent()}",
                 "${AQUA}$infoEuModifier: ${GOLD}${rEuModifier.formatPercent()}",
             ) +

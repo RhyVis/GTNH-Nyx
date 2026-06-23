@@ -460,7 +460,7 @@ class NyxInjector :
     companion object {
         @Suppress("SpellCheckingInspection")
         val GENNY: ITexture by lazy {
-            TextureFactory.of(Textures.BlockIcons.CustomIcon("iconsets/GENNY"))
+            TextureFactory.of(Textures.BlockIcons.custom("iconsets/GENNY"))
         }
     }
 }

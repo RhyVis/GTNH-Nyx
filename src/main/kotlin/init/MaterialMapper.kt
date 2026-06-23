@@ -11,7 +11,6 @@ import rhynia.nyx.ModLogger
 import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
 import rhynia.nyx.api.util.size
-import rhynia.nyx.mixins.gt.AccessorGTMaterial
 import kotlin.time.measureTime
 
 /**
@@ -21,7 +20,7 @@ import kotlin.time.measureTime
  */
 @Suppress("UNUSED")
 object MaterialMapper {
-    private val mapGT = AccessorGTMaterial.getMaterialMap()
+    private val mapGT = Materials.getMaterialsMap()
     private val mapBW = Werkstoff.werkstoffNameHashMap
     private val mapPP = Material.mMaterialMap.associateBy { it.unlocalizedName }
 
@@ -143,7 +142,7 @@ object MaterialMapper {
         ) : MaterialData {
             override val name: String = material.mName
             override val validOrePrefixes: Set<OrePrefixes> =
-                OrePrefixes.entries
+                OrePrefixes.VALUES.toList()
                     .filter { prefix ->
                         GTOreDictUnificator.get(prefix, material, 1) != null
                     }.toSet()
@@ -164,7 +163,7 @@ object MaterialMapper {
         ) : MaterialData {
             override val name: String = werkstoff.defaultName
             override val validOrePrefixes: Set<OrePrefixes> =
-                OrePrefixes.entries
+                OrePrefixes.VALUES.toList()
                     .filter { prefix ->
                         WerkstoffLoader.getCorrespondingItemStackUnsafe(prefix, werkstoff, 1) != null
                     }.toSet()
@@ -185,7 +184,7 @@ object MaterialMapper {
         ) : MaterialData {
             override val name: String = material.unlocalizedName
             override val validOrePrefixes: Set<OrePrefixes> =
-                OrePrefixes.entries
+                OrePrefixes.VALUES.toList()
                     .filter { prefix ->
                         material.getComponentByPrefix(prefix, 1) != null
                     }.toSet()
