@@ -1,6 +1,5 @@
 package rhynia.nyx.common.mte.base
 
-/*
 import com.google.common.math.LongMath
 import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil
 import gregtech.api.enums.GTValues.V
@@ -307,4 +306,3 @@ private fun getOverflowDivisor(transferPerOpt: BigInteger): Double =
     } else {
         1.0
     }
-*/

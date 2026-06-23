@@ -1,39 +1,39 @@
 package rhynia.nyx.init
 
-// import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil
+import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil
 import gregtech.api.GregTechAPI
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity
-// import net.minecraft.util.StatCollector
+import net.minecraft.util.StatCollector
 import rhynia.nyx.DevEnv
 import rhynia.nyx.MOD_NAME
 import rhynia.nyx.api.interfaces.Loader
 import rhynia.nyx.common.ItemList
 import rhynia.nyx.common.NyxItemList
-// import rhynia.nyx.common.NyxWirelessDynamoList
-// import rhynia.nyx.common.NyxWirelessEnergyList
-// import rhynia.nyx.common.mte.base.NyxHatchWirelessDynamo
-// import rhynia.nyx.common.mte.base.NyxHatchWirelessEnergy
+import rhynia.nyx.common.NyxWirelessDynamoList
+import rhynia.nyx.common.NyxWirelessEnergyList
+import rhynia.nyx.common.mte.base.NyxHatchWirelessDynamo
+import rhynia.nyx.common.mte.base.NyxHatchWirelessEnergy
 import rhynia.nyx.common.mte.prod.NyxConverter
 import rhynia.nyx.common.mte.prod.NyxCopier
 import rhynia.nyx.common.mte.prod.NyxProxy
 import rhynia.nyx.common.mte.sing.NyxInjector
 import rhynia.nyx.config.ConfigDebug
 import rhynia.nyx.config.ConfigMachine
-// import rhynia.nyx.config.ConfigRecipe
+import rhynia.nyx.config.ConfigRecipe
 import java.io.File
 
 object MachineLoader : Loader {
     private val offset by lazy { ConfigMachine.MTE_ID_OFFSET }
     private val offsetUpper get() = offset + 100
 
-    // private val offsetWirelessEnergy get() = offsetUpper - NyxWirelessEnergyList.entries.size
-    // private val offsetWirelessDynamo get() = offsetWirelessEnergy - NyxWirelessDynamoList.entries.size
+    private val offsetWirelessEnergy get() = offsetUpper - NyxWirelessEnergyList.entries.size
+    private val offsetWirelessDynamo get() = offsetWirelessEnergy - NyxWirelessDynamoList.entries.size
 
     override fun load() {
         if (ConfigDebug.DEBUG_PRINT_MTE_IDS || DevEnv) printMteIds()
         checkOccupation()
         initialiseMachineClass()
-        // initExtraWirelessExtended()
+        initExtraWirelessExtended()
     }
 
     private fun checkOccupation() {
@@ -61,7 +61,6 @@ object MachineLoader : Loader {
         NyxItemList.MachineInjector.register(NyxInjector(offset + 31, "nyx.machine.injector", 14), ConfigMachine.MTE_INJECTOR)
     }
 
-    /*
     private fun initExtraWirelessExtended() {
         if (!ConfigRecipe.RECIPE_EASY_WIRELESS) return
 
@@ -116,7 +115,6 @@ object MachineLoader : Loader {
             )
         }
     }
-    */
 
     private fun printMteIds() {
         buildList {

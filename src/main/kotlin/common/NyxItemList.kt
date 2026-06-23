@@ -221,7 +221,6 @@ enum class NyxItemList(
     }
 }
 
-/*
 enum class NyxWirelessEnergyList(
     val tier: Int = 0,
     val amp: Int = 0,
@@ -367,4 +366,4 @@ enum class NyxWirelessDynamoList(
             mStack = itemStack.copyAmount(1)
         }
 }
-*/
+
