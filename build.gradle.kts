@@ -9,3 +9,7 @@ configurations.configureEach {
         exclude(group = "net.glease", module = "tc4recipelib")
     }
 }
+
+dependencies {
+    testImplementation(kotlin("test"))
+}
