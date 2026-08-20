@@ -18,8 +18,6 @@ import rhynia.nyx.api.enums.RecipeValues
 import rhynia.nyx.api.enums.RecipeValues.INGOT
 import rhynia.nyx.api.util.getItem
 import rhynia.nyx.common.NyxItemList
-import rhynia.nyx.common.NyxWirelessDynamoList
-import rhynia.nyx.common.NyxWirelessEnergyList
 import rhynia.nyx.common.item.NyxDebugItem
 import tectech.thing.CustomItemList
 
@@ -682,36 +680,7 @@ enum class Tier(
                 }
             }
 
-            IV,
-            LuV,
-            ZPM,
-            UV,
-            UHV,
-            UEV,
-            UIV,
-            UMV,
-                -> {
-                val item = laserEnergyWirelessOf(this, tier)
-                item?.get(amount.toLong()) ?: fail("$this level $tier laser wireless energy")
-            }
-
             else -> fail("$this level $tier laser wireless energy")
-        }
-
-    fun getLaserDynamoWireless(amount: Int): ItemStack =
-        when (this) {
-            ULV,
-            LV,
-            MV,
-            HV,
-            EV,
-            MAX,
-                -> fail("$this level laser wireless dynamo")
-
-            else -> {
-                val item = laserDynamoWirelessOf(this)
-                item?.get(amount.toLong()) ?: fail("$this level laser wireless dynamo")
-            }
         }
 
     companion object {
@@ -911,116 +880,6 @@ enum class Tier(
                 7 -> CustomItemList.eM_energyWirelessTunnel7_UXV
                 8 -> CustomItemList.eM_energyWirelessTunnel8_UXV
                 9 -> CustomItemList.eM_energyWirelessTunnel9_UXV
-                else -> null
-            }
-
-        private fun laserEnergyWirelessOf(
-            tier: Tier,
-            sub: Int,
-        ): NyxWirelessEnergyList? =
-            when (tier) {
-                IV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserIV1
-                        2 -> NyxWirelessEnergyList.ExtLaserIV2
-                        3 -> NyxWirelessEnergyList.ExtLaserIV3
-                        4 -> NyxWirelessEnergyList.ExtLaserIV4
-                        5 -> NyxWirelessEnergyList.ExtLaserIV5
-                        6 -> NyxWirelessEnergyList.ExtLaserIV6
-                        7 -> NyxWirelessEnergyList.ExtLaserIV7
-                        else -> null
-                    }
-                LuV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserLuV1
-                        2 -> NyxWirelessEnergyList.ExtLaserLuV2
-                        3 -> NyxWirelessEnergyList.ExtLaserLuV3
-                        4 -> NyxWirelessEnergyList.ExtLaserLuV4
-                        5 -> NyxWirelessEnergyList.ExtLaserLuV5
-                        6 -> NyxWirelessEnergyList.ExtLaserLuV6
-                        7 -> NyxWirelessEnergyList.ExtLaserLuV7
-                        else -> null
-                    }
-                ZPM ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserZPM1
-                        2 -> NyxWirelessEnergyList.ExtLaserZPM2
-                        3 -> NyxWirelessEnergyList.ExtLaserZPM3
-                        4 -> NyxWirelessEnergyList.ExtLaserZPM4
-                        5 -> NyxWirelessEnergyList.ExtLaserZPM5
-                        6 -> NyxWirelessEnergyList.ExtLaserZPM6
-                        7 -> NyxWirelessEnergyList.ExtLaserZPM7
-                        else -> null
-                    }
-                UV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserUV1
-                        2 -> NyxWirelessEnergyList.ExtLaserUV2
-                        3 -> NyxWirelessEnergyList.ExtLaserUV3
-                        4 -> NyxWirelessEnergyList.ExtLaserUV4
-                        5 -> NyxWirelessEnergyList.ExtLaserUV5
-                        6 -> NyxWirelessEnergyList.ExtLaserUV6
-                        7 -> NyxWirelessEnergyList.ExtLaserUV7
-                        else -> null
-                    }
-                UHV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserUHV1
-                        2 -> NyxWirelessEnergyList.ExtLaserUHV2
-                        3 -> NyxWirelessEnergyList.ExtLaserUHV3
-                        4 -> NyxWirelessEnergyList.ExtLaserUHV4
-                        5 -> NyxWirelessEnergyList.ExtLaserUHV5
-                        6 -> NyxWirelessEnergyList.ExtLaserUHV6
-                        7 -> NyxWirelessEnergyList.ExtLaserUHV7
-                        else -> null
-                    }
-                UEV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserUEV1
-                        2 -> NyxWirelessEnergyList.ExtLaserUEV2
-                        3 -> NyxWirelessEnergyList.ExtLaserUEV3
-                        4 -> NyxWirelessEnergyList.ExtLaserUEV4
-                        5 -> NyxWirelessEnergyList.ExtLaserUEV5
-                        6 -> NyxWirelessEnergyList.ExtLaserUEV6
-                        7 -> NyxWirelessEnergyList.ExtLaserUEV7
-                        else -> null
-                    }
-                UIV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserUIV1
-                        2 -> NyxWirelessEnergyList.ExtLaserUIV2
-                        3 -> NyxWirelessEnergyList.ExtLaserUIV3
-                        4 -> NyxWirelessEnergyList.ExtLaserUIV4
-                        5 -> NyxWirelessEnergyList.ExtLaserUIV5
-                        6 -> NyxWirelessEnergyList.ExtLaserUIV6
-                        7 -> NyxWirelessEnergyList.ExtLaserUIV7
-                        else -> null
-                    }
-                UMV ->
-                    when (sub) {
-                        1 -> NyxWirelessEnergyList.ExtLaserUMV1
-                        2 -> NyxWirelessEnergyList.ExtLaserUMV2
-                        3 -> NyxWirelessEnergyList.ExtLaserUMV3
-                        4 -> NyxWirelessEnergyList.ExtLaserUMV4
-                        5 -> NyxWirelessEnergyList.ExtLaserUMV5
-                        6 -> NyxWirelessEnergyList.ExtLaserUMV6
-                        7 -> NyxWirelessEnergyList.ExtLaserUMV7
-                        else -> null
-                    }
-                else -> null
-            }
-
-        private fun laserDynamoWirelessOf(tier: Tier): NyxWirelessDynamoList? =
-            when (tier) {
-                IV -> NyxWirelessDynamoList.ExtDynamoIV
-                LuV -> NyxWirelessDynamoList.ExtDynamoLuV
-                ZPM -> NyxWirelessDynamoList.ExtDynamoZPM
-                UV -> NyxWirelessDynamoList.ExtDynamoUV
-                UHV -> NyxWirelessDynamoList.ExtDynamoUHV
-                UEV -> NyxWirelessDynamoList.ExtDynamoUEV
-                UIV -> NyxWirelessDynamoList.ExtDynamoUIV
-                UMV -> NyxWirelessDynamoList.ExtDynamoUMV
-                UXV -> NyxWirelessDynamoList.ExtDynamoUXV
                 else -> null
             }
     }
