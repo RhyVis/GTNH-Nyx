@@ -70,25 +70,13 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
                 mEfficiencyIncrease = 0
                 mOutputItems = null
                 mOutputFluids = null
-                pCopyItem = pCopyItemBase
-                pCopyFluid = pCopyFluidBase
                 pDisplayName = "×"
             }
         }
 
     private var pDisplayName: String = "×"
     private val pCopyItemBase: ItemStack by lazy { NyxItemList.TestItem01.get(1) }
-    private var pCopyItem: ItemStack = pCopyItemBase.copy()
-        set(value) {
-            pDisplayName = value.displayName
-            field = value
-        }
     private val pCopyFluidBase: FluidStack by lazy { NyxMaterials.Null.getFluid() }
-    private var pCopyFluid: FluidStack = pCopyFluidBase.copy()
-        set(value) {
-            pDisplayName = value.localizedName
-            field = value
-        }
     private var pAmount: Long = 0
         set(value) {
             field =
@@ -126,13 +114,15 @@ class NyxCopier : NyxMTECubeBase<NyxCopier> {
         pRunning = false
         val stackToCopy = controllerSlot ?: return CheckRecipeResultRegistry.NO_RECIPE
         if (pItemMode) {
-            pCopyItem = stackToCopy
             if (stackToCopy.isItemEqual(pCopyItemBase)) return CheckRecipeResultRegistry.NO_RECIPE
-            if (!outputItem(pCopyItem, pAmount)) return CheckRecipeResultRegistry.NO_RECIPE
+            if (!outputItem(stackToCopy, pAmount)) return CheckRecipeResultRegistry.NO_RECIPE
+            // Resolving the display name is not cheap, so only do it on the running path.
+            pDisplayName = stackToCopy.displayName
         } else {
-            pCopyFluid = GTUtility.convertCellToFluid(stackToCopy) ?: return CheckRecipeResultRegistry.NO_RECIPE
-            if (pCopyFluid.isFluidEqual(pCopyFluidBase)) return CheckRecipeResultRegistry.NO_RECIPE
-            if (!outputFluid(pCopyFluid, pAmount)) return CheckRecipeResultRegistry.NO_RECIPE
+            val fluidToCopy = GTUtility.convertCellToFluid(stackToCopy) ?: return CheckRecipeResultRegistry.NO_RECIPE
+            if (fluidToCopy.isFluidEqual(pCopyFluidBase)) return CheckRecipeResultRegistry.NO_RECIPE
+            if (!outputFluid(fluidToCopy, pAmount)) return CheckRecipeResultRegistry.NO_RECIPE
+            pDisplayName = fluidToCopy.localizedName
         }
         pRunning = true
         return CheckRecipeResultRegistry.SUCCESSFUL

@@ -30,6 +30,7 @@ import rhynia.nyx.api.enums.CheckRecipeResultRef
 import rhynia.nyx.api.enums.CommonString
 import rhynia.nyx.api.item.MetaItemToken
 import rhynia.nyx.api.item.asToken
+import rhynia.nyx.api.item.matches
 import rhynia.nyx.api.process.NyxProcessingLogic
 import rhynia.nyx.api.util.RefContainer
 import rhynia.nyx.api.util.intObjMapOf
@@ -96,6 +97,14 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
     private fun updateRecipeContainer(): Boolean {
         val controllerItem = controllerSlot ?: return false
 
+        // process() calls this on every recipe check, so skip the lookup while the
+        // controller item itself is unchanged.
+        val lastToken = pLastControllerItem
+        if (pMode != null && lastToken != null && controllerItem matches lastToken) {
+            pControllerStackSize = controllerItem.stackSize
+            return true
+        }
+
         val token = controllerItem.asToken()
         val modeContainer = RecipeMapper.getRecipeMap(token)
 
@@ -103,13 +112,13 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
             pMode = modeContainer
             pLastControllerItem = token
             pControllerStackSize = controllerItem.stackSize
-            ModLogger.debug("Update recipe map: ${pMode!!.currentName}")
+            if (ModLogger.isDebugEnabled) ModLogger.debug("Update recipe map: ${modeContainer.currentName}")
             return true
         } else {
             pMode = null
             pLastControllerItem = null
             pControllerStackSize = 0
-            ModLogger.info("Update recipe map: null")
+            if (ModLogger.isDebugEnabled) ModLogger.debug("Update recipe map: null")
             return false
         }
     }
@@ -219,7 +228,7 @@ class NyxProxy : NyxMTECubeBase<NyxProxy> {
                         } ?: null.also { gtMteCache[id] = null }
                 }
                 else -> {
-                    ModLogger.info("Unsupported token item: ${token.item.javaClass.name}")
+                    if (ModLogger.isDebugEnabled) ModLogger.debug("Unsupported token item: ${token.item.javaClass.name}")
                     return null
                 }
             }
