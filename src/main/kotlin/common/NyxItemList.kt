@@ -2,7 +2,6 @@ package rhynia.nyx.common
 
 import gregtech.api.enums.GTValues
 import gregtech.api.interfaces.IItemContainer
-import gregtech.api.util.GTLog
 import gregtech.api.util.GTOreDictUnificator
 import gregtech.api.util.GTUtility
 import net.minecraft.block.Block
@@ -99,7 +98,6 @@ enum class NyxItemList(
     ): Boolean {
         if (mDeprecated && !mWarned) {
             Exception("$this is now deprecated").let {
-                it.printStackTrace(GTLog.err)
                 ModLogger.error("Accessing deprecated entry $this", it)
             }
             mWarned = true
@@ -119,11 +117,8 @@ enum class NyxItemList(
     ): ItemStack {
         safetyCheck()
         if (GTUtility.isStackInvalid(mStack)) {
-            GTLog.out.let {
-                println("The ItemStack for $this is invalid!")
-                NullPointerException().printStackTrace(it)
-                debugItem("The ItemStack for $this is invalid!").copyAmount(aAmount.toInt())
-            }
+            ModLogger.error("The ItemStack for $this is invalid!", NullPointerException())
+            debugItem("The ItemStack for $this is invalid!").copyAmount(aAmount.toInt())
         }
         return mStack.copyAmount(aAmount.toInt())
     }
@@ -212,7 +207,6 @@ enum class NyxItemList(
         }
         if (mDeprecated && !mWarned) {
             Exception("$this is now deprecated").let {
-                it.printStackTrace(GTLog.err)
                 ModLogger.error("Accessing deprecated entry $this", it)
             }
             mWarned = true
